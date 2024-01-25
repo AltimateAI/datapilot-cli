@@ -2,8 +2,7 @@
 import re
 from pathlib import Path
 
-from setuptools import find_packages
-from setuptools import setup
+from setuptools import find_packages, setup
 
 
 def read(*names, **kwargs):
@@ -62,8 +61,11 @@ setup(
     ],
     python_requires=">=3.8",
     install_requires=[
-        "click",
-        # eg: "aspectlib==1.1.1", "six>=1.7",
+        "click==8.1.7",
+        "sqlglot==18.3.0",
+        "dbt-artifacts-parser==0.5.1",
+        "configtree==0.6",
+        "tabulate==0.9.0",
     ],
     extras_require={
         # eg:
@@ -72,7 +74,7 @@ setup(
     },
     entry_points={
         "console_scripts": [
-            "datapilot = datapilot.cli:main",
+            "datapilot = datapilot.cli.main:datapilot",
         ]
     },
 )

@@ -1,0 +1,17 @@
+version: v1
+
+model_type_patterns:
+  staging: "^stg_.*"
+  mart: "^(mrt_|mart_|fct_|dim_).*"
+  intermediate: "^int_.*"
+  base: "^base_.*"
+
+
+insights:
+  dbt_low_test_coverage:
+    min_test_coverage_percent: 30
+    severity: WARNING
+  model_fanout.max_fanout: 10
+  source_fanout.max_fanout: 10
+  staging_models_dependency.downstream_model_types:
+    - mart
