@@ -22,7 +22,7 @@ setup(
     ),
     author="Anand Gupta",
     author_email="info@altimate.ai",
-    url="https://github.com/anandgupta42/datapilot",
+    url="https://github.com/AltimateAI/datapilot",
     packages=find_packages("src"),
     package_dir={"": "src"},
     py_modules=[path.stem for path in Path("src").glob("*.py")],
@@ -55,7 +55,7 @@ setup(
     project_urls={
         "Documentation": "https://datapilot.readthedocs.io/",
         "Changelog": "https://datapilot.readthedocs.io/en/latest/changelog.html",
-        "Issue Tracker": "https://github.com/anandgupta42/datapilot/issues",
+        "Issue Tracker": "https://github.com/AltimateAI/datapilot/issues",
     },
     keywords=[
         # eg: "keyword1", "keyword2", "keyword3",

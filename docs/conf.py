@@ -1,5 +1,3 @@
-import furo
-
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
@@ -22,14 +20,14 @@ version = release = "0.0.0"
 pygments_style = "trac"
 templates_path = ["."]
 extlinks = {
-    "issue": ("https://github.com/anandgupta42/datapilot/issues/%s", "#"),
-    "pr": ("https://github.com/anandgupta42/datapilot/pull/%s", "PR #"),
+    "issue": ("https://github.com/AltimateAI/datapilot/issues/%s", "#"),
+    "pr": ("https://github.com/AltimateAI/datapilot/pull/%s", "PR #"),
 }
 html_theme = "furo"
-html_theme_path = [furo.get_html_theme_path()]
-html_theme_options = {
-    "githuburl": "https://github.com/anandgupta42/datapilot/",
-}
+# html_theme_path = [furo.get_html_theme_path()]
+# html_theme_options = {
+#     "githuburl": "https://github.com/AltimateAI/datapilot/",
+# }
 
 html_use_smartypants = True
 html_last_updated_fmt = "%b %d, %Y"

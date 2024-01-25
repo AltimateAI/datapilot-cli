@@ -20,9 +20,9 @@ Overview
     :target: https://datapilot.readthedocs.io/
     :alt: Documentation Status
 
-.. |github-actions| image:: https://github.com/anandgupta42/datapilot/actions/workflows/github-actions.yml/badge.svg
+.. |github-actions| image:: https://github.com/AltimateAI/datapilot/actions/workflows/github-actions.yml/badge.svg
     :alt: GitHub Actions Build Status
-    :target: https://github.com/anandgupta42/datapilot/actions
+    :target: https://github.com/AltimateAI/datapilot/actions
 
 .. |codecov| image:: https://codecov.io/gh/anandgupta42/datapilot/branch/main/graphs/badge.svg?branch=main
     :alt: Coverage Status
@@ -46,7 +46,7 @@ Overview
 
 .. |commits-since| image:: https://img.shields.io/github/commits-since/anandgupta42/datapilot/v0.0.0.svg
     :alt: Commits since latest release
-    :target: https://github.com/anandgupta42/datapilot/compare/v0.0.0...main
+    :target: https://github.com/AltimateAI/datapilot/compare/v0.0.0...main
 
 
 .. |scrutinizer| image:: https://img.shields.io/scrutinizer/quality/g/anandgupta42/datapilot/main.svg
@@ -69,7 +69,7 @@ Installation
 
 You can also install the in-development version with::
 
-    pip install https://github.com/anandgupta42/datapilot/archive/main.zip
+    pip install https://github.com/AltimateAI/datapilot/archive/main.zip
 
 
 Documentation
