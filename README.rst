@@ -28,30 +28,7 @@ Overview
     :alt: Coverage Status
     :target: https://app.codecov.io/github/anandgupta42/datapilot
 
-.. |version| image:: https://img.shields.io/pypi/v/datapilot.svg
-    :alt: PyPI Package latest release
-    :target: https://pypi.org/project/datapilot
 
-.. |wheel| image:: https://img.shields.io/pypi/wheel/datapilot.svg
-    :alt: PyPI Wheel
-    :target: https://pypi.org/project/datapilot
-
-.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/datapilot.svg
-    :alt: Supported versions
-    :target: https://pypi.org/project/datapilot
-
-.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/datapilot.svg
-    :alt: Supported implementations
-    :target: https://pypi.org/project/datapilot
-
-.. |commits-since| image:: https://img.shields.io/github/commits-since/anandgupta42/datapilot/v0.0.0.svg
-    :alt: Commits since latest release
-    :target: https://github.com/AltimateAI/datapilot/compare/v0.0.0...main
-
-
-.. |scrutinizer| image:: https://img.shields.io/scrutinizer/quality/g/anandgupta42/datapilot/main.svg
-    :alt: Scrutinizer Status
-    :target: https://scrutinizer-ci.com/g/anandgupta42/datapilot/
 
 
 .. end-badges
