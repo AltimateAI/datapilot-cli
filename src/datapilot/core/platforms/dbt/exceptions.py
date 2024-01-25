@@ -1,0 +1,2 @@
+class AltimateInvalidManifestError(Exception):
+    pass

@@ -1,0 +1,5233 @@
+{
+    "metadata": {
+        "dbt_schema_version": "https://schemas.getdbt.com/dbt/catalog/v1.json",
+        "dbt_version": "1.7.4",
+        "generated_at": "2024-01-13T01:22:34.335584Z",
+        "invocation_id": "4cc35bf3-4c5a-4af6-b569-1d16b145a046",
+        "env": {}
+    },
+    "nodes": {
+        "model.elementary.dbt_source_freshness_results": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_SOURCE_FRESHNESS_RESULTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "SOURCE_FRESHNESS_EXECUTION_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "SOURCE_FRESHNESS_EXECUTION_ID",
+                    "comment": null
+                },
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "MAX_LOADED_AT": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "MAX_LOADED_AT",
+                    "comment": null
+                },
+                "SNAPSHOTTED_AT": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "SNAPSHOTTED_AT",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "CREATED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 6,
+                    "name": "CREATED_AT",
+                    "comment": null
+                },
+                "MAX_LOADED_AT_TIME_AGO_IN_S": {
+                    "type": "FLOAT",
+                    "index": 7,
+                    "name": "MAX_LOADED_AT_TIME_AGO_IN_S",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "ERROR": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "ERROR",
+                    "comment": null
+                },
+                "COMPILE_STARTED_AT": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "COMPILE_STARTED_AT",
+                    "comment": null
+                },
+                "COMPILE_COMPLETED_AT": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "COMPILE_COMPLETED_AT",
+                    "comment": null
+                },
+                "EXECUTE_STARTED_AT": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "EXECUTE_STARTED_AT",
+                    "comment": null
+                },
+                "EXECUTE_COMPLETED_AT": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "EXECUTE_COMPLETED_AT",
+                    "comment": null
+                },
+                "INVOCATION_ID": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "INVOCATION_ID",
+                    "comment": null
+                },
+                "WARN_AFTER": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "WARN_AFTER",
+                    "comment": null
+                },
+                "ERROR_AFTER": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "ERROR_AFTER",
+                    "comment": null
+                },
+                "FILTER": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "FILTER",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 0,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 0,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-02 17:57UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_source_freshness_results"
+        },
+        "model.elementary.dbt_exposures": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_EXPOSURES",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "MATURITY": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "MATURITY",
+                    "comment": null
+                },
+                "TYPE": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "TYPE",
+                    "comment": null
+                },
+                "OWNER_EMAIL": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "OWNER_EMAIL",
+                    "comment": null
+                },
+                "OWNER_NAME": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "OWNER_NAME",
+                    "comment": null
+                },
+                "URL": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "URL",
+                    "comment": null
+                },
+                "DEPENDS_ON_MACROS": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "DEPENDS_ON_MACROS",
+                    "comment": null
+                },
+                "DEPENDS_ON_NODES": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "DEPENDS_ON_NODES",
+                    "comment": null
+                },
+                "DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "DESCRIPTION",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "META": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "META",
+                    "comment": null
+                },
+                "PACKAGE_NAME": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "PACKAGE_NAME",
+                    "comment": null
+                },
+                "ORIGINAL_PATH": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "ORIGINAL_PATH",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "METADATA_HASH": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "METADATA_HASH",
+                    "comment": null
+                },
+                "LABEL": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "LABEL",
+                    "comment": null
+                },
+                "RAW_QUERIES": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "RAW_QUERIES",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 0,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 0,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:08UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_exposures"
+        },
+        "model.jaffle_shop_package.stg_depends_on_downstream": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "STG_DEPENDS_ON_DOWNSTREAM",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER_DATE",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER_DATE",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.stg_depends_on_downstream"
+        },
+        "model.elementary.dbt_invocations": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_INVOCATIONS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "INVOCATION_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "INVOCATION_ID",
+                    "comment": null
+                },
+                "JOB_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "JOB_ID",
+                    "comment": null
+                },
+                "JOB_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "JOB_NAME",
+                    "comment": null
+                },
+                "JOB_RUN_ID": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "JOB_RUN_ID",
+                    "comment": null
+                },
+                "RUN_STARTED_AT": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "RUN_STARTED_AT",
+                    "comment": null
+                },
+                "RUN_COMPLETED_AT": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "RUN_COMPLETED_AT",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "CREATED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 8,
+                    "name": "CREATED_AT",
+                    "comment": null
+                },
+                "COMMAND": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "COMMAND",
+                    "comment": null
+                },
+                "DBT_VERSION": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "DBT_VERSION",
+                    "comment": null
+                },
+                "ELEMENTARY_VERSION": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "ELEMENTARY_VERSION",
+                    "comment": null
+                },
+                "FULL_REFRESH": {
+                    "type": "BOOLEAN",
+                    "index": 12,
+                    "name": "FULL_REFRESH",
+                    "comment": null
+                },
+                "INVOCATION_VARS": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "INVOCATION_VARS",
+                    "comment": null
+                },
+                "VARS": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "VARS",
+                    "comment": null
+                },
+                "TARGET_NAME": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "TARGET_NAME",
+                    "comment": null
+                },
+                "TARGET_DATABASE": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "TARGET_DATABASE",
+                    "comment": null
+                },
+                "TARGET_SCHEMA": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "TARGET_SCHEMA",
+                    "comment": null
+                },
+                "TARGET_PROFILE_NAME": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "TARGET_PROFILE_NAME",
+                    "comment": null
+                },
+                "THREADS": {
+                    "type": "NUMBER",
+                    "index": 19,
+                    "name": "THREADS",
+                    "comment": null
+                },
+                "SELECTED": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "SELECTED",
+                    "comment": null
+                },
+                "YAML_SELECTOR": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "YAML_SELECTOR",
+                    "comment": null
+                },
+                "PROJECT_ID": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "PROJECT_ID",
+                    "comment": null
+                },
+                "PROJECT_NAME": {
+                    "type": "TEXT",
+                    "index": 23,
+                    "name": "PROJECT_NAME",
+                    "comment": null
+                },
+                "ENV": {
+                    "type": "TEXT",
+                    "index": 24,
+                    "name": "ENV",
+                    "comment": null
+                },
+                "ENV_ID": {
+                    "type": "TEXT",
+                    "index": 25,
+                    "name": "ENV_ID",
+                    "comment": null
+                },
+                "CAUSE_CATEGORY": {
+                    "type": "TEXT",
+                    "index": 26,
+                    "name": "CAUSE_CATEGORY",
+                    "comment": null
+                },
+                "CAUSE": {
+                    "type": "TEXT",
+                    "index": 27,
+                    "name": "CAUSE",
+                    "comment": null
+                },
+                "PULL_REQUEST_ID": {
+                    "type": "TEXT",
+                    "index": 28,
+                    "name": "PULL_REQUEST_ID",
+                    "comment": null
+                },
+                "GIT_SHA": {
+                    "type": "TEXT",
+                    "index": 29,
+                    "name": "GIT_SHA",
+                    "comment": null
+                },
+                "ORCHESTRATOR": {
+                    "type": "TEXT",
+                    "index": 30,
+                    "name": "ORCHESTRATOR",
+                    "comment": null
+                },
+                "DBT_USER": {
+                    "type": "TEXT",
+                    "index": 31,
+                    "name": "DBT_USER",
+                    "comment": null
+                },
+                "JOB_URL": {
+                    "type": "TEXT",
+                    "index": 32,
+                    "name": "JOB_URL",
+                    "comment": null
+                },
+                "JOB_RUN_URL": {
+                    "type": "TEXT",
+                    "index": 33,
+                    "name": "JOB_RUN_URL",
+                    "comment": null
+                },
+                "ACCOUNT_ID": {
+                    "type": "TEXT",
+                    "index": 34,
+                    "name": "ACCOUNT_ID",
+                    "comment": null
+                },
+                "TARGET_ADAPTER_SPECIFIC_FIELDS": {
+                    "type": "TEXT",
+                    "index": 35,
+                    "name": "TARGET_ADAPTER_SPECIFIC_FIELDS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 18,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 10240,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:10UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_invocations"
+        },
+        "model.elementary.alerts_schema_changes": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "ALERTS_SCHEMA_CHANGES",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ALERT_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "ALERT_ID",
+                    "comment": null
+                },
+                "DATA_ISSUE_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "DATA_ISSUE_ID",
+                    "comment": null
+                },
+                "TEST_EXECUTION_ID": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "TEST_EXECUTION_ID",
+                    "comment": null
+                },
+                "TEST_UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "TEST_UNIQUE_ID",
+                    "comment": null
+                },
+                "MODEL_UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "MODEL_UNIQUE_ID",
+                    "comment": null
+                },
+                "DETECTED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 6,
+                    "name": "DETECTED_AT",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "TABLE_NAME",
+                    "comment": null
+                },
+                "COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "COLUMN_NAME",
+                    "comment": null
+                },
+                "ALERT_TYPE": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "ALERT_TYPE",
+                    "comment": null
+                },
+                "SUB_TYPE": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "SUB_TYPE",
+                    "comment": null
+                },
+                "ALERT_DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "ALERT_DESCRIPTION",
+                    "comment": null
+                },
+                "OWNERS": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "OWNERS",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "ALERT_RESULTS_QUERY": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "ALERT_RESULTS_QUERY",
+                    "comment": null
+                },
+                "OTHER": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "OTHER",
+                    "comment": null
+                },
+                "TEST_NAME": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "TEST_NAME",
+                    "comment": null
+                },
+                "TEST_SHORT_NAME": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "TEST_SHORT_NAME",
+                    "comment": null
+                },
+                "TEST_PARAMS": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "TEST_PARAMS",
+                    "comment": null
+                },
+                "SEVERITY": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "SEVERITY",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "RESULT_ROWS": {
+                    "type": "TEXT",
+                    "index": 23,
+                    "name": "RESULT_ROWS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.alerts_schema_changes"
+        },
+        "model.elementary.metrics_anomaly_score": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "METRICS_ANOMALY_SCORE",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "ID",
+                    "comment": null
+                },
+                "FULL_TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FULL_TABLE_NAME",
+                    "comment": null
+                },
+                "COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "COLUMN_NAME",
+                    "comment": null
+                },
+                "DIMENSION": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "DIMENSION",
+                    "comment": null
+                },
+                "DIMENSION_VALUE": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "DIMENSION_VALUE",
+                    "comment": null
+                },
+                "METRIC_NAME": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "METRIC_NAME",
+                    "comment": null
+                },
+                "ANOMALY_SCORE": {
+                    "type": "FLOAT",
+                    "index": 7,
+                    "name": "ANOMALY_SCORE",
+                    "comment": null
+                },
+                "LATEST_METRIC_VALUE": {
+                    "type": "FLOAT",
+                    "index": 8,
+                    "name": "LATEST_METRIC_VALUE",
+                    "comment": null
+                },
+                "BUCKET_START": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 9,
+                    "name": "BUCKET_START",
+                    "comment": null
+                },
+                "BUCKET_END": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 10,
+                    "name": "BUCKET_END",
+                    "comment": null
+                },
+                "TRAINING_AVG": {
+                    "type": "FLOAT",
+                    "index": 11,
+                    "name": "TRAINING_AVG",
+                    "comment": null
+                },
+                "TRAINING_STDDEV": {
+                    "type": "FLOAT",
+                    "index": 12,
+                    "name": "TRAINING_STDDEV",
+                    "comment": null
+                },
+                "TRAINING_START": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 13,
+                    "name": "TRAINING_START",
+                    "comment": null
+                },
+                "TRAINING_END": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 14,
+                    "name": "TRAINING_END",
+                    "comment": null
+                },
+                "TRAINING_SET_SIZE": {
+                    "type": "NUMBER",
+                    "index": 15,
+                    "name": "TRAINING_SET_SIZE",
+                    "comment": null
+                },
+                "UPDATED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 16,
+                    "name": "UPDATED_AT",
+                    "comment": null
+                },
+                "IS_ANOMALY": {
+                    "type": "BOOLEAN",
+                    "index": 17,
+                    "name": "IS_ANOMALY",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.metrics_anomaly_score"
+        },
+        "model.elementary.alerts_anomaly_detection": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "ALERTS_ANOMALY_DETECTION",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ALERT_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "ALERT_ID",
+                    "comment": null
+                },
+                "DATA_ISSUE_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "DATA_ISSUE_ID",
+                    "comment": null
+                },
+                "TEST_EXECUTION_ID": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "TEST_EXECUTION_ID",
+                    "comment": null
+                },
+                "TEST_UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "TEST_UNIQUE_ID",
+                    "comment": null
+                },
+                "MODEL_UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "MODEL_UNIQUE_ID",
+                    "comment": null
+                },
+                "DETECTED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 6,
+                    "name": "DETECTED_AT",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "TABLE_NAME",
+                    "comment": null
+                },
+                "COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "COLUMN_NAME",
+                    "comment": null
+                },
+                "ALERT_TYPE": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "ALERT_TYPE",
+                    "comment": null
+                },
+                "SUB_TYPE": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "SUB_TYPE",
+                    "comment": null
+                },
+                "ALERT_DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "ALERT_DESCRIPTION",
+                    "comment": null
+                },
+                "OWNERS": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "OWNERS",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "ALERT_RESULTS_QUERY": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "ALERT_RESULTS_QUERY",
+                    "comment": null
+                },
+                "OTHER": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "OTHER",
+                    "comment": null
+                },
+                "TEST_NAME": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "TEST_NAME",
+                    "comment": null
+                },
+                "TEST_SHORT_NAME": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "TEST_SHORT_NAME",
+                    "comment": null
+                },
+                "TEST_PARAMS": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "TEST_PARAMS",
+                    "comment": null
+                },
+                "SEVERITY": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "SEVERITY",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "RESULT_ROWS": {
+                    "type": "TEXT",
+                    "index": 23,
+                    "name": "RESULT_ROWS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.alerts_anomaly_detection"
+        },
+        "model.elementary.information_schema_columns": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "INFORMATION_SCHEMA_COLUMNS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "FULL_TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "FULL_TABLE_NAME",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "TABLE_NAME",
+                    "comment": null
+                },
+                "COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "COLUMN_NAME",
+                    "comment": null
+                },
+                "DATA_TYPE": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "DATA_TYPE",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.information_schema_columns"
+        },
+        "model.jaffle_shop_package.int_downstream_model_dependent_on_source": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "INT_DOWNSTREAM_MODEL_DEPENDENT_ON_SOURCE",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER_DATE",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER_DATE",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.int_downstream_model_dependent_on_source"
+        },
+        "seed.jaffle_shop_package.raw_payments": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP",
+                "name": "RAW_PAYMENTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "ID",
+                    "comment": null
+                },
+                "ORDER_ID": {
+                    "type": "NUMBER",
+                    "index": 2,
+                    "name": "ORDER_ID",
+                    "comment": null
+                },
+                "PAYMENT_METHOD": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "PAYMENT_METHOD",
+                    "comment": null
+                },
+                "AMOUNT": {
+                    "type": "NUMBER",
+                    "index": 4,
+                    "name": "AMOUNT",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 113,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 2560,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:09UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "seed.jaffle_shop_package.raw_payments"
+        },
+        "model.elementary.dbt_snapshots": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_SNAPSHOTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "ALIAS": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "ALIAS",
+                    "comment": null
+                },
+                "CHECKSUM": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "CHECKSUM",
+                    "comment": null
+                },
+                "MATERIALIZATION": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "MATERIALIZATION",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "META": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "META",
+                    "comment": null
+                },
+                "OWNER": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "OWNER",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "DEPENDS_ON_MACROS": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "DEPENDS_ON_MACROS",
+                    "comment": null
+                },
+                "DEPENDS_ON_NODES": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "DEPENDS_ON_NODES",
+                    "comment": null
+                },
+                "DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "DESCRIPTION",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "PACKAGE_NAME": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "PACKAGE_NAME",
+                    "comment": null
+                },
+                "ORIGINAL_PATH": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "ORIGINAL_PATH",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "PATCH_PATH": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "PATCH_PATH",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "METADATA_HASH": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "METADATA_HASH",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 0,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 0,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:08UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_snapshots"
+        },
+        "model.elementary.enriched_columns": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "ENRICHED_COLUMNS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "TABLE_NAME",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "DATA_TYPE": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "DATA_TYPE",
+                    "comment": null
+                },
+                "DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "DESCRIPTION",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.enriched_columns"
+        },
+        "model.elementary.metadata": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "METADATA",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "DBT_PKG_VERSION": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "DBT_PKG_VERSION",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 1,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 1024,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:09UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.metadata"
+        },
+        "model.elementary.dbt_columns": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_COLUMNS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "PARENT_UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "PARENT_UNIQUE_ID",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "DATA_TYPE": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "DATA_TYPE",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "META": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "META",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "TABLE_NAME",
+                    "comment": null
+                },
+                "DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "DESCRIPTION",
+                    "comment": null
+                },
+                "RESOURCE_TYPE": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "RESOURCE_TYPE",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "METADATA_HASH": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "METADATA_HASH",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 185,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 17920,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:08UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_columns"
+        },
+        "model.jaffle_shop_package.stg_orders": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "STG_ORDERS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ORDER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "ORDER_ID",
+                    "comment": null
+                },
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 2,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 3,
+                    "name": "ORDER_DATE",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "STATUS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.stg_orders"
+        },
+        "model.elementary.elementary_test_results": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "ELEMENTARY_TEST_RESULTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "ID",
+                    "comment": null
+                },
+                "DATA_ISSUE_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "DATA_ISSUE_ID",
+                    "comment": null
+                },
+                "TEST_EXECUTION_ID": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "TEST_EXECUTION_ID",
+                    "comment": null
+                },
+                "TEST_UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "TEST_UNIQUE_ID",
+                    "comment": null
+                },
+                "MODEL_UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "MODEL_UNIQUE_ID",
+                    "comment": null
+                },
+                "INVOCATION_ID": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "INVOCATION_ID",
+                    "comment": null
+                },
+                "DETECTED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 7,
+                    "name": "DETECTED_AT",
+                    "comment": null
+                },
+                "CREATED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 8,
+                    "name": "CREATED_AT",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "TABLE_NAME",
+                    "comment": null
+                },
+                "COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "COLUMN_NAME",
+                    "comment": null
+                },
+                "TEST_TYPE": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "TEST_TYPE",
+                    "comment": null
+                },
+                "TEST_SUB_TYPE": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "TEST_SUB_TYPE",
+                    "comment": null
+                },
+                "TEST_RESULTS_DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "TEST_RESULTS_DESCRIPTION",
+                    "comment": null
+                },
+                "OWNERS": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "OWNERS",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "TEST_RESULTS_QUERY": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "TEST_RESULTS_QUERY",
+                    "comment": null
+                },
+                "OTHER": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "OTHER",
+                    "comment": null
+                },
+                "TEST_NAME": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "TEST_NAME",
+                    "comment": null
+                },
+                "TEST_PARAMS": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "TEST_PARAMS",
+                    "comment": null
+                },
+                "SEVERITY": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "SEVERITY",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 23,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "FAILURES": {
+                    "type": "NUMBER",
+                    "index": 24,
+                    "name": "FAILURES",
+                    "comment": null
+                },
+                "TEST_SHORT_NAME": {
+                    "type": "TEXT",
+                    "index": 25,
+                    "name": "TEST_SHORT_NAME",
+                    "comment": null
+                },
+                "TEST_ALIAS": {
+                    "type": "TEXT",
+                    "index": 26,
+                    "name": "TEST_ALIAS",
+                    "comment": null
+                },
+                "RESULT_ROWS": {
+                    "type": "TEXT",
+                    "index": 27,
+                    "name": "RESULT_ROWS",
+                    "comment": null
+                },
+                "FAILED_ROW_COUNT": {
+                    "type": "NUMBER",
+                    "index": 28,
+                    "name": "FAILED_ROW_COUNT",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 103,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 20480,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:10UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.elementary_test_results"
+        },
+        "model.elementary.test_result_rows": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "TEST_RESULT_ROWS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ELEMENTARY_TEST_RESULTS_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "ELEMENTARY_TEST_RESULTS_ID",
+                    "comment": null
+                },
+                "RESULT_ROW": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "RESULT_ROW",
+                    "comment": null
+                },
+                "DETECTED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 3,
+                    "name": "DETECTED_AT",
+                    "comment": null
+                },
+                "CREATED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 4,
+                    "name": "CREATED_AT",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 0,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 0,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-02 17:57UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.test_result_rows"
+        },
+        "model.elementary.alerts_dbt_tests": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "ALERTS_DBT_TESTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ALERT_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "ALERT_ID",
+                    "comment": null
+                },
+                "DATA_ISSUE_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "DATA_ISSUE_ID",
+                    "comment": null
+                },
+                "TEST_EXECUTION_ID": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "TEST_EXECUTION_ID",
+                    "comment": null
+                },
+                "TEST_UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "TEST_UNIQUE_ID",
+                    "comment": null
+                },
+                "MODEL_UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "MODEL_UNIQUE_ID",
+                    "comment": null
+                },
+                "DETECTED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 6,
+                    "name": "DETECTED_AT",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "TABLE_NAME",
+                    "comment": null
+                },
+                "COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "COLUMN_NAME",
+                    "comment": null
+                },
+                "ALERT_TYPE": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "ALERT_TYPE",
+                    "comment": null
+                },
+                "SUB_TYPE": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "SUB_TYPE",
+                    "comment": null
+                },
+                "ALERT_DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "ALERT_DESCRIPTION",
+                    "comment": null
+                },
+                "OWNERS": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "OWNERS",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "ALERT_RESULTS_QUERY": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "ALERT_RESULTS_QUERY",
+                    "comment": null
+                },
+                "OTHER": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "OTHER",
+                    "comment": null
+                },
+                "TEST_NAME": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "TEST_NAME",
+                    "comment": null
+                },
+                "TEST_SHORT_NAME": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "TEST_SHORT_NAME",
+                    "comment": null
+                },
+                "TEST_PARAMS": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "TEST_PARAMS",
+                    "comment": null
+                },
+                "SEVERITY": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "SEVERITY",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "RESULT_ROWS": {
+                    "type": "TEXT",
+                    "index": 23,
+                    "name": "RESULT_ROWS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.alerts_dbt_tests"
+        },
+        "model.jaffle_shop_package.customers_downstream": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "CUSTOMERS_DOWNSTREAM",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                },
+                "CUSTOMER_LIFETIME_VALUE": {
+                    "type": "NUMBER",
+                    "index": 7,
+                    "name": "CUSTOMER_LIFETIME_VALUE",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.customers_downstream"
+        },
+        "model.jaffle_shop_package.customers": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "CUSTOMERS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                },
+                "CUSTOMER_LIFETIME_VALUE": {
+                    "type": "NUMBER",
+                    "index": 7,
+                    "name": "CUSTOMER_LIFETIME_VALUE",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.customers"
+        },
+        "model.jaffle_shop_package.source_fanout2": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "SOURCE_FANOUT2",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER_DATE",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER_DATE",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.source_fanout2"
+        },
+        "model.elementary.alerts_dbt_source_freshness": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "ALERTS_DBT_SOURCE_FRESHNESS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ALERT_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "ALERT_ID",
+                    "comment": null
+                },
+                "MAX_LOADED_AT": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "MAX_LOADED_AT",
+                    "comment": null
+                },
+                "SNAPSHOTTED_AT": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "SNAPSHOTTED_AT",
+                    "comment": null
+                },
+                "DETECTED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 4,
+                    "name": "DETECTED_AT",
+                    "comment": null
+                },
+                "MAX_LOADED_AT_TIME_AGO_IN_S": {
+                    "type": "FLOAT",
+                    "index": 5,
+                    "name": "MAX_LOADED_AT_TIME_AGO_IN_S",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "ERROR": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "ERROR",
+                    "comment": null
+                },
+                "WARN_AFTER": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "WARN_AFTER",
+                    "comment": null
+                },
+                "ERROR_AFTER": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "ERROR_AFTER",
+                    "comment": null
+                },
+                "FILTER": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "FILTER",
+                    "comment": null
+                },
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "SOURCE_NAME": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "SOURCE_NAME",
+                    "comment": null
+                },
+                "IDENTIFIER": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "IDENTIFIER",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "META": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "META",
+                    "comment": null
+                },
+                "OWNER": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "OWNER",
+                    "comment": null
+                },
+                "PACKAGE_NAME": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "PACKAGE_NAME",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "FRESHNESS_ERROR_AFTER": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "FRESHNESS_ERROR_AFTER",
+                    "comment": null
+                },
+                "FRESHNESS_WARN_AFTER": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "FRESHNESS_WARN_AFTER",
+                    "comment": null
+                },
+                "FRESHNESS_FILTER": {
+                    "type": "TEXT",
+                    "index": 23,
+                    "name": "FRESHNESS_FILTER",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.alerts_dbt_source_freshness"
+        },
+        "model.jaffle_shop_package.stg_customers": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "STG_CUSTOMERS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.stg_customers"
+        },
+        "model.elementary.model_run_results": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "MODEL_RUN_RESULTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "MODEL_EXECUTION_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "MODEL_EXECUTION_ID",
+                    "comment": null
+                },
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "INVOCATION_ID": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "INVOCATION_ID",
+                    "comment": null
+                },
+                "QUERY_ID": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "QUERY_ID",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "FULL_REFRESH": {
+                    "type": "BOOLEAN",
+                    "index": 8,
+                    "name": "FULL_REFRESH",
+                    "comment": null
+                },
+                "MESSAGE": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "MESSAGE",
+                    "comment": null
+                },
+                "EXECUTION_TIME": {
+                    "type": "FLOAT",
+                    "index": 10,
+                    "name": "EXECUTION_TIME",
+                    "comment": null
+                },
+                "EXECUTE_STARTED_AT": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "EXECUTE_STARTED_AT",
+                    "comment": null
+                },
+                "EXECUTE_COMPLETED_AT": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "EXECUTE_COMPLETED_AT",
+                    "comment": null
+                },
+                "COMPILE_STARTED_AT": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "COMPILE_STARTED_AT",
+                    "comment": null
+                },
+                "COMPILE_COMPLETED_AT": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "COMPILE_COMPLETED_AT",
+                    "comment": null
+                },
+                "COMPILED_CODE": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "COMPILED_CODE",
+                    "comment": null
+                },
+                "ADAPTER_RESPONSE": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "ADAPTER_RESPONSE",
+                    "comment": null
+                },
+                "THREAD_ID": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "THREAD_ID",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "MATERIALIZATION": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "MATERIALIZATION",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "PACKAGE_NAME": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "PACKAGE_NAME",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 23,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "ORIGINAL_PATH": {
+                    "type": "TEXT",
+                    "index": 24,
+                    "name": "ORIGINAL_PATH",
+                    "comment": null
+                },
+                "OWNER": {
+                    "type": "TEXT",
+                    "index": 25,
+                    "name": "OWNER",
+                    "comment": null
+                },
+                "ALIAS": {
+                    "type": "TEXT",
+                    "index": 26,
+                    "name": "ALIAS",
+                    "comment": null
+                },
+                "MODEL_INVOCATION_REVERSE_INDEX": {
+                    "type": "NUMBER",
+                    "index": 27,
+                    "name": "MODEL_INVOCATION_REVERSE_INDEX",
+                    "comment": null
+                },
+                "IS_THE_FIRST_INVOCATION_OF_THE_DAY": {
+                    "type": "BOOLEAN",
+                    "index": 28,
+                    "name": "IS_THE_FIRST_INVOCATION_OF_THE_DAY",
+                    "comment": null
+                },
+                "IS_THE_LAST_INVOCATION_OF_THE_DAY": {
+                    "type": "BOOLEAN",
+                    "index": 29,
+                    "name": "IS_THE_LAST_INVOCATION_OF_THE_DAY",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.model_run_results"
+        },
+        "model.elementary.dbt_sources": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_SOURCES",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "SOURCE_NAME": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "SOURCE_NAME",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "IDENTIFIER": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "IDENTIFIER",
+                    "comment": null
+                },
+                "LOADED_AT_FIELD": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "LOADED_AT_FIELD",
+                    "comment": null
+                },
+                "FRESHNESS_WARN_AFTER": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "FRESHNESS_WARN_AFTER",
+                    "comment": null
+                },
+                "FRESHNESS_ERROR_AFTER": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "FRESHNESS_ERROR_AFTER",
+                    "comment": null
+                },
+                "FRESHNESS_FILTER": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "FRESHNESS_FILTER",
+                    "comment": null
+                },
+                "FRESHNESS_DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "FRESHNESS_DESCRIPTION",
+                    "comment": null
+                },
+                "RELATION_NAME": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "RELATION_NAME",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "META": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "META",
+                    "comment": null
+                },
+                "OWNER": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "OWNER",
+                    "comment": null
+                },
+                "PACKAGE_NAME": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "PACKAGE_NAME",
+                    "comment": null
+                },
+                "ORIGINAL_PATH": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "ORIGINAL_PATH",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "SOURCE_DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "SOURCE_DESCRIPTION",
+                    "comment": null
+                },
+                "DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "DESCRIPTION",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "METADATA_HASH": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "METADATA_HASH",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 4,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 7168,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:08UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_sources"
+        },
+        "model.elementary.dbt_metrics": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_METRICS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "LABEL": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LABEL",
+                    "comment": null
+                },
+                "MODEL": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "MODEL",
+                    "comment": null
+                },
+                "TYPE": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "TYPE",
+                    "comment": null
+                },
+                "SQL": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "SQL",
+                    "comment": null
+                },
+                "TIMESTAMP": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "TIMESTAMP",
+                    "comment": null
+                },
+                "FILTERS": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "FILTERS",
+                    "comment": null
+                },
+                "TIME_GRAINS": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "TIME_GRAINS",
+                    "comment": null
+                },
+                "DIMENSIONS": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "DIMENSIONS",
+                    "comment": null
+                },
+                "DEPENDS_ON_MACROS": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "DEPENDS_ON_MACROS",
+                    "comment": null
+                },
+                "DEPENDS_ON_NODES": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "DEPENDS_ON_NODES",
+                    "comment": null
+                },
+                "DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "DESCRIPTION",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "META": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "META",
+                    "comment": null
+                },
+                "PACKAGE_NAME": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "PACKAGE_NAME",
+                    "comment": null
+                },
+                "ORIGINAL_PATH": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "ORIGINAL_PATH",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "METADATA_HASH": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "METADATA_HASH",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 0,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 0,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:08UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_metrics"
+        },
+        "model.jaffle_shop_package.direct_join_to_source": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "DIRECT_JOIN_TO_SOURCE",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                },
+                "CUSTOMER_LIFETIME_VALUE": {
+                    "type": "NUMBER",
+                    "index": 7,
+                    "name": "CUSTOMER_LIFETIME_VALUE",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.direct_join_to_source"
+        },
+        "seed.jaffle_shop_package.raw_customers": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP",
+                "name": "RAW_CUSTOMERS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 100,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 2560,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:09UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "seed.jaffle_shop_package.raw_customers"
+        },
+        "seed.jaffle_shop_package.raw_orders": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP",
+                "name": "RAW_ORDERS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "ID",
+                    "comment": null
+                },
+                "USER_ID": {
+                    "type": "NUMBER",
+                    "index": 2,
+                    "name": "USER_ID",
+                    "comment": null
+                },
+                "ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 3,
+                    "name": "ORDER_DATE",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "STATUS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 99,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 2048,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:09UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "seed.jaffle_shop_package.raw_orders"
+        },
+        "model.jaffle_shop_package.dim_downstream_model_dependent_on_source": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "DIM_DOWNSTREAM_MODEL_DEPENDENT_ON_SOURCE",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER_DATE",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER_DATE",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.dim_downstream_model_dependent_on_source"
+        },
+        "model.elementary.snapshot_run_results": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "SNAPSHOT_RUN_RESULTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "MODEL_EXECUTION_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "MODEL_EXECUTION_ID",
+                    "comment": null
+                },
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "INVOCATION_ID": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "INVOCATION_ID",
+                    "comment": null
+                },
+                "QUERY_ID": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "QUERY_ID",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "FULL_REFRESH": {
+                    "type": "BOOLEAN",
+                    "index": 8,
+                    "name": "FULL_REFRESH",
+                    "comment": null
+                },
+                "MESSAGE": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "MESSAGE",
+                    "comment": null
+                },
+                "EXECUTION_TIME": {
+                    "type": "FLOAT",
+                    "index": 10,
+                    "name": "EXECUTION_TIME",
+                    "comment": null
+                },
+                "EXECUTE_STARTED_AT": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "EXECUTE_STARTED_AT",
+                    "comment": null
+                },
+                "EXECUTE_COMPLETED_AT": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "EXECUTE_COMPLETED_AT",
+                    "comment": null
+                },
+                "COMPILE_STARTED_AT": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "COMPILE_STARTED_AT",
+                    "comment": null
+                },
+                "COMPILE_COMPLETED_AT": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "COMPILE_COMPLETED_AT",
+                    "comment": null
+                },
+                "COMPILED_CODE": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "COMPILED_CODE",
+                    "comment": null
+                },
+                "ADAPTER_RESPONSE": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "ADAPTER_RESPONSE",
+                    "comment": null
+                },
+                "THREAD_ID": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "THREAD_ID",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "MATERIALIZATION": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "MATERIALIZATION",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "PACKAGE_NAME": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "PACKAGE_NAME",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 23,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "ORIGINAL_PATH": {
+                    "type": "TEXT",
+                    "index": 24,
+                    "name": "ORIGINAL_PATH",
+                    "comment": null
+                },
+                "OWNER": {
+                    "type": "TEXT",
+                    "index": 25,
+                    "name": "OWNER",
+                    "comment": null
+                },
+                "ALIAS": {
+                    "type": "TEXT",
+                    "index": 26,
+                    "name": "ALIAS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.snapshot_run_results"
+        },
+        "model.elementary.dbt_run_results": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_RUN_RESULTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "MODEL_EXECUTION_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "MODEL_EXECUTION_ID",
+                    "comment": null
+                },
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "INVOCATION_ID": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "INVOCATION_ID",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "CREATED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 5,
+                    "name": "CREATED_AT",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "MESSAGE": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "MESSAGE",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "RESOURCE_TYPE": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "RESOURCE_TYPE",
+                    "comment": null
+                },
+                "EXECUTION_TIME": {
+                    "type": "FLOAT",
+                    "index": 10,
+                    "name": "EXECUTION_TIME",
+                    "comment": null
+                },
+                "EXECUTE_STARTED_AT": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "EXECUTE_STARTED_AT",
+                    "comment": null
+                },
+                "EXECUTE_COMPLETED_AT": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "EXECUTE_COMPLETED_AT",
+                    "comment": null
+                },
+                "COMPILE_STARTED_AT": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "COMPILE_STARTED_AT",
+                    "comment": null
+                },
+                "COMPILE_COMPLETED_AT": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "COMPILE_COMPLETED_AT",
+                    "comment": null
+                },
+                "ROWS_AFFECTED": {
+                    "type": "NUMBER",
+                    "index": 15,
+                    "name": "ROWS_AFFECTED",
+                    "comment": null
+                },
+                "FULL_REFRESH": {
+                    "type": "BOOLEAN",
+                    "index": 16,
+                    "name": "FULL_REFRESH",
+                    "comment": null
+                },
+                "COMPILED_CODE": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "COMPILED_CODE",
+                    "comment": null
+                },
+                "FAILURES": {
+                    "type": "NUMBER",
+                    "index": 18,
+                    "name": "FAILURES",
+                    "comment": null
+                },
+                "QUERY_ID": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "QUERY_ID",
+                    "comment": null
+                },
+                "THREAD_ID": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "THREAD_ID",
+                    "comment": null
+                },
+                "MATERIALIZATION": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "MATERIALIZATION",
+                    "comment": null
+                },
+                "ADAPTER_RESPONSE": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "ADAPTER_RESPONSE",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 338,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 88576,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:09UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_run_results"
+        },
+        "model.elementary.dbt_artifacts_hashes": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_ARTIFACTS_HASHES",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ARTIFACTS_MODEL": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "ARTIFACTS_MODEL",
+                    "comment": null
+                },
+                "METADATA_HASH": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "METADATA_HASH",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_artifacts_hashes"
+        },
+        "model.jaffle_shop_package.fct_downstream_model_dependent_on_source": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "FCT_DOWNSTREAM_MODEL_DEPENDENT_ON_SOURCE",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER_DATE",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER_DATE",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.fct_downstream_model_dependent_on_source"
+        },
+        "model.elementary.job_run_results": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "JOB_RUN_RESULTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "ID",
+                    "comment": null
+                },
+                "RUN_ID": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "RUN_ID",
+                    "comment": null
+                },
+                "RUN_STARTED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 4,
+                    "name": "RUN_STARTED_AT",
+                    "comment": null
+                },
+                "RUN_COMPLETED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 5,
+                    "name": "RUN_COMPLETED_AT",
+                    "comment": null
+                },
+                "RUN_EXECUTION_TIME": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "RUN_EXECUTION_TIME",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.job_run_results"
+        },
+        "model.elementary.monitors_runs": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "MONITORS_RUNS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "FULL_TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "FULL_TABLE_NAME",
+                    "comment": null
+                },
+                "COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "COLUMN_NAME",
+                    "comment": null
+                },
+                "METRIC_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "METRIC_NAME",
+                    "comment": null
+                },
+                "METRIC_PROPERTIES": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "METRIC_PROPERTIES",
+                    "comment": null
+                },
+                "LAST_BUCKET_END": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 5,
+                    "name": "LAST_BUCKET_END",
+                    "comment": null
+                },
+                "FIRST_BUCKET_END": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 6,
+                    "name": "FIRST_BUCKET_END",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.monitors_runs"
+        },
+        "model.elementary.dbt_tests": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_TESTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "SHORT_NAME": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "SHORT_NAME",
+                    "comment": null
+                },
+                "ALIAS": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "ALIAS",
+                    "comment": null
+                },
+                "TEST_COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "TEST_COLUMN_NAME",
+                    "comment": null
+                },
+                "SEVERITY": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "SEVERITY",
+                    "comment": null
+                },
+                "WARN_IF": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "WARN_IF",
+                    "comment": null
+                },
+                "ERROR_IF": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "ERROR_IF",
+                    "comment": null
+                },
+                "TEST_PARAMS": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "TEST_PARAMS",
+                    "comment": null
+                },
+                "TEST_NAMESPACE": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "TEST_NAMESPACE",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "MODEL_TAGS": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "MODEL_TAGS",
+                    "comment": null
+                },
+                "MODEL_OWNERS": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "MODEL_OWNERS",
+                    "comment": null
+                },
+                "META": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "META",
+                    "comment": null
+                },
+                "DEPENDS_ON_MACROS": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "DEPENDS_ON_MACROS",
+                    "comment": null
+                },
+                "DEPENDS_ON_NODES": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "DEPENDS_ON_NODES",
+                    "comment": null
+                },
+                "PARENT_MODEL_UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "PARENT_MODEL_UNIQUE_ID",
+                    "comment": null
+                },
+                "DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 20,
+                    "name": "DESCRIPTION",
+                    "comment": null
+                },
+                "PACKAGE_NAME": {
+                    "type": "TEXT",
+                    "index": 21,
+                    "name": "PACKAGE_NAME",
+                    "comment": null
+                },
+                "TYPE": {
+                    "type": "TEXT",
+                    "index": 22,
+                    "name": "TYPE",
+                    "comment": null
+                },
+                "ORIGINAL_PATH": {
+                    "type": "TEXT",
+                    "index": 23,
+                    "name": "ORIGINAL_PATH",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 24,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 25,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "METADATA_HASH": {
+                    "type": "TEXT",
+                    "index": 26,
+                    "name": "METADATA_HASH",
+                    "comment": null
+                },
+                "QUALITY_DIMENSION": {
+                    "type": "TEXT",
+                    "index": 27,
+                    "name": "QUALITY_DIMENSION",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 20,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 12800,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:09UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_tests"
+        },
+        "model.jaffle_shop_package.stg_depends_on_stg": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "STG_DEPENDS_ON_STG",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER_DATE",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER_DATE",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.stg_depends_on_stg"
+        },
+        "model.jaffle_shop_package.mart_downstream_model_dependent_on_source": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "MART_DOWNSTREAM_MODEL_DEPENDENT_ON_SOURCE",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER_DATE",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER_DATE",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.mart_downstream_model_dependent_on_source"
+        },
+        "model.jaffle_shop_package.source_fanout1": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "SOURCE_FANOUT1",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER_DATE",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER_DATE",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.source_fanout1"
+        },
+        "model.jaffle_shop_package.stg_payments": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "STG_PAYMENTS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "PAYMENT_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "PAYMENT_ID",
+                    "comment": null
+                },
+                "ORDER_ID": {
+                    "type": "NUMBER",
+                    "index": 2,
+                    "name": "ORDER_ID",
+                    "comment": null
+                },
+                "PAYMENT_METHOD": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "PAYMENT_METHOD",
+                    "comment": null
+                },
+                "AMOUNT": {
+                    "type": "NUMBER",
+                    "index": 4,
+                    "name": "AMOUNT",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.stg_payments"
+        },
+        "model.elementary.data_monitoring_metrics": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DATA_MONITORING_METRICS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "ID",
+                    "comment": null
+                },
+                "FULL_TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FULL_TABLE_NAME",
+                    "comment": null
+                },
+                "COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "COLUMN_NAME",
+                    "comment": null
+                },
+                "METRIC_NAME": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "METRIC_NAME",
+                    "comment": null
+                },
+                "METRIC_VALUE": {
+                    "type": "FLOAT",
+                    "index": 5,
+                    "name": "METRIC_VALUE",
+                    "comment": null
+                },
+                "SOURCE_VALUE": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "SOURCE_VALUE",
+                    "comment": null
+                },
+                "BUCKET_START": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 7,
+                    "name": "BUCKET_START",
+                    "comment": null
+                },
+                "BUCKET_END": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 8,
+                    "name": "BUCKET_END",
+                    "comment": null
+                },
+                "BUCKET_DURATION_HOURS": {
+                    "type": "NUMBER",
+                    "index": 9,
+                    "name": "BUCKET_DURATION_HOURS",
+                    "comment": null
+                },
+                "UPDATED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 10,
+                    "name": "UPDATED_AT",
+                    "comment": null
+                },
+                "DIMENSION": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "DIMENSION",
+                    "comment": null
+                },
+                "DIMENSION_VALUE": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "DIMENSION_VALUE",
+                    "comment": null
+                },
+                "METRIC_PROPERTIES": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "METRIC_PROPERTIES",
+                    "comment": null
+                },
+                "CREATED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 14,
+                    "name": "CREATED_AT",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 206,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 9728,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:09UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.data_monitoring_metrics"
+        },
+        "model.elementary.alerts_dbt_models": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "ALERTS_DBT_MODELS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ALERT_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "ALERT_ID",
+                    "comment": null
+                },
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "DETECTED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 3,
+                    "name": "DETECTED_AT",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "MATERIALIZATION": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "MATERIALIZATION",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "ORIGINAL_PATH": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "ORIGINAL_PATH",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "MESSAGE": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "MESSAGE",
+                    "comment": null
+                },
+                "OWNERS": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "OWNERS",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "ALIAS": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "ALIAS",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "FULL_REFRESH": {
+                    "type": "BOOLEAN",
+                    "index": 14,
+                    "name": "FULL_REFRESH",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.alerts_dbt_models"
+        },
+        "model.jaffle_shop_package.orders": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP",
+                "name": "ORDERS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "ORDER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "ORDER_ID",
+                    "comment": null
+                },
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 2,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 3,
+                    "name": "ORDER_DATE",
+                    "comment": null
+                },
+                "STATUS": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "STATUS",
+                    "comment": null
+                },
+                "CREDIT_CARD_AMOUNT": {
+                    "type": "NUMBER",
+                    "index": 5,
+                    "name": "CREDIT_CARD_AMOUNT",
+                    "comment": null
+                },
+                "COUPON_AMOUNT": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "COUPON_AMOUNT",
+                    "comment": null
+                },
+                "BANK_TRANSFER_AMOUNT": {
+                    "type": "NUMBER",
+                    "index": 7,
+                    "name": "BANK_TRANSFER_AMOUNT",
+                    "comment": null
+                },
+                "GIFT_CARD_AMOUNT": {
+                    "type": "NUMBER",
+                    "index": 8,
+                    "name": "GIFT_CARD_AMOUNT",
+                    "comment": null
+                },
+                "AMOUNT": {
+                    "type": "NUMBER",
+                    "index": 9,
+                    "name": "AMOUNT",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.jaffle_shop_package.orders"
+        },
+        "model.elementary.anomaly_threshold_sensitivity": {
+            "metadata": {
+                "type": "VIEW",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "ANOMALY_THRESHOLD_SENSITIVITY",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "FULL_TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "FULL_TABLE_NAME",
+                    "comment": null
+                },
+                "COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "COLUMN_NAME",
+                    "comment": null
+                },
+                "METRIC_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "METRIC_NAME",
+                    "comment": null
+                },
+                "LATEST_METRIC_VALUE": {
+                    "type": "FLOAT",
+                    "index": 4,
+                    "name": "LATEST_METRIC_VALUE",
+                    "comment": null
+                },
+                "METRIC_AVG": {
+                    "type": "FLOAT",
+                    "index": 5,
+                    "name": "METRIC_AVG",
+                    "comment": null
+                },
+                "METRIC_STDDEV": {
+                    "type": "FLOAT",
+                    "index": 6,
+                    "name": "METRIC_STDDEV",
+                    "comment": null
+                },
+                "ANOMALY_SCORE": {
+                    "type": "FLOAT",
+                    "index": 7,
+                    "name": "ANOMALY_SCORE",
+                    "comment": null
+                },
+                "is_anomaly_1_5": {
+                    "type": "BOOLEAN",
+                    "index": 8,
+                    "name": "is_anomaly_1_5",
+                    "comment": null
+                },
+                "is_anomaly_2": {
+                    "type": "BOOLEAN",
+                    "index": 9,
+                    "name": "is_anomaly_2",
+                    "comment": null
+                },
+                "is_anomaly_2_5": {
+                    "type": "BOOLEAN",
+                    "index": 10,
+                    "name": "is_anomaly_2_5",
+                    "comment": null
+                },
+                "is_anomaly_3": {
+                    "type": "BOOLEAN",
+                    "index": 11,
+                    "name": "is_anomaly_3",
+                    "comment": null
+                },
+                "is_anomaly_3_5": {
+                    "type": "BOOLEAN",
+                    "index": 12,
+                    "name": "is_anomaly_3_5",
+                    "comment": null
+                },
+                "is_anomaly_4": {
+                    "type": "BOOLEAN",
+                    "index": 13,
+                    "name": "is_anomaly_4",
+                    "comment": null
+                },
+                "is_anomaly_4_5": {
+                    "type": "BOOLEAN",
+                    "index": 14,
+                    "name": "is_anomaly_4_5",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": false,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.anomaly_threshold_sensitivity"
+        },
+        "model.elementary.dbt_seeds": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_SEEDS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "ALIAS": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "ALIAS",
+                    "comment": null
+                },
+                "CHECKSUM": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "CHECKSUM",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "META": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "META",
+                    "comment": null
+                },
+                "OWNER": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "OWNER",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "DESCRIPTION",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "PACKAGE_NAME": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "PACKAGE_NAME",
+                    "comment": null
+                },
+                "ORIGINAL_PATH": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "ORIGINAL_PATH",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "METADATA_HASH": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "METADATA_HASH",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 3,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 5632,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:08UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_seeds"
+        },
+        "model.elementary.dbt_models": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "DBT_MODELS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "UNIQUE_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "UNIQUE_ID",
+                    "comment": null
+                },
+                "ALIAS": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "ALIAS",
+                    "comment": null
+                },
+                "CHECKSUM": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "CHECKSUM",
+                    "comment": null
+                },
+                "MATERIALIZATION": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "MATERIALIZATION",
+                    "comment": null
+                },
+                "TAGS": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "TAGS",
+                    "comment": null
+                },
+                "META": {
+                    "type": "TEXT",
+                    "index": 6,
+                    "name": "META",
+                    "comment": null
+                },
+                "OWNER": {
+                    "type": "TEXT",
+                    "index": 7,
+                    "name": "OWNER",
+                    "comment": null
+                },
+                "DATABASE_NAME": {
+                    "type": "TEXT",
+                    "index": 8,
+                    "name": "DATABASE_NAME",
+                    "comment": null
+                },
+                "SCHEMA_NAME": {
+                    "type": "TEXT",
+                    "index": 9,
+                    "name": "SCHEMA_NAME",
+                    "comment": null
+                },
+                "DEPENDS_ON_MACROS": {
+                    "type": "TEXT",
+                    "index": 10,
+                    "name": "DEPENDS_ON_MACROS",
+                    "comment": null
+                },
+                "DEPENDS_ON_NODES": {
+                    "type": "TEXT",
+                    "index": 11,
+                    "name": "DEPENDS_ON_NODES",
+                    "comment": null
+                },
+                "DESCRIPTION": {
+                    "type": "TEXT",
+                    "index": 12,
+                    "name": "DESCRIPTION",
+                    "comment": null
+                },
+                "NAME": {
+                    "type": "TEXT",
+                    "index": 13,
+                    "name": "NAME",
+                    "comment": null
+                },
+                "PACKAGE_NAME": {
+                    "type": "TEXT",
+                    "index": 14,
+                    "name": "PACKAGE_NAME",
+                    "comment": null
+                },
+                "ORIGINAL_PATH": {
+                    "type": "TEXT",
+                    "index": 15,
+                    "name": "ORIGINAL_PATH",
+                    "comment": null
+                },
+                "PATH": {
+                    "type": "TEXT",
+                    "index": 16,
+                    "name": "PATH",
+                    "comment": null
+                },
+                "PATCH_PATH": {
+                    "type": "TEXT",
+                    "index": 17,
+                    "name": "PATCH_PATH",
+                    "comment": null
+                },
+                "GENERATED_AT": {
+                    "type": "TEXT",
+                    "index": 18,
+                    "name": "GENERATED_AT",
+                    "comment": null
+                },
+                "METADATA_HASH": {
+                    "type": "TEXT",
+                    "index": 19,
+                    "name": "METADATA_HASH",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 48,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 18432,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-13 00:08UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.dbt_models"
+        },
+        "model.elementary.schema_columns_snapshot": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "JAFFLE_SHOP_ELEMENTARY",
+                "name": "SCHEMA_COLUMNS_SNAPSHOT",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "COLUMN_STATE_ID": {
+                    "type": "TEXT",
+                    "index": 1,
+                    "name": "COLUMN_STATE_ID",
+                    "comment": null
+                },
+                "FULL_COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FULL_COLUMN_NAME",
+                    "comment": null
+                },
+                "FULL_TABLE_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "FULL_TABLE_NAME",
+                    "comment": null
+                },
+                "COLUMN_NAME": {
+                    "type": "TEXT",
+                    "index": 4,
+                    "name": "COLUMN_NAME",
+                    "comment": null
+                },
+                "DATA_TYPE": {
+                    "type": "TEXT",
+                    "index": 5,
+                    "name": "DATA_TYPE",
+                    "comment": null
+                },
+                "IS_NEW": {
+                    "type": "BOOLEAN",
+                    "index": 6,
+                    "name": "IS_NEW",
+                    "comment": null
+                },
+                "DETECTED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 7,
+                    "name": "DETECTED_AT",
+                    "comment": null
+                },
+                "CREATED_AT": {
+                    "type": "TIMESTAMP_NTZ",
+                    "index": 8,
+                    "name": "CREATED_AT",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 0,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 0,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2024-01-02 17:57UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "model.elementary.schema_columns_snapshot"
+        }
+    },
+    "sources": {
+        "source.jaffle_shop_package.jaffle_shop.customers": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "PUBLIC",
+                "name": "CUSTOMERS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER_DATE",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER_DATE",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 100,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 3584,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2023-12-16 02:56UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "source.jaffle_shop_package.jaffle_shop.customers"
+        },
+        "source.jaffle_shop_package.stripe.stripe_customers": {
+            "metadata": {
+                "type": "BASE TABLE",
+                "schema": "PUBLIC",
+                "name": "CUSTOMERS",
+                "database": "ANALYTICS",
+                "comment": null,
+                "owner": "ACCOUNTADMIN"
+            },
+            "columns": {
+                "CUSTOMER_ID": {
+                    "type": "NUMBER",
+                    "index": 1,
+                    "name": "CUSTOMER_ID",
+                    "comment": null
+                },
+                "FIRST_NAME": {
+                    "type": "TEXT",
+                    "index": 2,
+                    "name": "FIRST_NAME",
+                    "comment": null
+                },
+                "LAST_NAME": {
+                    "type": "TEXT",
+                    "index": 3,
+                    "name": "LAST_NAME",
+                    "comment": null
+                },
+                "FIRST_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 4,
+                    "name": "FIRST_ORDER_DATE",
+                    "comment": null
+                },
+                "MOST_RECENT_ORDER_DATE": {
+                    "type": "DATE",
+                    "index": 5,
+                    "name": "MOST_RECENT_ORDER_DATE",
+                    "comment": null
+                },
+                "NUMBER_OF_ORDERS": {
+                    "type": "NUMBER",
+                    "index": 6,
+                    "name": "NUMBER_OF_ORDERS",
+                    "comment": null
+                }
+            },
+            "stats": {
+                "row_count": {
+                    "id": "row_count",
+                    "label": "Row Count",
+                    "value": 100,
+                    "include": true,
+                    "description": "An approximate count of rows in this table"
+                },
+                "bytes": {
+                    "id": "bytes",
+                    "label": "Approximate Size",
+                    "value": 3584,
+                    "include": true,
+                    "description": "Approximate size of the table as reported by Snowflake"
+                },
+                "last_modified": {
+                    "id": "last_modified",
+                    "label": "Last Modified",
+                    "value": "2023-12-16 02:56UTC",
+                    "include": true,
+                    "description": "The timestamp for last update/change"
+                },
+                "has_stats": {
+                    "id": "has_stats",
+                    "label": "Has Stats?",
+                    "value": true,
+                    "include": false,
+                    "description": "Indicates whether there are statistics for this table"
+                }
+            },
+            "unique_id": "source.jaffle_shop_package.stripe.stripe_customers"
+        }
+    },
+    "errors": null
+}

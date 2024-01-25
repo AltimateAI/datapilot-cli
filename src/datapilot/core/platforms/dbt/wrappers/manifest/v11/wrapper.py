@@ -1,0 +1,276 @@
+from typing import Dict, Set, Text, Union
+
+from dbt_artifacts_parser.parsers.manifest.manifest_v11 import (
+    GenericTestNode, ManifestV11, SingularTestNode)
+
+from datapilot.core.platforms.dbt.constants import (GENERIC, OTHER_TEST_NODE,
+                                                    SEED, SINGULAR)
+from datapilot.core.platforms.dbt.schemas.manifest import (
+    AltimateDBTContract, AltimateDependsOn, AltimateExposureType,
+    AltimateExternalTable, AltimateFileHash, AltimateFreshnessThreshold,
+    AltimateManifestColumnInfo, AltimateManifestExposureNode,
+    AltimateManifestNode, AltimateManifestSourceNode, AltimateManifestTestNode,
+    AltimateMaturityEnum, AltimateNodeConfig, AltimateOwner, AltimateQuoting,
+    AltimateRefArgs, AltimateResourceType, AltimateSourceConfig,
+    AltimateTestConfig, AltimateTestMetadata)
+from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import (
+    TEST_TYPE_TO_NODE_MAP, ExposureNode, ManifestNode, SourceNode, TestNode)
+from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import \
+    BaseManifestWrapper
+
+
+class ManifestV11Wrapper(BaseManifestWrapper):
+    def __init__(self, manifest: ManifestV11):
+        self.manifest = manifest
+
+    def _get_node(self, node: ManifestNode) -> AltimateManifestNode:
+        (
+            sources,
+            metrics,
+            compiled_path,
+            compiled,
+            compiled_code,
+            depends_on_nodes,
+            raw_code,
+            language,
+            contract,
+        ) = ([], [], None, None, None, None, "", "", None)
+        if node.resource_type.value != SEED:
+            sources = node.sources
+            metrics = node.metrics
+            depends_on_nodes = node.depends_on.nodes
+            compiled_path = node.compiled_path
+            compiled = node.compiled
+            raw_code = node.raw_code
+            language = node.language
+            contract = AltimateDBTContract(**node.contract.__dict__) if node.contract else None
+
+        return AltimateManifestNode(
+            database=node.database,
+            schema_name=node.schema_,
+            name=node.name,
+            resource_type=AltimateResourceType(node.resource_type.value),
+            package_name=node.package_name,
+            path=node.path,
+            description=node.description,
+            original_file_path=node.original_file_path,
+            unique_id=node.unique_id,
+            fqn=node.fqn,
+            alias=node.alias,
+            raw_code=raw_code,
+            language=language,
+            config=AltimateNodeConfig(**node.config.__dict__) if node.config else None,
+            checksum=AltimateFileHash(
+                name=node.checksum.name,
+                checksum=node.checksum.checksum,
+            ),
+            columns={
+                name: AltimateManifestColumnInfo(
+                    name=column.name,
+                    description=column.description,
+                    meta=column.meta,
+                    data_type=column.data_type,
+                    quote=column.quote,
+                    tags=column.tags,
+                )
+                for name, column in node.columns.items()
+            },
+            relation_name=node.relation_name,
+            sources=sources,
+            metrics=metrics,
+            depends_on=AltimateDependsOn(
+                nodes=depends_on_nodes,
+                macros=node.depends_on.macros,
+            ),
+            compiled_path=compiled_path,
+            compiled=compiled,
+            compiled_code=compiled_code,
+            contract=contract,
+        )
+
+    def _get_source(self, source: SourceNode) -> AltimateManifestSourceNode:
+        return AltimateManifestSourceNode(
+            database=source.database,
+            resource_type=AltimateResourceType(source.resource_type.value),
+            schema_name=source.schema_,
+            name=source.name,
+            package_name=source.package_name,
+            path=source.path,
+            original_file_path=source.original_file_path,
+            unique_id=source.unique_id,
+            fqn=source.fqn,
+            source_name=source.source_name,
+            source_description=source.source_description,
+            loader=source.loader,
+            identifier=source.identifier,
+            quoting=AltimateQuoting(**source.quoting.dict()) if source.quoting else None,
+            loaded_at_field=source.loaded_at_field,
+            freshness=AltimateFreshnessThreshold(**source.freshness.dict()) if source.freshness else None,
+            external=AltimateExternalTable(**source.external.dict()) if source.external else None,
+            description=source.description,
+            columns={
+                name: AltimateManifestColumnInfo(
+                    name=column.name,
+                    description=column.description,
+                    meta=column.meta,
+                    data_type=column.data_type,
+                    quote=column.quote,
+                    tags=column.tags,
+                )
+                for name, column in source.columns.items()
+            },
+            meta=source.meta,
+            relation_name=source.relation_name,
+            source_meta=source.source_meta,
+            tags=source.tags,
+            config=AltimateSourceConfig(**source.config.dict()) if source.config else None,
+            patch_path=source.patch_path,
+            unrendered_config=source.unrendered_config,
+            created_at=source.created_at,
+        )
+
+    def _get_exposure(self, exposure: ExposureNode) -> AltimateManifestExposureNode:
+        return AltimateManifestExposureNode(
+            name=exposure.name,
+            resource_type=exposure.resource_type,
+            package_name=exposure.package_name,
+            path=exposure.path,
+            original_file_path=exposure.original_file_path,
+            unique_id=exposure.unique_id,
+            fqn=exposure.fqn,
+            type=AltimateExposureType(exposure.type.value),
+            owner=AltimateOwner(**exposure.owner.dict()) if exposure.owner else None,
+            description=exposure.description,
+            label=exposure.label,
+            maturity=AltimateMaturityEnum(exposure.maturity.value),
+            meta=exposure.meta,
+            tags=exposure.tags,
+            config=AltimateSourceConfig(**exposure.config.dict()) if exposure.config else None,
+            unrendered_config=exposure.unrendered_config,
+            url=exposure.url,
+            depends_on=AltimateDependsOn(
+                nodes=exposure.depends_on.nodes,
+                macros=exposure.depends_on.macros,
+            ),
+            refs=[AltimateRefArgs(**ref.dict()) for ref in exposure.refs] if exposure.refs else None,
+            sources=exposure.sources,
+            metrics=exposure.metrics,
+            created_at=exposure.created_at,
+        )
+
+    def _get_tests(self, test: TestNode) -> AltimateManifestTestNode:
+        if isinstance(test, GenericTestNode):
+            test_type = GENERIC
+        elif isinstance(test, SingularTestNode):
+            test_type = SINGULAR
+        else:
+            test_type = OTHER_TEST_NODE
+        return AltimateManifestTestNode(
+            test_metadata=AltimateTestMetadata(**test.test_metadata.dict()) if test.test_metadata else None,
+            test_type=test_type,
+            name=test.name,
+            resource_type=AltimateResourceType(test.resource_type.value),
+            package_name=test.package_name,
+            path=test.path,
+            original_file_path=test.original_file_path,
+            unique_id=test.unique_id,
+            fqn=test.fqn,
+            alias=test.alias,
+            checksum=AltimateFileHash(
+                name=test.checksum.name,
+                checksum=test.checksum.checksum,
+            ),
+            config=AltimateTestConfig(**test.config.dict()) if test.config else None,
+            description=test.description,
+            tags=test.tags,
+            columns={
+                name: AltimateManifestColumnInfo(
+                    name=column.name,
+                    description=column.description,
+                    meta=column.meta,
+                    data_type=column.data_type,
+                    quote=column.quote,
+                    tags=column.tags,
+                )
+                for name, column in test.columns.items()
+            }
+            if test.columns
+            else None,
+            meta=test.meta,
+            relation_name=test.relation_name,
+            group=test.group,
+            raw_code=test.raw_code,
+            language=test.language,
+            refs=[AltimateRefArgs(**ref.dict()) for ref in test.refs] if test.refs else None,
+            sources=test.sources,
+            metrics=test.metrics,
+            depends_on=AltimateDependsOn(
+                nodes=test.depends_on.nodes,
+                macros=test.depends_on.macros,
+            ),
+            compiled_path=test.compiled_path,
+            compiled=test.compiled,
+            compiled_code=test.compiled_code,
+        )
+
+    def get_nodes(
+        self,
+    ) -> Dict[Text, AltimateManifestNode]:
+        nodes = {}
+        for node in self.manifest.nodes.values():
+            if (
+                node.resource_type
+                in [
+                    AltimateResourceType.seed,
+                    AltimateResourceType.test,
+                ]
+                or node.package_name != self.get_package()
+            ):
+                continue
+            nodes[node.unique_id] = self._get_node(node)
+        return nodes
+
+    def get_package(self) -> Text:
+        return self.manifest.metadata.project_name
+
+    def get_sources(self) -> Dict[Text, AltimateManifestSourceNode]:
+        sources = {}
+        for source in self.manifest.sources.values():
+            sources[source.unique_id] = self._get_source(source)
+        return sources
+
+    def get_exposures(self) -> Dict[Text, AltimateManifestExposureNode]:
+        exposures = {}
+        for exposure in self.manifest.exposures.values():
+            exposures[exposure.unique_id] = self._get_exposure(exposure)
+        return exposures
+
+    def get_tests(self, types=None) -> Dict[Text, AltimateManifestTestNode]:
+        tests = {}
+        if types is None:
+            types = TestNode
+        else:
+            type_list = [TEST_TYPE_TO_NODE_MAP.get(t) for t in types if t in TEST_TYPE_TO_NODE_MAP]
+            types = Union[tuple(type_list)]
+
+        for node in self.manifest.nodes.values():
+            if node.resource_type.value != AltimateResourceType.test.value:
+                continue
+            if isinstance(node, types or TestNode):
+                tests[node.unique_id] = self._get_tests(node)
+        return tests
+
+    def parent_to_child_map(self, nodes: Dict[Text, AltimateManifestNode]) -> Dict[Text, Set[Text]]:
+        """
+        Current manifest contains information about parents
+        THis gives an information of node to childre
+        :param nodes: A dictionary of nodes in a manifest.
+        :return: A dictionary of all the children of a node.
+        """
+        children_map = {}
+        for node_id, node in nodes.items():
+            if node_id not in children_map:
+                children_map[node_id] = set()
+            for parent in node.depends_on.nodes or []:
+                children_map.setdefault(parent, set()).add(node_id)
+        return children_map
