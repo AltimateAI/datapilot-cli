@@ -59,5 +59,3 @@ default_context:
     website: "www.altimate.ai"
     year_from: "2024"
     year_to: "2024"
-
-version: "0.0.0"
