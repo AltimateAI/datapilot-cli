@@ -1,0 +1,61 @@
+# This file exists so you can easily regenerate your project.
+#
+# `cookiepatcher` is a convenient shim around `cookiecutter`
+# for regenerating projects (it will generate a .cookiecutterrc
+# automatically for any template). To use it:
+#
+#    pip install cookiepatcher
+#    cookiepatcher gh:ionelmc/cookiecutter-pylibrary datapilot
+#
+# See:
+#    https://pypi.org/project/cookiepatcher
+#
+# Alternatively, you can run:
+#
+#    cookiecutter --overwrite-if-exists --config-file=datapilot/.cookiecutterrc gh:ionelmc/cookiecutter-pylibrary
+
+default_context:
+    allow_tests_inside_package: "no"
+    c_extension_function: "longest"
+    c_extension_module: "_datapilot"
+    c_extension_optional: "yes"
+    c_extension_support: "no"
+    codacy: "no"
+    codacy_projectid: "[Get ID from https://app.codacy.com/gh/anandgupta42/datapilot/settings]"
+    codeclimate: "no"
+    codecov: "yes"
+    command_line_interface: "click"
+    command_line_interface_bin_name: "datapilot"
+    coveralls: "no"
+    distribution_name: "datapilot"
+    email: "info@altimate.ai"
+    formatter_quote_style: "double"
+    full_name: "Anand Gupta"
+    github_actions: "yes"
+    github_actions_osx: "yes"
+    github_actions_windows: "yes"
+    license: "MIT license"
+    package_name: "datapilot"
+    pre_commit: "yes"
+    project_name: "datapilot"
+    project_short_description: "Assistant for Data Teams"
+    pypi_badge: "yes"
+    pypi_disable_upload: "no"
+    release_date: "today"
+    repo_hosting: "github.com"
+    repo_hosting_domain: "github.com"
+    repo_main_branch: "main"
+    repo_name: "datapilot"
+    repo_username: "AltimateAI"
+    scrutinizer: "yes"
+    setup_py_uses_setuptools_scm: "no"
+    sphinx_docs: "yes"
+    sphinx_docs_hosting: "https://datapilot.readthedocs.io/"
+    sphinx_doctest: "no"
+    sphinx_theme: "furo"
+    test_matrix_separate_coverage: "yes"
+    version: "0.0.0"
+    version_manager: "bump2version"
+    website: "www.altimate.ai"
+    year_from: "2024"
+    year_to: "2024"
