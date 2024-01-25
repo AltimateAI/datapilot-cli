@@ -54,7 +54,7 @@ default_context:
     sphinx_doctest: "no"
     sphinx_theme: "furo"
     test_matrix_separate_coverage: "yes"
-    version: "0.0.1"
+    version: "0.0.0"
     version_manager: "bump2version"
     website: "www.altimate.ai"
     year_from: "2024"
