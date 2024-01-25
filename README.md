@@ -18,7 +18,7 @@ Required Python Version: Python 3.7 or higher.
 DataPilot is available as a Python package and can be easily installed using pip.
 
 ```Shell
-pip install datapilot
+pip install altimate-datapilot
 ```
 
 ### Usage
