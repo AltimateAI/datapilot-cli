@@ -3,17 +3,11 @@ from typing import Dict, Optional, Text, Tuple
 
 from dbt_artifacts_parser.parser import parse_catalog, parse_manifest
 
-from datapilot.core.platforms.dbt.constants import (BASE, FOLDER, INTERMEDIATE,
-                                                    MART, MODEL, OTHER,
-                                                    STAGING)
-from datapilot.core.platforms.dbt.exceptions import \
-    AltimateInvalidManifestError
-from datapilot.core.platforms.dbt.schemas.manifest import (
-    AltimateManifestNode, AltimateManifestSourceNode, Catalog, Manifest)
-from datapilot.exceptions.exceptions import (AltimateFileNotFoundError,
-                                             AltimateInvalidJSONError)
-from datapilot.utils.utils import (extract_dir_name_from_file_path,
-                                   extract_folders_in_path, load_json)
+from datapilot.core.platforms.dbt.constants import BASE, FOLDER, INTERMEDIATE, MART, MODEL, OTHER, STAGING
+from datapilot.core.platforms.dbt.exceptions import AltimateInvalidManifestError
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode, AltimateManifestSourceNode, Catalog, Manifest
+from datapilot.exceptions.exceptions import AltimateFileNotFoundError, AltimateInvalidJSONError
+from datapilot.utils.utils import extract_dir_name_from_file_path, extract_folders_in_path, load_json
 
 MODEL_TYPE_PATTERNS = {
     STAGING: r"^stg_.*",  # Example: models starting with 'stg_'

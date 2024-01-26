@@ -2,10 +2,8 @@ from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
 
 from datapilot.core.platforms.dbt.schemas.manifest import Catalog, Manifest
-from datapilot.core.platforms.dbt.wrappers.catalog.v1.wrapper import \
-    CatalogV1Wrapper
-from datapilot.core.platforms.dbt.wrappers.manifest.v11.wrapper import \
-    ManifestV11Wrapper
+from datapilot.core.platforms.dbt.wrappers.catalog.v1.wrapper import CatalogV1Wrapper
+from datapilot.core.platforms.dbt.wrappers.manifest.v11.wrapper import ManifestV11Wrapper
 from datapilot.exceptions.exceptions import AltimateNotSupportedError
 
 

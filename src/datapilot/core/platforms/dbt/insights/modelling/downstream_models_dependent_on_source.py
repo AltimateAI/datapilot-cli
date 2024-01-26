@@ -3,10 +3,8 @@ from typing import List
 from datapilot.config.utils import get_regex_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import INTERMEDIATE, MART
-from datapilot.core.platforms.dbt.insights.modelling.base import \
-    DBTModellingInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.insights.modelling.base import DBTModellingInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult, DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.core.platforms.dbt.utils import classify_model_type
 from datapilot.utils.formatting.utils import numbered_list

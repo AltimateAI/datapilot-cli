@@ -3,8 +3,7 @@ from typing import Dict, List, Optional, Text
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import GENERIC
 from datapilot.core.platforms.dbt.insights.dbt_test.base import DBTTestInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult, DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 

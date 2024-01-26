@@ -1,22 +1,38 @@
 from typing import Dict, Set, Text, Union
 
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import (
-    GenericTestNode, ManifestV11, SingularTestNode)
+from dbt_artifacts_parser.parsers.manifest.manifest_v11 import GenericTestNode, ManifestV11, SingularTestNode
 
-from datapilot.core.platforms.dbt.constants import (GENERIC, OTHER_TEST_NODE,
-                                                    SEED, SINGULAR)
+from datapilot.core.platforms.dbt.constants import GENERIC, OTHER_TEST_NODE, SEED, SINGULAR
 from datapilot.core.platforms.dbt.schemas.manifest import (
-    AltimateDBTContract, AltimateDependsOn, AltimateExposureType,
-    AltimateExternalTable, AltimateFileHash, AltimateFreshnessThreshold,
-    AltimateManifestColumnInfo, AltimateManifestExposureNode,
-    AltimateManifestNode, AltimateManifestSourceNode, AltimateManifestTestNode,
-    AltimateMaturityEnum, AltimateNodeConfig, AltimateOwner, AltimateQuoting,
-    AltimateRefArgs, AltimateResourceType, AltimateSourceConfig,
-    AltimateTestConfig, AltimateTestMetadata)
+    AltimateDBTContract,
+    AltimateDependsOn,
+    AltimateExposureType,
+    AltimateExternalTable,
+    AltimateFileHash,
+    AltimateFreshnessThreshold,
+    AltimateManifestColumnInfo,
+    AltimateManifestExposureNode,
+    AltimateManifestNode,
+    AltimateManifestSourceNode,
+    AltimateManifestTestNode,
+    AltimateMaturityEnum,
+    AltimateNodeConfig,
+    AltimateOwner,
+    AltimateQuoting,
+    AltimateRefArgs,
+    AltimateResourceType,
+    AltimateSourceConfig,
+    AltimateTestConfig,
+    AltimateTestMetadata,
+)
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import (
-    TEST_TYPE_TO_NODE_MAP, ExposureNode, ManifestNode, SourceNode, TestNode)
-from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import \
-    BaseManifestWrapper
+    TEST_TYPE_TO_NODE_MAP,
+    ExposureNode,
+    ManifestNode,
+    SourceNode,
+    TestNode,
+)
+from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import BaseManifestWrapper
 
 
 class ManifestV11Wrapper(BaseManifestWrapper):
@@ -183,19 +199,21 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             config=AltimateTestConfig(**test.config.dict()) if test.config else None,
             description=test.description,
             tags=test.tags,
-            columns={
-                name: AltimateManifestColumnInfo(
-                    name=column.name,
-                    description=column.description,
-                    meta=column.meta,
-                    data_type=column.data_type,
-                    quote=column.quote,
-                    tags=column.tags,
-                )
-                for name, column in test.columns.items()
-            }
-            if test.columns
-            else None,
+            columns=(
+                {
+                    name: AltimateManifestColumnInfo(
+                        name=column.name,
+                        description=column.description,
+                        meta=column.meta,
+                        data_type=column.data_type,
+                        quote=column.quote,
+                        tags=column.tags,
+                    )
+                    for name, column in test.columns.items()
+                }
+                if test.columns
+                else None
+            ),
             meta=test.meta,
             relation_name=test.relation_name,
             group=test.group,

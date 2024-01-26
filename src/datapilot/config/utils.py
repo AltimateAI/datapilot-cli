@@ -1,8 +1,7 @@
 from typing import Dict, Optional, Text
 
 from datapilot.core.platforms.dbt.constants import FOLDER, MODEL
-from datapilot.schemas.constants import (CONFIG_FOLDER_TYPE_PATTERNS,
-                                         CONFIG_MODEL_TYPE_PATTERNS)
+from datapilot.schemas.constants import CONFIG_FOLDER_TYPE_PATTERNS, CONFIG_MODEL_TYPE_PATTERNS
 
 
 def get_regex_configuration(

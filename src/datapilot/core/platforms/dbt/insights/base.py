@@ -5,10 +5,13 @@ from datapilot.core.insights.base.insight import Insight
 from datapilot.core.insights.schema import Severity
 from datapilot.core.platforms.dbt.constants import NON_MATERIALIZED
 from datapilot.core.platforms.dbt.schemas.manifest import (
-    AltimateManifestExposureNode, AltimateManifestNode,
-    AltimateManifestSourceNode, AltimateManifestTestNode, AltimateResourceType)
-from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import \
-    BaseManifestWrapper
+    AltimateManifestExposureNode,
+    AltimateManifestNode,
+    AltimateManifestSourceNode,
+    AltimateManifestTestNode,
+    AltimateResourceType,
+)
+from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import BaseManifestWrapper
 
 
 class DBTInsight(Insight):
@@ -42,9 +45,12 @@ class DBTInsight(Insight):
     def check_part_of_project(self, node_project_name: Text) -> bool:
         return node_project_name == self.project_name
 
-    def get_node(
-        self, node_id: Text
-    ) -> Union[AltimateManifestNode, AltimateManifestSourceNode, AltimateManifestExposureNode, AltimateManifestTestNode,]:
+    def get_node(self, node_id: Text) -> Union[
+        AltimateManifestNode,
+        AltimateManifestSourceNode,
+        AltimateManifestExposureNode,
+        AltimateManifestTestNode,
+    ]:
         if node_id in self.nodes:
             return self.nodes[node_id]
         elif node_id in self.sources:

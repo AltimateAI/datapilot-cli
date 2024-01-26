@@ -1,12 +1,13 @@
 import pytest
 
-from datapilot.core.platforms.dbt.constants import (BASE, INTERMEDIATE, MART,
-                                                    OTHER, STAGING)
-from datapilot.core.platforms.dbt.utils import (MODEL_TYPE_PATTERNS,
-                                                _check_model_naming_convention,
-                                                classify_model_type_by_folder,
-                                                classify_model_type_by_name,
-                                                get_hard_coded_references)
+from datapilot.core.platforms.dbt.constants import BASE, INTERMEDIATE, MART, OTHER, STAGING
+from datapilot.core.platforms.dbt.utils import (
+    MODEL_TYPE_PATTERNS,
+    _check_model_naming_convention,
+    classify_model_type_by_folder,
+    classify_model_type_by_name,
+    get_hard_coded_references,
+)
 
 test_cases = [
     # Test with a simple FROM clause

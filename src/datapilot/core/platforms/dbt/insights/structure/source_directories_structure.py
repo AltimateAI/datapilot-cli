@@ -3,10 +3,8 @@ from typing import Dict, List, Optional, Text
 from datapilot.config.utils import get_regex_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import OTHER
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
-from datapilot.core.platforms.dbt.insights.structure.base import \
-    DBTStructureInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult, DBTModelInsightResponse
+from datapilot.core.platforms.dbt.insights.structure.base import DBTStructureInsight
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.core.platforms.dbt.utils import _check_source_folder_convention
 

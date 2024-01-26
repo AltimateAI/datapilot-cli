@@ -1,8 +1,7 @@
 from typing import Dict, List, Text
 
 from datapilot.core.insights.schema import InsightResult, Severity
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTModelInsightResponse, DBTProjectInsightResponse)
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse, DBTProjectInsightResponse
 from datapilot.utils.formatting.utils import color_based_on_severity
 
 

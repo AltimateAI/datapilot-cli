@@ -5,8 +5,7 @@ import click
 from datapilot.config.config import load_config
 from datapilot.core.platforms.dbt.constants import MODEL, PROJECT
 from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
-from datapilot.core.platforms.dbt.formatting import (
-    generate_model_insights_table, generate_project_insights_table)
+from datapilot.core.platforms.dbt.formatting import generate_model_insights_table, generate_project_insights_table
 from datapilot.utils.formatting.utils import tabulate_data
 
 logging.basicConfig(level=logging.INFO)

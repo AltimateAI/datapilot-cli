@@ -1,13 +1,10 @@
 from typing import List, Text, Tuple
 
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.insights.governance.base import \
-    DBTGovernanceInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.insights.governance.base import DBTGovernanceInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult, DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.core.platforms.dbt.wrappers.catalog.wrapper import \
-    BaseCatalogWrapper
+from datapilot.core.platforms.dbt.wrappers.catalog.wrapper import BaseCatalogWrapper
 from datapilot.utils.formatting.utils import numbered_list
 
 

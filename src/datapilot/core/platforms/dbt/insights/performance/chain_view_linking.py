@@ -1,10 +1,8 @@
 from typing import List, Text
 
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.insights.performance.base import \
-    DBTPerformanceInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTProjectInsightResponse)
+from datapilot.core.platforms.dbt.insights.performance.base import DBTPerformanceInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult, DBTProjectInsightResponse
 from datapilot.schemas.constants import CONFIG_METRICS
 from datapilot.utils.formatting.utils import numbered_list
 

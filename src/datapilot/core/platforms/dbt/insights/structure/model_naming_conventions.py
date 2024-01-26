@@ -3,13 +3,10 @@ from typing import List, Optional
 from datapilot.config.utils import get_regex_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import MODEL, OTHER
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
-from datapilot.core.platforms.dbt.insights.structure.base import \
-    DBTStructureInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult, DBTModelInsightResponse
+from datapilot.core.platforms.dbt.insights.structure.base import DBTStructureInsight
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.core.platforms.dbt.utils import (_check_model_naming_convention,
-                                                classify_model_type)
+from datapilot.core.platforms.dbt.utils import _check_model_naming_convention, classify_model_type
 
 
 class DBTModelNamingConvention(DBTStructureInsight):

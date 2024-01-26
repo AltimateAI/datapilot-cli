@@ -1,12 +1,9 @@
 from typing import List
 
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.insights.governance.base import \
-    DBTGovernanceInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
-from datapilot.core.platforms.dbt.schemas.manifest import (
-    AltimateAccess, AltimateManifestNode, AltimateResourceType)
+from datapilot.core.platforms.dbt.insights.governance.base import DBTGovernanceInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult, DBTModelInsightResponse
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateAccess, AltimateManifestNode, AltimateResourceType
 from datapilot.utils.formatting.utils import numbered_list
 
 

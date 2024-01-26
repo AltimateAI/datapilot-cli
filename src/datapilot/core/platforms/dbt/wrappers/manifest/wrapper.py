@@ -2,8 +2,11 @@ from abc import ABC
 from typing import Dict, Set, Text
 
 from datapilot.core.platforms.dbt.schemas.manifest import (
-    AltimateManifestExposureNode, AltimateManifestNode,
-    AltimateManifestSourceNode, AltimateManifestTestNode)
+    AltimateManifestExposureNode,
+    AltimateManifestNode,
+    AltimateManifestSourceNode,
+    AltimateManifestTestNode,
+)
 
 
 class BaseManifestWrapper(ABC):

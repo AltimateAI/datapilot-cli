@@ -2,10 +2,8 @@ from typing import List, Text
 
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import SOURCE
-from datapilot.core.platforms.dbt.insights.performance.base import \
-    DBTPerformanceInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.insights.performance.base import DBTPerformanceInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult, DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.utils.formatting.utils import numbered_list
 

@@ -1,10 +1,8 @@
 from typing import List
 
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.insights.modelling.base import \
-    DBTModellingInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.insights.modelling.base import DBTModellingInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult, DBTModelInsightResponse
 
 
 class DBTRejoiningOfUpstreamConcepts(DBTModellingInsight):

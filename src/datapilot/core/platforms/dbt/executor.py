@@ -1,4 +1,5 @@
 import logging
+
 # from src.utils.formatting.utils import generate_model_insights_table
 from typing import Optional, Text
 
@@ -7,12 +8,10 @@ from configtree.tree import Tree
 from datapilot.config.config import load_config
 from datapilot.core.platforms.dbt.constants import MODEL, PROJECT
 from datapilot.core.platforms.dbt.factory import DBTFactory
-from datapilot.core.platforms.dbt.formatting import (
-    generate_model_insights_table, generate_project_insights_table)
+from datapilot.core.platforms.dbt.formatting import generate_model_insights_table, generate_project_insights_table
 from datapilot.core.platforms.dbt.insights import INSIGHTS
 from datapilot.core.platforms.dbt.utils import load_catalog, load_manifest
-from datapilot.utils.formatting.utils import (RED, YELLOW, color_text,
-                                              tabulate_data)
+from datapilot.utils.formatting.utils import RED, YELLOW, color_text, tabulate_data
 
 
 class DBTInsightGenerator:

@@ -1,8 +1,18 @@
 from typing import Dict, Type, Union
 
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import (
-    AnalysisNode, Exposure, GenericTestNode, HookNode, ModelNode, RPCNode,
-    SeedNode, SingularTestNode, SnapshotNode, SourceDefinition, SqlNode)
+    AnalysisNode,
+    Exposure,
+    GenericTestNode,
+    HookNode,
+    ModelNode,
+    RPCNode,
+    SeedNode,
+    SingularTestNode,
+    SnapshotNode,
+    SourceDefinition,
+    SqlNode,
+)
 
 from datapilot.core.platforms.dbt.constants import GENERIC, SINGULAR
 
