@@ -119,7 +119,7 @@ insights:
 
 ### Key Sections of the config file
 
-- version: Specifies the version of the configuration.
+- disabled_insights: Insights that you want to disable 
 - model_type_patterns: Regex patterns to identify different model types like staging, mart, etc.
 - insights: Custom configurations for each insight.
 - For each insight, you can set specific thresholds, severity levels, or other parameters.
