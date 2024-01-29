@@ -128,7 +128,6 @@ insights:
 SEVERITY can have 3 values -> `INFO`, `WARNING`, `ERROR`
 ```
 insights:
-  # Set minimum test coverage percent and severity for 'Low Test Coverage in DBT Models'
   dbt_low_test_coverage:
     severity: WARNING
 ```
