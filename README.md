@@ -115,15 +115,27 @@ insights:
 
 ```
 
-### Key Sections
+### Key Sections of the config file
 
 - version: Specifies the version of the configuration.
 - model_type_patterns: Regex patterns to identify different model types like staging, mart, etc.
 - insights: Custom configurations for each insight.
 - For each insight, you can set specific thresholds, severity levels, or other parameters.
 
-### Customizing Insights
-- To change the severity level or set a threshold, modify the corresponding insight under the insights section.
-- You can add or remove insights as needed.
+### Overriding default configs for the checks
+- To change the severity level or set a threshold, modify the corresponding insight under the insights section. For example
+
+SEVERITY can have 3 values -> `INFO`, `WARNING`, `ERROR`
+```
+insights:
+  # Set minimum test coverage percent and severity for 'Low Test Coverage in DBT Models'
+  dbt_low_test_coverage:
+    severity: WARNING
+```
+
 - For insights with more complex configurations (like fanout thresholds or model types), follow the example structure.
+```
+insights:
+  model_fanout.max_fanout: 10
+```
 
