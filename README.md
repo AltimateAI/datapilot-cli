@@ -76,7 +76,7 @@ For DataPilot, you can tailor the behavior of the insights by adjusting their co
 
 ### YAML Configuration Structure
 
-Here's an example of how you can structure your YAML configuration file:
+Here’s an example of configurations that can be specific in YAML file:
 
 ```yaml
 version: v1
