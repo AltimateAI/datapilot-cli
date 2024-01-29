@@ -2,7 +2,8 @@
 import re
 from pathlib import Path
 
-from setuptools import find_packages, setup
+from setuptools import find_packages
+from setuptools import setup
 
 
 def read(*names, **kwargs):
@@ -12,7 +13,7 @@ def read(*names, **kwargs):
 
 setup(
     name="datapilot",
-    version="0.0.1",
+    version="0.0.2",
     license="MIT",
     description="Assistant for Data Teams",
     long_description="{}\n{}".format(
