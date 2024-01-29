@@ -41,14 +41,14 @@ def load_manifest(manifest_path: Text) -> Manifest:
     try:
         manifest_dict = load_json(manifest_path)
     except FileNotFoundError as e:
-        raise AltimateFileNotFoundError(f"Manifest file not found: {manifest_path}. Error: {e}")
+        raise AltimateFileNotFoundError(f"Manifest file not found: {manifest_path}. Error: {e}") from e
     except ValueError as e:
-        raise AltimateInvalidJSONError(f"Invalid JSON file: {manifest_path}. Error: {e}")
+        raise AltimateInvalidJSONError(f"Invalid JSON file: {manifest_path}. Error: {e}") from e
 
     try:
         manifest: Manifest = parse_manifest(manifest_dict)
     except ValueError as e:
-        raise AltimateInvalidManifestError(f"Invalid manifest file: {manifest_path}. Error: {e}")
+        raise AltimateInvalidManifestError(f"Invalid manifest file: {manifest_path}. Error: {e}") from e
 
     return manifest
 
@@ -57,14 +57,14 @@ def load_catalog(catalog_path: Text) -> Catalog:
     try:
         catalog_dict = load_json(catalog_path)
     except FileNotFoundError as e:
-        raise AltimateFileNotFoundError(f"Manifest file not found: {catalog_path}. Error: {e}")
+        raise AltimateFileNotFoundError(f"Manifest file not found: {catalog_path}. Error: {e}") from e
     except ValueError as e:
-        raise AltimateInvalidJSONError(f"Invalid JSON file: {catalog_path}. Error: {e}")
+        raise AltimateInvalidJSONError(f"Invalid JSON file: {catalog_path}. Error: {e}") from e
 
     try:
         catalog: Catalog = parse_catalog(catalog_dict)
     except ValueError as e:
-        raise AltimateInvalidManifestError(f"Invalid manifest file: {catalog_path}. Error: {e}")
+        raise AltimateInvalidManifestError(f"Invalid manifest file: {catalog_path}. Error: {e}") from e
 
     return catalog
 
@@ -108,8 +108,8 @@ def classify_model_type_by_folder(model_path: Text, model_folder_pattern: Option
 # TODO: Add tests!
 def classify_model_type(
     model_name: Text,
-    folder_path: Text = None,
-    patterns: Dict[Text, Optional[Dict[Text, Text]]] = None,
+    folder_path: Optional[Text] = None,
+    patterns: Optional[Dict[Text, Optional[Dict[Text, Text]]]] = None,
 ) -> Optional[Text]:
     """
     Classify the type of a model based on its name using regex patterns.
@@ -238,7 +238,7 @@ def get_hard_coded_references(sql_code):
     """
     # Define regex patterns to match different types of hard-coded references
     from_hard_coded_references = {
-        "from_var_1": """(?ix)
+        "from_var_1": r"""(?ix)
 
                     # first matching group
                     # from or join followed by at least 1 whitespace character
@@ -261,7 +261,7 @@ def get_hard_coded_references(sql_code):
                 (\)\s *}})
 
     """,
-        "from_var_2": """(?ix)
+        "from_var_2": r"""(?ix)
 
     # first matching group
     # from or join followed by at least 1 whitespace character
@@ -301,7 +301,7 @@ def get_hard_coded_references(sql_code):
         (\)\s *}})
 
     """,
-        "from_table_1": """(?ix)
+        "from_table_1": r"""(?ix)
 
     # first matching group
     # from or join followed by at least 1 whitespace character            
@@ -337,7 +337,7 @@ def get_hard_coded_references(sql_code):
         ([\]`\"\']?)(?=\s|$)
 
               """,
-        "from_table_2": """(?ix)
+        "from_table_2": r"""(?ix)
 
     # first matching group
     # from or join followed by at least 1 whitespace character 
@@ -388,7 +388,7 @@ def get_hard_coded_references(sql_code):
         ([\]`\"\']?)(?=\s|$)
 
               """,
-        "from_table_3": """(?ix)
+        "from_table_3": r"""(?ix)
 
     # first matching group
     # from or join followed by at least 1 whitespace character             
@@ -412,7 +412,7 @@ def get_hard_coded_references(sql_code):
 
     # Set to store all unique hard-coded references
     hard_coded_references = set()
-    for regex_name, regex_pattern in from_hard_coded_references.items():
+    for regex_pattern in from_hard_coded_references.values():
         # Compile the regex pattern
         all_regex_matches = re.findall(regex_pattern, sql_code)
 

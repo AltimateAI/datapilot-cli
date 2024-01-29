@@ -76,7 +76,7 @@ class DBTInsight(Insight):
                 return
             for parent_id in self.get_node(node_id).depends_on.nodes:
                 if is_not_materialized(self.get_node(parent_id)):
-                    build_chain(parent_id, current_chain + [parent_id])
+                    build_chain(parent_id, [*current_chain, parent_id])
 
         long_chains = []
         for node_id, node in self.nodes.items():

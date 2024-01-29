@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.governance.base import \
@@ -40,7 +40,7 @@ class DBTUndocumentedPublicModels(DBTGovernanceInsight):
         self,
         model_unique_id: str,
         model_description_is_missing: bool,
-        columns: List[str] = None,
+        columns: Optional[List[str]] = None,
     ) -> DBTInsightResult:
         """
         Build failure result for the insight if a model is a root model with 0 direct parents.

@@ -74,7 +74,7 @@ class MissingPrimaryKeyTests(DBTTestInsight):
 
         column_tests.pop(self._ALL_TESTS_KEY, None)
 
-        for column, tests in column_tests.items():
+        for tests in column_tests.values():
             if self.NOT_NULL in tests and self.UNIQUE in tests:
                 return True
 
@@ -103,7 +103,7 @@ class MissingPrimaryKeyTests(DBTTestInsight):
         :return: A list of DBTModelInsightResponse objects with insights for each model.
         """
         self.logger.debug("Generating insights for DBT models")
-        tests = self.manifest.get_tests([GENERIC])
+        tests = self.manifest.get_tests(GENERIC)
 
         nodes_which_need_tests = self._get_nodes_which_need_tests()
 
