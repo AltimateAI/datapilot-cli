@@ -121,8 +121,7 @@ insights:
 
 - disabled_insights: Insights that you want to disable 
 - model_type_patterns: Regex patterns to identify different model types like staging, mart, etc.
-- insights: Custom configurations for each insight.
-- For each insight, you can set specific thresholds, severity levels, or other parameters.
+- insights: Custom configurations for each insight. For each insight, you can set specific thresholds, severity levels, or other parameters.
 
 ### Overriding default configs for the insights
 - To change the severity level or set a threshold, modify the corresponding insight under the insights section. For example
