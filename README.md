@@ -32,6 +32,24 @@ Replace [path_to_manifest] and [path_to_catalog] with the actual paths to your d
 
 The [--catalog-path] is an optional argument. If you don't specify a catalog path, the tool will skip some insights that require the catalog file.
 
+#### Generating Manifest and Catalog Files for dbt Projects
+
+1. Generate Manifest File (manifest.json)
+The manifest.json file contains essential metadata about your dbt models, tests, and more. To create it:
+
+Open your dbt project's root directory in a terminal or command prompt.
+Run `dbt compile`. This command generates manifest.json in the target folder.
+
+2.  Generate Catalog File (catalog.json)
+
+The catalog.json file provides schema details related to your dbt models. To create it:
+
+Ensure you're in your dbt project's root directory.
+Run `dbt docs generate`. This connects to your database and creates catalog.json in the target folder.
+Note: The catalog.json is optional for some operations but required for comprehensive project health checks. dbt docs generate requires an active database connection and may take longer for projects with many models.
+
+### Checks
+
 The following checks are available:
 
 | Name                           | Type       | Description                                                                                                                                                                 | Files Required         | Overrides                  |
