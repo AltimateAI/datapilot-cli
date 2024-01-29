@@ -47,10 +47,19 @@ def get_dir_path(path: str) -> str:
 base_url = "http://localhost:5001"
 
 
+def upload_content_to_signed_url(file_path, signed_url):
+    api_client = APIClient()
+
+    with open(file_path, "rb") as file:
+        file_content = file.read()
+
+    return api_client.put(signed_url, data=file_content)
+
+
 def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path):
     api_client = APIClient(api_token, base_url, tenant)
 
-    endpoint = "/dbt/v1/signed_url"
+    endpoint = f"/dbt/v1/signed_url"
     params = {"dbt_core_integration_id": dbt_core_integration_id, "file_type": "manifest"}
     signed_url_data = api_client.get(endpoint, params=params)
 
@@ -58,16 +67,14 @@ def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path):
         signed_url = signed_url_data.get("url")
         file_id = signed_url_data.get("dbt_core_integration_file_id")
         print(f"Received signed URL: {signed_url}")
+        print(f"Received File ID: {file_id}")
 
-        with open(manifest_path, "rb") as file:
-            file_content = file.read()
-
-        upload_response = api_client.post(signed_url, data=file_content)
+        upload_response = upload_content_to_signed_url(manifest_path, signed_url)
 
         if upload_response:
-            endpoint = "/verify_upload"
+            endpoint = f"/dbt/v1/verify_upload"
             verify_params = {"dbt_core_integration_file_id": file_id}
-            verify_response = api_client.post(endpoint, params=verify_params)
+            verify_response = api_client.post(endpoint, data=verify_params)
 
             if verify_response:
                 print("File successfully uploaded and verified.")
