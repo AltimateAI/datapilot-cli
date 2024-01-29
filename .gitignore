@@ -58,7 +58,7 @@ nosetests.xml
 # IDE project files
 *.iml
 *.komodoproject
-    .idea
+.idea
 .project
 .pydevproject
 .vscode
