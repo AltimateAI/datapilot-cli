@@ -132,7 +132,7 @@ insights:
     severity: WARNING
 ```
 
-- For insights with more complex configurations (like fanout thresholds or model types), follow the example structure.
+- For insights with more complex configurations (like fanout thresholds or model types), you need to specify the insight name and corresponding parameter under insights. For example:
 ```
 insights:
   model_fanout.max_fanout: 10
