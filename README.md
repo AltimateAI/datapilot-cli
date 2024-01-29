@@ -125,7 +125,7 @@ insights:
 ### Overriding default configs for the checks
 - To change the severity level or set a threshold, modify the corresponding insight under the insights section. For example
 
-SEVERITY can have 3 values -> `INFO`, `WARNING`, `ERROR`
+`Severity` can have 3 values -> `INFO`, `WARNING`, `ERROR`
 ```
 insights:
   dbt_low_test_coverage:
