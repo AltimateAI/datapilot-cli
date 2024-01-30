@@ -2,17 +2,20 @@ from pathlib import Path
 
 import pytest
 
-from datapilot.core.platforms.dbt.constants import (BASE, INTERMEDIATE, MART,
-                                                    OTHER, STAGING)
-from datapilot.core.platforms.dbt.utils import (MODEL_TYPE_PATTERNS,
-                                                _check_model_naming_convention,
-                                                classify_model_type_by_folder,
-                                                classify_model_type_by_name,
-                                                get_hard_coded_references)
+from datapilot.core.platforms.dbt.constants import BASE
+from datapilot.core.platforms.dbt.constants import INTERMEDIATE
+from datapilot.core.platforms.dbt.constants import MART
+from datapilot.core.platforms.dbt.constants import OTHER
+from datapilot.core.platforms.dbt.constants import STAGING
+from datapilot.core.platforms.dbt.utils import MODEL_TYPE_PATTERNS
+from datapilot.core.platforms.dbt.utils import _check_model_naming_convention
+from datapilot.core.platforms.dbt.utils import classify_model_type_by_folder
+from datapilot.core.platforms.dbt.utils import classify_model_type_by_name
+from datapilot.core.platforms.dbt.utils import get_hard_coded_references
 
 
 @pytest.mark.parametrize(
-    "sql_code, expected",
+    ("sql_code", "expected"),
     [
         # Test with a simple FROM clause
         ("SELECT * FROM table1", set()),
@@ -23,7 +26,7 @@ from datapilot.core.platforms.dbt.utils import (MODEL_TYPE_PATTERNS,
         # Test with more complex SQL code
         (
             """
-    SELECT * 
+    SELECT *
     FROM schema.table1
     JOIN schema.table2 ON table1.id = table2.id
     WHERE table1.column = 'value'
@@ -53,7 +56,7 @@ def test_get_hard_coded_references(sql_code, expected):
 
 
 @pytest.mark.parametrize(
-    "model_path, model_folder_pattern, expected",
+    ("model_path", "model_folder_pattern", "expected"),
     [
         # Test cases without additional folder patterns
         (Path("path/to/staging/model_file.sql"), None, STAGING),
@@ -69,7 +72,6 @@ def test_get_hard_coded_references(sql_code, expected):
         # Override the default folder patterns
         (Path("path/to/staging/model_file.sql"), {STAGING: "^staging_.*"}, OTHER),
         (Path("path/to/staging_1/model_file.sql"), {STAGING: "^staging_.*"}, STAGING),
-        (Path("path/to/staging_1/model_file.sql"), {STAGING: "^staging_.*"}, STAGING),
         (Path("path/to/staging_1/model_file.sql"), {STAGING: "^staging_.*", OTHER: "^other_.*"}, STAGING),
         (Path("path/to/other_1/model_file.sql"), {STAGING: "^staging_.*", OTHER: "^other_.*"}, OTHER),
     ],
@@ -79,7 +81,7 @@ def test_classify_model_type_by_folder(model_path, model_folder_pattern, expecte
 
 
 @pytest.mark.parametrize(
-    "model_name, model_name_pattern, expected",
+    ("model_name", "model_name_pattern", "expected"),
     [
         # Test cases without additional patterns
         ("stg_example_model", None, STAGING),
@@ -105,7 +107,7 @@ def test_classify_model_type_by_name(model_name, model_name_pattern, expected):
 
 
 @pytest.mark.parametrize(
-    "model_name, expected_model_type, patterns, expected",
+    ("model_name", "expected_model_type", "patterns", "expected"),
     [
         # Valid model names
         ("stg_model", STAGING, None, (True, None)),
@@ -133,4 +135,5 @@ def test_classify_model_type_by_name(model_name, model_name_pattern, expected):
     ],
 )
 def test_check_model_naming_convention(model_name, expected_model_type, patterns, expected):
-    assert _check_model_naming_convention(model_name, expected_model_type, patterns) == expected
+    result = _check_model_naming_convention(model_name, expected_model_type, patterns)
+    assert result == expected

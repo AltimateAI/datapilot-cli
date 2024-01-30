@@ -1,11 +1,10 @@
-from typing import List, Text
+from typing import List
 
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import SOURCE
-from datapilot.core.platforms.dbt.insights.performance.base import \
-    DBTPerformanceInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.insights.performance.base import DBTPerformanceInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.utils.formatting.utils import numbered_list
 
@@ -40,9 +39,9 @@ class DBTExposureParentMaterialization(DBTPerformanceInsight):
 
     def _build_failure_result(
         self,
-        exposure_unique_id: Text,
-        source_parents: List[Text],
-        bad_materializations: List[Text],
+        exposure_unique_id: str,
+        source_parents: List[str],
+        bad_materializations: List[str],
     ) -> DBTInsightResult:
         failure_message = self.FAILURE_MESSAGE.format(
             exposure_unique_id=exposure_unique_id,

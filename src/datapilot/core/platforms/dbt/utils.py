@@ -1,19 +1,28 @@
 import re
-from typing import Dict, Optional, Text, Tuple
+from typing import Dict
+from typing import Optional
+from typing import Tuple
 
-from dbt_artifacts_parser.parser import parse_catalog, parse_manifest
+from dbt_artifacts_parser.parser import parse_catalog
+from dbt_artifacts_parser.parser import parse_manifest
 
-from datapilot.core.platforms.dbt.constants import (BASE, FOLDER, INTERMEDIATE,
-                                                    MART, MODEL, OTHER,
-                                                    STAGING)
-from datapilot.core.platforms.dbt.exceptions import \
-    AltimateInvalidManifestError
-from datapilot.core.platforms.dbt.schemas.manifest import (
-    AltimateManifestNode, AltimateManifestSourceNode, Catalog, Manifest)
-from datapilot.exceptions.exceptions import (AltimateFileNotFoundError,
-                                             AltimateInvalidJSONError)
-from datapilot.utils.utils import (extract_dir_name_from_file_path,
-                                   extract_folders_in_path, load_json)
+from datapilot.core.platforms.dbt.constants import BASE
+from datapilot.core.platforms.dbt.constants import FOLDER
+from datapilot.core.platforms.dbt.constants import INTERMEDIATE
+from datapilot.core.platforms.dbt.constants import MART
+from datapilot.core.platforms.dbt.constants import MODEL
+from datapilot.core.platforms.dbt.constants import OTHER
+from datapilot.core.platforms.dbt.constants import STAGING
+from datapilot.core.platforms.dbt.exceptions import AltimateInvalidManifestError
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
+from datapilot.core.platforms.dbt.schemas.manifest import Catalog
+from datapilot.core.platforms.dbt.schemas.manifest import Manifest
+from datapilot.exceptions.exceptions import AltimateFileNotFoundError
+from datapilot.exceptions.exceptions import AltimateInvalidJSONError
+from datapilot.utils.utils import extract_dir_name_from_file_path
+from datapilot.utils.utils import extract_folders_in_path
+from datapilot.utils.utils import load_json
 
 MODEL_TYPE_PATTERNS = {
     STAGING: r"^stg_.*",  # Example: models starting with 'stg_'
@@ -37,7 +46,7 @@ def combine_dict(dict1: Dict, dict2: Optional[Dict]) -> Dict:
     return {**dict1, **dict2}
 
 
-def load_manifest(manifest_path: Text) -> Manifest:
+def load_manifest(manifest_path: str) -> Manifest:
     try:
         manifest_dict = load_json(manifest_path)
     except FileNotFoundError as e:
@@ -53,7 +62,7 @@ def load_manifest(manifest_path: Text) -> Manifest:
     return manifest
 
 
-def load_catalog(catalog_path: Text) -> Catalog:
+def load_catalog(catalog_path: str) -> Catalog:
     try:
         catalog_dict = load_json(catalog_path)
     except FileNotFoundError as e:
@@ -69,12 +78,12 @@ def load_catalog(catalog_path: Text) -> Catalog:
     return catalog
 
 
-def load_run_results(run_results_path: Text) -> Manifest:
+def load_run_results(run_results_path: str) -> Manifest:
     raise NotImplementedError
 
 
 # TODO: Add tests!
-def get_table_name_from_source(source: AltimateManifestSourceNode) -> Text:
+def get_table_name_from_source(source: AltimateManifestSourceNode) -> str:
     db = source.database
     schema = source.schema_name
     identifier = source.identifier
@@ -84,8 +93,8 @@ def get_table_name_from_source(source: AltimateManifestSourceNode) -> Text:
 
 
 def classify_model_type_by_name(
-    model_name: Text,
-    model_name_pattern: Optional[Dict[Text, Text]],
+    model_name: str,
+    model_name_pattern: Optional[Dict[str, str]],
 ):
     types_patterns = combine_dict(MODEL_TYPE_PATTERNS, model_name_pattern)
     for model_type, pattern in types_patterns.items():
@@ -95,7 +104,7 @@ def classify_model_type_by_name(
     return None
 
 
-def classify_model_type_by_folder(model_path: Text, model_folder_pattern: Optional[Dict[Text, Text]]) -> Text:
+def classify_model_type_by_folder(model_path: str, model_folder_pattern: Optional[Dict[str, str]]) -> str:
     folder_patterns = combine_dict(FOLDER_MAP, model_folder_pattern)
     dirname = extract_dir_name_from_file_path(model_path)
     for model_type, pattern in folder_patterns.items():
@@ -107,10 +116,10 @@ def classify_model_type_by_folder(model_path: Text, model_folder_pattern: Option
 
 # TODO: Add tests!
 def classify_model_type(
-    model_name: Text,
-    folder_path: Optional[Text] = None,
-    patterns: Optional[Dict[Text, Optional[Dict[Text, Text]]]] = None,
-) -> Optional[Text]:
+    model_name: str,
+    folder_path: Optional[str] = None,
+    patterns: Optional[Dict[str, Optional[Dict[str, str]]]] = None,
+) -> Optional[str]:
     """
     Classify the type of a model based on its name using regex patterns.
 
@@ -133,8 +142,8 @@ def classify_model_type(
 
 
 def _check_model_naming_convention(
-    model_name: Text, expected_model_type: Text, patterns: Optional[Dict[Text, Text]]
-) -> Tuple[bool, Optional[Text]]:
+    model_name: str, expected_model_type: str, patterns: Optional[Dict[str, str]]
+) -> Tuple[bool, Optional[str]]:
     model_patterns = combine_dict(MODEL_TYPE_PATTERNS, patterns)
     expected_model_pattern = model_patterns.get(expected_model_type)
     if expected_model_pattern:
@@ -145,8 +154,8 @@ def _check_model_naming_convention(
 
 def get_node_source_name(
     node: AltimateManifestNode,
-    sources: Dict[Text, AltimateManifestSourceNode],
-) -> Text:
+    sources: Dict[str, AltimateManifestSourceNode],
+) -> str:
     for node_id in node.depends_on.nodes:
         if node_id in sources:
             return sources[node_id].source_name
@@ -180,7 +189,7 @@ def _check_staging_convention(folder_path, folder_patterns, directory_name, node
     return True, None
 
 
-def _check_source_folder_convention(source_name, folder_path, patterns=Optional[Dict[Text, Dict[Text, Text]]]):
+def _check_source_folder_convention(source_name, folder_path, patterns=Optional[Dict[str, Dict[str, str]]]):
     folder_patterns = combine_dict(FOLDER_MAP, patterns.get(FOLDER))
     directories = extract_folders_in_path(folder_path)
     directory_name = extract_dir_name_from_file_path(folder_path)
@@ -273,7 +282,7 @@ def get_hard_coded_references(sql_code):
                  ({{\s * var\s * \(\s *[\'\"]?)
 
                  # third matching group
-                 # at least 1 of anything except a parenthesis or quotation mark            
+                 # at least 1 of anything except a parenthesis or quotation mark
                  ([^)\'\"]+)
 
     # fourth matching group
@@ -285,26 +294,26 @@ def get_hard_coded_references(sql_code):
         (,)
 
     # sixth matching group
-    # 0 or more whitespace character(s), 1 or 0 quotation mark            
+    # 0 or more whitespace character(s), 1 or 0 quotation mark
     (\s *[\'\"]?)
 
      # seventh matching group
-     # at least 1 of anything except a parenthesis or quotation mark            
+     # at least 1 of anything except a parenthesis or quotation mark
      ([^)\'\"]+)
 
     # eighth matching group
-    # 1 or 0 quotation mark, 0 or more whitespace character(s)            
+    # 1 or 0 quotation mark, 0 or more whitespace character(s)
         ([\'\"]?\s*)
 
     # ninth matching group
-    # a closing parenthesis, 0 or more whitespace character(s), closing }}            
+    # a closing parenthesis, 0 or more whitespace character(s), closing }}
         (\)\s *}})
 
     """,
         "from_table_1": r"""(?ix)
 
     # first matching group
-    # from or join followed by at least 1 whitespace character            
+    # from or join followed by at least 1 whitespace character
         (
     from | join)\s +
 
@@ -340,23 +349,23 @@ def get_hard_coded_references(sql_code):
         "from_table_2": r"""(?ix)
 
     # first matching group
-    # from or join followed by at least 1 whitespace character 
+    # from or join followed by at least 1 whitespace character
         (
     from | join)\s +
 
                  # second matching group
-                 # 1 or 0 of (opening bracket, backtick, or quotation mark)            
+                 # 1 or 0 of (opening bracket, backtick, or quotation mark)
                  ([\[`\"\']?)
 
                  # third matching group
                  # at least 1 word character
                  (\w+)
                  # fouth matching group
-                 # 1 or 0 of (closing bracket, backtick, or quotation mark)            
+                 # 1 or 0 of (closing bracket, backtick, or quotation mark)
                      ([\]`\"\']?)
 
     # fifth matching group
-    # a period            
+    # a period
         (\.)
 
     # sixth matching group
@@ -364,23 +373,23 @@ def get_hard_coded_references(sql_code):
     ([\[`\"\']?)
 
     # seventh matching group
-    # at least 1 word character            
+    # at least 1 word character
     (\w+)
 
     # eighth matching group
-    # 1 or 0 of (closing bracket, backtick, or quotation mark) 
+    # 1 or 0 of (closing bracket, backtick, or quotation mark)
         ([\]`\"\']?)
 
     # ninth matching group
-    # a period             
+    # a period
         (\.)
 
     # tenth matching group
-    # 1 or 0 of (closing bracket, backtick, or quotation mark)             
+    # 1 or 0 of (closing bracket, backtick, or quotation mark)
     ([\[`\"\']?)
 
     # eleventh matching group
-    # at least 1 word character   
+    # at least 1 word character
     (\w+)
 
     # twelfth matching group
@@ -391,16 +400,16 @@ def get_hard_coded_references(sql_code):
         "from_table_3": r"""(?ix)
 
     # first matching group
-    # from or join followed by at least 1 whitespace character             
+    # from or join followed by at least 1 whitespace character
         (
     from | join)\s +
 
                  # second matching group
-                 # 1 of (opening bracket, backtick, or quotation mark)            
+                 # 1 of (opening bracket, backtick, or quotation mark)
                  ([\[`\"\'])
 
                  # third matching group
-                 # at least 1 word character or space 
+                 # at least 1 word character or space
                  ([\w]+)
 
                  # fourth matching group

@@ -1,14 +1,17 @@
-from abc import ABC, abstractmethod
-from typing import Dict, Set, Text
+from abc import ABC
+from abc import abstractmethod
+from typing import Dict
+from typing import Set
 
-from datapilot.core.platforms.dbt.schemas.manifest import (
-    AltimateManifestExposureNode, AltimateManifestNode,
-    AltimateManifestSourceNode, AltimateManifestTestNode)
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
 
 
 class BaseManifestWrapper(ABC):
     @abstractmethod
-    def get_nodes(self) -> Dict[Text, AltimateManifestNode]:
+    def get_nodes(self) -> Dict[str, AltimateManifestNode]:
         pass
 
     @abstractmethod
@@ -16,17 +19,17 @@ class BaseManifestWrapper(ABC):
         pass
 
     @abstractmethod
-    def get_sources(self) -> Dict[Text, AltimateManifestSourceNode]:
+    def get_sources(self) -> Dict[str, AltimateManifestSourceNode]:
         pass
 
     @abstractmethod
-    def get_exposures(self) -> Dict[Text, AltimateManifestExposureNode]:
+    def get_exposures(self) -> Dict[str, AltimateManifestExposureNode]:
         pass
 
     @abstractmethod
-    def parent_to_child_map(self, nodes: Dict[Text, AltimateManifestNode]) -> Dict[Text, Set[Text]]:
+    def parent_to_child_map(self, nodes: Dict[str, AltimateManifestNode]) -> Dict[str, Set[str]]:
         pass
 
     @abstractmethod
-    def get_tests(self, types=None) -> Dict[Text, AltimateManifestTestNode]:
+    def get_tests(self, types=None) -> Dict[str, AltimateManifestTestNode]:
         pass

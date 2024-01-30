@@ -3,8 +3,8 @@ from typing import List
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import SINGULAR
 from datapilot.core.platforms.dbt.insights.dbt_test.base import DBTTestInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTProjectInsightResponse)
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTProjectInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.schemas.constants import CONFIG_METRICS
 

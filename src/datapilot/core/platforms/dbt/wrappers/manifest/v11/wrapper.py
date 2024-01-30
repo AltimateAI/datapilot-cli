@@ -1,22 +1,40 @@
-from typing import Dict, Set, Text, Union
+from typing import Dict
+from typing import Set
 
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import (
-    GenericTestNode, ManifestV11, SingularTestNode)
+from dbt_artifacts_parser.parsers.manifest.manifest_v11 import GenericTestNode
+from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
+from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SingularTestNode
 
-from datapilot.core.platforms.dbt.constants import (GENERIC, OTHER_TEST_NODE,
-                                                    SEED, SINGULAR)
-from datapilot.core.platforms.dbt.schemas.manifest import (
-    AltimateDBTContract, AltimateDependsOn, AltimateExposureType,
-    AltimateExternalTable, AltimateFileHash, AltimateFreshnessThreshold,
-    AltimateManifestColumnInfo, AltimateManifestExposureNode,
-    AltimateManifestNode, AltimateManifestSourceNode, AltimateManifestTestNode,
-    AltimateMaturityEnum, AltimateNodeConfig, AltimateOwner, AltimateQuoting,
-    AltimateRefArgs, AltimateResourceType, AltimateSourceConfig,
-    AltimateTestConfig, AltimateTestMetadata)
-from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import (
-    TEST_TYPE_TO_NODE_MAP, ExposureNode, ManifestNode, SourceNode, TestNode)
-from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import \
-    BaseManifestWrapper
+from datapilot.core.platforms.dbt.constants import GENERIC
+from datapilot.core.platforms.dbt.constants import OTHER_TEST_NODE
+from datapilot.core.platforms.dbt.constants import SEED
+from datapilot.core.platforms.dbt.constants import SINGULAR
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateDBTContract
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateDependsOn
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateExposureType
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateExternalTable
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateFileHash
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateFreshnessThreshold
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestColumnInfo
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateMaturityEnum
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateNodeConfig
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateOwner
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateQuoting
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateRefArgs
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateSourceConfig
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateTestConfig
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateTestMetadata
+from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import TEST_TYPE_TO_NODE_MAP
+from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import ExposureNode
+from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import ManifestNode
+from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import SourceNode
+from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import TestNode
+from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import BaseManifestWrapper
 
 
 class ManifestV11Wrapper(BaseManifestWrapper):
@@ -215,7 +233,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
 
     def get_nodes(
         self,
-    ) -> Dict[Text, AltimateManifestNode]:
+    ) -> Dict[str, AltimateManifestNode]:
         nodes = {}
         for node in self.manifest.nodes.values():
             if (
@@ -230,22 +248,22 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             nodes[node.unique_id] = self._get_node(node)
         return nodes
 
-    def get_package(self) -> Text:
+    def get_package(self) -> str:
         return self.manifest.metadata.project_name
 
-    def get_sources(self) -> Dict[Text, AltimateManifestSourceNode]:
+    def get_sources(self) -> Dict[str, AltimateManifestSourceNode]:
         sources = {}
         for source in self.manifest.sources.values():
             sources[source.unique_id] = self._get_source(source)
         return sources
 
-    def get_exposures(self) -> Dict[Text, AltimateManifestExposureNode]:
+    def get_exposures(self) -> Dict[str, AltimateManifestExposureNode]:
         exposures = {}
         for exposure in self.manifest.exposures.values():
             exposures[exposure.unique_id] = self._get_exposure(exposure)
         return exposures
 
-    def get_tests(self, type=None) -> Dict[Text, AltimateManifestTestNode]:
+    def get_tests(self, type=None) -> Dict[str, AltimateManifestTestNode]:
         tests = {}
         # Initialize types_union with TestNode
         types = [GenericTestNode, SingularTestNode]
@@ -261,7 +279,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
                     tests[node.unique_id] = self._get_tests(node)
         return tests
 
-    def parent_to_child_map(self, nodes: Dict[Text, AltimateManifestNode]) -> Dict[Text, Set[Text]]:
+    def parent_to_child_map(self, nodes: Dict[str, AltimateManifestNode]) -> Dict[str, Set[str]]:
         """
         Current manifest contains information about parents
         THis gives an information of node to childre

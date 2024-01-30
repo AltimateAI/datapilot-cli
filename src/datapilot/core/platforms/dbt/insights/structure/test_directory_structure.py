@@ -1,10 +1,10 @@
-from typing import List, Optional
+from typing import List
+from typing import Optional
 
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
-from datapilot.core.platforms.dbt.insights.structure.base import \
-    DBTStructureInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
+from datapilot.core.platforms.dbt.insights.structure.base import DBTStructureInsight
 from datapilot.utils.utils import get_dir_path
 
 

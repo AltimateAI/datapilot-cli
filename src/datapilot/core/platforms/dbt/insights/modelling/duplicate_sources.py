@@ -2,10 +2,9 @@ from collections import defaultdict
 from typing import List
 
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.insights.modelling.base import \
-    DBTModellingInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTProjectInsightResponse)
+from datapilot.core.platforms.dbt.insights.modelling.base import DBTModellingInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTProjectInsightResponse
 from datapilot.core.platforms.dbt.utils import get_table_name_from_source
 from datapilot.utils.formatting.utils import numbered_list
 
