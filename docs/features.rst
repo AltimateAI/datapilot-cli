@@ -33,4 +33,4 @@ Step 3: Run the ``project-health`` command.
 
     datapilot dbt project-health --manifest-path ./target/manifest.json --catalog-path ./target/catalog.json
 
-This command assesses your dbt project and provides insights on several key areas. Detailed information on each of these areas can be found in the `Insights <insights.md>`_ section.
+This command assesses your dbt project and provides insights on several key areas.
