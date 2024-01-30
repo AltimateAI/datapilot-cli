@@ -1,14 +1,17 @@
 from abc import abstractmethod
-from typing import Dict, List, Text, Union
+from typing import Dict
+from typing import List
+from typing import Union
 
 from datapilot.core.insights.base.insight import Insight
 from datapilot.core.insights.schema import Severity
 from datapilot.core.platforms.dbt.constants import NON_MATERIALIZED
-from datapilot.core.platforms.dbt.schemas.manifest import (
-    AltimateManifestExposureNode, AltimateManifestNode,
-    AltimateManifestSourceNode, AltimateManifestTestNode, AltimateResourceType)
-from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import \
-    BaseManifestWrapper
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
+from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import BaseManifestWrapper
 
 
 class DBTInsight(Insight):
@@ -17,12 +20,12 @@ class DBTInsight(Insight):
     def __init__(
         self,
         manifest_wrapper: BaseManifestWrapper,
-        nodes: Dict[Text, AltimateManifestNode],
-        sources: Dict[Text, AltimateManifestSourceNode],
-        exposures: Dict[Text, AltimateManifestExposureNode],
-        tests: Dict[Text, AltimateManifestTestNode],
-        children_map: Dict[Text, List[Text]],
-        project_name: Text,
+        nodes: Dict[str, AltimateManifestNode],
+        sources: Dict[str, AltimateManifestSourceNode],
+        exposures: Dict[str, AltimateManifestExposureNode],
+        tests: Dict[str, AltimateManifestTestNode],
+        children_map: Dict[str, List[str]],
+        project_name: str,
         *args,
         **kwargs,
     ):
@@ -39,11 +42,11 @@ class DBTInsight(Insight):
     def generate(self, *args, **kwargs) -> dict:
         pass
 
-    def check_part_of_project(self, node_project_name: Text) -> bool:
+    def check_part_of_project(self, node_project_name: str) -> bool:
         return node_project_name == self.project_name
 
     def get_node(
-        self, node_id: Text
+        self, node_id: str
     ) -> Union[AltimateManifestNode, AltimateManifestSourceNode, AltimateManifestExposureNode, AltimateManifestTestNode,]:
         if node_id in self.nodes:
             return self.nodes[node_id]

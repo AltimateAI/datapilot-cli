@@ -1,13 +1,14 @@
-from typing import Dict, Optional, Text
+from typing import Dict
+from typing import Optional
 
-from datapilot.core.platforms.dbt.constants import FOLDER, MODEL
-from datapilot.schemas.constants import (CONFIG_FOLDER_TYPE_PATTERNS,
-                                         CONFIG_MODEL_TYPE_PATTERNS)
+from datapilot.core.platforms.dbt.constants import FOLDER
+from datapilot.core.platforms.dbt.constants import MODEL
+from datapilot.schemas.constants import CONFIG_MODEL_TYPE_PATTERNS
 
 
 def get_regex_configuration(
     config: Optional[Dict],
-) -> Dict[Text, Optional[Dict[Text, Text]]]:
+) -> Dict[str, Optional[Dict[str, str]]]:
     model_type_patterns = config.get(CONFIG_MODEL_TYPE_PATTERNS, None)
     folder_type_patterns = config.get(CONFIG_MODEL_TYPE_PATTERNS, None)
     return {

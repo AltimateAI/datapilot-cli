@@ -1,13 +1,12 @@
-from typing import List, Text, Tuple
+from typing import List
+from typing import Tuple
 
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.insights.governance.base import \
-    DBTGovernanceInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.insights.governance.base import DBTGovernanceInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.core.platforms.dbt.wrappers.catalog.wrapper import \
-    BaseCatalogWrapper
+from datapilot.core.platforms.dbt.wrappers.catalog.wrapper import BaseCatalogWrapper
 from datapilot.utils.formatting.utils import numbered_list
 
 
@@ -66,7 +65,7 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
             metadata={"stale_columns": columns, "model_unique_id": model_unique_id},
         )
 
-    def _get_columns_documented(self, node_id) -> List[Text]:
+    def _get_columns_documented(self, node_id) -> List[str]:
         """
         Get the list of columns that are documented for a given node.
         :param node_id: The unique ID of the node.
@@ -78,7 +77,7 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
                 columns.append(column_name.lower())
         return columns
 
-    def _get_columns_in_model(self, node_id) -> List[Text]:
+    def _get_columns_in_model(self, node_id) -> List[str]:
         if node_id not in self.catalog.get_schema():
             return []
         return [k.lower() for k in self.catalog.get_schema()[node_id].keys()]
@@ -110,7 +109,7 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
         return insights
 
     @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, Text]:
+    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
         """
         return False
         """

@@ -1,15 +1,11 @@
-from abc import ABC, abstractmethod
+from abc import ABC
+from abc import abstractmethod
 
-from dbt_artifacts_parser.parsers.run_results.run_results_v1 import \
-    RunResultsV1
-from dbt_artifacts_parser.parsers.run_results.run_results_v2 import \
-    RunResultsV2
-from dbt_artifacts_parser.parsers.run_results.run_results_v3 import \
-    RunResultsV3
-from dbt_artifacts_parser.parsers.run_results.run_results_v4 import \
-    RunResultsV4
-from dbt_artifacts_parser.parsers.run_results.run_results_v5 import \
-    RunResultsV5
+from dbt_artifacts_parser.parsers.run_results.run_results_v1 import RunResultsV1
+from dbt_artifacts_parser.parsers.run_results.run_results_v2 import RunResultsV2
+from dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunResultsV3
+from dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
+from dbt_artifacts_parser.parsers.run_results.run_results_v5 import RunResultsV5
 
 
 class BaseRunResultsWrapper(ABC):

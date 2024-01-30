@@ -1,12 +1,14 @@
-from typing import ClassVar, List, Text
+from typing import ClassVar
+from typing import List
 
 from datapilot.config.utils import get_regex_configuration
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.constants import INTERMEDIATE, MART, STAGING
-from datapilot.core.platforms.dbt.insights.modelling.base import \
-    DBTModellingInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.constants import INTERMEDIATE
+from datapilot.core.platforms.dbt.constants import MART
+from datapilot.core.platforms.dbt.constants import STAGING
+from datapilot.core.platforms.dbt.insights.modelling.base import DBTModellingInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.core.platforms.dbt.utils import classify_model_type
 from datapilot.schemas.constants import CONFIG_METRICS
@@ -37,7 +39,7 @@ class DBTStagingModelsDependentOnDownstreamModels(DBTModellingInsight):
         "This will align the model with best practices, enhancing data flow clarity and lineage tracing."
     )
     DOWNSTREAM_MODEL_TYPES_STR = "downstream_model_types"
-    DOWNSTREAM_MODEL_TYPES: ClassVar[List[Text]] = [MART, INTERMEDIATE]
+    DOWNSTREAM_MODEL_TYPES: ClassVar[List[str]] = [MART, INTERMEDIATE]
 
     def _build_failure_result(self, current_model_unique_id: str, downstream_dependencies: List[str]) -> DBTInsightResult:
         failure = self.FAILURE_MESSAGE.format(
@@ -58,7 +60,7 @@ class DBTStagingModelsDependentOnDownstreamModels(DBTModellingInsight):
             },
         )
 
-    def _get_downstream_models(self) -> List[Text]:
+    def _get_downstream_models(self) -> List[str]:
         metrics_config = self.config.get(CONFIG_METRICS, {})
         metric_config = metrics_config.get(self.ALIAS, {})
 

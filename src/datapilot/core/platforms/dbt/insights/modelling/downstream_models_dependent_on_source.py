@@ -1,12 +1,13 @@
-from typing import ClassVar, List, Text
+from typing import ClassVar
+from typing import List
 
 from datapilot.config.utils import get_regex_configuration
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.constants import INTERMEDIATE, MART
-from datapilot.core.platforms.dbt.insights.modelling.base import \
-    DBTModellingInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.constants import INTERMEDIATE
+from datapilot.core.platforms.dbt.constants import MART
+from datapilot.core.platforms.dbt.insights.modelling.base import DBTModellingInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.core.platforms.dbt.utils import classify_model_type
 from datapilot.utils.formatting.utils import numbered_list
@@ -39,13 +40,13 @@ class DBTDownstreamModelsDependentOnSource(DBTModellingInsight):
         "`{current_model_unique_id}` to select from this staging layer, ensuring a proper abstraction layer between "
         "raw data and downstream data artifacts."
     )
-    MODEL_TYPES: ClassVar[List[Text]] = [INTERMEDIATE, MART]
+    MODEL_TYPES: ClassVar[List[str]] = [INTERMEDIATE, MART]
 
     def _build_failure_result(
         self,
-        current_model_unique_id: Text,
-        source_dependencies: List[Text],
-        model_type: Text,
+        current_model_unique_id: str,
+        source_dependencies: List[str],
+        model_type: str,
     ) -> DBTInsightResult:
         """
         Build failure result for the insight if a downstream model depends directly on a source node.

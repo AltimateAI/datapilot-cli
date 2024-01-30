@@ -1,10 +1,12 @@
-from typing import Dict, List, Optional, Text
+from typing import Dict
+from typing import List
+from typing import Optional
 
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import GENERIC
 from datapilot.core.platforms.dbt.insights.dbt_test.base import DBTTestInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
@@ -58,7 +60,7 @@ class MissingPrimaryKeyTests(DBTTestInsight):
             metadata={"model_unique_id": model_unique_id},
         )
 
-    def _has_primary_key_test(self, column_tests: Optional[Dict[Text, List]]) -> bool:
+    def _has_primary_key_test(self, column_tests: Optional[Dict[str, List]]) -> bool:
         """
         Checks if the given column tests include a primary key test.
 

@@ -1,12 +1,13 @@
-from typing import List, Optional
+from typing import List
+from typing import Optional
 
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.insights.governance.base import \
-    DBTGovernanceInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
-from datapilot.core.platforms.dbt.schemas.manifest import (
-    AltimateAccess, AltimateManifestNode, AltimateResourceType)
+from datapilot.core.platforms.dbt.insights.governance.base import DBTGovernanceInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateAccess
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.utils.formatting.utils import numbered_list
 
 
@@ -55,7 +56,7 @@ class DBTUndocumentedPublicModels(DBTGovernanceInsight):
         failure = self.FAILURE_MESSAGE.format(
             model_unique_id=model_unique_id,
         )
-        failure += f"Missing Model documentation." if model_description_is_missing else ""
+        failure += "Missing Model documentation." if model_description_is_missing else ""
 
         failure += f"\n Columns missing documentation: {numbered_list(columns)}" if columns else ""
 

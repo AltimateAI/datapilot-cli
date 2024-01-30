@@ -1,15 +1,15 @@
-from typing import List, Optional
+from typing import List
+from typing import Optional
 
 from datapilot.config.utils import get_regex_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import OTHER
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
-from datapilot.core.platforms.dbt.insights.structure.base import \
-    DBTStructureInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
+from datapilot.core.platforms.dbt.insights.structure.base import DBTStructureInsight
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.core.platforms.dbt.utils import (_check_model_folder_convention,
-                                                classify_model_type)
+from datapilot.core.platforms.dbt.utils import _check_model_folder_convention
+from datapilot.core.platforms.dbt.utils import classify_model_type
 
 
 class DBTModelDirectoryStructure(DBTStructureInsight):

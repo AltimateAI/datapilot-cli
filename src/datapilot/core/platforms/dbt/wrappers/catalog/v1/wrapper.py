@@ -1,7 +1,6 @@
 from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
 
-from datapilot.core.platforms.dbt.wrappers.catalog.wrapper import \
-    BaseCatalogWrapper
+from datapilot.core.platforms.dbt.wrappers.catalog.wrapper import BaseCatalogWrapper
 
 
 class CatalogV1Wrapper(BaseCatalogWrapper):

@@ -1,29 +1,30 @@
 import logging
+
 # from src.utils.formatting.utils import generate_model_insights_table
-from typing import Optional, Text
+from typing import Optional
 
 from configtree.tree import Tree
 
-from datapilot.config.config import load_config
-from datapilot.core.platforms.dbt.constants import MODEL, PROJECT
+from datapilot.core.platforms.dbt.constants import MODEL
+from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.factory import DBTFactory
-from datapilot.core.platforms.dbt.formatting import (
-    generate_model_insights_table, generate_project_insights_table)
 from datapilot.core.platforms.dbt.insights import INSIGHTS
-from datapilot.core.platforms.dbt.utils import load_catalog, load_manifest
-from datapilot.utils.formatting.utils import (RED, YELLOW, color_text,
-                                              tabulate_data)
+from datapilot.core.platforms.dbt.utils import load_catalog
+from datapilot.core.platforms.dbt.utils import load_manifest
+from datapilot.utils.formatting.utils import RED
+from datapilot.utils.formatting.utils import YELLOW
+from datapilot.utils.formatting.utils import color_text
 
 
 class DBTInsightGenerator:
     def __init__(
         self,
-        manifest_path: Text,
-        catalog_path: Optional[Text] = None,
-        run_results_path: Optional[Text] = None,
-        env: Optional[Text] = None,
+        manifest_path: str,
+        catalog_path: Optional[str] = None,
+        run_results_path: Optional[str] = None,
+        env: Optional[str] = None,
         config: Optional[Tree] = None,
-        target: Text = "dev",
+        target: str = "dev",
     ):
         self.manifest_path = manifest_path
         self.catalog_path = catalog_path

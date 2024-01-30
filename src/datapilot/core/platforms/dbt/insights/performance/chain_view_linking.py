@@ -1,10 +1,9 @@
-from typing import List, Text
+from typing import List
 
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.insights.performance.base import \
-    DBTPerformanceInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTProjectInsightResponse)
+from datapilot.core.platforms.dbt.insights.performance.base import DBTPerformanceInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTProjectInsightResponse
 from datapilot.schemas.constants import CONFIG_METRICS
 from datapilot.utils.formatting.utils import numbered_list
 
@@ -39,7 +38,7 @@ class DBTChainViewLinking(DBTPerformanceInsight):
 
     def _build_failure_result(
         self,
-        chain_views: List[List[Text]],
+        chain_views: List[List[str]],
         chain_length: int = CHAIN_LENGTH,
     ) -> DBTInsightResult:
         chains = [" -> ".join(chain_view[::-1]) for chain_view in chain_views]

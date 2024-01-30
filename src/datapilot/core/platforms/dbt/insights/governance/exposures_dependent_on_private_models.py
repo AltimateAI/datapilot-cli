@@ -1,10 +1,9 @@
 from typing import List
 
 from datapilot.core.insights.utils import get_severity
-from datapilot.core.platforms.dbt.insights.governance.base import \
-    DBTGovernanceInsight
-from datapilot.core.platforms.dbt.insights.schema import (
-    DBTInsightResult, DBTModelInsightResponse)
+from datapilot.core.platforms.dbt.insights.governance.base import DBTGovernanceInsight
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateAccess
 from datapilot.utils.formatting.utils import numbered_list
 
@@ -69,7 +68,7 @@ class DBTExposureDependentOnPrivateModels(DBTGovernanceInsight):
             return []
         insights = []
         for exposure_id, exposure in self.exposures.items():
-            self.logger.debug("Checking exposure {}".format(exposure_id))
+            self.logger.debug(f"Checking exposure {exposure_id}")
             private_models = []
             for dependency_id in exposure.depends_on.nodes:
                 dependency_node = self.get_node(dependency_id)
