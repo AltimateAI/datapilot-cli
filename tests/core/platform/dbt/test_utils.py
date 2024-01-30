@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from datapilot.core.platforms.dbt.constants import (BASE, INTERMEDIATE, MART,
@@ -54,34 +56,26 @@ def test_get_hard_coded_references(sql_code, expected):
     "model_path, model_folder_pattern, expected",
     [
         # Test cases without additional folder patterns
-        ("/path/to/staging/model_file.sql", None, STAGING),
-        ("/path/to/mart/model_file.sql", None, MART),
-        ("/path/to/intermediate/model_file.sql", None, INTERMEDIATE),
-        ("/path/to/base/model_file.sql", None, BASE),
-        ("/path/to/other/model_fil.sql", None, OTHER),
-        ("/path/to/base/model_fil", None, BASE),
+        (Path("path/to/staging/model_file.sql"), None, STAGING),
+        (Path("path/to/mart/model_file.sql"), None, MART),
+        (Path("path/to/intermediate/model_file.sql"), None, INTERMEDIATE),
+        (Path("path/to/base/model_file.sql"), None, BASE),
+        (Path("path/to/other/model_fil.sql"), None, OTHER),
+        (Path("path/to/base/model_fil"), None, BASE),
         # Test cases with additional folder patterns
-        ("/path/to/custom/model_file.sql", {"CUSTOM": "custom"}, "CUSTOM"),
-        ("/path/to/unknown/model_file.sql", {"CUSTOM": "custom"}, OTHER),
-        ("/path/to/unknown/model_file", {"CUSTOM": "custom"}, OTHER),
-        # OVerride the default folder patterns
-        ("/path/to/staging/model_file.sql", {STAGING: "^staging_.*"}, OTHER),
-        ("/path/to/staging_1/model_file.sql", {STAGING: "^staging_.*"}, STAGING),
-        ("/path/to/staging_1/model_file.sql", {STAGING: "^staging_.*"}, STAGING),
-        (
-            "/path/to/staging_1/model_file.sql",
-            {STAGING: "^staging_.*", OTHER: "^other_.*"},
-            STAGING,
-        ),
-        (
-            "/path/to/other_1/model_file.sql",
-            {STAGING: "^staging_.*", OTHER: "^other_.*"},
-            OTHER,
-        ),
+        (Path("path/to/custom/model_file.sql"), {"CUSTOM": "custom"}, "CUSTOM"),
+        (Path("path/to/unknown/model_file.sql"), {"CUSTOM": "custom"}, OTHER),
+        (Path("path/to/unknown/model_file"), {"CUSTOM": "custom"}, OTHER),
+        # Override the default folder patterns
+        (Path("path/to/staging/model_file.sql"), {STAGING: "^staging_.*"}, OTHER),
+        (Path("path/to/staging_1/model_file.sql"), {STAGING: "^staging_.*"}, STAGING),
+        (Path("path/to/staging_1/model_file.sql"), {STAGING: "^staging_.*"}, STAGING),
+        (Path("path/to/staging_1/model_file.sql"), {STAGING: "^staging_.*", OTHER: "^other_.*"}, STAGING),
+        (Path("path/to/other_1/model_file.sql"), {STAGING: "^staging_.*", OTHER: "^other_.*"}, OTHER),
     ],
 )
 def test_classify_model_type_by_folder(model_path, model_folder_pattern, expected):
-    assert classify_model_type_by_folder(model_path, model_folder_pattern) == expected
+    assert classify_model_type_by_folder(str(model_path), model_folder_pattern) == expected
 
 
 @pytest.mark.parametrize(
