@@ -1,6 +1,9 @@
 import logging
-from abc import ABC, abstractmethod
-from typing import Dict, Optional, Text, Tuple
+from abc import ABC
+from abc import abstractmethod
+from typing import Dict
+from typing import Optional
+from typing import Tuple
 
 from datapilot.core.insights.schema import InsightResponse
 
@@ -17,7 +20,7 @@ class Insight(ABC):
         pass
 
     @classmethod
-    def has_all_required_data(cls, **kwargs) -> Tuple[bool, Text]:
+    def has_all_required_data(cls, **kwargs) -> Tuple[bool, str]:
         """
         return False
         """

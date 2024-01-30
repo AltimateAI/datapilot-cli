@@ -1,10 +1,8 @@
-from typing import Text
-
 from configtree import Loader
 from configtree.tree import Tree
 
 
-def load_config(config_file_path: Text) -> Tree:
+def load_config(config_file_path: str) -> Tree:
     load = Loader()
     return load(config_file_path)
 

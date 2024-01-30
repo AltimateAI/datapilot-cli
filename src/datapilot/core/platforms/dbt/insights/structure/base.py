@@ -1,5 +1,8 @@
 from abc import abstractmethod
-from typing import Any, Dict, Optional, Text, Tuple
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Tuple
 
 from datapilot.core.insights.schema import Severity
 from datapilot.core.platforms.dbt.insights.base import DBTInsight
@@ -10,7 +13,7 @@ class DBTStructureInsight(DBTInsight):
     TYPE = "structure"
     DEFAULT_SEVERITY = Severity.WARNING
 
-    def __init__(self, config: Optional[Dict[Text, Any]] = None, *args, **kwargs):
+    def __init__(self, config: Optional[Dict[str, Any]] = None, *args, **kwargs):
         self.config = config or {}
         super().__init__(*args, **kwargs)
 

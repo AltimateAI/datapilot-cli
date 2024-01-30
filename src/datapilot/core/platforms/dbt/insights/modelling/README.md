@@ -1,7 +1,7 @@
 ## Insights
 
 
-- Direct Join to Source | Done 
+- Direct Join to Source | Done
 - Downstream Models Dependent on Source | Done
 - Duplicate Sources | Done
 - Hard Coded References | Done

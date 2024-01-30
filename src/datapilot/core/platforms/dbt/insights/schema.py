@@ -1,7 +1,10 @@
-from typing import List, Optional, Text
+from typing import List
+from typing import Optional
 
-from datapilot.core.insights.schema import InsightResponse, InsightResult
-from datapilot.core.platforms.dbt.constants import MODEL, PROJECT
+from datapilot.core.insights.schema import InsightResponse
+from datapilot.core.insights.schema import InsightResult
+from datapilot.core.platforms.dbt.constants import MODEL
+from datapilot.core.platforms.dbt.constants import PROJECT
 
 # from src.utils.formatting.utils import get_severity_color, reset_color, bold, underline
 
@@ -15,11 +18,11 @@ class DBTInsightResponse(InsightResponse):
 
 
 class DBTModelInsightResponse(DBTInsightResponse):
-    unique_id: Text
-    package_name: Text
-    path: Text
-    original_file_path: Text
-    insight_level: Text = MODEL
+    unique_id: str
+    package_name: str
+    path: str
+    original_file_path: str
+    insight_level: str = MODEL
 
     # def get_report(self, do_format=True) -> str:
     #     divider = "-" * 40
@@ -39,8 +42,8 @@ class DBTModelInsightResponse(DBTInsightResponse):
 
 
 class DBTProjectInsightResponse(DBTInsightResponse):
-    package_name: Text
-    insight_level: Text = PROJECT
+    package_name: str
+    insight_level: str = PROJECT
     insights: List[DBTInsightResult]
     insight: Optional[DBTInsightResult] = None
     #

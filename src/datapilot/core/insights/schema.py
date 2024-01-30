@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict, Text
+from typing import Dict
 
 from pydantic import BaseModel
 
@@ -11,11 +11,11 @@ class Severity(Enum):
 
 
 class InsightResult(BaseModel):
-    name: Text
-    type: Text
-    message: Text
-    recommendation: Text
-    reason_to_flag: Text
+    name: str
+    type: str
+    message: str
+    recommendation: str
+    reason_to_flag: str
     metadata: Dict
 
 
