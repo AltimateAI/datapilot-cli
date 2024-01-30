@@ -245,19 +245,20 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             exposures[exposure.unique_id] = self._get_exposure(exposure)
         return exposures
 
-    def get_tests(self, types=None) -> Dict[Text, AltimateManifestTestNode]:
+    def get_tests(self, type=None) -> Dict[Text, AltimateManifestTestNode]:
         tests = {}
-        if types is None:
-            types = TestNode
-        else:
-            type_list = [TEST_TYPE_TO_NODE_MAP.get(t) for t in types if t in TEST_TYPE_TO_NODE_MAP]
-            types = Union[tuple(type_list)]
+        # Initialize types_union with TestNode
+        types = [GenericTestNode, SingularTestNode]
+
+        # Add other types to the union if provided
+        if type:
+            types = TEST_TYPE_TO_NODE_MAP.get(type)
 
         for node in self.manifest.nodes.values():
-            if node.resource_type.value != AltimateResourceType.test.value:
-                continue
-            if isinstance(node, types or TestNode):
-                tests[node.unique_id] = self._get_tests(node)
+            # Check if the node is a test and of the correct type
+            if node.resource_type.value == AltimateResourceType.test.value:
+                if any(isinstance(node, t) for t in types):
+                    tests[node.unique_id] = self._get_tests(node)
         return tests
 
     def parent_to_child_map(self, nodes: Dict[Text, AltimateManifestNode]) -> Dict[Text, Set[Text]]:

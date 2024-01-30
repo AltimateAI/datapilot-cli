@@ -56,7 +56,7 @@ class DBTRejoiningOfUpstreamConcepts(DBTModellingInsight):
         for parent_model, children in self.children_map.items():
             for child in children:
                 child_child_is_also_parent_child = any(
-                    [dwn_stream_child in self.children_map[child] for dwn_stream_child in self.children_map[parent_model]]
+                    dwn_stream_child in self.children_map[child] for dwn_stream_child in self.children_map[parent_model]
                 )
                 if child_child_is_also_parent_child and len(self.children_map[child]) == 1:
                     insight_result = self._build_failure_result(

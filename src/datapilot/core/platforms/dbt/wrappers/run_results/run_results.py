@@ -1,4 +1,4 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 
 from dbt_artifacts_parser.parsers.run_results.run_results_v1 import \
     RunResultsV1
@@ -13,7 +13,9 @@ from dbt_artifacts_parser.parsers.run_results.run_results_v5 import \
 
 
 class BaseRunResultsWrapper(ABC):
-    pass
+    @abstractmethod
+    def get_run_results(self):
+        pass
 
 
 class RunResultsV1Wrapper(BaseRunResultsWrapper):

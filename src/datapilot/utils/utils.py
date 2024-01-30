@@ -1,11 +1,12 @@
 import json
 import os
+from pathlib import Path
 from typing import Dict, Text
 
 
 def load_json(file_path: Text) -> Dict:
     try:
-        with open(file_path) as f:
+        with Path(file_path).open() as f:
             return json.load(f)
     except FileNotFoundError:
         raise
@@ -16,7 +17,7 @@ def load_json(file_path: Text) -> Dict:
 def extract_dir_name_from_file_path(path: Text) -> Text:
     # Handle both Windows and Linux paths using os.path
     # Get root directory name
-    return os.path.basename(os.path.dirname(path))
+    return Path(path).parent.name
 
 
 def extract_folders_in_path(path: str) -> list:

@@ -55,8 +55,8 @@ class DBTInsightGenerator:
         # TODO - add catalog and run results wrappers
 
     def _check_if_skipped(self, insight):
-        if self.config.get("disabled"):
-            if insight.ALIAS in self.config.get("disabled", []):
+        if self.config.get("disabled_insights", False):
+            if insight.ALIAS in self.config.get("disabled_insights", []):
                 return True
         return False
 

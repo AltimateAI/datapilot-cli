@@ -1,5 +1,8 @@
 version: v1
 
+disabled_insights:
+- dbt_low_test_coverage
+
 model_type_patterns:
   staging: "^stg_.*"
   mart: "^(mrt_|mart_|fct_|dim_).*"

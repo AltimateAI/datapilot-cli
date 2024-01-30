@@ -18,14 +18,14 @@ ManifestNode = Union[
     SeedNode,
 ]
 
-SourceNode = Union[SourceDefinition]
+SourceNode = SourceDefinition
 
-ExposureNode = Union[Exposure]
+ExposureNode = Exposure
 
 TestNode = Union[GenericTestNode, SingularTestNode]
 
 
-TEST_TYPE_TO_NODE_MAP: dict[str, Type[GenericTestNode | SingularTestNode]] = {
-    GENERIC: GenericTestNode,
-    SINGULAR: SingularTestNode,
+TEST_TYPE_TO_NODE_MAP: dict[str, Type] = {
+    GENERIC: [GenericTestNode],
+    SINGULAR: [SingularTestNode],
 }

@@ -36,7 +36,7 @@ Manifest = Union[
     ManifestV1,
 ]
 
-Catalog = Union[CatalogV1]
+Catalog = CatalogV1
 
 
 class AltimateDependsOn(BaseModel):

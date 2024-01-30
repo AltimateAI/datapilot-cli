@@ -1,4 +1,4 @@
-from typing import List
+from typing import ClassVar, List, Text
 
 from datapilot.config.utils import get_regex_configuration
 from datapilot.core.insights.utils import get_severity
@@ -37,7 +37,7 @@ class DBTStagingModelsDependentOnDownstreamModels(DBTModellingInsight):
         "This will align the model with best practices, enhancing data flow clarity and lineage tracing."
     )
     DOWNSTREAM_MODEL_TYPES_STR = "downstream_model_types"
-    DOWNSTREAM_MODEL_TYPES = [MART, INTERMEDIATE]
+    DOWNSTREAM_MODEL_TYPES: ClassVar[List[Text]] = [MART, INTERMEDIATE]
 
     def _build_failure_result(self, current_model_unique_id: str, downstream_dependencies: List[str]) -> DBTInsightResult:
         failure = self.FAILURE_MESSAGE.format(
@@ -58,7 +58,7 @@ class DBTStagingModelsDependentOnDownstreamModels(DBTModellingInsight):
             },
         )
 
-    def _get_downstream_models(self) -> List[str]:
+    def _get_downstream_models(self) -> List[Text]:
         metrics_config = self.config.get(CONFIG_METRICS, {})
         metric_config = metrics_config.get(self.ALIAS, {})
 
