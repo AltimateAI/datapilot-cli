@@ -59,8 +59,9 @@ def project_health(manifest_path, catalog_path, config_path=None):
         click.echo(tabulate_data(report["table"], headers="keys"))
         click.echo("\n")
 
-    project_report = generate_project_insights_table(package_insights)
-    click.echo("--" * 50)
-    click.echo("Project Insights")
-    click.echo("--" * 50)
-    click.echo(tabulate_data(project_report, headers="keys"))
+    if len(package_insights) > 0:
+        project_report = generate_project_insights_table(package_insights)
+        click.echo("--" * 50)
+        click.echo("Project Insights")
+        click.echo("--" * 50)
+        click.echo(tabulate_data(project_report, headers="keys"))

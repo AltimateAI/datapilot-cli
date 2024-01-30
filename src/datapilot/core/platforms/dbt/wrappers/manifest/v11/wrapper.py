@@ -150,7 +150,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
     def _get_exposure(self, exposure: ExposureNode) -> AltimateManifestExposureNode:
         return AltimateManifestExposureNode(
             name=exposure.name,
-            resource_type=exposure.resource_type,
+            resource_type=AltimateResourceType(exposure.resource_type.value),
             package_name=exposure.package_name,
             path=exposure.path,
             original_file_path=exposure.original_file_path,
