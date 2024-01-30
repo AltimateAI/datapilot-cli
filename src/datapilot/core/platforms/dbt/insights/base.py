@@ -57,7 +57,8 @@ class DBTInsight(Insight):
         elif node_id in self.tests:
             return self.tests[node_id]
         else:
-            raise ValueError(f"Node {node_id} not found in manifest.")
+            self.logger.debug(f"Model {node_id} not found in manifest")
+            return None
 
     def find_long_chains(self, min_chain_length=4):
         """
