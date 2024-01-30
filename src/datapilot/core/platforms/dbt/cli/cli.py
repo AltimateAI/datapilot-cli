@@ -1,4 +1,5 @@
 import logging
+import os
 
 import click
 
@@ -9,6 +10,7 @@ from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
 from datapilot.core.platforms.dbt.formatting import generate_model_insights_table
 from datapilot.core.platforms.dbt.formatting import generate_project_insights_table
 from datapilot.utils.formatting.utils import tabulate_data
+from datapilot.utils.utils import onboard_manifest
 
 logging.basicConfig(level=logging.INFO)
 
@@ -64,3 +66,30 @@ def project_health(manifest_path, catalog_path, config_path=None):
     click.echo("Project Insights")
     click.echo("--" * 50)
     click.echo(tabulate_data(project_report, headers="keys"))
+
+
+@dbt.command("onboard")
+@click.option("--token", prompt="API Token", help="Your API token for authentication.")
+@click.option("--tenant", prompt="Tenant", help="Your tenant ID.")
+@click.option("--dbt_core_integration_id", prompt="DBT Core Integration ID", help="DBT Core Integration ID")
+@click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
+def onboard(token, tenant, dbt_core_integration_id, manifest_path, env=None):
+    """Onboard a manifest file to DBT."""
+    if not token and env:
+        token = os.environ.get("ALTIMATE_API_KEY")
+
+    if not tenant and env:
+        tenant = os.environ.get("ALTIMATE_INSTANCE_NAME")
+
+    if not token or not tenant:
+        click.echo("Error: API Token is required.")
+        return
+
+    # if not validate_credentials(token, tenant):
+    #     print("Error: Invalid credentials.")
+    #     return
+
+    # This will throw error if manifest file is incorrect
+    # load_manifest(manifest_path)
+
+    onboard_manifest(token, tenant, dbt_core_integration_id, manifest_path)
