@@ -1,8 +1,9 @@
-from abc import ABC, abstractmethod
-from typing import Dict, Text
+from abc import ABC
+from abc import abstractmethod
+from typing import Dict
 
 
 class BaseCatalogWrapper(ABC):
     @abstractmethod
-    def get_schema(self) -> Dict[Text, Dict[Text, Text]]:
+    def get_schema(self) -> Dict[str, Dict[str, str]]:
         pass

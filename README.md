@@ -1,9 +1,9 @@
 
 ## Introduction
 
-DataPilot is an AI teammate for engineers to ensure best practices in their SQL and dbt projects. DataPilot can be integrated into local environments to help identify potential issues early. It can also be integrated into Git and CI/CD to ensure certain standards are followed for data projects at the organizational level. 
+DataPilot is an AI teammate for engineers to ensure best practices in their SQL and dbt projects. DataPilot can be integrated into local environments to help identify potential issues early. It can also be integrated into Git and CI/CD to ensure certain standards are followed for data projects at the organizational level.
 
-Here are a few key insights, the full list of insights is available below. 
+Here are a few key insights, the full list of insights is available below.
 
 1. High Source or model fanouts
 2. Hard code references
@@ -119,7 +119,7 @@ insights:
 
 ### Key Sections of the config file
 
-- disabled_insights: Insights that you want to disable 
+- disabled_insights: Insights that you want to disable
 - model_type_patterns: Regex patterns to identify different model types like staging, mart, etc.
 - insights: Custom configurations for each insight. For each insight, you can set specific thresholds, severity levels, or other parameters.
 
@@ -138,4 +138,3 @@ insights:
 insights:
   model_fanout.max_fanout: 10
 ```
-

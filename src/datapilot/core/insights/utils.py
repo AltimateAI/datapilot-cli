@@ -3,7 +3,8 @@ from typing import Optional
 from configtree.tree import Tree
 
 from datapilot.core.insights.schema import Severity
-from datapilot.schemas.constants import CONFIG_METRICS, CONFIG_SEVERITY
+from datapilot.schemas.constants import CONFIG_METRICS
+from datapilot.schemas.constants import CONFIG_SEVERITY
 
 
 def get_severity(

@@ -1,20 +1,20 @@
 import json
 import os
 from pathlib import Path
-from typing import Dict, Text
+from typing import Dict
 
 
-def load_json(file_path: Text) -> Dict:
+def load_json(file_path: str) -> Dict:
     try:
         with Path(file_path).open() as f:
             return json.load(f)
     except FileNotFoundError:
         raise
-    except json.decoder.JSONDecodeError:
-        raise ValueError(f"Invalid JSON file: {file_path}")
+    except json.decoder.JSONDecodeError as e:
+        raise ValueError(f"Invalid JSON file: {file_path}") from e
 
 
-def extract_dir_name_from_file_path(path: Text) -> Text:
+def extract_dir_name_from_file_path(path: str) -> str:
     # Handle both Windows and Linux paths using os.path
     # Get root directory name
     return Path(path).parent.name
@@ -39,4 +39,4 @@ def get_dir_path(path: str) -> str:
     :param path:
     :return:
     """
-    return os.path.dirname(path)
+    return Path(path).parent

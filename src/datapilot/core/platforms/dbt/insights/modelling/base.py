@@ -1,16 +1,17 @@
 from abc import abstractmethod
-from typing import Any, Dict, List, Optional, Text, Tuple
+from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Tuple
 
-from datapilot.core.insights.schema import Severity
 from datapilot.core.platforms.dbt.insights.base import DBTInsight
-from datapilot.schemas.constants import CONFIG_METRICS
 
 
 class DBTModellingInsight(DBTInsight):
     NAME = "DBTModellingInsight"
     TYPE = "Modelling"
 
-    def __init__(self, config: Optional[Dict[Text, Any]] = None, *args, **kwargs):
+    def __init__(self, config: Optional[Dict[str, Any]] = None, *args, **kwargs):
         self.config = config or {}
         super().__init__(*args, **kwargs)
 
