@@ -12,7 +12,7 @@ def read(*names, **kwargs):
 
 
 setup(
-    name="datapilot",
+    name="altimate-datapilot",
     version="0.0.3",
     license="MIT",
     description="Assistant for Data Teams",
