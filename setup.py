@@ -12,8 +12,8 @@ def read(*names, **kwargs):
 
 
 setup(
-    name="datapilot",
-    version="0.0.2",
+    name="altimate-datapilot",
+    version="0.0.3",
     license="MIT",
     description="Assistant for Data Teams",
     long_description="{}\n{}".format(

@@ -75,7 +75,7 @@ class DBTTestCoverage(DBTTestInsight):
             if test.package_name == self.project_name:
                 models_with_tests = models_with_tests.union(set(test.depends_on.nodes) if test.depends_on else set())
 
-        return round((len(models_with_tests) / num_models) * 100) if num_models > 0 else 0
+        return round((len(models_with_tests) / num_models) * 100) if num_models > 0 else 100
 
     def _get_min_coverage_percent(self) -> int:
         """

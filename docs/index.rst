@@ -6,16 +6,12 @@ Contents
    :maxdepth: 2
 
    readme
+   introduction
    installation
-   usage
-   reference/index
+   features
+   insights
+   configuration
    contributing
    authors
    changelog
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   license

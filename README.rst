@@ -42,7 +42,7 @@ Installation
 
 ::
 
-    pip install datapilot
+    pip install altimate-datapilot
 
 You can also install the in-development version with::
 
