@@ -23,6 +23,9 @@ class APIClient:
 
         return headers
 
+    def log(self, message):
+        self.logger.debug(message)
+
     def get(self, endpoint, params=None, timeout=None):
         url = f"{self.base_url}{endpoint}"
         headers = self._get_headers()
@@ -49,3 +52,11 @@ class APIClient:
         response = requests.put(url, data=data, timeout=timeout)
         self.logger.debug(f"Received PUT response with status: {response.status_code}")
         return response
+
+    def verify_upload(self, params=None):
+        endpoint = "/dbt/v1/verify_upload"
+        verify_response = self.post(endpoint, data=params)
+        if verify_response:
+            self.logger.debug("File successfully uploaded and verified.")
+        else:
+            self.logger.debug(f"Error verifying upload: {verify_response.status_code}, {verify_response.text}")

@@ -67,24 +67,17 @@ def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path):
     if signed_url_data:
         signed_url = signed_url_data.get("url")
         file_id = signed_url_data.get("dbt_core_integration_file_id")
-        print(f"Received signed URL: {signed_url}")
-        print(f"Received File ID: {file_id}")
+        api_client.log(f"Received signed URL: {signed_url}")
+        api_client.log(f"Received File ID: {file_id}")
 
         upload_response = upload_content_to_signed_url(manifest_path, signed_url)
 
         if upload_response:
-            endpoint = "/dbt/v1/verify_upload"
             verify_params = {"dbt_core_integration_file_id": file_id}
-            verify_response = api_client.post(endpoint, data=verify_params)
-
-            if verify_response:
-                print("File successfully uploaded and verified.")
-                return
-            else:
-                print(f"Error verifying upload: {verify_response.status_code}, {verify_response.text}")
+            api_client.verify_upload(verify_params)
 
         else:
-            print(f"Error uploading file: {upload_response.status_code}, {upload_response.text}")
+            api_client.log(f"Error uploading file: {upload_response.status_code}, {upload_response.text}")
 
     else:
-        print("Error getting signed URL.")
+        api_client.log("Error getting signed URL.")

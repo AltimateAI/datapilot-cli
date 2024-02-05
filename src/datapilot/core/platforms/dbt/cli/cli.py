@@ -9,6 +9,7 @@ from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
 from datapilot.core.platforms.dbt.formatting import generate_model_insights_table
 from datapilot.core.platforms.dbt.formatting import generate_project_insights_table
+from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import tabulate_data
 from datapilot.utils.utils import onboard_manifest
 
@@ -91,6 +92,6 @@ def onboard(token, tenant, dbt_core_integration_id, manifest_path, env=None):
     #     return
 
     # This will throw error if manifest file is incorrect
-    # load_manifest(manifest_path)
+    load_manifest(manifest_path)
 
     onboard_manifest(token, tenant, dbt_core_integration_id, manifest_path)
