@@ -3,6 +3,8 @@ import os
 from pathlib import Path
 from typing import Dict
 
+from requests import Response
+
 from datapilot.clients.altimate.client import APIClient
 
 
@@ -44,11 +46,7 @@ def get_dir_path(path: str) -> str:
     return Path(path).parent
 
 
-# Will need to change this
-base_url = "http://localhost:5001"
-
-
-def upload_content_to_signed_url(file_path, signed_url):
+def upload_content_to_signed_url(file_path, signed_url) -> Response:
     api_client = APIClient()
 
     with Path(file_path).open("rb") as file:
@@ -57,12 +55,11 @@ def upload_content_to_signed_url(file_path, signed_url):
     return api_client.put(signed_url, data=file_content)
 
 
-def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path):
-    api_client = APIClient(api_token, base_url, tenant)
+def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path, backend_url) -> dict:
+    api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)
 
-    endpoint = "/dbt/v1/signed_url"
     params = {"dbt_core_integration_id": dbt_core_integration_id, "file_type": "manifest"}
-    signed_url_data = api_client.get(endpoint, params=params)
+    signed_url_data = api_client.get_signed_url(params)
 
     if signed_url_data:
         signed_url = signed_url_data.get("url")
@@ -75,9 +72,11 @@ def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path):
         if upload_response:
             verify_params = {"dbt_core_integration_file_id": file_id}
             api_client.verify_upload(verify_params)
-
+            return {"ok": True}
         else:
             api_client.log(f"Error uploading file: {upload_response.status_code}, {upload_response.text}")
+            return {"ok": False, "message": f"Error uploading file: {upload_response.status_code}, {upload_response.text}"}
 
     else:
         api_client.log("Error getting signed URL.")
+        return {"ok": False, "message": "Error getting signed URL."}

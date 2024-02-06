@@ -75,7 +75,8 @@ def project_health(manifest_path, catalog_path, config_path=None):
 @click.option("--tenant", prompt="Tenant", help="Your tenant ID.")
 @click.option("--dbt_core_integration_id", prompt="DBT Core Integration ID", help="DBT Core Integration ID")
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
-def onboard(token, tenant, dbt_core_integration_id, manifest_path, env=None):
+@click.option("--backend-url", required=False, prompt="Altimate's Backend URL", help="Altimate's Backend URL")
+def onboard(token, tenant, dbt_core_integration_id, manifest_path, backend_url="https://api.myaltimate.com", env=None):
     """Onboard a manifest file to DBT."""
     if not token and env:
         token = os.environ.get("ALTIMATE_API_KEY")
@@ -94,4 +95,9 @@ def onboard(token, tenant, dbt_core_integration_id, manifest_path, env=None):
     # This will throw error if manifest file is incorrect
     load_manifest(manifest_path)
 
-    onboard_manifest(token, tenant, dbt_core_integration_id, manifest_path)
+    response = onboard_manifest(token, tenant, dbt_core_integration_id, manifest_path, backend_url)
+
+    if response["ok"]:
+        click.echo("Manifest onboarded successfully!")
+    else:
+        click.echo(f"{response.message}")
