@@ -56,7 +56,7 @@ class APIClient:
     def verify_upload(self, params=None):
         endpoint = "/dbt/v1/verify_upload"
         verify_response = self.post(endpoint, data=params)
-        if verify_response:
+        if verify_response.status_code == 200:
             self.logger.debug("File successfully uploaded and verified.")
         else:
             self.logger.debug(f"Error verifying upload: {verify_response.status_code}, {verify_response.text}")
@@ -64,7 +64,8 @@ class APIClient:
     def get_signed_url(self, params=None):
         endpoint = "/dbt/v1/signed_url"
         response: requests.Response = self.get(endpoint, params=params)
-        if response.status_code == 200:
+        if response:
             self.logger.debug("Fetched signed url")
+            return response
         else:
             self.logger.debug(f"Error fetching signed url: {response.status_code}, {response.text}")

@@ -100,4 +100,4 @@ def onboard(token, tenant, dbt_core_integration_id, manifest_path, backend_url="
     if response["ok"]:
         click.echo("Manifest onboarded successfully!")
     else:
-        click.echo(f"{response.message}")
+        click.echo(f"{response['message']}")
