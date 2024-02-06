@@ -63,9 +63,19 @@ class APIClient:
 
     def get_signed_url(self, params=None):
         endpoint = "/dbt/v1/signed_url"
-        response: requests.Response = self.get(endpoint, params=params)
+        response = self.get(endpoint, params=params)
         if response:
             self.logger.debug("Fetched signed url")
             return response
         else:
-            self.logger.debug(f"Error fetching signed url: {response.status_code}, {response.text}")
+            self.logger.debug("Error fetching signed url")
+
+    def validate_credentials(self):
+        endpoint = "/dbt/v3/validate-credentials"
+        response = self.get(endpoint)
+        if response:
+            self.logger.debug("Credentials are valid")
+            return True
+        else:
+            self.logger.debug("Error validating credentials")
+            return False

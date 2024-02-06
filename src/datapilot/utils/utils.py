@@ -55,6 +55,15 @@ def upload_content_to_signed_url(file_path, signed_url) -> Response:
     return api_client.put(signed_url, data=file_content)
 
 
+def validate_credentials(
+    token,
+    backend_url,
+    tenant,
+) -> Response:
+    api_client = APIClient(api_token=token, base_url=backend_url, tenant=tenant)
+    return api_client.validate_credentials()
+
+
 def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path, backend_url) -> dict:
     api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)
 

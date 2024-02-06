@@ -12,6 +12,7 @@ from datapilot.core.platforms.dbt.formatting import generate_project_insights_ta
 from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import tabulate_data
 from datapilot.utils.utils import onboard_manifest
+from datapilot.utils.utils import validate_credentials
 
 logging.basicConfig(level=logging.INFO)
 
@@ -88,9 +89,9 @@ def onboard(token, tenant, dbt_core_integration_id, manifest_path, backend_url="
         click.echo("Error: API Token is required.")
         return
 
-    # if not validate_credentials(token, tenant):
-    #     print("Error: Invalid credentials.")
-    #     return
+    if not validate_credentials(token, backend_url, tenant):
+        click.echo("Error: Invalid credentials.")
+        return
 
     # This will throw error if manifest file is incorrect
     load_manifest(manifest_path)
