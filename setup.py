@@ -67,6 +67,7 @@ setup(
         "dbt-artifacts-parser==0.5.1",
         "configtree==0.6",
         "tabulate==0.9.0",
+        "requests==2.31.0",
     ],
     extras_require={
         # eg:
