@@ -5,10 +5,10 @@ from typing import Optional
 
 from configtree.tree import Tree
 
+from datapilot.core.platforms import get_insight_list
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.factory import DBTFactory
-from datapilot.core.platforms.dbt.insights import INSIGHTS
 from datapilot.core.platforms.dbt.utils import load_catalog
 from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import RED
@@ -24,6 +24,7 @@ class DBTInsightGenerator:
         run_results_path: Optional[str] = None,
         env: Optional[str] = None,
         config: Optional[Tree] = None,
+        adapter: Optional[str] = None,
         target: str = "dev",
     ):
         self.manifest_path = manifest_path
@@ -53,6 +54,7 @@ class DBTInsightGenerator:
         self.children_map = self.manifest_wrapper.parent_to_child_map(self.nodes)
         self.tests = self.manifest_wrapper.get_tests()
         self.project_name = self.manifest_wrapper.get_package()
+        self.insights = get_insight_list(dialect=adapter)
         # TODO - add catalog and run results wrappers
 
     def _check_if_skipped(self, insight):
@@ -66,7 +68,7 @@ class DBTInsightGenerator:
             MODEL: {},
             PROJECT: [],
         }
-        for insight_class in INSIGHTS:
+        for insight_class in self.insights:
             # TODO: Skip insight based on config
 
             run_insight, message = insight_class.has_all_required_data(

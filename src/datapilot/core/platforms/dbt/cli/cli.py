@@ -5,9 +5,9 @@ import click
 from datapilot.config.config import load_config
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
-from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
 from datapilot.core.platforms.dbt.formatting import generate_model_insights_table
 from datapilot.core.platforms.dbt.formatting import generate_project_insights_table
+from datapilot.core.platforms.executor import DBTInsightGenerator
 from datapilot.utils.formatting.utils import tabulate_data
 
 logging.basicConfig(level=logging.INFO)
@@ -35,7 +35,12 @@ def dbt():
     required=False,
     help="Path to the DBT config file",
 )
-def project_health(manifest_path, catalog_path, config_path=None):
+@click.option(
+    "--adapter",
+    required=False,
+    help="The adapter to use for the insights",
+)
+def project_health(manifest_path, catalog_path, config_path=None, adapter=None):
     """
     Validate the DBT project's configuration and structure.
     :param manifest_path: Path to the DBT manifest file.
@@ -43,7 +48,7 @@ def project_health(manifest_path, catalog_path, config_path=None):
     config = None
     if config_path:
         config = load_config(config_path)
-    insight_generator = DBTInsightGenerator(manifest_path, catalog_path=catalog_path, config=config)
+    insight_generator = DBTInsightGenerator(manifest_path, catalog_path=catalog_path, config=config, adapter=adapter)
     reports = insight_generator.run()
 
     package_insights = reports[PROJECT]
