@@ -1,0 +1,3 @@
+from datapilot.core.platforms.dbt_snowflake.insights.configuration.permanant_staging_tables import DBTSnowflakePermanantStagingTables
+
+INSIGHTS = [DBTSnowflakePermanantStagingTables]

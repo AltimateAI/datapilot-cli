@@ -130,6 +130,7 @@ class AltimateNodeConfig(BaseModel):
     unique_key: Optional[Optional[Union[str, List[str]]]] = None
     on_schema_change: Optional[Optional[str]] = "ignore"
     unlogged: Optional[bool] = None
+    transient: Optional[bool] = None
 
 
 class AltimateManifestNode(BaseModel):

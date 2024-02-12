@@ -11,45 +11,37 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.utils import classify_model_type
 
 
-class DBTPostgresLoggedTables(DBTConfigurationInsight):
-    """
-    This class identifies all models that ar of type unlogged
-    """
-
-    NAME = "Logged Tables in dbt Models"
-    ALIAS = "staging_logged_tables"
-    DESCRIPTION = (
-        "Logged tables  are considerably slower than unlogged tables, as they require a write to the WAL and are. "
-        "replicated to read replicas. Unlogged tables are not replicated and do not require a write to the WAL, "
-        "but are not less safe."
-    )
+class DBTSnowflakePermanantStagingTables(DBTConfigurationInsight):
+    NAME = "Permanant Staging Tables"
+    ALIAS = "snowflake_permanant_staging_tables"
+    DESCRIPTION = "This insight checks for the presence of permanant staging tables in the DBT project."
     REASON_TO_FLAG = (
-        "Unlogged tables are considerably faster than logged tables, as they do not require a write to the WAL and are not replicated to read replicas."
-        " staging tables can be unlogged"
+        "Since staging tables typicaly refersh frequently, it is recommended to use transient tables to avoid storage costs."
+        " In snowflake, transient tables don't have a failsafe period and hence helps in reducing storage costs."
+        " If you are using a permanent staging table, You may incurr additional fail-safe storage costs evertyime you refresh the table."
     )
-    FAILURE_MESSAGE = "The staging table {logged_model} is logged\n Consider changing them to unlogged tables to improve performance."
+    FAILURE_MESSAGE = "The stagign table {staging_model} is permanant. Consider using transient tables to avoid fail safestorage costs."
     RECOMMENDATION = (
-        "To address this issue, consider changing the following staging tables to unlogged tables to improve performance."
-        "You can do this by adding the following to your dbt model: \n"
-        "{{ config(materialized='table', unlogged=True) }}"
+        "Consider using transient tables to avoid fail safe storage costs. You can use the following configuration in your model:\n"
+        "{{ config(materialized='table', transient=True) }}"
     )
 
-    def _build_failure_result(self, logged_model: str) -> DBTInsightResult:
+    def _build_failure_result(self, staging_model: str) -> DBTInsightResult:
         """
         Constructs a failure result for a given model with low test coverage.
         :param coverage: The calculated test coverage percentage for the model.
         :param min_coverage: The minimum required test coverage percentage.
         :return: An instance of DBTInsightResult containing failure details.
         """
-        self.logger.debug(f"Logged tables found: {logged_model}")
-        failure = self.FAILURE_MESSAGE.format(logged_model=logged_model)
+        self.logger.debug(f"Permanant Staging tables found: {staging_model}")
+        failure = self.FAILURE_MESSAGE.format(logged_tables=staging_model)
         return DBTInsightResult(
             type=self.TYPE,
             name=self.NAME,
             message=failure,
             recommendation=self.RECOMMENDATION,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"logged_model": logged_model},
+            metadata={"staging_model": staging_model},
         )
 
     def _check_logged_tables(self, node: AltimateManifestNode) -> List[str]:
@@ -58,32 +50,31 @@ class DBTPostgresLoggedTables(DBTConfigurationInsight):
         """
         regex_configuration = get_regex_configuration(self.config)
         model_type = classify_model_type(node.name, node.original_file_path, regex_configuration)
-        self.logger.debug(f"Checking if model {node.name} is a logged table")
+        self.logger.debug(f"Checking if model {node.name} is a permanant table")
         self.logger.debug(f"Model type: {model_type}")
-        if (not node.config.unlogged) and (model_type == STAGING) and node.config.materialized == TABLE:
+        if (node.config.transient == False) and (model_type == STAGING) and node.config.materialized == TABLE:  # noqa
             return True
         return False
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         """
-        Generates insights for each DBT model in the project, focusing on logged tables
-        :return: A list of DBTModelInsightResponse objects with insights for each model.
+        Generates insights for the DBT project. This insight checks for the presence of permanant staging tables in the DBT project.
         """
-        self.logger.debug("Generating logged tables insights for DBT models.")
+        self.logger.debug("Generating test coverage insights for DBT models")
 
         insights = []
         for node_id, node in self.nodes.items():
             if self._check_logged_tables(node):
                 insights.append(
                     DBTModelInsightResponse(
-                        unique_id=node_id,
+                        unique_id=node,
+                        package_name=self.project_name,
                         path=node.path,
                         original_file_path=node.original_file_path,
-                        package_name=self.project_name,
-                        insights=self._build_failure_result(node_id),
+                        insight=self._build_failure_result(node_id),
                         severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                     )
                 )
 
-        self.logger.debug("Completed generating logged tables insights for DBT models.")
+        self.logger.debug("Completed generating permanant staging tables insights.")
         return insights
