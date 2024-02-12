@@ -69,7 +69,6 @@ def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path, 
 
     params = {"dbt_core_integration_id": dbt_core_integration_id, "file_type": "manifest"}
     signed_url_data = api_client.get_signed_url(params)
-
     if signed_url_data:
         signed_url = signed_url_data.get("url")
         file_id = signed_url_data.get("dbt_core_integration_file_id")
@@ -88,4 +87,7 @@ def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path, 
 
     else:
         api_client.log("Error getting signed URL.")
-        return {"ok": False, "message": "Error in uploading the manifest."}
+        return {
+            "ok": False,
+            "message": "Error in uploading the manifest.                                                                                                                              ",
+        }
