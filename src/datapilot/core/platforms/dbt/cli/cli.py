@@ -1,8 +1,8 @@
 import logging
-import os
 
 import click
 
+from datapilot.clients.altimate.utils import check_token_and_instance
 from datapilot.config.config import load_config
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
@@ -73,30 +73,22 @@ def project_health(manifest_path, catalog_path, config_path=None):
 
 @dbt.command("onboard")
 @click.option("--token", prompt="API Token", help="Your API token for authentication.")
-@click.option("--tenant", prompt="Tenant", help="Your tenant ID.")
+@click.option("--instance-name", prompt="Instance Name", help="Your tenant ID.")
 @click.option("--dbt_core_integration_id", prompt="DBT Core Integration ID", help="DBT Core Integration ID")
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
 @click.option("--backend-url", required=False, prompt="Altimate's Backend URL", help="Altimate's Backend URL")
-def onboard(token, tenant, dbt_core_integration_id, manifest_path, backend_url="https://api.myaltimate.com", env=None):
+def onboard(token, instance_name, dbt_core_integration_id, manifest_path, backend_url="https://api.myaltimate.com", env=None):
     """Onboard a manifest file to DBT."""
-    if not token and env:
-        token = os.environ.get("ALTIMATE_API_KEY")
+    check_token_and_instance(token, instance_name)
 
-    if not tenant and env:
-        tenant = os.environ.get("ALTIMATE_INSTANCE_NAME")
-
-    if not token or not tenant:
-        click.echo("Error: API Token is required.")
-        return
-
-    if not validate_credentials(token, backend_url, tenant):
+    if not validate_credentials(token, backend_url, instance_name):
         click.echo("Error: Invalid credentials.")
         return
 
     # This will throw error if manifest file is incorrect
     load_manifest(manifest_path)
 
-    response = onboard_manifest(token, tenant, dbt_core_integration_id, manifest_path, backend_url)
+    response = onboard_manifest(token, instance_name, dbt_core_integration_id, manifest_path, backend_url)
 
     if response["ok"]:
         click.echo("Manifest onboarded successfully!")
