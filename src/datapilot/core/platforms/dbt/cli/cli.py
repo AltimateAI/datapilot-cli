@@ -3,6 +3,8 @@ import logging
 import click
 
 from datapilot.clients.altimate.utils import check_token_and_instance
+from datapilot.clients.altimate.utils import onboard_manifest
+from datapilot.clients.altimate.utils import validate_credentials
 from datapilot.config.config import load_config
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
@@ -11,8 +13,6 @@ from datapilot.core.platforms.dbt.formatting import generate_model_insights_tabl
 from datapilot.core.platforms.dbt.formatting import generate_project_insights_table
 from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import tabulate_data
-from datapilot.utils.utils import onboard_manifest
-from datapilot.utils.utils import validate_credentials
 
 logging.basicConfig(level=logging.INFO)
 
