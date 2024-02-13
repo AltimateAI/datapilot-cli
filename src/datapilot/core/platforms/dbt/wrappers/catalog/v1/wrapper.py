@@ -16,3 +16,16 @@ class CatalogV1Wrapper(BaseCatalogWrapper):
                 column_name: column_node.type for column_name, column_node in catalog_source_node.columns.items()
             }
         return nodes_with_schemas
+
+    def get_columns(self):
+        # Combine nodes and sources into a single dictionary for iteration
+        combined_catalog_items = {**self.catalog.nodes, **self.catalog.sources}
+
+        nodes_with_columns = {}
+        for item_id, catalog_item in combined_catalog_items.items():
+            # Initialize an empty list for each item to store its columns
+            nodes_with_columns[item_id] = []
+            for name, column_node in catalog_item.columns.items():
+                # Append the column details to the corresponding item
+                nodes_with_columns[item_id].append({"name": name, "data_type": column_node.type, "description": ""})
+        return nodes_with_columns

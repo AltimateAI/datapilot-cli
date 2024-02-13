@@ -83,3 +83,7 @@ class APIClient:
     def validate_credentials(self):
         endpoint = "/dbt/v3/validate-credentials"
         return self.get(endpoint)
+
+    def sql_insights(self, data):
+        endpoint = "/dbt/v1/sqlinsights"
+        return self.post(endpoint, data=data)

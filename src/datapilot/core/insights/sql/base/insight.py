@@ -7,6 +7,7 @@ from datapilot.schemas.sql import Dialect
 
 class SqlInsight(Insight):
     NAME = "SqlInsight"
+    TYPE = "sql"
 
     def __init__(self, sql: str, dialect: Optional[Dialect], *args, **kwargs):
         self.sql = sql

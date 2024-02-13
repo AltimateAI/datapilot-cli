@@ -8,3 +8,4 @@ class Dialect(Enum):
     MYSQL = "mysql"
     BIGQUERY = "bigquery"
     OTHERS = "others"
+    DATABRICKS = "databricks"
