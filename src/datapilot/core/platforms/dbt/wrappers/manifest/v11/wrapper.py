@@ -49,14 +49,16 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             compiled,
             compiled_code,
             depends_on_nodes,
+            depends_on_macros,
             raw_code,
             language,
             contract,
-        ) = ([], [], None, None, None, None, "", "", None)
+        ) = ([], [], None, None, None, None, None, "", "", None)
         if node.resource_type.value != SEED:
             sources = node.sources
             metrics = node.metrics
-            depends_on_nodes = node.depends_on.nodes
+            depends_on_nodes = node.depends_on.nodes if node.depends_on else None
+            depends_on_macros = node.depends_on.macros if node.depends_on else None
             compiled_path = node.compiled_path
             compiled = node.compiled
             raw_code = node.raw_code
@@ -98,7 +100,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             metrics=metrics,
             depends_on=AltimateDependsOn(
                 nodes=depends_on_nodes,
-                macros=node.depends_on.macros,
+                macros=depends_on_macros,
             ),
             compiled_path=compiled_path,
             compiled=compiled,

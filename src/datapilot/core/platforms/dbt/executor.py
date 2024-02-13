@@ -95,19 +95,27 @@ class DBTInsightGenerator:
                         )
                     )
                     continue
-                insights = insight.generate()
-                num_insights = len(insights)
-                text = f"Found {num_insights} insights for {insight_class.NAME}"
-                if num_insights > 0:
-                    self.logger.info(color_text(text, RED))
-                else:
-                    self.logger.info(f"No insights found for {insight_class.NAME}")
-
-                for insight in insights:
-                    if insight.insight_level == MODEL:
-                        reports[MODEL].setdefault(insight.unique_id, []).append(insight)
+                try:
+                    insights = insight.generate()
+                    num_insights = len(insights)
+                    text = f"Found {num_insights} insights for {insight_class.NAME}"
+                    if num_insights > 0:
+                        self.logger.info(color_text(text, RED))
                     else:
-                        reports[PROJECT].append(insight)
+                        self.logger.info(f"No insights found for {insight_class.NAME}")
+
+                    for insight in insights:
+                        if insight.insight_level == MODEL:
+                            reports[MODEL].setdefault(insight.unique_id, []).append(insight)
+                        else:
+                            reports[PROJECT].append(insight)
+                except Exception as e:
+                    self.logger.info(
+                        color_text(
+                            f"Error running insight {insight_class.NAME}: {e}. Skipping insight. {message}",
+                            RED,
+                        )
+                    )
             else:
                 self.logger.info(color_text(f"Skipping insight {insight_class.NAME} as {message}", YELLOW))
 

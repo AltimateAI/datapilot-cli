@@ -59,8 +59,8 @@ class AltimateManifestColumnInfo(BaseModel):
 
 
 class AltimateFileHash(BaseModel):
-    name: str
-    checksum: str
+    name: Optional[str]
+    checksum: Optional[str]
 
 
 class AltimateResourceType(Enum):
