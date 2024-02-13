@@ -1,3 +1,4 @@
+from typing import Dict
 from typing import Type
 from typing import Union
 
@@ -35,7 +36,7 @@ ExposureNode = Exposure
 TestNode = Union[GenericTestNode, SingularTestNode]
 
 
-TEST_TYPE_TO_NODE_MAP: dict[str, Type] = {
+TEST_TYPE_TO_NODE_MAP: Dict[str, Type] = {
     GENERIC: [GenericTestNode],
     SINGULAR: [SingularTestNode],
 }

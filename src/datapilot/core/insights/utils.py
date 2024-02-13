@@ -1,6 +1,5 @@
+from typing import Dict
 from typing import Optional
-
-from configtree.tree import Tree
 
 from datapilot.core.insights.schema import Severity
 from datapilot.schemas.constants import CONFIG_METRICS
@@ -8,7 +7,7 @@ from datapilot.schemas.constants import CONFIG_SEVERITY
 
 
 def get_severity(
-    config: Optional[Tree],
+    config: Optional[Dict],
     alias: str,
     default_severity: Severity,
 ):
