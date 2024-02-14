@@ -15,7 +15,7 @@ project = "datapilot"
 year = "2024"
 author = "Anand Gupta"
 copyright = f"{year}, {author}"
-version = release = "0.0.4"
+version = release = "0.0.5"
 
 pygments_style = "trac"
 templates_path = ["."]
