@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Dict
 from typing import Optional
 
 import click
@@ -45,7 +46,7 @@ def validate_credentials(
     return api_client.validate_credentials()
 
 
-def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path, backend_url) -> dict:
+def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path, backend_url) -> Dict:
     api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)
 
     params = {"dbt_core_integration_id": dbt_core_integration_id, "file_type": "manifest"}

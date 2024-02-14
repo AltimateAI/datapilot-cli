@@ -39,7 +39,7 @@ class DBTInsight(Insight):
         super().__init__(*args, **kwargs)
 
     @abstractmethod
-    def generate(self, *args, **kwargs) -> dict:
+    def generate(self, *args, **kwargs) -> Dict:
         pass
 
     def check_part_of_project(self, node_project_name: str) -> bool:

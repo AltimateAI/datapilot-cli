@@ -49,14 +49,16 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             compiled,
             compiled_code,
             depends_on_nodes,
+            depends_on_macros,
             raw_code,
             language,
             contract,
-        ) = ([], [], None, None, None, None, "", "", None)
+        ) = ([], [], None, None, None, None, None, "", "", None)
         if node.resource_type.value != SEED:
             sources = node.sources
             metrics = node.metrics
-            depends_on_nodes = node.depends_on.nodes
+            depends_on_nodes = node.depends_on.nodes if node.depends_on else None
+            depends_on_macros = node.depends_on.macros if node.depends_on else None
             compiled_path = node.compiled_path
             compiled = node.compiled
             raw_code = node.raw_code
@@ -79,8 +81,8 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             language=language,
             config=AltimateNodeConfig(**node.config.__dict__) if node.config else None,
             checksum=AltimateFileHash(
-                name=node.checksum.name,
-                checksum=node.checksum.checksum,
+                name=node.checksum.name if node.checksum else None,
+                checksum=node.checksum.checksum if node.checksum else None,
             ),
             columns={
                 name: AltimateManifestColumnInfo(
@@ -98,7 +100,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             metrics=metrics,
             depends_on=AltimateDependsOn(
                 nodes=depends_on_nodes,
-                macros=node.depends_on.macros,
+                macros=depends_on_macros,
             ),
             compiled_path=compiled_path,
             compiled=compiled,
@@ -156,11 +158,11 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             original_file_path=exposure.original_file_path,
             unique_id=exposure.unique_id,
             fqn=exposure.fqn,
-            type=AltimateExposureType(exposure.type.value),
+            type=AltimateExposureType(exposure.type.value) if exposure.type else None,
             owner=AltimateOwner(**exposure.owner.dict()) if exposure.owner else None,
             description=exposure.description,
             label=exposure.label,
-            maturity=AltimateMaturityEnum(exposure.maturity.value),
+            maturity=AltimateMaturityEnum(exposure.maturity.value) if exposure.maturity else None,
             meta=exposure.meta,
             tags=exposure.tags,
             config=AltimateSourceConfig(**exposure.config.dict()) if exposure.config else None,
@@ -169,7 +171,9 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             depends_on=AltimateDependsOn(
                 nodes=exposure.depends_on.nodes,
                 macros=exposure.depends_on.macros,
-            ),
+            )
+            if exposure.depends_on
+            else None,
             refs=[AltimateRefArgs(**ref.dict()) for ref in exposure.refs] if exposure.refs else None,
             sources=exposure.sources,
             metrics=exposure.metrics,
@@ -197,7 +201,9 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             checksum=AltimateFileHash(
                 name=test.checksum.name,
                 checksum=test.checksum.checksum,
-            ),
+            )
+            if test.checksum
+            else None,
             config=AltimateTestConfig(**test.config.dict()) if test.config else None,
             description=test.description,
             tags=test.tags,
@@ -225,7 +231,9 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             depends_on=AltimateDependsOn(
                 nodes=test.depends_on.nodes,
                 macros=test.depends_on.macros,
-            ),
+            )
+            if test.depends_on
+            else None,
             compiled_path=test.compiled_path,
             compiled=test.compiled,
             compiled_code=test.compiled_code,

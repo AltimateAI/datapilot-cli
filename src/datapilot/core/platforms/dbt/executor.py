@@ -1,9 +1,8 @@
 import logging
+from typing import Dict
 
 # from src.utils.formatting.utils import generate_model_insights_table
 from typing import Optional
-
-from configtree.tree import Tree
 
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
@@ -23,7 +22,7 @@ class DBTInsightGenerator:
         catalog_path: Optional[str] = None,
         run_results_path: Optional[str] = None,
         env: Optional[str] = None,
-        config: Optional[Tree] = None,
+        config: Optional[Dict] = None,
         target: str = "dev",
     ):
         self.manifest_path = manifest_path
@@ -31,7 +30,7 @@ class DBTInsightGenerator:
         self.run_results_path = run_results_path
         self.target = target
         self.env = env
-        self.config = config or Tree()
+        self.config = config or {}
         manifest = load_manifest(self.manifest_path)
 
         self.manifest_wrapper = DBTFactory.get_manifest_wrapper(manifest)
@@ -96,19 +95,27 @@ class DBTInsightGenerator:
                         )
                     )
                     continue
-                insights = insight.generate()
-                num_insights = len(insights)
-                text = f"Found {num_insights} insights for {insight_class.NAME}"
-                if num_insights > 0:
-                    self.logger.info(color_text(text, RED))
-                else:
-                    self.logger.info(f"No insights found for {insight_class.NAME}")
-
-                for insight in insights:
-                    if insight.insight_level == MODEL:
-                        reports[MODEL].setdefault(insight.unique_id, []).append(insight)
+                try:
+                    insights = insight.generate()
+                    num_insights = len(insights)
+                    text = f"Found {num_insights} insights for {insight_class.NAME}"
+                    if num_insights > 0:
+                        self.logger.info(color_text(text, RED))
                     else:
-                        reports[PROJECT].append(insight)
+                        self.logger.info(f"No insights found for {insight_class.NAME}")
+
+                    for insight in insights:
+                        if insight.insight_level == MODEL:
+                            reports[MODEL].setdefault(insight.unique_id, []).append(insight)
+                        else:
+                            reports[PROJECT].append(insight)
+                except Exception as e:
+                    self.logger.info(
+                        color_text(
+                            f"Error running insight {insight_class.NAME}: {e}. Skipping insight. {message}",
+                            RED,
+                        )
+                    )
             else:
                 self.logger.info(color_text(f"Skipping insight {insight_class.NAME} as {message}", YELLOW))
 

@@ -59,8 +59,8 @@ class AltimateManifestColumnInfo(BaseModel):
 
 
 class AltimateFileHash(BaseModel):
-    name: str
-    checksum: str
+    name: Optional[str]
+    checksum: Optional[str]
 
 
 class AltimateResourceType(Enum):
@@ -145,7 +145,7 @@ class AltimateManifestNode(BaseModel):
     config: Optional[AltimateNodeConfig] = None
     raw_code: Optional[str] = ""
     language: Optional[str] = "sql"
-    checksum: AltimateFileHash
+    checksum: Optional[AltimateFileHash]
     description: Optional[str] = ""
     columns: Optional[Dict[str, AltimateManifestColumnInfo]] = None
     relation_name: Optional[Optional[str]] = None
@@ -329,7 +329,7 @@ class AltimateManifestTestNode(BaseModel):
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: AltimateFileHash
+    checksum: Optional[AltimateFileHash]
     config: Optional[AltimateTestConfig] = None
     _event_status: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
