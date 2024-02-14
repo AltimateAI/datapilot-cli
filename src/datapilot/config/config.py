@@ -1,12 +1,13 @@
 from pathlib import Path
 from typing import Dict
 
-import yaml
+from ruamel.yaml import YAML
 
 
 def load_config(config_file_path: str) -> Dict:
+    yaml = YAML(typ="safe")
     with Path(config_file_path).open() as file:
-        config_dict = yaml.safe_load(file)
+        config_dict = yaml.load(file)
     return config_dict
 
 

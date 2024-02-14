@@ -65,7 +65,7 @@ setup(
         "click==8.1.7",
         "sqlglot==18.3.0",
         "dbt-artifacts-parser==0.5.1",
-        "PyYAML==6.0.1",
+        "ruamel.yaml==0.18.6",
         "tabulate==0.9.0",
         "requests==2.31.0",
     ],
