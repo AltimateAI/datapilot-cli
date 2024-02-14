@@ -181,14 +181,16 @@ class ManifestV11Wrapper(BaseManifestWrapper):
         )
 
     def _get_tests(self, test: TestNode) -> AltimateManifestTestNode:
+        test_metadata = None
         if isinstance(test, GenericTestNode):
             test_type = GENERIC
+            test_metadata = AltimateTestMetadata(**test.test_metadata.dict()) if test.test_metadata else None
         elif isinstance(test, SingularTestNode):
             test_type = SINGULAR
         else:
             test_type = OTHER_TEST_NODE
         return AltimateManifestTestNode(
-            test_metadata=AltimateTestMetadata(**test.test_metadata.dict()) if test.test_metadata else None,
+            test_metadata=test_metadata,
             test_type=test_type,
             name=test.name,
             resource_type=AltimateResourceType(test.resource_type.value),
