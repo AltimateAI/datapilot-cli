@@ -63,6 +63,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             compiled = node.compiled
             raw_code = node.raw_code
             language = node.language
+            compiled_code = node.compiled_code if node.compiled_code else None
             contract = AltimateDBTContract(**node.contract.__dict__) if node.contract else None
 
         return AltimateManifestNode(
