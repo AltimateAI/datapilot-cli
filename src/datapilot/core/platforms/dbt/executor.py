@@ -57,16 +57,17 @@ class DBTInsightGenerator:
         self.project_name = self.manifest_wrapper.get_package()
         self.selected_models = None
         self.selected_models_flag = False
+        entities = {
+            "nodes": self.nodes,
+            "sources": self.sources,
+            "exposures": self.exposures,
+            "tests": self.tests,
+        }
         if selected_models:
             self.selected_models_flag = True
             self.selected_models = get_models(
                 selected_models,
-                entities={
-                    "nodes": self.nodes,
-                    "sources": self.sources,
-                    "exposures": self.exposures,
-                    "tests": self.tests,
-                },
+                entities=entities,
             )
             if not self.selected_models:
                 raise ValueError(
@@ -78,12 +79,7 @@ class DBTInsightGenerator:
             self.excluded_models_flag = True
             self.excluded_models = get_models(
                 excluded_models,
-                entities={
-                    "nodes": self.nodes,
-                    "sources": self.sources,
-                    "exposures": self.exposures,
-                    "tests": self.tests,
-                },
+                entities=entities,
             )
             if not self.excluded_models:
                 raise ValueError(
