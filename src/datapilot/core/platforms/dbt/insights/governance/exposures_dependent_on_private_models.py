@@ -68,6 +68,9 @@ class DBTExposureDependentOnPrivateModels(DBTGovernanceInsight):
             return []
         insights = []
         for exposure_id, exposure in self.exposures.items():
+            if self.should_skip_model(exposure_id):
+                self.logger.debug(f"Skipping model {exposure_id} as it is not enabled for selected models")
+                continue
             self.logger.debug(f"Checking exposure {exposure_id}")
             private_models = []
             for dependency_id in exposure.depends_on.nodes:

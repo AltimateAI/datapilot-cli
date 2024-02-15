@@ -26,6 +26,8 @@ class DBTInsight(Insight):
         tests: Dict[str, AltimateManifestTestNode],
         children_map: Dict[str, List[str]],
         project_name: str,
+        selected_models: Union[List[str], None] = None,
+        excluded_models: Union[List[str], None] = None,
         *args,
         **kwargs,
     ):
@@ -36,6 +38,8 @@ class DBTInsight(Insight):
         self.tests = tests
         self.children_map = children_map
         self.project_name = project_name
+        self.selected_models = selected_models
+        self.excluded_models = excluded_models
         super().__init__(*args, **kwargs)
 
     @abstractmethod
@@ -88,3 +92,11 @@ class DBTInsight(Insight):
                 build_chain(node_id, [node_id])
 
         return long_chains
+
+    def should_skip_model(self, model_unique_id):
+        """Check if a model is in the excluded models list."""
+        if self.selected_models:
+            return model_unique_id not in self.selected_models
+
+        if self.excluded_models:
+            return model_unique_id in self.excluded_models

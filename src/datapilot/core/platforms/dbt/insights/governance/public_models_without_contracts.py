@@ -72,6 +72,9 @@ class DBTPublicModelWithoutContracts(DBTGovernanceInsight):
         self.logger.debug("Generating insights for public models without contracts")
         insights = []
         for node_id, node in self.nodes.items():
+            if self.should_skip_model(node_id):
+                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+                continue
             if node.resource_type == AltimateResourceType.model and node.access == AltimateAccess.public:
                 if (not node.contract) or (not node.contract.enforced):
                     self.logger.debug(f"Found public model {node_id} without contract enforced")

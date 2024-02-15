@@ -54,6 +54,9 @@ class DBTTestDirectoryStructure(DBTStructureInsight):
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         insights = []
         for test_id, test in self.tests.items():
+            if self.should_skip_model(test_id):
+                self.logger.debug(f"Skipping model {test_id} as it is not enabled for selected models")
+                continue
             test_file_path = get_dir_path(test_id)
             for node_id in test.depends_on.nodes:
                 node = self.get_node(node_id)

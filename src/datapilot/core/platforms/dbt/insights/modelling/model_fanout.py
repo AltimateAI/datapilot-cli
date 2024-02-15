@@ -81,6 +81,10 @@ class DBTModelFanout(DBTModellingInsight):
         insights = []
         self.logger.debug(f"Checking for models with fanout greater than {fanout_threshold}")
         for parent, children_set in self.children_map.items():
+            if self.should_skip_model(parent):
+                self.logger.debug(f"Skipping model {parent} as it is not enabled for selected models")
+                continue
+
             node = self.get_node(parent)
             if node.resource_type != AltimateResourceType.model:
                 continue

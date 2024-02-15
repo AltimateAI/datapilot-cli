@@ -64,6 +64,9 @@ class DBTRejoiningOfUpstreamConcepts(DBTModellingInsight):
                         children_list=list(self.children_map[child]),
                     )
                     child_node = self.get_node(child)
+                    if self.should_skip_model(child_node.unique_id):
+                        self.logger.debug(f"Skipping model {child_node.unique_id} as it is not enabled for selected models")
+                        continue
                     insights.append(
                         DBTModelInsightResponse(
                             unique_id=child_node.unique_id,

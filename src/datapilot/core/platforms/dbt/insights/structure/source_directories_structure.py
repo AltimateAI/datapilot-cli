@@ -56,6 +56,9 @@ class DBTSourceDirectoryStructure(DBTStructureInsight):
         insights = []
         regex_configuration = get_regex_configuration(self.config)
         for source_id, source in self.sources.items():
+            if self.should_skip_model(source_id):
+                self.logger.debug(f"Skipping model {source_id} as it is not enabled for selected models")
+                continue
             valid_convention, expected_directory = _check_source_folder_convention(
                 source_name=source.source_name,
                 folder_path=source.original_file_path,

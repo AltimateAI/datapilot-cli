@@ -1,7 +1,9 @@
 import re
 from typing import Dict
+from typing import List
 from typing import Optional
 from typing import Tuple
+from typing import Union
 
 from dbt_artifacts_parser.parser import parse_catalog
 from dbt_artifacts_parser.parser import parse_manifest
@@ -14,14 +16,17 @@ from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import OTHER
 from datapilot.core.platforms.dbt.constants import STAGING
 from datapilot.core.platforms.dbt.exceptions import AltimateInvalidManifestError
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
 from datapilot.core.platforms.dbt.schemas.manifest import Catalog
 from datapilot.core.platforms.dbt.schemas.manifest import Manifest
 from datapilot.exceptions.exceptions import AltimateFileNotFoundError
 from datapilot.exceptions.exceptions import AltimateInvalidJSONError
 from datapilot.utils.utils import extract_dir_name_from_file_path
 from datapilot.utils.utils import extract_folders_in_path
+from datapilot.utils.utils import is_superset_path
 from datapilot.utils.utils import load_json
 
 MODEL_TYPE_PATTERNS = {
@@ -433,3 +438,43 @@ def get_hard_coded_references(sql_code):
 
             hard_coded_references.add(raw_reference)
     return hard_coded_references
+
+
+def parse_argument(argument: str) -> dict:
+    """Parse the input argument and categorize it."""
+    if argument.startswith("path:"):
+        path_type = "model_path" if argument.endswith(".sql") else "directory_path"
+        path = argument.split(":", 1)[1]  # Splits only on the first occurrence.
+        return {"type": path_type, "name": path}
+
+    if argument.endswith(".sql"):
+        return {"type": "model_path", "name": argument}
+
+    if "/" in argument or "\\" in argument:
+        return {"type": "directory_path", "name": argument}
+
+    return {"type": "model_name", "name": argument}
+
+
+def add_models_by_type(
+    selected_category: dict,
+    entities: Dict[str, Union[AltimateManifestNode, AltimateManifestExposureNode, AltimateManifestSourceNode, AltimateManifestTestNode]],
+    final_models: List[str],
+):
+    """Add models to the final list based on the selected category."""
+    for entity in entities.values():
+        if selected_category["type"] in ["model_name", "model_path"]:
+            if (entity.name == selected_category.get("name")) or (entity.original_file_path == selected_category.get("name")):
+                final_models.append(entity.unique_id)
+        elif selected_category["type"] == "directory_path" and is_superset_path(selected_category["name"], entity.path):
+            final_models.append(entity["unique_id"])
+
+
+def get_models(selected_model_list: Optional[List[str]], entities) -> List[str]:
+    """Get models based on the selected model list and entities."""
+    final_models = []
+    for selected_model in selected_model_list or []:
+        selected_category = parse_argument(selected_model)
+        for entity_type in entities:
+            add_models_by_type(selected_category, entities[entity_type], final_models)
+    return final_models

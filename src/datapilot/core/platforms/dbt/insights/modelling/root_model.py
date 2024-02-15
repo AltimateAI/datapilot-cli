@@ -65,6 +65,9 @@ class DBTRootModel(DBTModellingInsight):
         insights = []
 
         for node_id, node in self.nodes.items():
+            if self.should_skip_model(node_id):
+                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+                continue
             if node.resource_type == AltimateResourceType.model and not node.depends_on.nodes:
                 self.logger.debug(f"Found root model {node_id} with no direct parents")
                 insight_result = self._build_failure_result(node.unique_id)

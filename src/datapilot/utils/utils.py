@@ -40,3 +40,14 @@ def get_dir_path(path: str) -> str:
     :return:
     """
     return Path(path).parent
+
+
+def is_superset_path(superset_path: str, path: str):
+    """
+    Check if the path is a sub-path of the superset path.
+
+    :param superset_path: The superset path
+    :param path: The path to be checked
+    :return: True if the path is a sub-path of the superset path, False otherwise
+    """
+    return Path(path).is_relative_to(superset_path)

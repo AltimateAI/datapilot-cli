@@ -59,6 +59,10 @@ class DBTModelsMultipleSourcesJoined(DBTModellingInsight):
         insights = []
 
         for node_id, node in self.nodes.items():
+            if self.should_skip_model(node_id):
+                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+                continue
+
             if node.resource_type == AltimateResourceType.model:
                 source_dependencies = [
                     dependent_node_id
