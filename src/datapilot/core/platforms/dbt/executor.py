@@ -24,6 +24,7 @@ class DBTInsightGenerator:
         env: Optional[str] = None,
         config: Optional[Dict] = None,
         target: str = "dev",
+        selected_models: Optional[str] = None,
     ):
         self.manifest_path = manifest_path
         self.catalog_path = catalog_path
@@ -60,6 +61,12 @@ class DBTInsightGenerator:
                 return True
         return False
 
+    def _check_if_model_skipped(self, insight):
+        if self.selected_models:
+            if insight.ALIAS not in self.selected_models:
+                return True
+        return False
+
     def run(self):
         reports = {
             MODEL: {},
@@ -87,6 +94,16 @@ class DBTInsightGenerator:
                     project_name=self.project_name,
                     config=self.config,
                 )
+
+                if self._check_if_model_skipped(insight):
+                    self.logger.info(
+                        color_text(
+                            f"Skipping insight {insight_class.NAME} as it is not enabled for selected models",
+                            YELLOW,
+                        )
+                    )
+                    continue
+
                 if self._check_if_skipped(insight):
                     self.logger.info(
                         color_text(
