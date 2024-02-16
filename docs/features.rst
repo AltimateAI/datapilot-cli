@@ -35,3 +35,13 @@ Step 3: Run the ``project-health`` command.
 
 
 The catalog path is optional. If you do not provide a catalog path, the command will still run, but the catalog-related insights will not be available.
+
+You can also select specific list of models to run the health check on by providing the '--select' flag. For example:
+
+.. code-block:: shell
+
+    datapilot dbt project-health --manifest-path ./target/manifest.json --select "path:dir1 path:dir2 model1 model2"
+
+This will run the health check on all the models in the 'dir1' and 'dir2' directory. It will also run the health check on the 'model1' and 'model2' models.
+As of now, the '--select' flag only supports filtering based on model path and model name. We will add support for other filters and make it compatible
+with the dbt comands soon.
