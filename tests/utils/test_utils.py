@@ -5,6 +5,7 @@ import pytest
 from datapilot.core.platforms.dbt.utils import get_manifest_wrapper
 from datapilot.core.platforms.dbt.utils import get_models
 from datapilot.utils.utils import extract_folders_in_path
+from datapilot.utils.utils import is_superset_path
 
 test_cases = [
     (Path("/home/user/documents/file.txt"), ["home", "user", "documents"]),
@@ -51,3 +52,19 @@ def test_model_selections(selected_model_list, expected):
     selected_models = [model for model in get_models(selected_model_list, entities) if not model.startswith("test.")]
 
     assert sorted(selected_models) == sorted(expected)
+
+
+@pytest.mark.parametrize(
+    ("superset_path", "path", "expected"),
+    [
+        ("/home/user", "/home/user/documents", True),
+        ("/home/user/documents", "/home/user2/documents", False),
+        ("/home/user", "/home/user", True),
+        (".", "./subdirectory", True),
+        ("/home/user/documents", "/home/user/../user2", False),
+        ("/home/user", "/home/user/docs", True),
+        ("/home/user", "/home/user/docs/../docs", True),
+    ],
+)
+def test_is_superset_path(superset_path, path, expected):
+    assert is_superset_path(superset_path, path) == expected

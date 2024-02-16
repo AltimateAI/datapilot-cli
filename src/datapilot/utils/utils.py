@@ -50,4 +50,9 @@ def is_superset_path(superset_path: str, path: str):
     :param path: The path to be checked
     :return: True if the path is a sub-path of the superset path, False otherwise
     """
-    return Path(path).is_relative_to(superset_path)
+
+    try:
+        Path(path).relative_to(superset_path)
+        return True
+    except ValueError:
+        return False
