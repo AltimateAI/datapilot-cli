@@ -97,3 +97,5 @@ class DBTInsight(Insight):
         """Check if a model is in the excluded models list."""
         if self.selected_models:
             return model_unique_id not in self.selected_models
+
+        return False
