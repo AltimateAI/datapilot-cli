@@ -1,4 +1,5 @@
 import re
+from enum import Enum
 from typing import Dict
 from typing import List
 from typing import Optional
@@ -16,6 +17,7 @@ from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import OTHER
 from datapilot.core.platforms.dbt.constants import STAGING
 from datapilot.core.platforms.dbt.exceptions import AltimateInvalidManifestError
+from datapilot.core.platforms.dbt.factory import DBTFactory
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
@@ -44,6 +46,12 @@ FOLDER_MAP = {
     BASE: BASE,
     # Add other model types with their folder names here
 }
+
+
+class SelectOption(Enum):
+    DIRECTORY = "directory"
+    MODEL_NAME = "model_name"
+    MODEL_PATH = "model_path"
 
 
 def combine_dict(dict1: Dict, dict2: Optional[Dict]) -> Dict:
@@ -441,40 +449,73 @@ def get_hard_coded_references(sql_code):
 
 
 def parse_argument(argument: str) -> dict:
-    """Parse the input argument and categorize it."""
+    """
+    Parses the given argument to categorize it as a model path, directory, or model name.
+
+    Parameters:
+    - argument (str): The input argument to be parsed.
+
+    Returns:
+    - dict: A dictionary containing the 'type' and 'name' of the parsed argument.
+    """
+    # Determine if the argument is a model path or directory based on its prefix and suffix.
     if argument.startswith("path:"):
-        path_type = "model_path" if argument.endswith(".sql") else "directory_path"
-        path = argument.split(":", 1)[1]  # Splits only on the first occurrence.
+        path_type = SelectOption.MODEL_PATH if argument.endswith(".sql") else SelectOption.DIRECTORY
+        path = argument.split(":", 1)[1]
         return {"type": path_type, "name": path}
 
+    # Identify argument as a model path if it ends with '.sql'.
     if argument.endswith(".sql"):
-        return {"type": "model_path", "name": argument}
+        return {"type": SelectOption.MODEL_PATH, "name": argument}
 
+    # Identify argument as a directory if it contains path separators.
     if "/" in argument or "\\" in argument:
-        return {"type": "directory_path", "name": argument}
+        return {"type": SelectOption.DIRECTORY, "name": argument}
 
-    return {"type": "model_name", "name": argument}
+    # Default case: treat the argument as a model name.
+    return {"type": SelectOption.MODEL_NAME, "name": argument}
 
 
-def add_models_by_type(
-    selected_category: dict,
-    entities: Dict[str, Union[AltimateManifestNode, AltimateManifestExposureNode, AltimateManifestSourceNode, AltimateManifestTestNode]],
-    final_models: List[str],
-):
-    """Add models to the final list based on the selected category."""
+def add_models_by_type(selected_category: dict, entities: dict, final_models: List[str]):
+    """
+    Adds models to the final list based on the selected category.
+
+    Parameters:
+    - selected_category (dict): The category selected for adding models.
+    - entities (dict): A dictionary of entities, each associated with a type.
+    - final_models (List[str]): The list to which the models' unique IDs are added.
+    """
     for entity in entities.values():
-        if selected_category["type"] in ["model_name", "model_path"]:
-            if (entity.name == selected_category.get("name")) or (entity.original_file_path == selected_category.get("name")):
+        if selected_category["type"] in (SelectOption.MODEL_NAME, SelectOption.MODEL_PATH):
+            if entity.name == selected_category.get("name") or entity.original_file_path == selected_category.get("name"):
                 final_models.append(entity.unique_id)
-        elif selected_category["type"] == "directory_path" and is_superset_path(selected_category["name"], entity.path):
-            final_models.append(entity["unique_id"])
+        elif selected_category["type"] == SelectOption.DIRECTORY:
+            if is_superset_path(selected_category["name"], entity.original_file_path):
+                final_models.append(entity.unique_id)
 
 
-def get_models(selected_model_list: Optional[List[str]], entities) -> List[str]:
-    """Get models based on the selected model list and entities."""
+def get_models(
+    selected_model_list: Optional[List[str]],
+    entities: Dict[str, Union[AltimateManifestNode, AltimateManifestExposureNode, AltimateManifestSourceNode, AltimateManifestTestNode]],
+) -> List[str]:
+    """
+    Retrieves models based on a selected list and entities.
+
+    Parameters:
+    - selected_model_list (Optional[List[str]]): The list of selected models.
+    - entities (Dict): A dictionary containing entity types and their instances.
+
+    Returns:
+    - List[str]: A list of unique model IDs based on the selection criteria.
+    """
     final_models = []
     for selected_model in selected_model_list or []:
         selected_category = parse_argument(selected_model)
         for entity_type in entities:
             add_models_by_type(selected_category, entities[entity_type], final_models)
-    return final_models
+    return list(set(final_models))
+
+
+def get_manifest_wrapper(manifest_path: str):
+    manifest = load_manifest(manifest_path)
+    return DBTFactory.get_manifest_wrapper(manifest)
