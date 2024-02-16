@@ -113,6 +113,9 @@ class MissingPrimaryKeyTests(DBTTestInsight):
 
         insights = []
         for node_id in nodes_which_need_tests:
+            if self.should_skip_model(node_id):
+                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+                continue
             if not self._has_primary_key_test(nodes_which_have_test.get(node_id)):
                 node = self.get_node(node_id)
                 self.logger.debug(f"Adding insight for model {node_id}")

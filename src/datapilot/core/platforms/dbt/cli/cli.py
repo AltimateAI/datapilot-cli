@@ -39,7 +39,13 @@ def dbt():
     required=False,
     help="Path to the DBT config file",
 )
-def project_health(manifest_path, catalog_path, config_path=None):
+@click.option(
+    "--select",
+    required=False,
+    default=None,
+    help="Selective model testing. Specify one or more models to run tests on.",
+)
+def project_health(manifest_path, catalog_path, config_path=None, select=None):
     """
     Validate the DBT project's configuration and structure.
     :param manifest_path: Path to the DBT manifest file.
@@ -47,7 +53,10 @@ def project_health(manifest_path, catalog_path, config_path=None):
     config = None
     if config_path:
         config = load_config(config_path)
-    insight_generator = DBTInsightGenerator(manifest_path, catalog_path=catalog_path, config=config)
+    selected_models = []
+    if select:
+        selected_models = select.split(" ")
+    insight_generator = DBTInsightGenerator(manifest_path, catalog_path=catalog_path, config=config, selected_models=selected_models)
     reports = insight_generator.run()
 
     package_insights = reports[PROJECT]

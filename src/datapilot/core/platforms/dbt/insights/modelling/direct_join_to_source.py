@@ -109,6 +109,9 @@ class DBTDirectJoinSource(DBTModellingInsight):
         self.logger.debug(f"Generating insights for DBTDirectJoinSource for project {self.project_name}")
         recommendations = []
         for node_id, node in self.nodes.items():
+            if self.should_skip_model(node_id):
+                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+                continue
             if node.resource_type == AltimateResourceType.model:
                 recommendation = self._check_dependency_on_both_models_and_sources(node)
                 if recommendation:

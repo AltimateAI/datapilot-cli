@@ -56,6 +56,9 @@ class DBTHardCodedReferences(DBTModellingInsight):
         insights = []
 
         for node in self.nodes.values():
+            if self.should_skip_model(node.unique_id):
+                self.logger.debug(f"Skipping model {node.unique_id} as it is not enabled for selected models")
+                continue
             if node.resource_type == AltimateResourceType.model:
                 raw_code = node.raw_code
                 if (not raw_code) or node.language != SQL:

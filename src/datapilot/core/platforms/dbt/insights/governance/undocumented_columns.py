@@ -102,6 +102,9 @@ class DBTMissingDocumentation(DBTGovernanceInsight):
         """
         insights = []
         for node_id, node in self.nodes.items():
+            if self.should_skip_model(node_id):
+                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+                continue
             if node.resource_type == AltimateResourceType.model:
                 model_description_is_missing = not node.description
                 columns_documented = self._get_columns_documented(node_id)

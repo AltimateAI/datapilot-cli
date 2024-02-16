@@ -68,6 +68,9 @@ class DBTSourceFanout(DBTModellingInsight):
         insights = []
 
         for node_id, children_set in self.children_map.items():
+            if self.should_skip_model(node_id):
+                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+                continue
             node = self.get_node(node_id)
             if node.resource_type == AltimateResourceType.source:
                 if len(children_set) > fanout_threshold:

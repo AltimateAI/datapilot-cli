@@ -1,13 +1,15 @@
 import logging
-from typing import Dict
 
 # from src.utils.formatting.utils import generate_model_insights_table
+from typing import Dict
 from typing import Optional
 
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
+from datapilot.core.platforms.dbt.exceptions import AltimateCLIArgumentError
 from datapilot.core.platforms.dbt.factory import DBTFactory
 from datapilot.core.platforms.dbt.insights import INSIGHTS
+from datapilot.core.platforms.dbt.utils import get_models
 from datapilot.core.platforms.dbt.utils import load_catalog
 from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import RED
@@ -24,6 +26,7 @@ class DBTInsightGenerator:
         env: Optional[str] = None,
         config: Optional[Dict] = None,
         target: str = "dev",
+        selected_models: Optional[str] = None,
     ):
         self.manifest_path = manifest_path
         self.catalog_path = catalog_path
@@ -52,11 +55,36 @@ class DBTInsightGenerator:
         self.children_map = self.manifest_wrapper.parent_to_child_map(self.nodes)
         self.tests = self.manifest_wrapper.get_tests()
         self.project_name = self.manifest_wrapper.get_package()
-        # TODO - add catalog and run results wrappers
+        self.selected_models = None
+        self.selected_models_flag = False
+        entities = {
+            "nodes": self.nodes,
+            "sources": self.sources,
+            "exposures": self.exposures,
+            "tests": self.tests,
+        }
+        if selected_models:
+            self.selected_models_flag = True
+            self.selected_models = get_models(
+                selected_models,
+                entities=entities,
+            )
+            if not self.selected_models:
+                raise AltimateCLIArgumentError(
+                    f"Invalid values provided in the --select argument. Could not find models associated with pattern: --select {' '.join(selected_models)}"
+                )
+        self.excluded_models = None
+        self.excluded_models_flag = False
 
     def _check_if_skipped(self, insight):
         if self.config.get("disabled_insights", False):
             if insight.ALIAS in self.config.get("disabled_insights", []):
+                return True
+        return False
+
+    def _check_if_model_skipped(self, insight):
+        if self.selected_models:
+            if insight.ALIAS not in self.selected_models:
                 return True
         return False
 
@@ -86,7 +114,10 @@ class DBTInsightGenerator:
                     tests=self.tests,
                     project_name=self.project_name,
                     config=self.config,
+                    selected_models=self.selected_models,
+                    excluded_models=self.excluded_models,
                 )
+
                 if self._check_if_skipped(insight):
                     self.logger.info(
                         color_text(
@@ -105,10 +136,15 @@ class DBTInsightGenerator:
                         self.logger.info(f"No insights found for {insight_class.NAME}")
 
                     for insight in insights:
+                        # Handle MODEL level insights
                         if insight.insight_level == MODEL:
+                            # Add the insight if the model is selected or if all models are selected
+                            # if self.selected_models_flag and insight.unique_id in self.selected_models or not self.selected_models_flag:
                             reports[MODEL].setdefault(insight.unique_id, []).append(insight)
-                        else:
+                        # Handle PROJECT level insights, only if all models are selected
+                        elif insight.insight_level == PROJECT:
                             reports[PROJECT].append(insight)
+
                 except Exception as e:
                     self.logger.info(
                         color_text(

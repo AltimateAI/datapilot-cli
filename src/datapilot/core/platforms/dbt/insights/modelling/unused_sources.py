@@ -44,6 +44,9 @@ class DBTUnusedSources(DBTModellingInsight):
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         insights = []
         for source_id, source in self.sources.items():
+            if self.should_skip_model(source_id):
+                self.logger.debug(f"Skipping model {source_id} as it is not enabled for selected models")
+                continue
             if source_id not in self.children_map.keys():
                 insight_result = self._build_failure_result(source_id)
                 insights.append(

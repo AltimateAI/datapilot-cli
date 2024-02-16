@@ -23,7 +23,7 @@ from datapilot.core.platforms.dbt.insights.modelling.staging_model_dependent_on_
 from datapilot.core.platforms.dbt.insights.modelling.unused_sources import DBTUnusedSources
 from datapilot.core.platforms.dbt.insights.performance.chain_view_linking import DBTChainViewLinking
 from datapilot.core.platforms.dbt.insights.performance.exposure_parent_materializations import DBTExposureParentMaterialization
-from datapilot.core.platforms.dbt.insights.structure.model_directories_structuire import DBTModelDirectoryStructure
+from datapilot.core.platforms.dbt.insights.structure.model_directories_structure import DBTModelDirectoryStructure
 from datapilot.core.platforms.dbt.insights.structure.model_naming_conventions import DBTModelNamingConvention
 from datapilot.core.platforms.dbt.insights.structure.source_directories_structure import DBTSourceDirectoryStructure
 from datapilot.core.platforms.dbt.insights.structure.test_directory_structure import DBTTestDirectoryStructure

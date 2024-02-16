@@ -76,6 +76,9 @@ class DBTExposureParentMaterialization(DBTPerformanceInsight):
         insights = []
 
         for exposure_id, exposure in self.exposures.items():
+            if self.should_skip_model(exposure_id):
+                self.logger.debug(f"Skipping model {exposure_id} as it is not enabled for selected models")
+                continue
             bad_materializations = []
             source_parents = []
             for parent_model in exposure.depends_on.nodes:
