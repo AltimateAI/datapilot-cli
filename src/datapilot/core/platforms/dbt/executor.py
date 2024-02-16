@@ -6,6 +6,7 @@ from typing import Optional
 
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
+from datapilot.core.platforms.dbt.exceptions import AltimateCLIArgumentError
 from datapilot.core.platforms.dbt.factory import DBTFactory
 from datapilot.core.platforms.dbt.insights import INSIGHTS
 from datapilot.core.platforms.dbt.utils import get_models
@@ -26,7 +27,6 @@ class DBTInsightGenerator:
         config: Optional[Dict] = None,
         target: str = "dev",
         selected_models: Optional[str] = None,
-        excluded_models: Optional[str] = None,
     ):
         self.manifest_path = manifest_path
         self.catalog_path = catalog_path
@@ -70,22 +70,11 @@ class DBTInsightGenerator:
                 entities=entities,
             )
             if not self.selected_models:
-                raise ValueError(
+                raise AltimateCLIArgumentError(
                     f"Invalid values provided in the --select argument. Could not find models associated with pattern: --select {' '.join(selected_models)}"
                 )
         self.excluded_models = None
         self.excluded_models_flag = False
-        if excluded_models:
-            self.excluded_models_flag = True
-            self.excluded_models = get_models(
-                excluded_models,
-                entities=entities,
-            )
-            if not self.excluded_models:
-                raise ValueError(
-                    f"Invalid values provided in the --exclude argument. Could not find models associated with pattern: --exclude {' '.join(excluded_models)}"
-                )
-        print(self.selected_models)
 
     def _check_if_skipped(self, insight):
         if self.config.get("disabled_insights", False):

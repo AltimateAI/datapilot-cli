@@ -45,13 +45,7 @@ def dbt():
     default=None,
     help="Selective model testing. Specify one or more models to run tests on.",
 )
-@click.option(
-    "--exclude",
-    required=False,
-    default=None,
-    help="Exclude models from testing. Specify one or more models to exclude from testing.",
-)
-def project_health(manifest_path, catalog_path, config_path=None, select=None, exclude=None):
+def project_health(manifest_path, catalog_path, config_path=None, select=None):
     """
     Validate the DBT project's configuration and structure.
     :param manifest_path: Path to the DBT manifest file.
@@ -62,12 +56,7 @@ def project_health(manifest_path, catalog_path, config_path=None, select=None, e
     selected_models = []
     if select:
         selected_models = select.split(" ")
-    excluded_models = []
-    if exclude:
-        excluded_models = exclude.split(" ")
-    insight_generator = DBTInsightGenerator(
-        manifest_path, catalog_path=catalog_path, config=config, selected_models=selected_models, excluded_models=excluded_models
-    )
+    insight_generator = DBTInsightGenerator(manifest_path, catalog_path=catalog_path, config=config, selected_models=selected_models)
     reports = insight_generator.run()
 
     package_insights = reports[PROJECT]
