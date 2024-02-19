@@ -85,7 +85,7 @@ def project_health(manifest_path, catalog_path, config_path=None, select=None):
 @click.option("--instance-name", prompt="Instance Name", help="Your tenant ID.")
 @click.option("--dbt_core_integration_id", prompt="DBT Core Integration ID", help="DBT Core Integration ID")
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
-@click.option("--backend-url", required=False, prompt="Altimate's Backend URL", help="Altimate's Backend URL")
+@click.option("--backend-url", required=False, help="Altimate's Backend URL", default="https://api.myaltimate.com")
 def onboard(token, instance_name, dbt_core_integration_id, manifest_path, backend_url="https://api.myaltimate.com", env=None):
     """Onboard a manifest file to DBT."""
     check_token_and_instance(token, instance_name)
