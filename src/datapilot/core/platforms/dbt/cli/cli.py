@@ -95,7 +95,11 @@ def onboard(token, instance_name, dbt_core_integration_id, manifest_path, backen
         return
 
     # This will throw error if manifest file is incorrect
-    load_manifest(manifest_path)
+    try:
+        load_manifest(manifest_path)
+    except Exception as e:
+        click.echo(f"Error: {e}")
+        return
 
     response = onboard_manifest(token, instance_name, dbt_core_integration_id, manifest_path, backend_url)
 

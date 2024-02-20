@@ -65,7 +65,11 @@ def load_manifest(manifest_path: str) -> Manifest:
     except FileNotFoundError as e:
         raise AltimateFileNotFoundError(f"Manifest file not found: {manifest_path}. Error: {e}") from e
     except ValueError as e:
-        raise AltimateInvalidJSONError(f"Invalid JSON file: {manifest_path}. Error: {e}") from e
+        raise AltimateInvalidJSONError(f"Invalid manifest file: {manifest_path}. Error: {e}") from e
+    except Exception as e:
+        raise AltimateInvalidManifestError(
+            f"Invalid manifest file: {manifest_path}. Error: {e}. Please ensure that you are providing the path to a manifest file"
+        ) from e
 
     try:
         manifest: Manifest = parse_manifest(manifest_dict)
