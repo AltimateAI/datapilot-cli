@@ -12,6 +12,8 @@ def load_json(file_path: str) -> Dict:
         raise
     except json.decoder.JSONDecodeError as e:
         raise ValueError(f"Invalid JSON file: {file_path}") from e
+    except IsADirectoryError as e:
+        raise ValueError(f"Please provide a A valid manifest file path. {file_path} is a directory") from e
 
 
 def extract_dir_name_from_file_path(path: str) -> str:
