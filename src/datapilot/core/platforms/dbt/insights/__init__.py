@@ -1,3 +1,5 @@
+from datapilot.core.platforms.dbt.insights.checks.check_column_desc_are_same import CheckColumnDescAreSame
+from datapilot.core.platforms.dbt.insights.checks.check_column_name_contract import CheckColumnNameContract
 from datapilot.core.platforms.dbt.insights.dbt_test.missing_primary_key_tests import MissingPrimaryKeyTests
 from datapilot.core.platforms.dbt.insights.dbt_test.test_coverage import DBTTestCoverage
 from datapilot.core.platforms.dbt.insights.governance.documentation_on_stale_columns import DBTDocumentationStaleColumns
@@ -54,4 +56,6 @@ INSIGHTS = [
     DBTModelNamingConvention,
     DBTSourceDirectoryStructure,
     DBTTestDirectoryStructure,
+    CheckColumnDescAreSame,
+    CheckColumnNameContract,
 ]
