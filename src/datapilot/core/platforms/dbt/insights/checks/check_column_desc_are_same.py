@@ -6,7 +6,6 @@ from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckColumnDescAreSame(ChecksInsight):
@@ -20,36 +19,27 @@ class CheckColumnDescAreSame(ChecksInsight):
         "Different descriptions for the same column names can lead to confusion and hinder effective data "
         "modeling and analysis. It's important to have consistent column descriptions."
     )
-    FAILURE_MESSAGE = (
-        "The following columns in the model `{model_unique_id}` have different descriptions:\n{columns}. "
-        "Inconsistent descriptions can impede understanding and usage of the model."
-    )
-    RECOMMENDATION = (
-        "Ensure that the descriptions for the columns listed above in the model `{model_unique_id}` are consistent. "
-        "Consistent descriptions provide valuable context and aids in data understanding and collaboration."
-    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.columns_with_different_desc = []
+        self.columns = {}
+        self.column_node_map = {}
 
     def _build_failure_result(
         self,
-        model_unique_id: str,
-        columns: List[str],
     ) -> DBTInsightResult:
         """
-        Build failure result for the insight if a model is a root model with 0 direct parents.
+        Build failure result for the insight if a column has a different description in multiple models or sources.
 
-        :param model_unique_id: Unique ID of the current model being evaluated.
-        :param columns: List of columns that have different descriptions.
         :return: An instance of InsightResult containing failure message and recommendation.
         """
-        self.logger.debug(f"Building failure result for model {model_unique_id} with columns with different descriptions {columns}")
-        failure_message = self.FAILURE_MESSAGE.format(
-            columns=numbered_list(columns),
-            model_unique_id=model_unique_id,
-        )
-        recommendation = self.RECOMMENDATION.format(model_unique_id=model_unique_id)
+
+        failure_message = "The following models or sources have different descriptions for some columns:\n"
+        for col_name in self.columns_with_different_desc:
+            failure_message += f"- {self.column_node_map[col_name]} (column: {col_name})\n"
+
+        recommendation = "Ensure that the description for the columns is consistent across all instances."
 
         return DBTInsightResult(
             type=self.TYPE,
@@ -58,8 +48,7 @@ class CheckColumnDescAreSame(ChecksInsight):
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "columns": columns,
-                "model_unique_id": model_unique_id,
+                "columns_with_diff_desc": self.columns_with_different_desc,
             },
         )
 
@@ -69,45 +58,48 @@ class CheckColumnDescAreSame(ChecksInsight):
         identifying models with columns that have different descriptions for the same column name.
         :return: A list of InsightResponse objects.
         """
+
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.model:
-                columns = self._get_columns_with_different_desc(node_id)
-                if columns:
-                    insights.append(
-                        DBTModelInsightResponse(
-                            unique_id=node_id,
-                            package_name=node.package_name,
-                            path=node.original_file_path,
-                            original_file_path=node.original_file_path,
-                            insight=self._build_failure_result(
-                                node_id,
-                                columns,
-                            ),
-                            severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
-                        )
-                    )
+                self._get_columns_with_different_desc(node_id)
+            elif node.resource_type == AltimateResourceType.source:
+                self._get_columns_with_different_desc(node_id)
+
+        if self.columns_with_different_desc:
+            insights.append(
+                DBTModelInsightResponse(
+                    unique_id=node_id,
+                    package_name=node.package_name,
+                    path=node.original_file_path,
+                    original_file_path=node.original_file_path,
+                    insight=self._build_failure_result(),
+                    severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
+                )
+            )
 
         return insights
 
-    def _get_columns_with_different_desc(self, node_id) -> List[str]:
+    def _get_columns_with_different_desc(self, node_id):
         """
-        Get the list of columns that have different descriptions for the same column name.
+        Get the list of models or sources that have different descriptions for the same column name.
         :param node_id: The unique ID of the node.
-        :return: A list of column names.
         """
-        columns_with_different_desc = []
-        columns = {}
         for column_name, column_node in self.get_node(node_id).columns.items():
-            if column_name in columns:
-                if column_node.description != columns[column_name]:
-                    columns_with_different_desc.append(column_name)
+            if column_name in self.column_node_map:
+                self.column_node_map[column_name].append(node_id)
             else:
-                columns[column_name] = column_node.description
-        return columns_with_different_desc
+                self.column_node_map[column_name] = [node_id]
+
+            if column_name in self.columns:
+                if column_node.description != self.columns[column_name]:
+                    if column_name not in self.columns_with_different_desc:
+                        self.columns_with_different_desc.append(column_name)
+            else:
+                self.columns[column_name] = column_node.description
 
     @classmethod
     def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
