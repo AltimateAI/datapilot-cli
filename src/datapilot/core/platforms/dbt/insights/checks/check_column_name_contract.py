@@ -3,6 +3,8 @@ from typing import List
 from typing import Sequence
 from typing import Tuple
 
+from datapilot.config.utils import get_contract_regex_configuration
+from datapilot.config.utils import get_dtypes_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -34,8 +36,8 @@ class CheckColumnNameContract(ChecksInsight):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.pattern = kwargs.get("pattern")
-        self.dtypes = kwargs.get("dtypes")
+        self.pattern = get_contract_regex_configuration(self.config)
+        self.dtypes = get_dtypes_configuration(self.config)
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         insights = []
@@ -44,7 +46,7 @@ class CheckColumnNameContract(ChecksInsight):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.model:
-                columns = self._get_columns(node_id)
+                columns = self._get_columns_with_contract_violation(node_id)
                 if columns:
                     insights.append(
                         DBTModelInsightResponse(
@@ -74,7 +76,7 @@ class CheckColumnNameContract(ChecksInsight):
             metadata={"columns": columns, "model_unique_id": model_unique_id},
         )
 
-    def _get_columns(self, node_id) -> Sequence[str]:
+    def _get_columns_with_contract_violation(self, node_id) -> Sequence[str]:
         columns_with_contract_violation = []
         for col_name, col_node in self.get_node(node_id).columns.items():
             if re.match(self.pattern, col_name, re.IGNORECASE) is None or col_node.description not in self.dtypes:
