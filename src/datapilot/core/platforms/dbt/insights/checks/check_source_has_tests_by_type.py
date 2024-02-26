@@ -1,7 +1,7 @@
 from typing import List
 from typing import Tuple
 
-from datapilot.config.utils import get_test_name_configuration
+from datapilot.config.utils import get_source_test_type_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -10,61 +10,53 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.utils.formatting.utils import numbered_list
 
 
-class CheckModelHasTestsByName(ChecksInsight):
-    NAME = "Check Model Has Tests By Name"
-    ALIAS = "check_model_has_tests_by_name"
-    DESCRIPTION = "Checks that the model has tests with specific names."
-    REASON_TO_FLAG = "Models should have tests with specific names for proper validation."
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.test_names = get_test_name_configuration(self.config)
+class CheckSourceHasTestsByType(ChecksInsight):
+    NAME = "Check Source Has Tests By Type"
+    ALIAS = "check_source_has_tests_by_type"
+    DESCRIPTION = "Check if the source has tests with the specified types"
+    REASON_TO_FLAG = (
+        "The source table is missing tests with the specified types. Ensure that the source table has tests with the specified types."
+    )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         insights = []
+        self.test_types = get_source_test_type_configuration(self.config)
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
-            if node.resource_type == AltimateResourceType.model:
-                if self._model_has_tests_by_name(node_id, self.test_names):
+            if node.resource_type == AltimateResourceType.source:
+                if self._source_has_tests_by_type(node_id, self.test_types):
                     insights.append(
                         DBTModelInsightResponse(
                             unique_id=node_id,
                             package_name=node.package_name,
                             path=node.original_file_path,
                             original_file_path=node.original_file_path,
-                            insight=self._build_failure_result(node_id, self.test_names),
+                            insight=self._build_failure_result(node_id, self.test_types),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
         return insights
 
-    def _build_failure_result(self, model_unique_id: str, test_names: List[str]) -> DBTInsightResult:
+    def _build_failure_result(self, source_unique_id: str, test_types: List[str]) -> DBTInsightResult:
         failure_message = (
-            "The following models do not have tests with the specified names:\n{missing_tests}. "
-            "Ensure that each model has tests with the specified names for proper validation."
+            "The source table `{source_unique_id}` is missing the following tests: {test_types}. "
+            "Ensure that the source table has the required tests."
         )
         recommendation = (
-            "Add tests with the specified names for each model listed above. "
-            "Having tests with specific names ensures proper validation and data integrity."
+            "Add the following tests to the source table `{source_unique_id}`: {test_types}. "
+            "Ensuring that the source table has the required tests helps in maintaining data integrity and consistency."
         )
-
         return DBTInsightResult(
-            type=self.TYPE,
-            name=self.NAME,
-            message=failure_message.format(
-                missing_tests=numbered_list(test_names),
-            ),
-            recommendation=recommendation,
-            reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"missing_tests": test_names, "model_unique_id": model_unique_id},
+            failure_message=failure_message.format(source_unique_id=source_unique_id, test_types=numbered_list(test_types)),
+            recommendation=recommendation.format(source_unique_id=source_unique_id, test_types=numbered_list(test_types)),
+            metadata={"source_unique_id": source_unique_id, "test_types": test_types},
         )
 
-    def _model_has_tests_by_name(self, model_id, test_names: List[str]) -> bool:
-        model = self.get_node(model_id)
-        model_test_metadata = model.test_metadata
-        if model_test_metadata.name in test_names:
+    def _source_has_tests_by_type(self, node_id, test_types: List[str]) -> bool:
+        source = self.get_node(node_id)
+        if source.test_type in test_types:
             return True
         return False
 

@@ -61,10 +61,10 @@ class CheckModelHasTestsByType(ChecksInsight):
             metadata={"missing_tests": test_types, "model_unique_id": model_unique_id},
         )
 
-    def _model_has_tests_by_type(self, model, test_types: List[str]) -> bool:
-        for test_type in test_types:
-            if any(test.test_type == test_type for test in self.tests.values()):
-                return True
+    def _model_has_tests_by_type(self, model_id, test_types: List[str]) -> bool:
+        model = self.get_node(model_id)
+        if model.test_type in test_types:
+            return True
         return False
 
     @classmethod
