@@ -1,5 +1,32 @@
+from datapilot.core.platforms.dbt.insights.checks import check_source_columns_have_desc
+from datapilot.core.platforms.dbt.insights.checks import check_source_table_has_description
 from datapilot.core.platforms.dbt.insights.checks.check_column_desc_are_same import CheckColumnDescAreSame
 from datapilot.core.platforms.dbt.insights.checks.check_column_name_contract import CheckColumnNameContract
+from datapilot.core.platforms.dbt.insights.checks.check_macro_args_have_desc import CheckMacroArgsHaveDesc
+from datapilot.core.platforms.dbt.insights.checks.check_macro_has_desc import CheckMacroHasDesc
+from datapilot.core.platforms.dbt.insights.checks.check_model_has_all_columns import CheckModelHasAllColumns
+from datapilot.core.platforms.dbt.insights.checks.check_model_has_labels_keys import CheckModelHasLabelsKeys
+from datapilot.core.platforms.dbt.insights.checks.check_model_has_meta_keys import CheckModelHasMetaKeys
+from datapilot.core.platforms.dbt.insights.checks.check_model_has_properties_file import CheckModelHasPropertiesFile
+from datapilot.core.platforms.dbt.insights.checks.check_model_has_tests_by_group import CheckModelHasTestsByGroup
+from datapilot.core.platforms.dbt.insights.checks.check_model_has_tests_by_name import CheckModelHasTestsByName
+from datapilot.core.platforms.dbt.insights.checks.check_model_has_tests_by_type import CheckModelHasTestsByType
+from datapilot.core.platforms.dbt.insights.checks.check_model_materialization_by_childs import CheckModelMaterializationByChilds
+from datapilot.core.platforms.dbt.insights.checks.check_model_name_contract import CheckModelNameContract
+from datapilot.core.platforms.dbt.insights.checks.check_model_parents_database import CheckModelParentsDatabase
+from datapilot.core.platforms.dbt.insights.checks.check_model_parents_schema import CheckModelParentsSchema
+from datapilot.core.platforms.dbt.insights.checks.check_model_tags import CheckModelTags
+from datapilot.core.platforms.dbt.insights.checks.check_source_childs import CheckSourceChilds
+from datapilot.core.platforms.dbt.insights.checks.check_source_has_all_columns import CheckSourceHasAllColumns
+from datapilot.core.platforms.dbt.insights.checks.check_source_has_freshness import CheckSourceHasFreshness
+from datapilot.core.platforms.dbt.insights.checks.check_source_has_labels_keys import CheckSourceHasLabelsKeys
+from datapilot.core.platforms.dbt.insights.checks.check_source_has_loader import CheckSourceHasLoader
+from datapilot.core.platforms.dbt.insights.checks.check_source_has_meta_keys import CheckSourceHasMetaKeys
+from datapilot.core.platforms.dbt.insights.checks.check_source_has_tests import CheckSourceHasTests
+from datapilot.core.platforms.dbt.insights.checks.check_source_has_tests_by_group import CheckSourceHasTestsByGroup
+from datapilot.core.platforms.dbt.insights.checks.check_source_has_tests_by_name import CheckSourceHasTestsByName
+from datapilot.core.platforms.dbt.insights.checks.check_source_has_tests_by_type import CheckSourceHasTestsByType
+from datapilot.core.platforms.dbt.insights.checks.check_source_tags import CheckSourceTags
 from datapilot.core.platforms.dbt.insights.dbt_test.missing_primary_key_tests import MissingPrimaryKeyTests
 from datapilot.core.platforms.dbt.insights.dbt_test.test_coverage import DBTTestCoverage
 from datapilot.core.platforms.dbt.insights.governance.documentation_on_stale_columns import DBTDocumentationStaleColumns
@@ -58,4 +85,31 @@ INSIGHTS = [
     DBTTestDirectoryStructure,
     CheckColumnDescAreSame,
     CheckColumnNameContract,
+    CheckMacroArgsHaveDesc,
+    CheckMacroHasDesc,
+    CheckModelHasAllColumns,
+    CheckModelHasLabelsKeys,
+    CheckModelHasMetaKeys,
+    CheckModelHasPropertiesFile,
+    CheckModelHasTestsByName,
+    CheckModelHasTestsByType,
+    CheckModelHasTestsByGroup,
+    CheckModelMaterializationByChilds,
+    CheckModelNameContract,
+    CheckModelParentsDatabase,
+    CheckModelParentsSchema,
+    CheckModelTags,
+    CheckSourceChilds,
+    check_source_columns_have_desc,
+    CheckSourceHasAllColumns,
+    CheckSourceHasFreshness,
+    CheckSourceHasLabelsKeys,
+    CheckSourceHasLoader,
+    CheckSourceHasMetaKeys,
+    CheckSourceHasTestsByName,
+    CheckSourceHasTestsByType,
+    CheckSourceHasTestsByGroup,
+    CheckSourceHasTests,
+    check_source_table_has_description,
+    CheckSourceTags,
 ]
