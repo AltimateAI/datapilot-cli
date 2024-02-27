@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.config.utils import get_test_group_configuration
 from datapilot.core.insights.utils import get_severity
@@ -16,18 +15,15 @@ class CheckModelHasTestsByGroup(ChecksInsight):
     DESCRIPTION = "Checks that the model has tests with specific groups."
     REASON_TO_FLAG = "Models should have tests with specific groups for proper validation."
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.test_groups = get_test_group_configuration(self.config)
-
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
+        self.test_groups = get_test_group_configuration(self.config)
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.model:
-                if self._model_has_tests_by_group(node, self.test_groups):
+                if not self._model_has_tests_by_group(node_id, self.test_groups):
                     insights.append(
                         DBTModelInsightResponse(
                             unique_id=node_id,
@@ -61,18 +57,13 @@ class CheckModelHasTestsByGroup(ChecksInsight):
             metadata={"missing_tests": test_groups, "model_unique_id": model_unique_id},
         )
 
-    def _model_has_tests_by_group(self, model, test_groups: List[str]) -> bool:
-        for test_group in test_groups:
-            if any(test.group == test_group for test in self.tests.values()):
-                return True
-        return False
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""
+    def _model_has_tests_by_group(self, node_id, test_groups: List[str]) -> bool:
+        """
+        For model, check all dependencies and if node type is test, check if it has the required groups.
+        """
+        for child_id in self.children_map.get(node_id, []):
+            child = self.get_node(child_id)
+            if child.resource_type == AltimateResourceType.test:
+                if not child.group or child.group not in test_groups:
+                    return False
+        return True

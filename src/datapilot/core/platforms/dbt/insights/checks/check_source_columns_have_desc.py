@@ -52,7 +52,7 @@ class CheckSourceColumnsHaveDescriptions(ChecksInsight):
 
         """
         insights = []
-        for node_id, node in self.nodes.items():
+        for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
@@ -77,13 +77,3 @@ class CheckSourceColumnsHaveDescriptions(ChecksInsight):
             if not column_node.description:
                 columns_with_missing_descriptions.add(column_name)
         return columns_with_missing_descriptions
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""

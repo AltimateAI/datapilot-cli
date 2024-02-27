@@ -17,6 +17,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateFileHash
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateFreshnessThreshold
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestColumnInfo
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestMacroNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
@@ -31,6 +32,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateTestConfig
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateTestMetadata
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import TEST_TYPE_TO_NODE_MAP
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import ExposureNode
+from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import MacroNode
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import ManifestNode
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import SourceNode
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import TestNode
@@ -147,6 +149,31 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             patch_path=source.patch_path,
             unrendered_config=source.unrendered_config,
             created_at=source.created_at,
+        )
+
+    def _get_macro(self, macro: MacroNode) -> AltimateManifestMacroNode:
+        return AltimateManifestMacroNode(
+            name=macro.name,
+            resource_type=AltimateResourceType(macro.resource_type.value),
+            package_name=macro.package_name,
+            path=macro.path,
+            original_file_path=macro.original_file_path,
+            unique_id=macro.unique_id,
+            macro_sql=macro.macro_sql,
+            depends_on=(
+                AltimateDependsOn(
+                    macros=macro.depends_on.macros,
+                )
+                if macro.depends_on
+                else None
+            ),
+            description=macro.description,
+            meta=macro.meta,
+            docs=macro.docs,
+            patch_path=macro.patch_path,
+            arguments=[AltimateRefArgs(**arg.dict()) for arg in macro.arguments] if macro.arguments else None,
+            created_at=macro.created_at,
+            supported_languages=macro.supported_languages,
         )
 
     def _get_exposure(self, exposure: ExposureNode) -> AltimateManifestExposureNode:
@@ -266,6 +293,13 @@ class ManifestV11Wrapper(BaseManifestWrapper):
         for source in self.manifest.sources.values():
             sources[source.unique_id] = self._get_source(source)
         return sources
+
+    def get_macros(self) -> Dict[str, AltimateManifestMacroNode]:
+        macros = {}
+        for macro in self.manifest.macros.values():
+            if macro.resource_type.value == AltimateResourceType.macro.value:
+                macros[macro.unique_id] = self._get_macro(macro)
+        return macros
 
     def get_exposures(self) -> Dict[str, AltimateManifestExposureNode]:
         exposures = {}

@@ -1,6 +1,5 @@
 from typing import List
 from typing import Set
-from typing import Tuple
 
 from datapilot.config.utils import get_source_meta_keys_configuration
 from datapilot.core.insights.utils import get_severity
@@ -45,9 +44,9 @@ class CheckSourceHasMetaKeys(ChecksInsight):
         """
         meta_keys = get_source_meta_keys_configuration(self.config)
         insights = []
-        for node_id, node in self.nodes.items():
+        for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
-                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+                self.logger.debug(f"Skipping source {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.source:
                 diff = self._check_source_has_meta_keys(node_id, meta_keys)
@@ -61,15 +60,11 @@ class CheckSourceHasMetaKeys(ChecksInsight):
                     )
         return insights
 
-    def _check_source_has_meta_keys(self, model_unique_id: str, meta_keys: List[str]):
-        source = self.get_node(model_unique_id)
-        source_meta = set(source.meta.keys())
-        diff = set(meta_keys).difference(source_meta)
-        return diff
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        return True, ""
+    def _check_source_has_meta_keys(self, source_unique_id: str, meta_keys: List[str]):
+        source = self.get_node(source_unique_id)
+        if source.config:
+            if source.config.meta:
+                source_meta = set(source.config.meta.keys())
+                diff = set(meta_keys).difference(source_meta)
+                return diff
+        return set(meta_keys)

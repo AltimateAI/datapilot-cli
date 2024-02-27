@@ -50,6 +50,7 @@ class DBTInsightGenerator:
         self.logger = logging.getLogger("dbt-insight-generator")
 
         self.nodes = self.manifest_wrapper.get_nodes()
+        self.macros = self.manifest_wrapper.get_macros()
         self.sources = self.manifest_wrapper.get_sources()
         self.exposures = self.manifest_wrapper.get_exposures()
         self.children_map = self.manifest_wrapper.parent_to_child_map(self.nodes)
@@ -108,6 +109,7 @@ class DBTInsightGenerator:
                     manifest_wrapper=self.manifest_wrapper,
                     catalog_wrapper=self.catalog_wrapper,
                     nodes=self.nodes,
+                    macros=self.macros,
                     sources=self.sources,
                     exposures=self.exposures,
                     children_map=self.children_map,

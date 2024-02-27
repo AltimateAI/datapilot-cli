@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.config.utils import get_source_max_childs_configuration
 from datapilot.config.utils import get_source_min_childs_configuration
@@ -46,7 +45,7 @@ class CheckSourceChilds(ChecksInsight):
         insights = []
         self.min_childs = get_source_min_childs_configuration(self.config)
         self.max_childs = get_source_max_childs_configuration(self.config)
-        for node_id, node in self.nodes.items():
+        for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
@@ -71,7 +70,3 @@ class CheckSourceChilds(ChecksInsight):
         if self.max_childs and len(source_childs) > self.max_childs:
             return False
         return True
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        return True, ""

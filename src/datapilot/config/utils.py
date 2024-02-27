@@ -16,6 +16,7 @@ from datapilot.schemas.constants import CONFIG_SOURCE_MAX_CHILDS
 from datapilot.schemas.constants import CONFIG_SOURCE_META_KEYS
 from datapilot.schemas.constants import CONFIG_SOURCE_MIN_CHILDS
 from datapilot.schemas.constants import CONFIG_SOURCE_TAG_LIST
+from datapilot.schemas.constants import CONFIG_SOURCE_TEST_COUNT
 from datapilot.schemas.constants import CONFIG_SOURCE_TEST_GROUP
 from datapilot.schemas.constants import CONFIG_SOURCE_TEST_NAME
 from datapilot.schemas.constants import CONFIG_SOURCE_TEST_TYPE
@@ -170,3 +171,9 @@ def get_source_max_childs_configuration(
     config: Optional[Dict],
 ) -> Dict[str, Optional[Dict[str, str]]]:
     return config.get(CONFIG_SOURCE_MAX_CHILDS, None)
+
+
+def get_source_test_count_configuration(
+    config: Optional[Dict],
+) -> Dict[str, Optional[Dict[str, str]]]:
+    return config.get(CONFIG_SOURCE_TEST_COUNT, None)

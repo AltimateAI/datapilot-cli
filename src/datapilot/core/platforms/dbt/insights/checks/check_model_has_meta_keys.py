@@ -73,17 +73,10 @@ class CheckModelHasMetaKeys(ChecksInsight):
 
     def _check_meta_keys(self, node_id) -> Tuple[int, Set[str]]:
         status_code = 0
-        missing_keys = set(self.meta_keys) - set(self.get_node(node_id).meta.keys())
+        model = self.get_node(node_id)
+        if model.config:
+            if model.config.meta:
+                missing_keys = set(self.meta_keys) - set(model.config.meta.keys())
         if missing_keys:
             status_code = 1
         return status_code, missing_keys
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""

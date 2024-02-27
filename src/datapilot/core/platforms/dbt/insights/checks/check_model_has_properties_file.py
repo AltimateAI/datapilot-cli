@@ -73,13 +73,3 @@ class CheckModelHasPropertiesFile(ChecksInsight):
             missing_models.add(node.original_file_path)
             status_code = 1
         return status_code, missing_models
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""

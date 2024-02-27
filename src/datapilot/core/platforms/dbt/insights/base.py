@@ -7,6 +7,7 @@ from datapilot.core.insights.base.insight import Insight
 from datapilot.core.insights.schema import Severity
 from datapilot.core.platforms.dbt.constants import NON_MATERIALIZED
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestMacroNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
@@ -24,6 +25,7 @@ class DBTInsight(Insight):
         sources: Dict[str, AltimateManifestSourceNode],
         exposures: Dict[str, AltimateManifestExposureNode],
         tests: Dict[str, AltimateManifestTestNode],
+        macros: Dict[str, AltimateManifestMacroNode],
         children_map: Dict[str, List[str]],
         project_name: str,
         selected_models: Union[List[str], None] = None,
@@ -33,6 +35,7 @@ class DBTInsight(Insight):
     ):
         self.manifest = manifest_wrapper
         self.nodes = nodes
+        self.macros = macros
         self.sources = sources
         self.exposures = exposures
         self.tests = tests
@@ -51,7 +54,9 @@ class DBTInsight(Insight):
 
     def get_node(
         self, node_id: str
-    ) -> Union[AltimateManifestNode, AltimateManifestSourceNode, AltimateManifestExposureNode, AltimateManifestTestNode,]:
+    ) -> Union[
+        AltimateManifestNode, AltimateManifestSourceNode, AltimateManifestExposureNode, AltimateManifestTestNode, AltimateManifestMacroNode
+    ]:
         if node_id in self.nodes:
             return self.nodes[node_id]
         elif node_id in self.sources:
@@ -60,6 +65,8 @@ class DBTInsight(Insight):
             return self.exposures[node_id]
         elif node_id in self.tests:
             return self.tests[node_id]
+        elif node_id in self.macros:
+            return self.macros[node_id]
         else:
             self.logger.debug(f"Model {node_id} not found in manifest")
             return None

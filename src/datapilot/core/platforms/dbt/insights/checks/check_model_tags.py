@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.config.utils import get_tag_list_configuration
 from datapilot.core.insights.utils import get_severity
@@ -70,7 +69,3 @@ class CheckModelTags(ChecksInsight):
             if tag not in self.tag_list:
                 return False
         return True
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        return True, ""

@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
@@ -33,9 +32,9 @@ class CheckSourceHasLoader(ChecksInsight):
         Ensures that the source has a loader option
         """
         insights = []
-        for node_id, node in self.nodes.items():
+        for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
-                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+                self.logger.debug(f"Skipping source {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.source:
                 if not self._check_source_has_loader(node_id):
@@ -48,15 +47,8 @@ class CheckSourceHasLoader(ChecksInsight):
                     )
         return insights
 
-    def _check_source_has_loader(self, model_unique_id: str) -> bool:
-        source = self.get_node(model_unique_id)
+    def _check_source_has_loader(self, source_unique_id: str) -> bool:
+        source = self.get_node(source_unique_id)
         if source.loader is None:
             return False
         return True
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        return True, ""

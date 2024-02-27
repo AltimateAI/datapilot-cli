@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
@@ -45,33 +44,28 @@ class CheckMacroArgsHaveDesc(ChecksInsight):
         """
 
         insights = []
-        for node_id, node in self.nodes.items():
-            if self.should_skip_model(node_id):
-                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+        for macro_id, macro in self.macros.items():
+            if self.should_skip_model(macro_id):
+                self.logger.debug(f"Skipping model {macro_id} as it is not enabled for selected models")
                 continue
-            if node.resource_type == AltimateResourceType.macro:
-                if not self._check_macro_args_have_desc(node_id):
+            if macro.resource_type == AltimateResourceType.macro:
+                if not self._check_macro_args_have_desc(macro_id):
                     insights.append(
                         DBTModelInsightResponse(
-                            node_id=node_id,
-                            result=self._build_failure_result(node_id),
+                            macro_id=macro_id,
+                            result=self._build_failure_result(macro_id),
                             severity=get_severity(self.TYPE, self.config),
                         )
                     )
 
         return insights
 
-    def _check_macro_args_have_desc(self, node_id) -> bool:
+    def _check_macro_args_have_desc(self, macro_id) -> bool:
         """
         Check if the macro has descriptions for its arguments.
-        Assuming that macro.columns contains the arguments of the macro. Might not be th case
         """
-        macro = self.get_node(node_id)
-        for arg in macro.columns.values():
+        macro = self.get_node(macro_id)
+        for arg in macro.arguments:
             if not arg.description:
                 return False
         return True
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        return True, ""

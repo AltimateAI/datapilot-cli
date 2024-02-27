@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
@@ -66,6 +65,11 @@ class CheckColumnDescAreSame(ChecksInsight):
                 continue
             if node.resource_type == AltimateResourceType.model:
                 self._get_columns_with_different_desc(node_id)
+
+        for node_id, node in self.sources.items():
+            if self.should_skip_model(node_id):
+                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+                continue
             elif node.resource_type == AltimateResourceType.source:
                 self._get_columns_with_different_desc(node_id)
 
@@ -100,7 +104,3 @@ class CheckColumnDescAreSame(ChecksInsight):
                         self.columns_with_different_desc.append(column_name)
             else:
                 self.columns[column_name] = column_node.description
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        return True, ""

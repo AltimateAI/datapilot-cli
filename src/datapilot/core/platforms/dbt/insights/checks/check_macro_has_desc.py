@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
@@ -43,22 +42,18 @@ class CheckMacroHasDesc(ChecksInsight):
         """
 
         insights = []
-        for node_id, node in self.nodes.items():
-            if self.should_skip_model(node_id):
-                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+        for macro_id, macro in self.macros.items():
+            if self.should_skip_model(macro_id):
+                self.logger.debug(f"Skipping model {macro_id} as it is not enabled for selected models")
                 continue
-            if node.resource_type == AltimateResourceType.macro:
-                if not node.description:
+            if macro.resource_type == AltimateResourceType.macro:
+                if not macro.description:
                     insights.append(
                         DBTModelInsightResponse(
-                            node_id=node_id,
-                            result=self._build_failure_result(node_id),
+                            macro_id=macro_id,
+                            result=self._build_failure_result(macro_id),
                             severity=get_severity(self.TYPE, self.config),
                         )
                     )
 
         return insights
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        return True, ""

@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.config.utils import get_blacklist_schema_configuration
 from datapilot.config.utils import get_whitelist_schema_configuration
@@ -47,7 +46,7 @@ class CheckModelParentsSchema(ChecksInsight):
         insights = []
         self.whitelist = get_whitelist_schema_configuration(self.config)
         self.blacklist = get_blacklist_schema_configuration(self.config)
-        for node_id in self.nodes.items():
+        for node_id in self.nodes.keys():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
@@ -68,12 +67,8 @@ class CheckModelParentsSchema(ChecksInsight):
         """
         model = self.get_node(model_unique_id)
         if model.resource_type == AltimateResourceType.model:
-            for parent in model.depends_on.nodes:
+            for parent in getattr(model.depends_on, "nodes", []):
                 parent_model = self.get_node(parent)
                 if (self.whitelist and (parent_model.schema not in self.whitelist)) or parent_model.schema in self.blacklist:
                     return parent_model.schema
         return None
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        return True, ""

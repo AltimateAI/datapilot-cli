@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.config.utils import get_test_type_configuration
 from datapilot.core.insights.utils import get_severity
@@ -16,11 +15,8 @@ class CheckModelHasTestsByType(ChecksInsight):
     DESCRIPTION = "Checks that the model has tests with specific types."
     REASON_TO_FLAG = "Models should have tests with specific types for proper validation."
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.test_types = get_test_type_configuration(self.config)
-
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
+        self.test_types = get_test_type_configuration(self.config)
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
@@ -61,18 +57,13 @@ class CheckModelHasTestsByType(ChecksInsight):
             metadata={"missing_tests": test_types, "model_unique_id": model_unique_id},
         )
 
-    def _model_has_tests_by_type(self, model_id, test_types: List[str]) -> bool:
-        model = self.get_node(model_id)
-        if model.test_type in test_types:
-            return True
-        return False
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""
+    def _model_has_tests_by_type(self, node_id, test_types: List[str]) -> bool:
+        """
+        For model, check all dependencies and if node type is test, check if it has the required types.
+        """
+        for child_id in self.children_map.get(node_id, []):
+            child = self.get_node(child_id)
+            if child.resource_type == AltimateResourceType.test:
+                if child.test_type not in test_types:
+                    return False
+        return True

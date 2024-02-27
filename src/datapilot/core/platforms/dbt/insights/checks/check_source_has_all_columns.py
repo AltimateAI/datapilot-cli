@@ -44,7 +44,7 @@ class CheckSourceHasAllColumns(ChecksInsight):
         Ensures that the source has all columns in the properties file (usually schema.yml).
         """
         insights = []
-        for node_id, node in self.nodes.items():
+        for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
@@ -72,13 +72,3 @@ class CheckSourceHasAllColumns(ChecksInsight):
             if col_name not in catalog_columns:
                 missing_columns.add(col_name)
         return missing_columns
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""

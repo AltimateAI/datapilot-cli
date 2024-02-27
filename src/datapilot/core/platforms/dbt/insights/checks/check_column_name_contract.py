@@ -1,7 +1,6 @@
 import re
 from typing import List
 from typing import Sequence
-from typing import Tuple
 
 from datapilot.config.utils import get_contract_regex_configuration
 from datapilot.config.utils import get_dtypes_configuration
@@ -10,6 +9,7 @@ from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
+from datapilot.core.platforms.dbt.wrappers.catalog.wrapper import BaseCatalogWrapper
 from datapilot.utils.formatting.utils import numbered_list
 
 
@@ -34,12 +34,13 @@ class CheckColumnNameContract(ChecksInsight):
         "Consistent column naming conventions provide valuable context and aids in data understanding and collaboration."
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, catalog_wrapper: BaseCatalogWrapper, *args, **kwargs):
+        self.catalog = catalog_wrapper
         super().__init__(*args, **kwargs)
-        self.pattern = get_contract_regex_configuration(self.config)
-        self.dtypes = get_dtypes_configuration(self.config)
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
+        self.pattern = get_contract_regex_configuration(self.config)
+        self.dtypes = get_dtypes_configuration(self.config)
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
@@ -76,19 +77,20 @@ class CheckColumnNameContract(ChecksInsight):
             metadata={"columns": columns, "model_unique_id": model_unique_id},
         )
 
+    def _get_columns_in_model(self, node_id) -> List[str]:
+        if node_id not in self.catalog.get_schema():
+            return []
+        return self.catalog.get_schema()[node_id].keys()
+
     def _get_columns_with_contract_violation(self, node_id) -> Sequence[str]:
-        columns_with_contract_violation = []
-        for col_name, col_node in self.get_node(node_id).columns.items():
-            if re.match(self.pattern, col_name, re.IGNORECASE) is None or col_node.description not in self.dtypes:
-                columns_with_contract_violation.append(col_name)
-        return columns_with_contract_violation
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""
+        columns = []
+        for col in self._get_columns_in_model(node_id):
+            schema = self.catalog.get_schema()[node_id]
+            col_name = col.lower()
+            col_type = schema[col]
+            if any(col_type.lower() == dtype.lower() for dtype in self.dtypes):
+                if re.match(self.pattern, col_name, re.IGNORECASE) is None:
+                    columns.append(col_name)
+            elif re.match(self.pattern, col_name, re.IGNORECASE):
+                columns.append(col_name)
+        return columns

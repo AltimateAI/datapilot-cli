@@ -6,6 +6,7 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v11 import AnalysisNode
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import Exposure
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import GenericTestNode
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import HookNode
+from dbt_artifacts_parser.parsers.manifest.manifest_v11 import Macro
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ModelNode
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import RPCNode
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SeedNode
@@ -35,6 +36,7 @@ ExposureNode = Exposure
 
 TestNode = Union[GenericTestNode, SingularTestNode]
 
+MacroNode = Macro
 
 TEST_TYPE_TO_NODE_MAP: Dict[str, Type] = {
     GENERIC: [GenericTestNode],

@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.config.utils import get_threshold_childs_configuration
 from datapilot.core.insights.utils import get_severity
@@ -102,7 +101,3 @@ class CheckModelMaterializationByChilds(ChecksInsight):
                     )
                 )
         return insights
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        return True, ""

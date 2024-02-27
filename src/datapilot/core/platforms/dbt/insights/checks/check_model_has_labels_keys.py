@@ -77,13 +77,3 @@ class CheckModelHasLabelsKeys(ChecksInsight):
         if missing_keys:
             status_code = 1
         return status_code, missing_keys
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""

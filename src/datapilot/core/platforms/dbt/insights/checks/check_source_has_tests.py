@@ -1,12 +1,11 @@
 from typing import List
-from typing import Tuple
 
+from datapilot.config.utils import get_source_test_count_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckSourceHasTests(ChecksInsight):
@@ -17,51 +16,50 @@ class CheckSourceHasTests(ChecksInsight):
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         insights = []
-        for node_id, node in self.nodes.items():
+        source_test_count_threshold = get_source_test_count_configuration(self.config)
+        for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.source:
-                if not self._source_has_tests(node_id):
+                source_test_count = self.get_source_test_count(node_id)
+                if source_test_count < source_test_count_threshold:
                     insights.append(
                         DBTModelInsightResponse(
                             unique_id=node_id,
                             package_name=node.package_name,
                             path=node.original_file_path,
                             original_file_path=node.original_file_path,
-                            insight=self._build_failure_result(node_id, self.test_groups),
+                            insight=self._build_failure_result(node_id, source_test_count, source_test_count_threshold),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
         return insights
 
-    def _build_failure_result(self, source_unique_id: str, test_groups: List[str]) -> DBTInsightResult:
+    def _build_failure_result(self, source_unique_id: str, source_test_count: int, source_test_count_threshold: int) -> DBTInsightResult:
         failure_message = (
-            "The source table `{source_unique_id}` is missing the following tests: {test_groups}. "
-            "Ensure that the source table has the required tests."
+            "The following sources do not have enough tests. Ensure that each source has at least {source_test_count_threshold} tests."
         )
-        recommendation = (
-            "Add the following tests to the source table `{source_unique_id}`: {test_groups}. "
-            "Ensuring that the source table has the required tests helps in maintaining data integrity and consistency."
-        )
+        recommendation = "Add tests for each source listed above. Having tests ensures proper validation and data integrity."
+
         return DBTInsightResult(
-            failure_message=failure_message.format(source_unique_id=source_unique_id, test_groups=numbered_list(test_groups)),
-            recommendation=recommendation.format(source_unique_id=source_unique_id, test_groups=numbered_list(test_groups)),
-            metadata={"source_unique_id": source_unique_id, "test_groups": test_groups},
+            type=self.TYPE,
+            name=self.NAME,
+            message=failure_message.format(
+                source_test_count_threshold=source_test_count_threshold,
+            ),
+            recommendation=recommendation,
+            reason_to_flag=self.REASON_TO_FLAG,
+            metadata={"source_test_count": source_test_count, "source_unique_id": source_unique_id},
         )
 
-    def _source_has_tests(self, node_id) -> bool:
-        source = self.get_node(node_id)
-        if not source.test_metadata:
-            return False
-        return True
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""
+    def get_source_test_count(self, node_id: str) -> int:
+        """
+        Getting test count of sources by checking child nodes of sources that have type test.
+        """
+        count = 0
+        for child_id in self.children_map.get(node_id, []):
+            child = self.get_node(child_id)
+            if child.resource_type == AltimateResourceType.test:
+                count += 1
+        return count

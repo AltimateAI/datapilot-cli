@@ -1,7 +1,6 @@
 from typing import List
-from typing import Tuple
 
-from datapilot.config.utils import get_source_test_group_configuration
+from datapilot.config.utils import get_test_group_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -13,59 +12,58 @@ from datapilot.utils.formatting.utils import numbered_list
 class CheckSourceHasTestsByGroup(ChecksInsight):
     NAME = "Check Source Has Tests By Group"
     ALIAS = "check_source_has_tests_by_group"
-    DESCRIPTION = "Check if the source has tests with the specified groups"
-    REASON_TO_FLAG = (
-        "The source table is missing tests with the specified groups. Ensure that the source table has tests with the specified groups."
-    )
+    DESCRIPTION = "Checks that the source has tests with specific groups."
+    REASON_TO_FLAG = "Sources should have tests with specific groups for proper validation."
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
+        self.test_groups = get_test_group_configuration(self.config)
         insights = []
-        self.test_groups = get_source_test_group_configuration(self.config)
-        for node_id, node in self.nodes.items():
-            if self.should_skip_model(node_id):
-                self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
+        for source_id, source in self.sources.items():
+            if self.should_skip_model(source_id):
+                self.logger.debug(f"Skipping source {source_id} as it is not enabled for selected models")
                 continue
-            if node.resource_type == AltimateResourceType.source:
-                if self._source_has_tests_by_group(self.test_groups):
+            if source.resource_type == AltimateResourceType.source:
+                if not self._source_has_tests_by_group(source_id, self.test_groups):
                     insights.append(
                         DBTModelInsightResponse(
-                            unique_id=node_id,
-                            package_name=node.package_name,
-                            path=node.original_file_path,
-                            original_file_path=node.original_file_path,
-                            insight=self._build_failure_result(node_id, self.test_groups),
+                            unique_id=source_id,
+                            package_name=source.package_name,
+                            path=source.original_file_path,
+                            original_file_path=source.original_file_path,
+                            insight=self._build_failure_result(source_id, self.test_groups),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
         return insights
 
-    def _build_failure_result(self, source_unique_id: str, test_groups: List[str]) -> DBTInsightResult:
+    def _build_failure_result(self, source_id: str, test_groups: List[str]) -> DBTInsightResult:
         failure_message = (
-            "The source table `{source_unique_id}` is missing the following tests: {test_groups}. "
-            "Ensure that the source table has the required tests."
+            "The following sources do not have tests with the specified groups:\n{missing_tests}. "
+            "Ensure that each source has tests with the specified groups for proper validation."
         )
         recommendation = (
-            "Add the following tests to the source table `{source_unique_id}`: {test_groups}. "
-            "Ensuring that the source table has the required tests helps in maintaining data integrity and consistency."
+            "Add tests with the specified groups for each source listed above. "
+            "Having tests with specific groups ensures proper validation and data integrity."
         )
+
         return DBTInsightResult(
-            failure_message=failure_message.format(source_unique_id=source_unique_id, test_groups=numbered_list(test_groups)),
-            recommendation=recommendation.format(source_unique_id=source_unique_id, test_groups=numbered_list(test_groups)),
-            metadata={"source_unique_id": source_unique_id, "test_groups": test_groups},
+            type=self.TYPE,
+            name=self.NAME,
+            message=failure_message.format(
+                missing_tests=numbered_list(test_groups),
+            ),
+            recommendation=recommendation,
+            reason_to_flag=self.REASON_TO_FLAG,
+            metadata={"missing_tests": test_groups, "source_id": source_id},
         )
 
-    def _source_has_tests_by_group(self, test_groups: List[str]) -> bool:
-        for test_group in test_groups:
-            if any(test.group == test_group for test in self.tests.values()):
-                return True
-        return False
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""
+    def _source_has_tests_by_group(self, node_id, test_groups: List[str]) -> bool:
+        """
+        For source, check all dependencies and if node type is test, check if it has the required groups.
+        """
+        for child_id in self.children_map.get(node_id, []):
+            child = self.get_node(child_id)
+            if child.resource_type == AltimateResourceType.test:
+                if not child.group or child.group not in test_groups:
+                    return False
+        return True

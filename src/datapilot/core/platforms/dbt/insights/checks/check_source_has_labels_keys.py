@@ -27,7 +27,7 @@ class CheckSourceHasLabelsKeys(ChecksInsight):
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         insights = []
         self.labels_keys = get_source_labels_keys_configuration(self.config)
-        for node_id, node in self.nodes.items():
+        for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
@@ -67,13 +67,3 @@ class CheckSourceHasLabelsKeys(ChecksInsight):
         if missing_keys:
             status_code = 1
         return status_code, missing_keys
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        if not has_manifest:
-            return False, "Manifest is required for insight to run."
-
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
-        return True, ""

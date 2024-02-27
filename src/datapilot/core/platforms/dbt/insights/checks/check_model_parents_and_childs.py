@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
@@ -82,7 +81,3 @@ class CheckModelParentsAndChilds(ChecksInsight):
         node = self.get_node(model_unique_id)
         parents = node.depends_on.nodes
         return self.min_parents <= len(parents) <= self.max_parents and self.min_parents <= len(children) <= self.max_parents
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        return True, ""

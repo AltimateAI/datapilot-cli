@@ -1,5 +1,4 @@
 from typing import List
-from typing import Tuple
 
 from datapilot.config.utils import get_source_tag_list_configuration
 from datapilot.core.insights.utils import get_severity
@@ -42,12 +41,12 @@ class CheckSourceTags(ChecksInsight):
         """
         insights = []
         self.tag_list = get_source_tag_list_configuration(self.config)
-        for node_id, node in self.nodes.items():
+        for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.source:
-                if not self.valid_tag(node.config.tags):
+                if not self.valid_tag(node_id):
                     insights.append(
                         DBTModelInsightResponse(
                             node_id=node_id,
@@ -57,15 +56,11 @@ class CheckSourceTags(ChecksInsight):
                     )
         return insights
 
-    def valid_tag(self, tags: List[str]) -> bool:
+    def valid_tag(self, node_id: int) -> bool:
         """
-        Check if the tags are valid.
+        Check if the source has only valid tags from the provided list.
         """
-        for tag in tags:
-            if tag not in self.tag_list:
-                return False
-        return True
-
-    @classmethod
-    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
-        return True, ""
+        source = self.get_node(node_id)
+        source_tags = set(source.config.tags)
+        valid_tags = set(self.tag_list)
+        return source_tags.issubset(valid_tags)

@@ -17,6 +17,7 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
 from dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
 from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
+from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedLanguage
 from pydantic import BaseModel
 from pydantic import Extra
 
@@ -346,3 +347,41 @@ class AltimateManifestTestNode(BaseModel):
     compiled_path: Optional[Optional[str]] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[Optional[str]] = None
+
+
+class AltimateDocs(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    show: Optional[bool] = True
+    node_color: Optional[Optional[str]] = None
+
+
+class AltimateMacroArgument(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    name: str
+    type: Optional[Optional[str]] = None
+    description: Optional[str] = ""
+
+
+AltimateSupportedLanguage = SupportedLanguage
+
+
+class AltimateManifestMacroNode(BaseModel):
+    name: str
+    resource_type: AltimateResourceType
+    package_name: str
+    path: str
+    original_file_path: str
+    unique_id: str
+    macro_sql: str
+    depends_on: Optional[AltimateDependsOn] = None
+    description: Optional[str] = ""
+    meta: Optional[Dict[str, Any]] = None
+    docs: Optional[AltimateDocs] = None
+    patch_path: Optional[Optional[str]] = None
+    arguments: Optional[List[AltimateMacroArgument]] = None
+    created_at: Optional[float] = None
+    supported_languages: Optional[Optional[List[AltimateSupportedLanguage]]] = None
