@@ -158,3 +158,16 @@ class DBTInsightGenerator:
                 self.logger.info(color_text(f"Skipping insight {insight_class.NAME} as {message}", YELLOW))
 
         return reports
+
+
+def main():
+    # Need to get the partial manifest or catalog here
+    manifest_path = "path/to/manifest.json"
+    catalog_path = "path/to/catalog.json"
+    config = {}
+    insight_generator = DBTInsightGenerator(manifest_path, catalog_path=catalog_path, config=config)
+    insight_generator.run()
+
+
+if __name__ == "__main__":
+    exit(main())

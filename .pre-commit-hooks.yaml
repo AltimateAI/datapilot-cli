@@ -1,0 +1,5 @@
+- id: executor
+  name: exectutor
+  description: executor
+  entry: executor
+  language: python
