@@ -178,7 +178,12 @@ def main():
     insight_generator = DBTInsightGenerator(manifest_path=manifest_path, catalog_path=catalog_path, config=config)
     reports = insight_generator.run()
     if reports:
-        print(reports)
+        for model, insights in reports[MODEL].items():
+            print(model)
+            print(insights)
+        for insight in reports[PROJECT]:
+            print(PROJECT)
+            print(insight)
 
 
 if __name__ == "__main__":
