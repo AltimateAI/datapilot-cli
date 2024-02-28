@@ -75,8 +75,6 @@ setup(
         #   ":python_version=="2.6"": ["argparse"],
     },
     entry_points={
-        "console_scripts": [
-            "datapilot = datapilot.cli.main:datapilot",
-        ]
+        "console_scripts": ["datapilot = datapilot.cli.main:datapilot", "executor = src.datapilot.core.platforms.dbt.executor:main"]
     },
 )
