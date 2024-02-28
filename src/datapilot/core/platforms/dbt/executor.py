@@ -177,7 +177,8 @@ def main():
     config = {}
     insight_generator = DBTInsightGenerator(manifest_path=manifest_path, catalog_path=catalog_path, config=config)
     reports = insight_generator.run()
-    print(reports)
+    if reports:
+        print(reports)
 
 
 if __name__ == "__main__":
