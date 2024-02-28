@@ -109,6 +109,7 @@ class DBTInsightGenerator:
 
             if run_insight:
                 self.logger.info(f"Running insight {insight_class.NAME}")
+                print(f"Running insight {insight_class.NAME}")
                 insight = insight_class(
                     manifest_wrapper=self.manifest_wrapper,
                     catalog_wrapper=self.catalog_wrapper,
@@ -174,7 +175,6 @@ def main():
         manifest_path=manifest_path,
         catalog_path=catalog_path,
     )
-    print(manifest_path, catalog_path)
     config = {}
     insight_generator = DBTInsightGenerator(manifest_path=manifest_path, catalog_path=catalog_path, config=config)
     insight_generator.run()
