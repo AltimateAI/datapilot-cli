@@ -1,6 +1,6 @@
 - id: executor
   name: exectutor
   description: executor
-  entry: python3 src/datapilot/core/platforms/dbt/executor.py
+  entry: executor
   language: python
   types_or: [yaml, sql]
