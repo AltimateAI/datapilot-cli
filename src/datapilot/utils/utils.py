@@ -72,7 +72,7 @@ def get_changed_files(include_untracked=True):
     for line in result.stdout.splitlines():
         if line.startswith("??") and include_untracked:
             changed_files.append(line.split()[1])
-        elif line.startswith((" M", " A", " D", " R")):
+        elif line.startswith(("M", "A", "D", "R", " M", " A", " D", " R")):
             changed_files.append(line.split()[1])
     return changed_files
 
