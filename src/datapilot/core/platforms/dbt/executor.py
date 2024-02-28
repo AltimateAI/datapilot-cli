@@ -174,6 +174,7 @@ def main():
         manifest_path=manifest_path,
         catalog_path=catalog_path,
     )
+    print(manifest_path, catalog_path)
     config = {}
     insight_generator = DBTInsightGenerator(manifest_path=manifest_path, catalog_path=catalog_path, config=config)
     insight_generator.run()
