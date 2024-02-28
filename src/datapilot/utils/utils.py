@@ -63,10 +63,17 @@ def is_superset_path(superset_path: str, path: str):
         return False
 
 
-def get_changed_files():
-    command = ["git", "diff", "--name-only"]
+def get_changed_files(include_untracked=True):
+    command = ["git", "status", "--porcelain"]
+    if include_untracked:
+        command.append("-uall")
     result = subprocess.run(command, capture_output=True, text=True)  # noqa
-    changed_files = result.stdout.splitlines()
+    changed_files = []
+    for line in result.stdout.splitlines():
+        if line.startswith("??") and include_untracked:
+            changed_files.append(line.split()[1])
+        elif line.startswith((" M", " A", " D", " R")):
+            changed_files.append(line.split()[1])
     return changed_files
 
 
