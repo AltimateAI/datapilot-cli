@@ -1,5 +1,5 @@
 - id: executor
   name: exectutor
   description: executor
-  entry: executor
+  entry: python3 src/datapilot/core/platforms/dbt/executor.py
   language: python
