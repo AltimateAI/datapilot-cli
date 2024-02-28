@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 
 # from src.utils.formatting.utils import generate_model_insights_table
 from typing import Dict
@@ -15,7 +16,9 @@ from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import RED
 from datapilot.utils.formatting.utils import YELLOW
 from datapilot.utils.formatting.utils import color_text
+from datapilot.utils.utils import generate_partial_manifest_catalog
 from datapilot.utils.utils import get_changed_files
+from datapilot.utils.utils import get_tmp_dir_path
 
 
 class DBTInsightGenerator:
@@ -163,18 +166,17 @@ class DBTInsightGenerator:
 
 def main():
     changed_files = get_changed_files()
-    print(changed_files)
-    # tmp_folder = get_tmp_dir_path()
-    # manifest_path = Path(tmp_folder / "manifest.json")
-    # catalog_path = Path(tmp_folder / "catalog.json")
-    # generate_partial_manifest_catalog(
-    #     changed_files,
-    #     manifest_path=manifest_path,
-    #     catalog_path=catalog_path,
-    # )
-    # config = {}
-    # insight_generator = DBTInsightGenerator(manifest_path=manifest_path, catalog_path=catalog_path, config=config)
-    # insight_generator.run()
+    tmp_folder = get_tmp_dir_path()
+    manifest_path = Path(tmp_folder / "manifest.json")
+    catalog_path = Path(tmp_folder / "catalog.json")
+    generate_partial_manifest_catalog(
+        changed_files,
+        manifest_path=manifest_path,
+        catalog_path=catalog_path,
+    )
+    config = {}
+    insight_generator = DBTInsightGenerator(manifest_path=manifest_path, catalog_path=catalog_path, config=config)
+    insight_generator.run()
 
 
 if __name__ == "__main__":
