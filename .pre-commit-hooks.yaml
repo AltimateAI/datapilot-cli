@@ -3,3 +3,4 @@
   description: executor
   entry: python3 src/datapilot/core/platforms/dbt/executor.py
   language: python
+  types_or: [yaml, sql]
