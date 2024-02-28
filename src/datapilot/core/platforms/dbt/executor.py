@@ -181,6 +181,7 @@ def main():
         for model, insights in reports[MODEL].items():
             print(model)
             print(insights)
+            print("\n\n\n")
         for insight in reports[PROJECT]:
             print(PROJECT)
             print(insight)
