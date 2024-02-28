@@ -1,5 +1,6 @@
 import json
 import os
+import subprocess
 from pathlib import Path
 from typing import Dict
 
@@ -58,3 +59,10 @@ def is_superset_path(superset_path: str, path: str):
         return True
     except ValueError:
         return False
+
+
+def get_changed_files():
+    command = ["git", "diff", "--name-only"]
+    result = subprocess.run(command, capture_output=True, text=True)  # noqa
+    changed_files = result.stdout.splitlines()
+    return changed_files

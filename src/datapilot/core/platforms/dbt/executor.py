@@ -15,6 +15,7 @@ from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import RED
 from datapilot.utils.formatting.utils import YELLOW
 from datapilot.utils.formatting.utils import color_text
+from datapilot.utils.utils import get_changed_files
 
 
 class DBTInsightGenerator:
@@ -161,6 +162,8 @@ class DBTInsightGenerator:
 
 
 def main():
+    changed_files = get_changed_files()
+    print(changed_files)
     # Need to get the partial manifest or catalog here
     manifest_path = "path/to/manifest.json"
     catalog_path = "path/to/catalog.json"
