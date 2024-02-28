@@ -1,6 +1,8 @@
 import json
 import os
 import subprocess
+import tempfile
+import uuid
 from pathlib import Path
 from typing import Dict
 
@@ -66,3 +68,33 @@ def get_changed_files():
     result = subprocess.run(command, capture_output=True, text=True)  # noqa
     changed_files = result.stdout.splitlines()
     return changed_files
+
+
+def get_tmp_dir_path():
+    tmp_dir = Path(tempfile.gettempdir()) / str(uuid.uuid4())
+    tmp_dir.mkdir(parents=True, exist_ok=True)
+    return tmp_dir
+
+
+def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str):
+    models = [Path(f).stem for f in changed_files]
+
+    for model in models:
+        subprocess.run(["dbt", "compile", "--models", model])  # noqa
+
+    manifest_file = Path("target/manifest.json")
+    catalog_file = Path("target/catalog.json")
+
+    with manifest_file.open() as f:
+        manifest = json.load(f)
+
+    with catalog_file.open() as f:
+        catalog = json.load(f)
+
+    manifest["nodes"] = {k: v for k, v in manifest["nodes"].items() if v["name"] in models}
+    catalog["nodes"] = {k: v for k, v in catalog["nodes"].items() if v["metadata"]["name"] in models}
+
+    with Path.open(manifest_path, "w") as f:
+        json.dump(manifest, f)
+    with Path.open(catalog_path, "w") as f:
+        json.dump(catalog, f)
