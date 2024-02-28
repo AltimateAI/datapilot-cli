@@ -1,4 +1,5 @@
 import logging
+import time
 from pathlib import Path
 
 # from src.utils.formatting.utils import generate_model_insights_table
@@ -165,6 +166,8 @@ class DBTInsightGenerator:
 
 
 def main():
+    start_time = time.time()
+
     changed_files = get_changed_files()
     tmp_folder = get_tmp_dir_path()
     manifest_path = Path(tmp_folder / "manifest.json")
@@ -185,6 +188,11 @@ def main():
         for insight in reports[PROJECT]:
             print(PROJECT)
             print(insight)
+            print("\n\n\n")
+
+    end_time = time.time()
+    total_time = end_time - start_time
+    print(f"Total time taken: {round(total_time, 2)} seconds")
 
 
 if __name__ == "__main__":
