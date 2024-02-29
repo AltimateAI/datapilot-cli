@@ -41,6 +41,7 @@ class CheckColumnNameContract(ChecksInsight):
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         self.pattern = get_contract_regex_configuration(self.config)
         self.dtypes = get_dtypes_configuration(self.config)
+        self.dtypes = self.dtypes if self.dtypes else []
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
@@ -88,9 +89,9 @@ class CheckColumnNameContract(ChecksInsight):
             schema = self.catalog.get_schema()[node_id]
             col_name = col.lower()
             col_type = schema[col]
-            if any(col_type.lower() == dtype.lower() for dtype in self.dtypes):
-                if re.match(self.pattern, col_name, re.IGNORECASE) is None:
+            if any(col_type.lower() == dtype.lower() for dtype in self.dtypes if dtype):
+                if re.match(self.pattern, col_name, re.IGNORECASE) is not None:
                     columns.append(col_name)
-            elif re.match(self.pattern, col_name, re.IGNORECASE):
+            elif not re.match(self.pattern, col_name, re.IGNORECASE):
                 columns.append(col_name)
         return columns

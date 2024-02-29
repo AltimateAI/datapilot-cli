@@ -74,7 +74,7 @@ class CheckModelHasAllColumns(ChecksInsight):
     def _check_model_columns(self, node_id) -> Tuple[int, Set[str]]:
         missing_columns = set()
         catalog_columns = [k.lower() for k in self.catalog.get_schema()[node_id].keys()]
-        for col_name in self.get_node(node_id).columns.items():
+        for col_name in self.get_node(node_id).columns.keys():
             if col_name not in catalog_columns:
                 missing_columns.add(col_name)
         return missing_columns
