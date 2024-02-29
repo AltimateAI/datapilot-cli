@@ -1,3 +1,4 @@
+import argparse
 import logging
 
 # from src.utils.formatting.utils import generate_model_insights_table
@@ -163,10 +164,17 @@ class DBTInsightGenerator:
 
 def main(argv: Optional[Sequence[str]] = None):
     # start_time = time.time()
-    print(argv)
-    # parser = argparse.ArgumentParser()
-    # args = parser.parse_args(argv)
-    # print(args)
+    parser = argparse.ArgumentParser()
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument(
+        "--config-path",
+        nargs="*",
+        help="Path of the config file to be used for the insight generation",
+    )
+
+    args = parser.parse_args(argv)
+
+    print(args)
     # config = None
     # if args.config_path:
     #     print(f"Using config file: {args.config_path}")
