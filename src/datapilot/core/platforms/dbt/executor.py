@@ -175,6 +175,8 @@ def main(argv: Optional[Sequence[str]] = None):
     args = parser.parse_known_args(argv)
 
     print(args)
+    print(args[0].config_path)
+    print(args[1])
     # config = None
     # if args.config_path:
     #     print(f"Using config file: {args.config_path}")
