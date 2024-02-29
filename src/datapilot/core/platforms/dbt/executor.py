@@ -1,3 +1,4 @@
+import argparse
 import logging
 import time
 from pathlib import Path
@@ -5,7 +6,9 @@ from pathlib import Path
 # from src.utils.formatting.utils import generate_model_insights_table
 from typing import Dict
 from typing import Optional
+from typing import Sequence
 
+from datapilot.config.config import load_config
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.exceptions import AltimateCLIArgumentError
@@ -165,8 +168,15 @@ class DBTInsightGenerator:
         return reports
 
 
-def main():
+def main(argv: Optional[Sequence[str]] = None):
     start_time = time.time()
+
+    parser = argparse.ArgumentParser()
+    args = parser.parse_args(argv)
+    config = None
+    if args.config_path:
+        print(f"Using config file: {args.config_path}")
+        config = load_config(args.config_path)
 
     changed_files = get_changed_files()
     tmp_folder = get_tmp_dir_path()
