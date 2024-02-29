@@ -172,7 +172,7 @@ def main(argv: Optional[Sequence[str]] = None):
         help="Path of the config file to be used for the insight generation",
     )
 
-    args = parser.parse_args(argv)
+    args = parser.parse_known_args(argv)
 
     print(args)
     # config = None
