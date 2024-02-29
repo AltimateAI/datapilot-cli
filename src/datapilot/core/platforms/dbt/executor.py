@@ -1,4 +1,3 @@
-import argparse
 import logging
 
 # from src.utils.formatting.utils import generate_model_insights_table
@@ -164,10 +163,10 @@ class DBTInsightGenerator:
 
 def main(argv: Optional[Sequence[str]] = None):
     # start_time = time.time()
-
-    parser = argparse.ArgumentParser()
-    args = parser.parse_args(argv)
-    print(args)
+    print(argv)
+    # parser = argparse.ArgumentParser()
+    # args = parser.parse_args(argv)
+    # print(args)
     # config = None
     # if args.config_path:
     #     print(f"Using config file: {args.config_path}")
