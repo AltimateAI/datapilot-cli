@@ -24,18 +24,15 @@ class CheckModelHasMetaKeys(ChecksInsight):
         "It's important to ensure that the model includes all the required meta keys as per the configuration."
     )
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.meta_keys = get_meta_keys_configuration(self.config)
-
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
+        self.meta_keys = get_meta_keys_configuration(self.config)
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.model:
-                status_code, missing_models = self._check_meta_keys(node_id)
+                status_code, missing_keys = self._check_meta_keys(node_id)
                 if status_code == 1:
                     insights.append(
                         DBTModelInsightResponse(
@@ -43,7 +40,7 @@ class CheckModelHasMetaKeys(ChecksInsight):
                             package_name=node.package_name,
                             path=node.original_file_path,
                             original_file_path=node.original_file_path,
-                            insight=self._build_failure_result(node_id, missing_models),
+                            insight=self._build_failure_result(node_id, missing_keys),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
@@ -74,9 +71,9 @@ class CheckModelHasMetaKeys(ChecksInsight):
     def _check_meta_keys(self, node_id) -> Tuple[int, Set[str]]:
         status_code = 0
         model = self.get_node(node_id)
-        if model.config:
-            if model.config.meta:
-                missing_keys = set(self.meta_keys) - set(model.config.meta.keys())
+        missing_keys = None
+        if model.meta:
+            missing_keys = set(self.meta_keys) - set(model.meta.keys())
         if missing_keys:
             status_code = 1
         return status_code, missing_keys

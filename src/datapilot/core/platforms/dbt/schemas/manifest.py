@@ -158,6 +158,7 @@ class AltimateManifestNode(BaseModel):
     compiled_code: Optional[Optional[str]] = None
     access: Optional[AltimateAccess]
     contract: Optional[AltimateDBTContract] = None
+    meta: Optional[Dict[str, Any]] = None
 
 
 class AltimateQuoting(BaseModel):
