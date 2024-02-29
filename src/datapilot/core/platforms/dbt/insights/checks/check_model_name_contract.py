@@ -54,6 +54,8 @@ class CheckModelNameContract(ChecksInsight):
         """
         insights = []
         self.pattern = get_model_regex_configuration(self.config)
+        # Models should start with model_
+        self.pattern = f"^{self.pattern}" if self.pattern else r"^model_"
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
