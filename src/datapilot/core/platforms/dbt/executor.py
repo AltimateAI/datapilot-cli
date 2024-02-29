@@ -181,7 +181,7 @@ def main(argv: Optional[Sequence[str]] = None):
     args = parser.parse_known_args(argv)
 
     config = None
-    if hasattr(args[0], "config_path"):
+    if hasattr(args[0], "config_path") and args[0].config_path:
         print(f"Using config file: {args[0].config_path[0]}")
         config = load_config(args[0].config_path[0])
 
