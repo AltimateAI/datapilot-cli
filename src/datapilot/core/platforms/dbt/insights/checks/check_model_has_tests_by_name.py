@@ -6,7 +6,6 @@ from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckModelHasTestsByName(ChecksInsight):
@@ -23,22 +22,22 @@ class CheckModelHasTestsByName(ChecksInsight):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.model:
-                if self._model_has_tests_by_name(node_id, self.test_names):
+                if not self._model_has_tests_by_name(node_id, self.test_names):
                     insights.append(
                         DBTModelInsightResponse(
                             unique_id=node_id,
                             package_name=node.package_name,
                             path=node.original_file_path,
                             original_file_path=node.original_file_path,
-                            insight=self._build_failure_result(node_id, self.test_names),
+                            insight=self._build_failure_result(node_id),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
         return insights
 
-    def _build_failure_result(self, model_unique_id: str, test_names: List[str]) -> DBTInsightResult:
+    def _build_failure_result(self, model_unique_id: str) -> DBTInsightResult:
         failure_message = (
-            "The following models do not have tests with the specified names:\n{missing_tests}. "
+            f"The following models do not have tests with the specified names:\n{model_unique_id}. "
             "Ensure that each model has tests with the specified names for proper validation."
         )
         recommendation = (
@@ -49,21 +48,22 @@ class CheckModelHasTestsByName(ChecksInsight):
         return DBTInsightResult(
             type=self.TYPE,
             name=self.NAME,
-            message=failure_message.format(
-                missing_tests=numbered_list(test_names),
-            ),
+            message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"missing_tests": test_names, "model_unique_id": model_unique_id},
+            metadata={"model_unique_id": model_unique_id},
         )
 
     def _model_has_tests_by_name(self, node_id, test_names: List[str]) -> bool:
         """
         For model, check all dependencies and if node type is test, check if it has the required names.
+        Only return true if all child.name in test_names
         """
-        for child_id in self.children_map.get(node_id, []):
+        if node_id not in self.children_map:
+            return False
+        for child_id in self.children_map[node_id]:
             child = self.get_node(child_id)
             if child.resource_type == AltimateResourceType.test:
-                if child.name not in test_names:
-                    return False
-        return True
+                if child.name in test_names:
+                    return True
+        return False
