@@ -180,7 +180,7 @@ def main(argv: Optional[Sequence[str]] = None):
 
     args = parser.parse_known_args(argv)
 
-    config = None
+    config = {}
     if hasattr(args[0], "config_path") and args[0].config_path:
         print(f"Using config file: {args[0].config_path[0]}")
         config = load_config(args[0].config_path[0])
@@ -189,13 +189,11 @@ def main(argv: Optional[Sequence[str]] = None):
     tmp_folder = get_tmp_dir_path()
     manifest_path = Path(tmp_folder / "manifest.json")
     catalog_path = Path(tmp_folder / "catalog.json")
-    print(manifest_path, catalog_path)
     generate_partial_manifest_catalog(
         changed_files,
         manifest_path=manifest_path,
         catalog_path=catalog_path,
     )
-    config = {}
     insight_generator = DBTInsightGenerator(manifest_path=manifest_path, catalog_path=catalog_path, config=config)
     reports = insight_generator.run()
     if reports:
