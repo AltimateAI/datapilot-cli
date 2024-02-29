@@ -90,6 +90,10 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
         subprocess.run(["dbt", "compile", "--models", model])  # noqa
 
     manifest_file = Path("target/manifest.json")
+
+    for model in models:
+        subprocess.run(["dbt", "docs", "generate", "--models", model])  # noqa
+
     catalog_file = Path("target/catalog.json")
 
     with manifest_file.open() as f:
@@ -97,9 +101,6 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
 
     with catalog_file.open() as f:
         catalog = json.load(f)
-
-    manifest["nodes"] = {k: v for k, v in manifest["nodes"].items() if v["name"] in models}
-    catalog["nodes"] = {k: v for k, v in catalog["nodes"].items() if v["metadata"]["name"] in models}
 
     with Path.open(manifest_path, "w") as f:
         json.dump(manifest, f)
