@@ -53,9 +53,12 @@ class CheckSourceChilds(ChecksInsight):
                 if not self.valid_childs(node_id):
                     insights.append(
                         DBTModelInsightResponse(
-                            node_id=node_id,
-                            result=self._build_failure_result(node_id),
-                            severity=get_severity(self.TYPE, self.config),
+                            unique_id=node_id,
+                            package_name=node.package_name,
+                            original_file_path=node.original_file_path,
+                            path=node.original_file_path,
+                            insight=self._build_failure_result(node_id),
+                            severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
         return insights

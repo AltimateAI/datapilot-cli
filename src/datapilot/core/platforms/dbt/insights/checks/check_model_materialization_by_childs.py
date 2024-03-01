@@ -85,19 +85,27 @@ class CheckModelMaterializationByChilds(ChecksInsight):
             if nr_childs > threshold_childs and model_materialization == "view":
                 insights.append(
                     DBTModelInsightResponse(
-                        node_id=node_id,
-                        result=self._build_failure_result_view_materialization(node_id, nr_childs, threshold_childs, model_materialization),
-                        severity=get_severity(self.TYPE, self.config),
+                        unique_id=node_id,
+                        package_name=node.package_name,
+                        path=node.original_file_path,
+                        original_file_path=node.original_file_path,
+                        insight=self._build_failure_result_view_materialization(
+                            node_id, nr_childs, threshold_childs, model_materialization
+                        ),
+                        severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                     )
                 )
             elif nr_childs <= threshold_childs and model_materialization != "view":
                 insights.append(
                     DBTModelInsightResponse(
-                        node_id=node_id,
-                        result=self._build_failure_result_not_view_materialization(
+                        unique_id=node_id,
+                        package_name=node.package_name,
+                        path=node.original_file_path,
+                        original_file_path=node.original_file_path,
+                        insight=self._build_failure_result_not_view_materialization(
                             node_id, nr_childs, threshold_childs, model_materialization
                         ),
-                        severity=get_severity(self.TYPE, self.config),
+                        severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                     )
                 )
         return insights

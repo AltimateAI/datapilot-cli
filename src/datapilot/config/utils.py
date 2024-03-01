@@ -8,7 +8,11 @@ from datapilot.schemas.constants import CONFIG_BLACKLIST_SCHEMA
 from datapilot.schemas.constants import CONFIG_CONTRACT_PATTERNS
 from datapilot.schemas.constants import CONFIG_DTYPES_PATTERNS
 from datapilot.schemas.constants import CONFIG_LABELS_KEYS
+from datapilot.schemas.constants import CONFIG_MAX_CHILDS
+from datapilot.schemas.constants import CONFIG_MAX_PARENTS
 from datapilot.schemas.constants import CONFIG_META_KEYS
+from datapilot.schemas.constants import CONFIG_MIN_CHILDS
+from datapilot.schemas.constants import CONFIG_MIN_PARENTS
 from datapilot.schemas.constants import CONFIG_MODEL_CONTRACT_PATTERNS
 from datapilot.schemas.constants import CONFIG_MODEL_TYPE_PATTERNS
 from datapilot.schemas.constants import CONFIG_SOURCE_LABELS_KEYS
@@ -177,3 +181,27 @@ def get_source_test_count_configuration(
     config: Optional[Dict],
 ) -> Dict[str, Optional[Dict[str, str]]]:
     return config.get(CONFIG_SOURCE_TEST_COUNT, None)
+
+
+def get_max_parents_configuration(
+    config: Optional[Dict],
+) -> Dict[str, Optional[Dict[str, str]]]:
+    return config.get(CONFIG_MAX_PARENTS, None)
+
+
+def get_min_parents_configuration(
+    config: Optional[Dict],
+) -> Dict[str, Optional[Dict[str, str]]]:
+    return config.get(CONFIG_MIN_PARENTS, None)
+
+
+def get_max_childs_configuration(
+    config: Optional[Dict],
+) -> Dict[str, Optional[Dict[str, str]]]:
+    return config.get(CONFIG_MAX_CHILDS, None)
+
+
+def get_min_childs_configuration(
+    config: Optional[Dict],
+) -> Dict[str, Optional[Dict[str, str]]]:
+    return config.get(CONFIG_MIN_CHILDS, None)

@@ -52,9 +52,12 @@ class CheckMacroArgsHaveDesc(ChecksInsight):
                 if not self._check_macro_args_have_desc(macro_id):
                     insights.append(
                         DBTModelInsightResponse(
-                            macro_id=macro_id,
-                            result=self._build_failure_result(macro_id),
-                            severity=get_severity(self.TYPE, self.config),
+                            unique_id=macro_id,
+                            package_name=macro.package_name,
+                            original_file_path=macro.original_file_path,
+                            path=macro.original_file_path,
+                            insight=self._build_failure_result(macro_id),
+                            severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
 

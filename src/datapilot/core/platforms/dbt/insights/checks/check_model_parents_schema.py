@@ -46,6 +46,7 @@ class CheckModelParentsSchema(ChecksInsight):
         insights = []
         self.whitelist = get_whitelist_schema_configuration(self.config)
         self.blacklist = get_blacklist_schema_configuration(self.config)
+        self.blacklist = self.blacklist if self.blacklist else []
         for node_id in self.nodes.keys():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
@@ -54,9 +55,12 @@ class CheckModelParentsSchema(ChecksInsight):
             if parent_schema:
                 insights.append(
                     DBTModelInsightResponse(
-                        node_id=node_id,
-                        result=self._build_failure_result(node_id, parent_schema),
-                        severity=get_severity(self.TYPE, self.config),
+                        unique_id=node_id,
+                        package_name=self.nodes[node_id].package_name,
+                        path=self.nodes[node_id].original_file_path,
+                        original_file_path=self.nodes[node_id].original_file_path,
+                        insight=self._build_failure_result(node_id, parent_schema),
+                        severity=get_severity(self.nodes[node_id].resource_type),
                     )
                 )
         return insights
@@ -69,6 +73,6 @@ class CheckModelParentsSchema(ChecksInsight):
         if model.resource_type == AltimateResourceType.model:
             for parent in getattr(model.depends_on, "nodes", []):
                 parent_model = self.get_node(parent)
-                if (self.whitelist and (parent_model.schema not in self.whitelist)) or parent_model.schema in self.blacklist:
-                    return parent_model.schema
+                if (self.whitelist and (parent_model.schema_name not in self.whitelist)) or (parent_model.schema in self.blacklist):
+                    return parent_model.schema_name
         return None

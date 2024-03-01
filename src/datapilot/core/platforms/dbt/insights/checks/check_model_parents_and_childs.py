@@ -1,5 +1,9 @@
 from typing import List
 
+from datapilot.config.utils import get_max_childs_configuration
+from datapilot.config.utils import get_max_parents_configuration
+from datapilot.config.utils import get_min_childs_configuration
+from datapilot.config.utils import get_min_parents_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -21,6 +25,8 @@ class CheckModelParentsAndChilds(ChecksInsight):
         node_id: str,
         min_parents: int,
         max_parents: int,
+        min_childs: int,
+        max_childs: int,
     ) -> DBTInsightResult:
         """
         Build failure result for the insight if a column has specific number (max/min) of parents or/and childs.
@@ -28,7 +34,7 @@ class CheckModelParentsAndChilds(ChecksInsight):
         :return: An instance of InsightResult containing failure message and recommendation.
         """
 
-        failure_message = f"The model:{node_id} doesn't have the required number of parents or childs. Min parents: {min_parents}, Max parents: {max_parents}:\n"
+        failure_message = f"The model:{node_id} doesn't have the required number of parents or childs.\n Min parents: {min_parents}, Max parents: {max_parents} Min childs: {min_childs}, Max childs: {max_childs}\n"
 
         recommendation = (
             "Update the model to adhere to have the required number of parents or childs."
@@ -41,7 +47,7 @@ class CheckModelParentsAndChilds(ChecksInsight):
             message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"min_parents": min_parents, "max_parents": max_parents},
+            metadata={"min_parents": min_parents, "max_parents": max_parents, "min_childs": min_childs, "max_childs": max_childs},
         )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
@@ -52,8 +58,10 @@ class CheckModelParentsAndChilds(ChecksInsight):
         The parent and corresponding child information is present in self.children_map
         """
         insights = []
-        self.min_parents = self.config.get("min_parents", 0)
-        self.max_parents = self.config.get("max_parents", 0)
+        self.min_parents = get_min_parents_configuration(self.config)
+        self.max_parents = get_max_parents_configuration(self.config)
+        self.min_childs = get_min_childs_configuration(self.config)
+        self.max_childs = get_max_childs_configuration(self.config)
 
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
@@ -67,7 +75,9 @@ class CheckModelParentsAndChilds(ChecksInsight):
                             package_name=node.package_name,
                             path=node.original_file_path,
                             original_file_path=node.original_file_path,
-                            insight=self._build_failure_result(node_id, self.min_parents, self.max_parents),
+                            insight=self._build_failure_result(
+                                node_id, self.min_parents, self.max_parents, self.min_childs, self.max_childs
+                            ),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
@@ -80,4 +90,4 @@ class CheckModelParentsAndChilds(ChecksInsight):
         children = self.children_map.get(model_unique_id, [])
         node = self.get_node(model_unique_id)
         parents = node.depends_on.nodes
-        return self.min_parents <= len(parents) <= self.max_parents and self.min_parents <= len(children) <= self.max_parents
+        return self.min_parents <= len(parents) <= self.max_parents and self.min_childs <= len(children) <= self.max_childs

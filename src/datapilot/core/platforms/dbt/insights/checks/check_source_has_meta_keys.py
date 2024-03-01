@@ -54,8 +54,11 @@ class CheckSourceHasMetaKeys(ChecksInsight):
                     insights.append(
                         DBTModelInsightResponse(
                             unique_id=node_id,
-                            severity=get_severity(self.DEFAULT_SEVERITY),
-                            result=self._build_failure_result(node_id, diff),
+                            package_name=node.package_name,
+                            original_file_path=node.original_file_path,
+                            path=node.original_file_path,
+                            insight=self._build_failure_result(node_id, diff),
+                            severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
         return insights

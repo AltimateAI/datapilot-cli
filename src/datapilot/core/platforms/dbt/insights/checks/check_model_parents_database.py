@@ -46,6 +46,7 @@ class CheckModelParentsDatabase(ChecksInsight):
         insights = []
         self.whitelist = get_whitelist_database_configuration(self.config)
         self.blacklist = get_blacklist_database_configuration(self.config)
+        self.blacklist = self.blacklist if self.blacklist else []
         for node_id in self.nodes.keys():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
@@ -54,13 +55,11 @@ class CheckModelParentsDatabase(ChecksInsight):
             if parent_database:
                 insights.append(
                     DBTModelInsightResponse(
-                        node_id=node_id,
-                        results=[
-                            self._build_failure_result(
-                                node_id,
-                                parent_database,
-                            )
-                        ],
+                        unique_id=node_id,
+                        package_name=self.nodes[node_id].package_name,
+                        path=self.nodes[node_id].original_file_path,
+                        original_file_path=self.nodes[node_id].original_file_path,
+                        insight=self._build_failure_result(node_id, parent_database),
                         severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                     )
                 )
