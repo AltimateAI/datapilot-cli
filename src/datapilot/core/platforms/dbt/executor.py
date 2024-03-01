@@ -21,7 +21,6 @@ from datapilot.utils.formatting.utils import RED
 from datapilot.utils.formatting.utils import YELLOW
 from datapilot.utils.formatting.utils import color_text
 from datapilot.utils.utils import generate_partial_manifest_catalog
-from datapilot.utils.utils import get_changed_files
 from datapilot.utils.utils import get_tmp_dir_path
 
 
@@ -185,7 +184,7 @@ def main(argv: Optional[Sequence[str]] = None):
         print(f"Using config file: {args[0].config_path[0]}")
         config = load_config(args[0].config_path[0])
 
-    changed_files = get_changed_files()
+    changed_files = args[1]
     tmp_folder = get_tmp_dir_path()
     manifest_path = Path(tmp_folder / "manifest.json")
     catalog_path = Path(tmp_folder / "catalog.json")
