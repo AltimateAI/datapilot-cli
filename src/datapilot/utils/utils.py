@@ -6,6 +6,8 @@ import uuid
 from pathlib import Path
 from typing import Dict
 
+from pydantic import BaseModel
+
 
 def load_json(file_path: str) -> Dict:
     try:
@@ -83,16 +85,46 @@ def get_tmp_dir_path():
     return tmp_dir
 
 
+class DBTNode(BaseModel):
+    unique_id: str
+    name: str
+    resource_type: str
+    table: str = ""
+
+
 def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str):
     models = [Path(f).stem for f in changed_files]
 
     subprocess.run(["dbt", "compile", "--models", " ".join(models)])  # noqa
 
-    manifest_file = Path("target/manifest.json")
+    manifest_file = Path("/Users/gaurp/jaffle_shop/target/manifest.json")
     with manifest_file.open() as f:
         manifest = json.load(f)
 
-    subprocess.run(["dbt", "docs", "generate", "--models", " ".join(models)])  # noqa
+    nodes = []
+    for node in manifest["nodes"]:
+        nodes.append(DBTNode(**manifest["nodes"][node]))
+
+    for node in manifest["sources"]:
+        nodes.append(DBTNode(**manifest["sources"][node]))
+
+    nodes_str = ",\n".join(
+        [
+            "{" + f'"name":"{node.name}","resource_type":"{node.resource_type}","unique_id":"{node.unique_id}","table":""' + "}"
+            for node in nodes
+        ]
+    )
+
+    query = (
+        "{% set result = {} %}{% set nodes = ["
+        + nodes_str
+        + '] %}{% for n in nodes %}{% if n["resource_type"] == "source" %}{% set columns = adapter.get_columns_in_relation(source(n["name"], n["table"])) %}{% else %}{% set columns = adapter.get_columns_in_relation(ref(n["name"])) %}{% endif %}{% set new_columns = [] %}{% for column in columns %}{% do new_columns.append({"column": column.name, "dtype": column.dtype}) %}{% endfor %}{% do result.update({n["unique_id"]:new_columns}) %}{% endfor %}{{ tojson(result) }}'
+    )
+
+    subprocess.run(["dbt", "compile", "--inline", query])  # noqa
+
+    # Will need to get catalog by getting the json output from above query
+
     catalog_file = Path("target/catalog.json")
     with catalog_file.open() as f:
         catalog = json.load(f)
@@ -101,3 +133,9 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
         json.dump(manifest, f)
     with Path.open(catalog_path, "w") as f:
         json.dump(catalog, f)
+
+
+if __name__ == "__main__":
+    print("Running main")
+    print(generate_partial_manifest_catalog([], "/Users/gaurp/Desktop/manifest.json", ""))
+    print("Done running main")
