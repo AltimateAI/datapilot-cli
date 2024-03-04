@@ -18,22 +18,24 @@ class CheckSourceChilds(ChecksInsight):
     def _build_failure_result(
         self,
         node_id: str,
+        min_childs: int,
+        max_childs: int,
     ) -> DBTInsightResult:
         """
-        Build failure result for the insight if a source has a number of childs that is not in the valid range.
+        Build failure result for the insight if a source has a specific number (max/min) of childs
         """
-        failure_message = (
-            "The source `{source_unique_id}` has the following number of childs: {number_of_childs}. "
-            "Ensure that the source has a specific number (max/min) of childs."
-        )
-        recommendation = (
-            "Ensure that the source `{source_unique_id}` has a specific number (max/min) of childs. "
-            "Ensuring that the source has a specific number (max/min) of childs helps in maintaining data integrity and consistency."
-        )
+        failure_message = f"The source:{node_id} has a number of childs that is not in the valid range:\n"
+        failure_message += f"Min childs: {min_childs}\n"
+        failure_message += f"Max childs: {max_childs}\n"
+
+        recommendation = "Update the source to adhere to the valid range of childs."
         return DBTInsightResult(
-            failure_message=failure_message.format(source_unique_id=node_id, number_of_childs=len(self.children_map.get(node_id, []))),
-            recommendation=recommendation.format(source_unique_id=node_id),
-            metadata={"source_unique_id": node_id, "number_of_childs": len(self.children_map.get(node_id, []))},
+            type=self.TYPE,
+            name=self.NAME,
+            message=failure_message,
+            recommendation=recommendation,
+            reason_to_flag=self.REASON_TO_FLAG,
+            metadata={"source_unique_id": node_id, "min_childs": min_childs, "max_childs": max_childs},
         )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
@@ -57,7 +59,7 @@ class CheckSourceChilds(ChecksInsight):
                             package_name=node.package_name,
                             original_file_path=node.original_file_path,
                             path=node.original_file_path,
-                            insight=self._build_failure_result(node_id),
+                            insight=self._build_failure_result(node_id, min_childs=self.min_childs, max_childs=self.max_childs),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )

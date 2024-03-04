@@ -22,19 +22,21 @@ class CheckSourceHasAllColumns(ChecksInsight):
         self.catalog = catalog_wrapper
         super().__init__(*args, **kwargs)
 
-    def _build_failure_result(self, model_unique_id: str, columns: Sequence[str]) -> DBTInsightResult:
-        failure_message = (
-            "The following columns in the source `{model_unique_id}` are missing descriptions:\n{columns}. "
-            "Ensure that the source includes descriptions for all the columns."
-        )
-        recommendation = (
-            "Add the missing descriptions for the columns listed above in the source `{model_unique_id}`. "
-            "Ensuring that the source has descriptions for all the columns helps in maintaining data integrity and consistency."
-        )
+    def _build_failure_result(self, source_unique_id: str, columns: Sequence[str]) -> DBTInsightResult:
+        """
+        Build failure result for the insight if a source has missing columns.
+        """
+        failure_message = f"The source:{source_unique_id} has missing columns:\n"
+        failure_message += numbered_list(columns)
+
+        recommendation = "Update the source to include all columns."
         return DBTInsightResult(
-            failure_message=failure_message.format(model_unique_id=model_unique_id, columns=numbered_list(columns)),
-            recommendation=recommendation.format(model_unique_id=model_unique_id),
-            metadata={"missing_columns": columns, "model_unique_id": model_unique_id},
+            type=self.TYPE,
+            name=self.NAME,
+            message=failure_message,
+            recommendation=recommendation,
+            reason_to_flag=self.REASON_TO_FLAG,
+            metadata={"source_unique_id": source_unique_id, "columns": columns},
         )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:

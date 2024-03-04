@@ -21,18 +21,20 @@ class CheckSourceHasMetaKeys(ChecksInsight):
         source_id: int,
         diff: Set[str],
     ) -> DBTInsightResult:
-        failure_message = (
-            "The source table `{source_id}` is missing the following meta keys: {diff}. "
-            "Ensure that the source table has the required meta keys."
-        )
-        recommendation = (
-            "Add the following meta keys to the source table `{source_id}`: {diff}. "
-            "Ensuring that the source table has the required meta keys helps in maintaining data integrity and consistency."
-        )
+        """
+        Build failure result for the insight if a model's parent schema is not whitelist or in blacklist.
+        """
+        failure_message = f"The source:{source_id} does not have the following meta keys defined: {numbered_list(diff)}\n"
+
+        recommendation = "Define the meta keys for the source to ensure consistency in analysis."
+
         return DBTInsightResult(
-            failure_message=failure_message.format(source_id=source_id, diff=numbered_list(diff)),
-            recommendation=recommendation.format(source_id=source_id, diff=numbered_list(diff)),
-            metadata={"source_id": source_id, "diff": diff},
+            type=self.TYPE,
+            name=self.NAME,
+            message=failure_message,
+            recommendation=recommendation,
+            reason_to_flag=self.REASON_TO_FLAG,
+            metadata={"source_id": source_id},
         )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
@@ -65,9 +67,8 @@ class CheckSourceHasMetaKeys(ChecksInsight):
 
     def _check_source_has_meta_keys(self, source_unique_id: str, meta_keys: List[str]):
         source = self.get_node(source_unique_id)
-        if source.config:
-            if source.config.meta:
-                source_meta = set(source.config.meta.keys())
-                diff = set(meta_keys).difference(source_meta)
-                return diff
+        if len(source.meta) > 0:
+            source_meta = set(source.meta.keys())
+            diff = set(meta_keys).difference(source_meta)
+            return diff
         return set(meta_keys)

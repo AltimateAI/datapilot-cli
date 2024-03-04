@@ -14,14 +14,19 @@ class CheckSourceHasLoader(ChecksInsight):
     REASON_TO_FLAG = "Missing loader for the source can lead to confusion and inconsistency in analysis. "
 
     def _build_failure_result(self, source_id: int) -> DBTInsightResult:
-        failure_message = "The source table `{source_id}` is missing a loader. " "Ensure that the source table has a loader."
-        recommendation = (
-            "Add a loader for the source table `{source_id}`. "
-            "Ensuring that the source table has a loader helps in maintaining data integrity and consistency."
-        )
+        """
+        Build failure result for the insight if a model's parent schema is not whitelist or in blacklist.
+        """
+        failure_message = f"The source:{source_id} does not have a loader defined.\n"
+
+        recommendation = "Define the loader for the source to ensure consistency in analysis."
+
         return DBTInsightResult(
-            failure_message=failure_message.format(source_id=source_id),
-            recommendation=recommendation.format(source_id=source_id),
+            type=self.TYPE,
+            name=self.NAME,
+            message=failure_message,
+            recommendation=recommendation,
+            reason_to_flag=self.REASON_TO_FLAG,
             metadata={"source_id": source_id},
         )
 
@@ -52,6 +57,6 @@ class CheckSourceHasLoader(ChecksInsight):
 
     def _check_source_has_loader(self, source_unique_id: str) -> bool:
         source = self.get_node(source_unique_id)
-        if source.loader is None:
+        if not source.loader:
             return False
         return True
