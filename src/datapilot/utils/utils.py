@@ -214,88 +214,91 @@ def run_macro(macro: str) -> str:
 
 
 def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str):
-    models = [Path(f).stem for f in changed_files]
+    try:
+        models = [Path(f).stem for f in changed_files]
 
-    subprocess.run(["dbt", "parse"])  # noqa
+        subprocess.run(["dbt", "parse"])  # noqa
 
-    manifest_file = Path("target/manifest.json")
-    with manifest_file.open() as f:
-        manifest = json.load(f)
+        manifest_file = Path("target/manifest.json")
+        with manifest_file.open() as f:
+            manifest = json.load(f)
 
-    nodes = get_manifest_model_nodes(manifest, models)
-    sources = get_manifest_source_nodes(manifest)
+        nodes = get_manifest_model_nodes(manifest, models)
+        sources = get_manifest_source_nodes(manifest)
 
-    nodes_tables = get_model_tables(nodes)
-    sources_tables = get_source_tables(sources)
-    tables = nodes_tables + sources_tables
+        nodes_tables = get_model_tables(nodes)
+        sources_tables = get_source_tables(sources)
+        tables = nodes_tables + sources_tables
 
-    query = (
+        query = (
+            """
+        {% set maximum = 10000 %}
+        {% set columns_list = [] %}
+        {% for table in """
+            + str(tables)
+            + """ %}
+        {%- set sql -%}
+            describe table {{ table }}
+        {%- endset -%}
+        {%- set result = run_query(sql) -%}
+
+        {% if (result | length) >= maximum %}
+            {% set msg %}
+            Too many columns in relation {{ table }}! dbt can only get
+            information about relations with fewer than {{ maximum }} columns.
+            {% endset %}
+            {% do exceptions.raise_compiler_error(msg) %}
+        {% endif %}
+
+        {% for row in result %}
+            {% do columns_list.append({'table': table, 'name': row['name'], 'type': row['type']}) %}
+        {% endfor %}
+        {% endfor %}
+        {{ tojson(columns_list) }}
         """
-    {% set maximum = 10000 %}
-    {% set columns_list = [] %}
-    {% for table in """
-        + str(tables)
-        + """ %}
-    {%- set sql -%}
-        describe table {{ table }}
-    {%- endset -%}
-    {%- set result = run_query(sql) -%}
+        )
 
-    {% if (result | length) >= maximum %}
-        {% set msg %}
-        Too many columns in relation {{ table }}! dbt can only get
-        information about relations with fewer than {{ maximum }} columns.
-        {% endset %}
-        {% do exceptions.raise_compiler_error(msg) %}
-    {% endif %}
+        dbt_compile_output = run_macro(query)
 
-    {% for row in result %}
-        {% do columns_list.append({'table': table, 'name': row['name'], 'type': row['type']}) %}
-    {% endfor %}
-    {% endfor %}
-    {{ tojson(columns_list) }}
-    """
-    )
+        print(dbt_compile_output)
 
-    dbt_compile_output = run_macro(query)
+        compiled_inline_node = dbt_compile_output.split("Compiled inline node is:")[1].strip().replace("'", "").strip()
 
-    print(dbt_compile_output)
+        compiled_dict = json.loads(compiled_inline_node)
 
-    compiled_inline_node = dbt_compile_output.split("Compiled inline node is:")[1].strip().replace("'", "").strip()
+        # we need to get all columns  from compiled_dict which is a list of dictionaries
+        # and each item in the list is a dictionary with keys table, name, type
+        # we need to create a map of all the columns for each table
+        # and then create a catalog for each table
 
-    compiled_dict = json.loads(compiled_inline_node)
+        table_columns_map = {}
+        for column in compiled_dict:
+            if column["table"] in table_columns_map:
+                table_columns_map[column["table"]].append(column)
+            else:
+                table_columns_map[column["table"]] = [column]
 
-    # we need to get all columns  from compiled_dict which is a list of dictionaries
-    # and each item in the list is a dictionary with keys table, name, type
-    # we need to create a map of all the columns for each table
-    # and then create a catalog for each table
+        catalog = {
+            "metadata": {
+                "dbt_schema_version": "https://schemas.getdbt.com/dbt/catalog/v1.json",
+                "dbt_version": "1.7.2",
+                "generated_at": "2024-03-04T11:13:52.284167Z",
+                "invocation_id": "e2970ef7-c397-404b-ac5d-63a71a45b628",
+                "env": {},
+            },
+            "errors": None,
+        }
 
-    table_columns_map = {}
-    for column in compiled_dict:
-        if column["table"] in table_columns_map:
-            table_columns_map[column["table"]].append(column)
-        else:
-            table_columns_map[column["table"]] = [column]
+        catalog = fill_catalog(table_columns_map, manifest, catalog, nodes, "nodes")
+        catalog = fill_catalog(table_columns_map, manifest, catalog, sources, "sources")
 
-    catalog = {
-        "metadata": {
-            "dbt_schema_version": "https://schemas.getdbt.com/dbt/catalog/v1.json",
-            "dbt_version": "1.7.2",
-            "generated_at": "2024-03-04T11:13:52.284167Z",
-            "invocation_id": "e2970ef7-c397-404b-ac5d-63a71a45b628",
-            "env": {},
-        },
-        "errors": None,
-    }
-
-    catalog = fill_catalog(table_columns_map, manifest, catalog, nodes, "nodes")
-    catalog = fill_catalog(table_columns_map, manifest, catalog, sources, "sources")
-
-    with Path.open(manifest_path, "w") as f:
-        json.dump(manifest, f)
-    with Path.open(catalog_path, "w") as f:
-        print(catalog_path)
-        json.dump(catalog, f)
+        with Path.open(manifest_path, "w") as f:
+            json.dump(manifest, f)
+        with Path.open(catalog_path, "w") as f:
+            print(catalog_path)
+            json.dump(catalog, f)
+    except Exception as e:
+        print("Unable to generate partial manifest and catalog. Error: ", e)
 
 
 if __name__ == "__main__":
