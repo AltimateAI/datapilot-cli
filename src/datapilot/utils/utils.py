@@ -3,6 +3,7 @@ import os
 import re
 import subprocess
 import tempfile
+import time
 import uuid
 from pathlib import Path
 from typing import Dict
@@ -90,6 +91,9 @@ class ModelNode(BaseModel):
     unique_id: str
     name: str
     resource_type: str
+    database: str
+    alias: str
+    table_schema: str
 
 
 class SourceNode(BaseModel):
@@ -97,7 +101,8 @@ class SourceNode(BaseModel):
     name: str
     resource_type: str
     table: str = ""
-    alias: str = ""
+    database: str
+    table_schema: str
 
 
 def get_column_type(dtype: str) -> str:
@@ -133,9 +138,9 @@ def get_column_type(dtype: str) -> str:
 
 
 def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str):
-    # changed_files = [
-    #     "/Users/gaurp/the_tuva_project_dbt_cloud/models/cms_hcc/final/cms_hcc__patient_risk_factors.sql",
-    # ]
+    changed_files = [
+        "/Users/gaurp/the_tuva_project_dbt_cloud/models/cms_hcc/final/cms_hcc__patient_risk_factors.sql",
+    ]
     models = [Path(f).stem for f in changed_files]
 
     subprocess.run(["dbt", "parse"], cwd="/Users/gaurp/the_tuva_project_dbt_cloud")  # noqa
@@ -149,14 +154,31 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
     for node in manifest["nodes"].values():
         if node["name"] in models:
             if node["resource_type"] == "model":
-                nodes.append(ModelNode(**node))
+                nodes.append(
+                    ModelNode(
+                        unique_id=node["unique_id"],
+                        name=node["name"],
+                        resource_type=node["resource_type"],
+                        database=node["database"],
+                        alias=node["alias"],
+                        table_schema=node["schema"],
+                    )
+                )
 
     for node in manifest["sources"].values():
         sources.append(
-            SourceNode(unique_id=node["unique_id"], name=node["source_name"], resource_type=node["resource_type"], table=node["identifier"])
+            SourceNode(
+                unique_id=node["unique_id"],
+                name=node["name"],
+                resource_type=node["resource_type"],
+                table=node["identifier"],
+                database=node["database"],
+                table_schema=node["schema"],
+            )
         )
 
     nodes_str = []
+    tables = []
     for node in nodes:
         nodes_str.append(
             {
@@ -165,6 +187,7 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
                 "unique_id": node.unique_id,
             }
         )
+        tables.append(f"{node.database}.{node.table_schema}.{node.alias}")
 
     for source in sources:
         nodes_str.append(
@@ -175,6 +198,7 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
                 "table": source.table,
             }
         )
+        tables.append(f"{source.database}.{source.table_schema}.{source.name}")
 
         # query = (
         #     """'{% set result = {} %}{% set nodes ="""
@@ -182,30 +206,35 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
         #     + """%}{% for n in nodes %}  {% if n["resource_type"] == "source" %}    {% set columns = adapter.get_columns_in_relation(source(n["name"], n["table"])) %}  {% else %}    {% set columns = adapter.get_columns_in_relation(ref(n["name"])) %}  {% endif %}  {% set new_columns = [] %}  {% for column in columns %}    {% do new_columns.append({"column": column.name, "dtype": column.dtype}) %}  {% endfor %}  {% do result.update({n["unique_id"]:new_columns}) %}{% endfor %}{{ tojson(result) }}' """
         # )
 
-        query = """
-  {%- set sql -%}
-    describe table analytics.public.customers
-  {%- endset -%}
-  {%- set result = run_query(sql) -%}
-
-  {% set maximum = 10000 %}
-  {% if (result | length) >= maximum %}
-    {% set msg %}
-      Too many columns in relation analytics.public.customers! dbt can only get
-      information about relations with fewer than {{ maximum }} columns.
-    {% endset %}
-    {% do exceptions.raise_compiler_error(msg) %}
-  {% endif %}
-
-  {% set columns = [] %}
-  {% for row in result %}
-    {% do columns.append(api.Column.from_description(row['name'], row['type'])) %}
-  {% endfor %}
-  {% do return(columns) %}
+    query = (
         """
+    {% set maximum = 10000 %}
+    {% set columns_list = [] %}
+    {% for table in """
+        + str(tables)
+        + """ %}
+    {%- set sql -%}
+        describe table {{ table }}
+    {%- endset -%}
+    {%- set result = run_query(sql) -%}
 
-    query = query.strip()
-    print(query)
+    {% if (result | length) >= maximum %}
+        {% set msg %}
+        Too many columns in relation {{ table }}! dbt can only get
+        information about relations with fewer than {{ maximum }} columns.
+        {% endset %}
+        {% do exceptions.raise_compiler_error(msg) %}
+    {% endif %}
+
+    {% for row in result %}
+        {% do columns_list.append({'table': table, 'name': row['name'], 'type': row['type']}) %}
+    {% endfor %}
+    {% endfor %}
+    {{ tojson(columns_list) }}
+    """
+    )
+
+    start_time = time.time()
 
     dbt_compile = subprocess.run(
         ["dbt", "compile", "--inline", query],  # noqa
@@ -213,6 +242,9 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
         capture_output=True,
         text=True,
     )
+
+    end_time = time.time()
+    print(f"Time taken to run dbt compile: {end_time - start_time}")
 
     dbt_compile_output = dbt_compile.stdout
 
