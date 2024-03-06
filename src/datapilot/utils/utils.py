@@ -298,7 +298,7 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
             print(catalog_path)
             json.dump(catalog, f)
     except Exception as e:
-        print("Unable to generate partial manifest and catalog. Error: ", e)
+        raise Exception("Unable to generate partial manifest and catalog") from e
 
 
 if __name__ == "__main__":
