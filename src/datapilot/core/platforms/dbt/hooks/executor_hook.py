@@ -12,7 +12,7 @@ from datapilot.utils.utils import generate_partial_manifest_catalog
 from datapilot.utils.utils import get_tmp_dir_path
 
 
-def executor_hook(argv: Optional[Sequence[str]] = None):
+def main(argv: Optional[Sequence[str]] = None):
     start_time = time.time()
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
@@ -56,4 +56,4 @@ def executor_hook(argv: Optional[Sequence[str]] = None):
 
 
 if __name__ == "__main__":
-    exit(executor_hook())
+    exit(main())
