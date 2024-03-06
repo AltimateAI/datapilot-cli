@@ -55,8 +55,16 @@ class CheckSourceHasFreshness(ChecksInsight):
                     )
         return insights
 
-    def _check_source_has_freshness(self, model_unique_id: str) -> bool:
-        source = self.get_node(model_unique_id)
-        if not source.freshness:
+    def _check_source_has_freshness(self, source_id: str) -> bool:
+        source = self.get_node(source_id)
+        freshness = source.freshness
+
+        if not freshness:
             return False
+
+        required_keys = ["warn_after", "error_after"]
+        for key in required_keys:
+            if key not in freshness or not all(sub_key in freshness[key] for sub_key in ["count", "period"]):
+                return False
+
         return True
