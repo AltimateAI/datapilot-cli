@@ -259,6 +259,8 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
 
     dbt_compile_output = run_macro(query)
 
+    print(dbt_compile_output)
+
     compiled_inline_node = dbt_compile_output.split("Compiled inline node is:")[1].strip().replace("'", "").strip()
 
     compiled_dict = json.loads(compiled_inline_node)
