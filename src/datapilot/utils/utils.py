@@ -3,12 +3,12 @@ import os
 import re
 import subprocess
 import tempfile
-import time
 import uuid
 from pathlib import Path
 from typing import Dict
 
-from pydantic import BaseModel
+from datapilot.schemas.nodes import ModelNode
+from datapilot.schemas.nodes import SourceNode
 
 
 def load_json(file_path: str) -> Dict:
@@ -87,24 +87,6 @@ def get_tmp_dir_path():
     return tmp_dir
 
 
-class ModelNode(BaseModel):
-    unique_id: str
-    name: str
-    resource_type: str
-    database: str
-    alias: str
-    table_schema: str
-
-
-class SourceNode(BaseModel):
-    unique_id: str
-    name: str
-    resource_type: str
-    table: str = ""
-    database: str
-    table_schema: str
-
-
 def get_column_type(dtype: str) -> str:
     dtype = dtype.lower()
     if re.match(r".*int.*", dtype):
@@ -122,9 +104,9 @@ def get_column_type(dtype: str) -> str:
     elif re.match(r".*text.*", dtype):
         return "TEXT"
     elif re.match(r".*char.*", dtype):
-        return "CHAR"
+        return "TEXT"
     elif re.match(r".*varchar.*", dtype):
-        return "VARCHAR"
+        return "TEXT"
     elif re.match(r".*numeric.*", dtype):
         return "NUMERIC"
     elif re.match(r".*decimal.*", dtype):
@@ -137,20 +119,8 @@ def get_column_type(dtype: str) -> str:
         return "TEXT"
 
 
-def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str):
-    changed_files = [
-        "/Users/gaurp/the_tuva_project_dbt_cloud/models/cms_hcc/final/cms_hcc__patient_risk_factors.sql",
-    ]
-    models = [Path(f).stem for f in changed_files]
-
-    subprocess.run(["dbt", "parse"], cwd="/Users/gaurp/the_tuva_project_dbt_cloud")  # noqa
-
-    manifest_file = Path("/Users/gaurp/the_tuva_project_dbt_cloud/target/manifest.json")
-    with manifest_file.open() as f:
-        manifest = json.load(f)
-
+def get_manifest_model_nodes(manifest: Dict, models: list) -> list[ModelNode]:
     nodes = []
-    sources = []
     for node in manifest["nodes"].values():
         if node["name"] in models:
             if node["resource_type"] == "model":
@@ -164,9 +134,13 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
                         table_schema=node["schema"],
                     )
                 )
+    return nodes
 
+
+def get_manifest_source_nodes(manifest: Dict) -> list[SourceNode]:
+    nodes = []
     for node in manifest["sources"].values():
-        sources.append(
+        nodes.append(
             SourceNode(
                 unique_id=node["unique_id"],
                 name=node["name"],
@@ -176,35 +150,84 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
                 table_schema=node["schema"],
             )
         )
+    return nodes
 
-    nodes_str = []
+
+def get_model_tables(models: list[ModelNode]) -> list[str]:
     tables = []
+    for model in models:
+        tables.append(f"{model.database}.{model.table_schema}.{model.alias}")
+    return tables
+
+
+def get_source_tables(sources: list[SourceNode]) -> list[str]:
+    tables = []
+    for source in sources:
+        tables.append(f"{source.database}.{source.table_schema}.{source.name}")
+    return tables
+
+
+def get_table_name(node: ModelNode | SourceNode, node_type: str) -> str:
+    if node_type == "nodes":
+        return f"{node.database}.{node.table_schema}.{node.alias}"
+    return f"{node.database}.{node.table_schema}.{node.name}"
+
+
+def fill_catalog(table_columns_map: Dict, manifest: Dict, catalog: Dict, nodes: list[ModelNode | SourceNode], node_type: str) -> Dict:
     for node in nodes:
-        nodes_str.append(
-            {
-                "name": node.name,
-                "resource_type": node.resource_type,
+        columns = {}
+        for column in table_columns_map[get_table_name(node, node_type)]:
+            column_type = get_column_type(column["type"])
+            columns[column["name"]] = {
+                "type": column_type,
+                "index": len(columns) + 1,
+                "name": column["name"],
+                "comment": None,
+            }
+
+        catalog[node_type] = {
+            node.unique_id: {
+                "metadata": {
+                    "type": "BASE TABLE",
+                    "schema": manifest[node_type][node.unique_id]["schema"],
+                    "name": node.alias if node_type == "nodes" else node.name,
+                    "database": manifest[node_type][node.unique_id]["database"],
+                    "comment": None,
+                    "owner": None,
+                },
+                "columns": columns,
+                "stats": {},
                 "unique_id": node.unique_id,
             }
-        )
-        tables.append(f"{node.database}.{node.table_schema}.{node.alias}")
+        }
 
-    for source in sources:
-        nodes_str.append(
-            {
-                "name": source.name,
-                "resource_type": source.resource_type,
-                "unique_id": source.unique_id,
-                "table": source.table,
-            }
-        )
-        tables.append(f"{source.database}.{source.table_schema}.{source.name}")
+    return catalog
 
-        # query = (
-        #     """'{% set result = {} %}{% set nodes ="""
-        #     + str(nodes_str)
-        #     + """%}{% for n in nodes %}  {% if n["resource_type"] == "source" %}    {% set columns = adapter.get_columns_in_relation(source(n["name"], n["table"])) %}  {% else %}    {% set columns = adapter.get_columns_in_relation(ref(n["name"])) %}  {% endif %}  {% set new_columns = [] %}  {% for column in columns %}    {% do new_columns.append({"column": column.name, "dtype": column.dtype}) %}  {% endfor %}  {% do result.update({n["unique_id"]:new_columns}) %}{% endfor %}{{ tojson(result) }}' """
-        # )
+
+def run_macro(macro: str) -> str:
+    dbt_compile = subprocess.run(
+        ["dbt", "compile", "--inline", macro],  # noqa
+        capture_output=True,
+        text=True,
+    )
+    return dbt_compile.stdout
+
+
+def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str):
+    models = [Path(f).stem for f in changed_files]
+
+    subprocess.run(["dbt", "parse"])  # noqa
+
+    manifest_file = Path("target/manifest.json")
+    with manifest_file.open() as f:
+        manifest = json.load(f)
+
+    nodes = get_manifest_model_nodes(manifest, models)
+    sources = get_manifest_source_nodes(manifest)
+
+    nodes_tables = get_model_tables(nodes)
+    sources_tables = get_source_tables(sources)
+    tables = nodes_tables + sources_tables
 
     query = (
         """
@@ -234,25 +257,23 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
     """
     )
 
-    start_time = time.time()
-
-    dbt_compile = subprocess.run(
-        ["dbt", "compile", "--inline", query],  # noqa
-        cwd="/Users/gaurp/the_tuva_project_dbt_cloud",
-        capture_output=True,
-        text=True,
-    )
-
-    end_time = time.time()
-    print(f"Time taken to run dbt compile: {end_time - start_time}")
-
-    dbt_compile_output = dbt_compile.stdout
-
-    print(dbt_compile_output)
+    dbt_compile_output = run_macro(query)
 
     compiled_inline_node = dbt_compile_output.split("Compiled inline node is:")[1].strip().replace("'", "").strip()
 
     compiled_dict = json.loads(compiled_inline_node)
+
+    # we need to get all columns  from compiled_dict which is a list of dictionaries
+    # and each item in the list is a dictionary with keys table, name, type
+    # we need to create a map of all the columns for each table
+    # and then create a catalog for each table
+
+    table_columns_map = {}
+    for column in compiled_dict:
+        if column["table"] in table_columns_map:
+            table_columns_map[column["table"]].append(column)
+        else:
+            table_columns_map[column["table"]] = [column]
 
     catalog = {
         "metadata": {
@@ -265,74 +286,13 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
         "errors": None,
     }
 
-    # we need to get all columns  from compiled_dict which is supposed to be a dict
-    # with list of columns for each model and source and each column will be a dict with column name and dtype
-    # we need to convert this to a list of columns for each model and source and each column will be a dict with format like
-    # we are getting dtype like VARCHAR, BOOLEAN, NUMBER etc. from the compiled_dict
-    # "columns": {"customer_id": {"type": "integer", "index": 1, "name": "customer_id","comment": null} i.e. we need to add index and name to the dict
-    # index will be autoincrementing from 1 to n for each column in the list and comment will be null. we need to convert the type to text, integer, bigint, date, etc
-
-    for node in nodes:
-        columns = []
-        for column in compiled_dict[node.unique_id]:
-            column_type = get_column_type(column["dtype"])
-            columns.append(
-                {
-                    "type": column_type,
-                    "index": len(columns) + 1,
-                    "name": column["column"],
-                    "comment": None,
-                }
-            )
-
-        catalog["nodes"] = {
-            node.unique_id: {
-                "metadata": {
-                    "type": "BASE TABLE",
-                    "schema": manifest["nodes"][node.unique_id]["schema"],
-                    "name": node.name,
-                    "database": manifest["nodes"][node.unique_id]["database"],
-                    "comment": None,
-                    "owner": None,
-                },
-                "columns": columns,
-                "stats": {},
-                "unique_id": node.unique_id,
-            }
-        }
-
-    for source in sources:
-        columns = []
-        for column in compiled_dict[source.unique_id]:
-            column_type = get_column_type(column["dtype"])
-            columns.append(
-                {
-                    "type": column_type,
-                    "index": len(columns) + 1,
-                    "name": column["column"],
-                    "comment": None,
-                }
-            )
-
-        catalog["sources"] = {
-            source.unique_id: {
-                "metadata": {
-                    "type": "BASE TABLE",
-                    "schema": manifest["sources"][source.unique_id]["schema"],
-                    "name": source.name,
-                    "database": manifest["sources"][source.unique_id]["database"],
-                    "comment": None,
-                    "owner": None,
-                },
-                "columns": columns,
-                "stats": {},
-                "unique_id": source.unique_id,
-            }
-        }
+    catalog = fill_catalog(table_columns_map, manifest, catalog, nodes, "nodes")
+    catalog = fill_catalog(table_columns_map, manifest, catalog, sources, "sources")
 
     with Path.open(manifest_path, "w") as f:
         json.dump(manifest, f)
     with Path.open(catalog_path, "w") as f:
+        print(catalog_path)
         json.dump(catalog, f)
 
 
