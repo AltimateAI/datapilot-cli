@@ -68,9 +68,4 @@ class CheckModelTags(ChecksInsight):
         """
         if not self.tag_list:
             return True
-        if not tags:
-            return False
-        for tag in tags:
-            if tag not in self.tag_list:
-                return False
-        return True
+        return all(tag in self.tag_list for tag in tags)

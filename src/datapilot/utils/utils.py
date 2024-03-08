@@ -6,6 +6,8 @@ import tempfile
 import uuid
 from pathlib import Path
 from typing import Dict
+from typing import List
+from typing import Union
 
 from datapilot.schemas.nodes import ModelNode
 from datapilot.schemas.nodes import SourceNode
@@ -119,7 +121,7 @@ def get_column_type(dtype: str) -> str:
         return "TEXT"
 
 
-def get_manifest_model_nodes(manifest: Dict, models: list) -> list[ModelNode]:
+def get_manifest_model_nodes(manifest: Dict, models: List) -> List[ModelNode]:
     nodes = []
     for node in manifest["nodes"].values():
         if node["name"] in models:
@@ -137,7 +139,7 @@ def get_manifest_model_nodes(manifest: Dict, models: list) -> list[ModelNode]:
     return nodes
 
 
-def get_manifest_source_nodes(manifest: Dict) -> list[SourceNode]:
+def get_manifest_source_nodes(manifest: Dict) -> List[SourceNode]:
     nodes = []
     for node in manifest["sources"].values():
         nodes.append(
@@ -153,27 +155,27 @@ def get_manifest_source_nodes(manifest: Dict) -> list[SourceNode]:
     return nodes
 
 
-def get_model_tables(models: list[ModelNode]) -> list[str]:
+def get_model_tables(models: List[ModelNode]) -> List[str]:
     tables = []
     for model in models:
         tables.append(f"{model.database}.{model.table_schema}.{model.alias}")
     return tables
 
 
-def get_source_tables(sources: list[SourceNode]) -> list[str]:
+def get_source_tables(sources: List[SourceNode]) -> List[str]:
     tables = []
     for source in sources:
         tables.append(f"{source.database}.{source.table_schema}.{source.name}")
     return tables
 
 
-def get_table_name(node: ModelNode | SourceNode, node_type: str) -> str:
+def get_table_name(node: Union[ModelNode, SourceNode], node_type: str) -> str:
     if node_type == "nodes":
         return f"{node.database}.{node.table_schema}.{node.alias}"
     return f"{node.database}.{node.table_schema}.{node.name}"
 
 
-def fill_catalog(table_columns_map: Dict, manifest: Dict, catalog: Dict, nodes: list[ModelNode | SourceNode], node_type: str) -> Dict:
+def fill_catalog(table_columns_map: Dict, manifest: Dict, catalog: Dict, nodes: List[Union[ModelNode, SourceNode]], node_type: str) -> Dict:
     for node in nodes:
         columns = {}
         for column in table_columns_map[node.unique_id]:
@@ -275,7 +277,6 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
         with Path.open(manifest_path, "w") as f:
             json.dump(manifest, f)
         with Path.open(catalog_path, "w") as f:
-            print(catalog_path)
             json.dump(catalog, f)
     except Exception as e:
         raise Exception("Unable to generate partial manifest and catalog") from e

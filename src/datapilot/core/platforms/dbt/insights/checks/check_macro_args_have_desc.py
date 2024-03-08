@@ -13,7 +13,7 @@ class CheckMacroArgsHaveDesc(ChecksInsight):
     DESCRIPTION = (
         "Checks that macros have descriptions for their arguments. Descriptions help in understanding the purpose of the macro arguments."
     )
-    REASON_TO_FLAG = "Macros without descriptions for their arguments can lead to confusion and hinder effective data modeling and analysis. It's important to have descriptions for macro arguments."
+    REASON_TO_FLAG = "Clear descriptions for macro arguments are crucial as they prevent misunderstandings, enhance user comprehension, and simplify maintenance. This leads to more accurate data analysis and efficient workflows."
 
     def _build_failure_result(
         self,

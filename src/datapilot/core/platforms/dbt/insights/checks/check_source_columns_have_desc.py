@@ -79,3 +79,18 @@ class CheckSourceColumnsHaveDescriptions(ChecksInsight):
             if not column_node.description:
                 columns_with_missing_descriptions.add(column_name)
         return columns_with_missing_descriptions
+
+    @classmethod
+    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
+        """
+        Check if all required data is available for the insight to run.
+        :param has_manifest: A boolean indicating if manifest is available.
+        :return: A boolean indicating if all required data is available.
+        """
+        if not has_manifest:
+            return False, "Manifest is required for insight to run."
+
+        if not has_catalog:
+            return False, "Catalog is required for insight to run."
+
+        return True, ""

@@ -1,6 +1,7 @@
 import re
 from typing import List
 from typing import Sequence
+from typing import Tuple
 
 from datapilot.config.utils import get_contract_regex_configuration
 from datapilot.config.utils import get_dtypes_configuration
@@ -95,3 +96,13 @@ class CheckColumnNameContract(ChecksInsight):
             elif not re.match(self.pattern, col_name, re.IGNORECASE):
                 columns.append(col_name)
         return columns
+
+    @classmethod
+    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
+        if not has_manifest:
+            return False, "Manifest is required for insight to run."
+
+        if not has_catalog:
+            return False, "Catalog is required for insight to run."
+
+        return True, ""

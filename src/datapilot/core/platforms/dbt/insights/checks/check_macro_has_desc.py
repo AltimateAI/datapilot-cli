@@ -8,10 +8,10 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckMacroHasDesc(ChecksInsight):
-    NAME = "Check Macro Has Desc"
+    NAME = "Macro has Documentation"
     ALIAS = "check_macro_has_desc"
     DESCRIPTION = "Checks that macros have descriptions. Descriptions help in understanding the purpose of the macro."
-    REASON_TO_FLAG = "Macros without descriptions can lead to confusion and hinder effective data modeling and analysis. It's important to have descriptions for macros."
+    REASON_TO_FLAG = "Undocumented macros can cause misunderstandings and inefficiencies in data modeling and analysis, as they make it difficult to understand their purpose and usage. Clear descriptions are vital for accuracy and streamlined workflow."
 
     def _build_failure_result(
         self,

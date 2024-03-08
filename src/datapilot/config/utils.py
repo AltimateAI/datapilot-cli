@@ -3,6 +3,7 @@ from typing import Optional
 
 from datapilot.core.platforms.dbt.constants import FOLDER
 from datapilot.core.platforms.dbt.constants import MODEL
+from datapilot.schemas.constants import CONFIG_BASE_FOLDER
 from datapilot.schemas.constants import CONFIG_BLACKLIST_DATABASE
 from datapilot.schemas.constants import CONFIG_BLACKLIST_SCHEMA
 from datapilot.schemas.constants import CONFIG_CONTRACT_PATTERNS
@@ -205,3 +206,9 @@ def get_min_childs_configuration(
     config: Optional[Dict],
 ) -> Dict[str, Optional[Dict[str, str]]]:
     return config.get(CONFIG_MIN_CHILDS, None)
+
+
+def get_base_folder_configuration(
+    config: Optional[Dict],
+) -> Dict[str, Optional[Dict[str, str]]]:
+    return config.get(CONFIG_BASE_FOLDER, None)

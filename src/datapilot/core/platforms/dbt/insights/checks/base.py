@@ -21,7 +21,4 @@ class ChecksInsight(DBTInsight):
         if not has_manifest:
             return False, "Manifest is required for insight to run."
 
-        if not has_catalog:
-            return False, "Catalog is required for insight to run."
-
         return True, ""

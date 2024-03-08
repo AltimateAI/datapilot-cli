@@ -73,8 +73,21 @@ class CheckModelHasAllColumns(ChecksInsight):
 
     def _check_model_columns(self, node_id) -> Tuple[int, Set[str]]:
         missing_columns = set()
-        catalog_columns = [k.lower() for k in self.catalog.get_schema()[node_id].keys()]
+        schema = self.catalog.get_schema()
+        if node_id not in schema:
+            return missing_columns
+        catalog_columns = schema[node_id].keys()
         for col_name in self.get_node(node_id).columns.keys():
             if col_name not in catalog_columns:
                 missing_columns.add(col_name)
         return missing_columns
+
+    @classmethod
+    def has_all_required_data(cls, has_manifest: bool, has_catalog: bool, **kwargs) -> Tuple[bool, str]:
+        if not has_manifest:
+            return False, "Manifest is required for insight to run."
+
+        if not has_catalog:
+            return False, "Catalog is required for insight to run."
+
+        return True, ""

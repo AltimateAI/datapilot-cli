@@ -2,6 +2,7 @@ from typing import List
 
 from datapilot.config.utils import get_threshold_childs_configuration
 from datapilot.core.insights.utils import get_severity
+from datapilot.core.platforms.dbt.constants import VIEW
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
@@ -14,7 +15,7 @@ class CheckModelMaterializationByChilds(ChecksInsight):
         "Checks the model materialization by a given threshold of child models."
         "All models with less child models then the treshold should be materialized as views (or ephemerals), all the rest as tables or incrementals."
     )
-    REASON_TO_FLAG = "The model has a different materialization than the expected one based on the number of child models."
+    REASON_TO_FLAG = "The model is flagged due to inappropriate materialization: models with child counts above the threshold require robust and efficient data processing, hence they should be materialized as tables or incrementals for optimized query performance and data management."
 
     def _build_failure_result_view_materialization(
         self,
@@ -82,7 +83,7 @@ class CheckModelMaterializationByChilds(ChecksInsight):
             nr_childs = len(self.children_map.get(node_id, []))
             model_materialization = node.config.materialized
 
-            if nr_childs > threshold_childs and model_materialization == "view":
+            if nr_childs > threshold_childs and model_materialization == VIEW:
                 insights.append(
                     DBTModelInsightResponse(
                         unique_id=node_id,
@@ -95,7 +96,7 @@ class CheckModelMaterializationByChilds(ChecksInsight):
                         severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                     )
                 )
-            elif nr_childs <= threshold_childs and model_materialization != "view":
+            elif nr_childs <= threshold_childs and model_materialization != VIEW:
                 insights.append(
                     DBTModelInsightResponse(
                         unique_id=node_id,

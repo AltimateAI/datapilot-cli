@@ -15,10 +15,7 @@ class CheckModelNameContract(ChecksInsight):
     DESCRIPTION = (
         "Check that model name abides to a contract (similar to check-column-name-contract). A contract consists of a regex pattern."
     )
-    REASON_TO_FLAG = (
-        "Model names that do not abide to a contract can lead to confusion and hinder effective data "
-        "modeling and analysis. It's important to have consistent model names."
-    )
+    REASON_TO_FLAG = "Model naming convention is not as expected"
 
     def _build_failure_result(
         self,
