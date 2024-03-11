@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_tag_list_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -43,7 +43,8 @@ class CheckModelTags(ChecksInsight):
         The provided tag list is in the configuration file.
         """
         insights = []
-        self.tag_list = get_tag_list_configuration(self.config)
+        self.insight_config = get_insight_configuration(self.config)
+        self.tag_list = self.insight_config["check_model_tags"]["tag_list"]
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")

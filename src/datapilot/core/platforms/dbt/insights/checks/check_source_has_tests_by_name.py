@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_source_test_name_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -15,8 +15,9 @@ class CheckSourceHasTestsByName(ChecksInsight):
     REASON_TO_FLAG = "Sources should have tests with specific names for proper validation."
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.test_names = get_source_test_name_configuration(self.config)
         insights = []
+        self.insight_config = get_insight_configuration(self.config)
+        self.test_names = self.insight_config["check_source_has_tests_by_name"]["test_names"]
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping source {node_id} as it is not enabled for selected models")

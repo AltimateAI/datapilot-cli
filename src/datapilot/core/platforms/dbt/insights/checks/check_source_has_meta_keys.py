@@ -1,7 +1,7 @@
 from typing import List
 from typing import Set
 
-from datapilot.config.utils import get_source_meta_keys_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -44,8 +44,9 @@ class CheckSourceHasMetaKeys(ChecksInsight):
         Ensures that the source has a list of valid meta keys.
         meta_keys are provided in the configuration file.
         """
-        meta_keys = get_source_meta_keys_configuration(self.config)
         insights = []
+        self.insight_config = get_insight_configuration(self.config)
+        meta_keys = self.insight_config["check_source_has_meta_keys"]["meta_keys"]
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping source {node_id} as it is not enabled for selected models")

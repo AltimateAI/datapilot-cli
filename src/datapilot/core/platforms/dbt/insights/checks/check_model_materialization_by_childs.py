@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_threshold_childs_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import VIEW
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
@@ -75,7 +75,8 @@ class CheckModelMaterializationByChilds(ChecksInsight):
         threshold_childs will be taken from the config file.
         """
         insights = []
-        threshold_childs = get_threshold_childs_configuration(self.config)
+        self.insight_config = get_insight_configuration(self.config)
+        threshold_childs = self.insight_config["check_model_materialization_by_childs"]["threshold_childs"]
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")

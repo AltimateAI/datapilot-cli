@@ -1,9 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_max_childs_configuration
-from datapilot.config.utils import get_max_parents_configuration
-from datapilot.config.utils import get_min_childs_configuration
-from datapilot.config.utils import get_min_parents_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -58,10 +55,11 @@ class CheckModelParentsAndChilds(ChecksInsight):
         The parent and corresponding child information is present in self.children_map
         """
         insights = []
-        self.min_parents = get_min_parents_configuration(self.config)
-        self.max_parents = get_max_parents_configuration(self.config)
-        self.min_childs = get_min_childs_configuration(self.config)
-        self.max_childs = get_max_childs_configuration(self.config)
+        self.insight_config = get_insight_configuration(self.config)
+        self.min_parents = self.insight_config["check_model_parents_and_childs"]["min_parents"]
+        self.max_parents = self.insight_config["check_model_parents_and_childs"]["max_parents"]
+        self.min_childs = self.insight_config["check_model_parents_and_childs"]["min_childs"]
+        self.max_childs = self.insight_config["check_model_parents_and_childs"]["max_childs"]
 
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):

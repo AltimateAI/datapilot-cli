@@ -3,8 +3,7 @@ from typing import List
 from typing import Sequence
 from typing import Tuple
 
-from datapilot.config.utils import get_contract_regex_configuration
-from datapilot.config.utils import get_dtypes_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -40,8 +39,9 @@ class CheckColumnNameContract(ChecksInsight):
         super().__init__(*args, **kwargs)
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.pattern = get_contract_regex_configuration(self.config)
-        self.dtypes = get_dtypes_configuration(self.config)
+        self.insight_config = get_insight_configuration(self.config)
+        self.pattern = self.insight_config["check_column_name_contract"]["pattern"]
+        self.dtypes = self.insight_config["check_column_name_contract"]["dtypes"]
         self.dtypes = self.dtypes if self.dtypes else []
         insights = []
         for node_id, node in self.nodes.items():

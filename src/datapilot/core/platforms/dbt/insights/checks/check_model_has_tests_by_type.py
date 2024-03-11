@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_test_type_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -15,7 +15,8 @@ class CheckModelHasTestsByType(ChecksInsight):
     REASON_TO_FLAG = "Models should have tests with specific types for proper validation."
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.test_types = get_test_type_configuration(self.config)
+        self.insight_config = get_insight_configuration(self.config)
+        self.test_types = self.insight_config["check_model_has_tests_by_type"]["test_types"]
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):

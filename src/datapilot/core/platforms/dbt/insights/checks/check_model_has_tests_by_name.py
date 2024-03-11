@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_test_name_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -15,7 +15,8 @@ class CheckModelHasTestsByName(ChecksInsight):
     REASON_TO_FLAG = "Models should have tests with specific names for proper validation."
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.test_names = get_test_name_configuration(self.config)
+        self.insight_config = get_insight_configuration(self.config)
+        self.test_names = self.insight_config["check_model_has_tests_by_name"]["test_names"]
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):

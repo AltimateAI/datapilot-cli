@@ -3,7 +3,7 @@ from typing import Sequence
 from typing import Set
 from typing import Tuple
 
-from datapilot.config.utils import get_meta_keys_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -25,7 +25,8 @@ class CheckModelHasMetaKeys(ChecksInsight):
     )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.meta_keys = get_meta_keys_configuration(self.config)
+        self.insight_config = get_insight_configuration(self.config)
+        self.meta_keys = self.insight_config["check_model_has_meta_keys"]["meta_keys"]
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):

@@ -1,7 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_blacklist_schema_configuration
-from datapilot.config.utils import get_whitelist_schema_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -44,8 +43,9 @@ class CheckModelParentsSchema(ChecksInsight):
         The whitelist and blacklist of schemas are defined in the config file.
         """
         insights = []
-        self.whitelist = get_whitelist_schema_configuration(self.config)
-        self.blacklist = get_blacklist_schema_configuration(self.config)
+        self.insight_config = get_insight_configuration(self.config)
+        self.whitelist = self.insight_config["check_model_parents_schema"]["whitelist"]
+        self.blacklist = self.insight_config["check_model_parents_schema"]["blacklist"]
         self.blacklist = self.blacklist if self.blacklist else []
         for node_id in self.nodes.keys():
             if self.should_skip_model(node_id):

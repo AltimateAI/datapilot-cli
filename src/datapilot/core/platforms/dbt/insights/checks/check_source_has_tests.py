@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_source_test_count_configuration
+from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -16,7 +16,8 @@ class CheckSourceHasTests(ChecksInsight):
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         insights = []
-        source_test_count_threshold = get_source_test_count_configuration(self.config)
+        self.insight_config = get_insight_configuration(self.config)
+        source_test_count_threshold = self.insight_config["check_source_has_tests"]["source_test_count_threshold"]
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
