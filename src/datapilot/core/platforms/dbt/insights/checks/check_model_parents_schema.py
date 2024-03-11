@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_insight_configuration
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -9,10 +9,13 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckModelParentsSchema(ChecksInsight):
-    NAME = "Check Model Parents Schema"
+    NAME = "Model Parents are from an allowed list of schemas"
     ALIAS = "check_model_parents_schema"
     DESCRIPTION = "Ensures the parent models or sources are from certain schema."
     REASON_TO_FLAG = "The model has a different schema as parent model or source."
+
+    WHITELIST_STR = "whitelist"
+    BLACKLIST_STR = "blacklist"
 
     def _build_failure_result(
         self,
@@ -43,10 +46,9 @@ class CheckModelParentsSchema(ChecksInsight):
         The whitelist and blacklist of schemas are defined in the config file.
         """
         insights = []
-        self.insight_config = get_insight_configuration(self.config)
-        self.whitelist = self.insight_config["check_model_parents_schema"]["whitelist"]
-        self.blacklist = self.insight_config["check_model_parents_schema"]["blacklist"]
-        self.blacklist = self.blacklist if self.blacklist else []
+        self.whitelist = get_check_config(self.config, self.ALIAS, self.WHITELIST_STR)
+        self.blacklist = get_check_config(self.config, self.ALIAS, self.BLACKLIST_STR) or []
+
         for node_id in self.nodes.keys():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
@@ -73,6 +75,34 @@ class CheckModelParentsSchema(ChecksInsight):
         if model.resource_type == AltimateResourceType.model:
             for parent in getattr(model.depends_on, "nodes", []):
                 parent_model = self.get_node(parent)
-                if (self.whitelist and (parent_model.schema_name not in self.whitelist)) or (parent_model.schema in self.blacklist):
+                if self.whitelist and (parent_model.schema_name not in self.whitelist):
+                    return parent_model.schema_name
+
+                if self.blacklist and (parent_model.schema_name in self.blacklist):
                     return parent_model.schema_name
         return None
+
+    @classmethod
+    def get_config_schema(cls):
+        config_schema = super().get_config_schema()
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.WHITELIST_STR: {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of schemas that are allowed as parent models or sources.",
+                },
+                cls.BLACKLIST_STR: {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of schemas that are not allowed as parent models or sources.",
+                },
+            },
+            "oneOf": [
+                {"required": ["WHITELIST_STR"], "not": {"required": ["BLACKLIST_STR"]}},
+                {"required": ["BLACKLIST_STR"], "not": {"required": ["WHITELIST_STR"]}},
+            ],
+        }
+        return config_schema

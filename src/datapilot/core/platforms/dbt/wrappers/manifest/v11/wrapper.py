@@ -109,6 +109,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             compiled_code=compiled_code,
             contract=contract,
             meta=node.meta,
+            patch_path=node.patch_path,
         )
 
     def _get_source(self, source: SourceNode) -> AltimateManifestSourceNode:

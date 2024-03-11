@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from typing import ClassVar
 from typing import Dict
 from typing import List
 from typing import Union
@@ -17,6 +18,7 @@ from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import BaseManifestW
 
 class DBTInsight(Insight):
     DEFAULT_SEVERITY = Severity.ERROR
+    FILES_REQUIRED: ClassVar = ["Manifest"]
 
     def __init__(
         self,
@@ -106,3 +108,14 @@ class DBTInsight(Insight):
             return model_unique_id not in self.selected_models
 
         return False
+
+    @classmethod
+    def get_config_schema(cls):
+        return {
+            "name": cls.NAME,
+            "alias": cls.ALIAS,
+            "type": cls.TYPE,
+            "files_required": cls.FILES_REQUIRED,
+            "description": cls.DESCRIPTION,
+            "config": {"$schema": "http://json-schema.org/draft-07/schema#", "type": "object", "properties": {}},
+        }

@@ -1,9 +1,10 @@
 import re
+from typing import ClassVar
 from typing import List
 from typing import Sequence
 from typing import Tuple
 
-from datapilot.config.utils import get_insight_configuration
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -14,8 +15,8 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckColumnNameContract(ChecksInsight):
-    NAME = "Check Column Name Contract"
-    ALIAS = "check_column_name_contract"
+    NAME = "Column name follows contract pattern"
+    ALIAS = "column_name_contract"
     DESCRIPTION = (
         "Checks that column names abide by a contract, as described in a blog post by Emily Riederer. "
         "A contract consists of a regex pattern and a series of data types. "
@@ -33,16 +34,32 @@ class CheckColumnNameContract(ChecksInsight):
         "Update the column names listed above in the model `{model_unique_id}` to adhere to the contract. "
         "Consistent column naming conventions provide valuable context and aids in data understanding and collaboration."
     )
+    PATTERN_STR = "pattern"
+    DATATYPE_STR = "dtype"
+    PATTERNS_LIST_STR = "patterns"
+    DEFAULT_PATTERN_STR = "default_pattern"
+    FILES_REQUIRED: ClassVar = ["Manifest", "Catalog"]
 
     def __init__(self, catalog_wrapper: BaseCatalogWrapper, *args, **kwargs):
         self.catalog = catalog_wrapper
         super().__init__(*args, **kwargs)
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.insight_config = get_insight_configuration(self.config)
-        self.pattern = self.insight_config["check_column_name_contract"]["pattern"]
-        self.dtypes = self.insight_config["check_column_name_contract"]["dtypes"]
-        self.dtypes = self.dtypes if self.dtypes else []
+        self.default_pattern = get_check_config(self.config, self.ALIAS, self.DEFAULT_PATTERN_STR)
+        datatype_configs = get_check_config(self.config, self.ALIAS, self.PATTERNS_LIST_STR)
+        # Patterns : [{"pattern": "^[a-z_]+$", "dtype": "string"}, {"pattern": "^[a-z_]+$", "dtype": "string"}]
+        if not datatype_configs:
+            self.logger.debug(f"Column name contract not found in insight config for {self.ALIAS}. Skipping insight.")
+            return []
+        self.patterns = {
+            pattern.get(self.DATATYPE_STR).lower(): pattern.get(self.PATTERN_STR)
+            for pattern in datatype_configs
+            if pattern.get(self.PATTERN_STR) and pattern.get(self.DATATYPE_STR)
+        }
+        if not self.patterns:
+            self.logger.debug(f"Column name contract not found in insight config for {self.ALIAS}")
+            return []
+
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
@@ -90,11 +107,11 @@ class CheckColumnNameContract(ChecksInsight):
             schema = self.catalog.get_schema()[node_id]
             col_name = col.lower()
             col_type = schema[col]
-            if any(col_type.lower() == dtype.lower() for dtype in self.dtypes if dtype):
-                if re.match(self.pattern, col_name, re.IGNORECASE) is not None:
-                    columns.append(col_name)
-            elif not re.match(self.pattern, col_name, re.IGNORECASE):
-                columns.append(col_name)
+            if col_type.lower() in self.patterns:
+                if re.match(self.patterns[col_type.lower()], col_name, re.IGNORECASE) is None:
+                    columns.append(col)
+            if self.default_pattern and re.match(self.default_pattern, col_name, re.IGNORECASE) is None:
+                columns.append(col)
         return columns
 
     @classmethod
@@ -106,3 +123,34 @@ class CheckColumnNameContract(ChecksInsight):
             return False, "Catalog is required for insight to run."
 
         return True, ""
+
+    @classmethod
+    def get_config_schema(cls):
+        config_schema = super().get_config_schema()
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.DEFAULT_PATTERN_STR: {
+                    "type": "string",
+                    "description": "The regex pattern to check the column name against if no pattern is found for the data type",
+                    "default": "^[a-z_]+$",
+                },
+                cls.PATTERNS_LIST_STR: {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            cls.PATTERN_STR: {"type": "string", "description": "The regex pattern to check the column name against"},
+                            cls.DATATYPE_STR: {"type": "string", "description": "The data type for which the pattern is defined"},
+                            "required": [cls.PATTERN_STR, cls.DATATYPE_STR],
+                        },
+                    },
+                    "description": "A list of patterns to check the column name against for different data types",
+                    "default": [],
+                },
+            },
+            "required": [cls.DEFAULT_PATTERN_STR, cls.PATTERN_STR],
+        }
+        config_schema["files_required"] = cls.FILES_REQUIRED
+        return config_schema

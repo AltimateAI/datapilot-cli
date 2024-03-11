@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from typing import ClassVar
 from typing import Tuple
 
 from datapilot.core.platforms.dbt.insights.base import DBTInsight
@@ -6,6 +7,7 @@ from datapilot.core.platforms.dbt.insights.base import DBTInsight
 
 class ChecksInsight(DBTInsight):
     TYPE = "Checks"
+    FILES_REQUIRED: ClassVar = ["Manifest"]
 
     @abstractmethod
     def generate(self, *args, **kwargs) -> dict:

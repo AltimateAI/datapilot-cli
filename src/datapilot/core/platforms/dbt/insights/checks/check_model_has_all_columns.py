@@ -1,3 +1,4 @@
+from typing import ClassVar
 from typing import List
 from typing import Sequence
 from typing import Set
@@ -13,7 +14,7 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckModelHasAllColumns(ChecksInsight):
-    NAME = "Check Model Has All Columns"
+    NAME = "Model has all columns as per catalog"
     ALIAS = "check_model_has_all_columns"
     DESCRIPTION = (
         "Checks that the model has all columns as defined in the catalog. "
@@ -23,6 +24,7 @@ class CheckModelHasAllColumns(ChecksInsight):
         "Missing columns in the model can lead to data integrity issues and inconsistency in analysis. "
         "It's important to ensure that the model has all the required columns as per the catalog definition."
     )
+    FILES_REQUIRED: ClassVar = ["Manifest", "Catalog"]
 
     def __init__(self, catalog_wrapper: BaseCatalogWrapper, *args, **kwargs):
         self.catalog = catalog_wrapper

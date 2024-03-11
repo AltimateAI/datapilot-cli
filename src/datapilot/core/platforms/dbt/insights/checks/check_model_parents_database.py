@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_insight_configuration
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -13,6 +13,8 @@ class CheckModelParentsDatabase(ChecksInsight):
     ALIAS = "check_model_parents_database"
     DESCRIPTION = "Ensures the parent models or sources are from certain database."
     REASON_TO_FLAG = "The model has a different database as parent model or source."
+    WHITELIST_STR = "whitelist"
+    BLACKLIST_STR = "blacklist"
 
     def _build_failure_result(
         self,
@@ -43,10 +45,10 @@ class CheckModelParentsDatabase(ChecksInsight):
         The whitelist and blacklist of databases are defined in the config file.
         """
         insights = []
-        self.insight_config = get_insight_configuration(self.config)
-        self.whitelist = self.insight_config["check_model_parents_database"]["whitelist"]
-        self.blacklist = self.insight_config["check_model_parents_database"]["blacklist"]
-        self.blacklist = self.blacklist if self.blacklist else []
+
+        self.whitelist = get_check_config(self.config, self.ALIAS, self.WHITELIST_STR)
+        self.blacklist = get_check_config(self.config, self.ALIAS, self.BLACKLIST_STR) or []
+
         for node_id in self.nodes.keys():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
@@ -73,6 +75,38 @@ class CheckModelParentsDatabase(ChecksInsight):
         if model.resource_type == AltimateResourceType.model:
             for parent in getattr(model.depends_on, "nodes", []):
                 parent_model = self.get_node(parent)
-                if (self.whitelist and (parent_model.database not in self.whitelist)) or parent_model.database in self.blacklist:
+                if self.whitelist and (parent_model.database not in self.whitelist):
+                    return parent_model.database
+
+                if self.blacklist and (parent_model.database in self.blacklist):
                     return parent_model.database
         return None
+
+    @classmethod
+    def get_config_schema(cls):
+        config_schema = super().get_config_schema()
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.WHITELIST_STR: {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of databases that are allowed as parent models or sources.",
+                },
+                cls.BLACKLIST_STR: {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of databases that are not allowed as parent models or sources.",
+                },
+                "oneOf": [
+                    {"required": [cls.WHITELIST_STR]},
+                    {"required": [cls.BLACKLIST_STR]},
+                ],
+            },
+            "oneOf": [
+                {"required": ["WHITELIST_STR"], "not": {"required": ["BLACKLIST_STR"]}},
+                {"required": ["BLACKLIST_STR"], "not": {"required": ["WHITELIST_STR"]}},
+            ],
+        }
+        return config_schema

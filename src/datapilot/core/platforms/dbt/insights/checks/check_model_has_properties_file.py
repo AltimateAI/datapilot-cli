@@ -1,14 +1,10 @@
 from typing import List
-from typing import Sequence
-from typing import Set
-from typing import Tuple
 
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckModelHasPropertiesFile(ChecksInsight):
@@ -30,7 +26,7 @@ class CheckModelHasPropertiesFile(ChecksInsight):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.model:
-                status_code, missing_models = self._check_properties_file(node_id)
+                status_code = self._check_properties_file(node_id)
                 if status_code == 1:
                     insights.append(
                         DBTModelInsightResponse(
@@ -38,15 +34,15 @@ class CheckModelHasPropertiesFile(ChecksInsight):
                             package_name=node.package_name,
                             path=node.original_file_path,
                             original_file_path=node.original_file_path,
-                            insight=self._build_failure_result(node_id, missing_models),
+                            insight=self._build_failure_result(node_id),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
         return insights
 
-    def _build_failure_result(self, model_unique_id: str, missing_models: Sequence[str]) -> DBTInsightResult:
+    def _build_failure_result(self, model_unique_id: str) -> DBTInsightResult:
         failure_message = (
-            "The following models do not have a properties file (.yml) defined:\n{missing_models}. "
+            f"The model {model_unique_id} do not have a properties file (.yml) defined."
             "Ensure that each model has a corresponding .yml file for additional configuration and documentation."
         )
         recommendation = (
@@ -57,19 +53,15 @@ class CheckModelHasPropertiesFile(ChecksInsight):
         return DBTInsightResult(
             type=self.TYPE,
             name=self.NAME,
-            message=failure_message.format(
-                missing_models=numbered_list(missing_models),
-            ),
+            message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"missing_models": missing_models, "model_unique_id": model_unique_id},
+            metadata={"model_unique_id": model_unique_id},
         )
 
-    def _check_properties_file(self, node_id) -> Tuple[int, Set[str]]:
+    def _check_properties_file(self, node_id) -> int:
         status_code = 0
-        missing_models = set()
         node = self.get_node(node_id)
         if node.resource_type == AltimateResourceType.model and not node.patch_path:
-            missing_models.add(node.original_file_path)
             status_code = 1
-        return status_code, missing_models
+        return status_code

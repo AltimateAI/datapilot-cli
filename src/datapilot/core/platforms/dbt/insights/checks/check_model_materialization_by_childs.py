@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_insight_configuration
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import VIEW
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
@@ -9,13 +9,14 @@ from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 
 
 class CheckModelMaterializationByChilds(ChecksInsight):
-    NAME = "Check Model Materialization By Childs"
+    NAME = "Model Materialization By Childs"
     ALIAS = "check_model_materialization_by_childs"
     DESCRIPTION = (
         "Checks the model materialization by a given threshold of child models."
         "All models with less child models then the treshold should be materialized as views (or ephemerals), all the rest as tables or incrementals."
     )
     REASON_TO_FLAG = "The model is flagged due to inappropriate materialization: models with child counts above the threshold require robust and efficient data processing, hence they should be materialized as tables or incrementals for optimized query performance and data management."
+    THRESHOLD_CHILDS_STR = "threshold_childs"
 
     def _build_failure_result_view_materialization(
         self,
@@ -75,8 +76,8 @@ class CheckModelMaterializationByChilds(ChecksInsight):
         threshold_childs will be taken from the config file.
         """
         insights = []
-        self.insight_config = get_insight_configuration(self.config)
-        threshold_childs = self.insight_config["check_model_materialization_by_childs"]["threshold_childs"]
+        threshold_childs = get_check_config(self.config, self.ALIAS, self.THRESHOLD_CHILDS_STR)
+
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
@@ -111,3 +112,19 @@ class CheckModelMaterializationByChilds(ChecksInsight):
                     )
                 )
         return insights
+
+    @classmethod
+    def get_config_schema(cls):
+        config_schema = super().get_config_schema()
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.THRESHOLD_CHILDS_STR: {
+                    "type": "integer",
+                    "description": "Threshold from which onwards the materialization should be changed.",
+                    "default": 5,
+                },
+            },
+        }
+        return config_schema

@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_insight_configuration
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -13,6 +13,7 @@ class CheckModelTags(ChecksInsight):
     ALIAS = "check_model_tags"
     DESCRIPTION = "Ensures that the model has only valid tags from the provided list."
     REASON_TO_FLAG = "The model has tags that are not in the valid tags list"
+    TAGS_LIST_STR = "tag_list"
 
     def _build_failure_result(
         self,
@@ -43,8 +44,7 @@ class CheckModelTags(ChecksInsight):
         The provided tag list is in the configuration file.
         """
         insights = []
-        self.insight_config = get_insight_configuration(self.config)
-        self.tag_list = self.insight_config["check_model_tags"]["tag_list"]
+        self.tag_list = get_check_config(self.config, self.ALIAS, self.TAGS_LIST_STR)
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
@@ -70,3 +70,19 @@ class CheckModelTags(ChecksInsight):
         if not self.tag_list:
             return True
         return all(tag in self.tag_list for tag in tags)
+
+    @classmethod
+    def get_config_schema(cls):
+        config_schema = super().get_config_schema()
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.TAGS_LIST_STR: {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of allowed tags for the model. If not provided, all tags are allowed.",
+                    "default": [],
+                },
+            },
+        }
