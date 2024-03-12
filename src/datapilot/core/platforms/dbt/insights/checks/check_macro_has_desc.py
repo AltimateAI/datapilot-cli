@@ -32,6 +32,7 @@ class CheckMacroHasDesc(ChecksInsight):
             message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
+            metadata={"macro_unique_id": node_id},
         )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:

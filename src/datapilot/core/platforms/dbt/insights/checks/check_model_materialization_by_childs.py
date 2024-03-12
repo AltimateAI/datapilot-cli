@@ -77,6 +77,9 @@ class CheckModelMaterializationByChilds(ChecksInsight):
         """
         insights = []
         threshold_childs = get_check_config(self.config, self.ALIAS, self.THRESHOLD_CHILDS_STR)
+        if not threshold_childs:
+            self.logger.info(f"Threshold childs are not provided in the configuration file for the insight {self.ALIAS}")
+            return insights
 
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):

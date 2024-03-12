@@ -19,7 +19,7 @@ class CheckModelHasTestsByName(ChecksInsight):
     TEST_COUNT_STR = "min_count"
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.test_list = get_check_config(self.config, self.ALIAS, self.TESTS_LIST_STR)
+        self.test_list = get_check_config(self.config, self.ALIAS, self.TESTS_LIST_STR) or []
         self.tests = {
             test.get(self.TEST_NAME_STR): test.get(self.TEST_COUNT_STR, 0) for test in self.test_list if test.get(self.TEST_NAME_STR)
         }

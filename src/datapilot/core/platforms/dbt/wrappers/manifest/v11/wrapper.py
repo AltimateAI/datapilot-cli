@@ -299,7 +299,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
     def get_macros(self) -> Dict[str, AltimateManifestMacroNode]:
         macros = {}
         for macro in self.manifest.macros.values():
-            if macro.resource_type.value == AltimateResourceType.macro.value:
+            if macro.resource_type.value == AltimateResourceType.macro.value and macro.package_name == self.get_package():
                 macros[macro.unique_id] = self._get_macro(macro)
         return macros
 

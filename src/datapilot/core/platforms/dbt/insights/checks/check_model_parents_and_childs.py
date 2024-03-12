@@ -19,8 +19,8 @@ class CheckModelParentsAndChilds(ChecksInsight):
     )
     MIN_PARENTS_STR = "min_parents"
     MAX_PARENTS_STR = "max_parents"
-    MIN_CHILDS_STR = "min_childs"
-    MAX_CHILDS_STR = "max_childs"
+    MIN_CHILDS_STR = "min_children"
+    MAX_CHILDS_STR = "max_children"
 
     def _build_failure_result(
         self,
@@ -60,10 +60,16 @@ class CheckModelParentsAndChilds(ChecksInsight):
         The parent and corresponding child information is present in self.children_map
         """
         insights = []
-        self.min_parents = get_check_config(self.config, self.ALIAS, self.MIN_PARENTS_STR)
+        self.min_parents = get_check_config(self.config, self.ALIAS, self.MIN_PARENTS_STR) or 1
         self.max_parents = get_check_config(self.config, self.ALIAS, self.MAX_PARENTS_STR)
-        self.min_childs = get_check_config(self.config, self.ALIAS, self.MIN_CHILDS_STR)
+        self.min_childs = get_check_config(self.config, self.ALIAS, self.MIN_CHILDS_STR) or 0
         self.max_childs = get_check_config(self.config, self.ALIAS, self.MAX_CHILDS_STR)
+
+        if not self.max_childs and not self.max_parents:
+            self.logger.info(
+                "max_children and max_parents are required values in the configuration. Please provide the required values. Skipping the insight."
+            )
+            return insights
 
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):

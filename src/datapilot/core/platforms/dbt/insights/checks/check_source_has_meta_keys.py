@@ -54,8 +54,11 @@ class CheckSourceHasMetaKeys(ChecksInsight):
         """
         insights = []
         self.insight_config = get_insight_configuration(self.config)
-        self.meta_keys = get_check_config(self.config, self.ALIAS, self.META_KEYS_STR)
+        self.meta_keys = get_check_config(self.config, self.ALIAS, self.META_KEYS_STR) or []
         self.allow_extra_keys = get_check_config(self.config, self.ALIAS, self.ALLOW_EXTRA_KEYS_STR)
+        if not self.meta_keys and not self.allow_extra_keys:
+            self.logger.error(f"Meta keys are not provided in the configuration file for the insight: {self.ALIAS}")
+            return insights
 
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
