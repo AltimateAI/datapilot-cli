@@ -9,8 +9,7 @@ from typing import Dict
 from typing import List
 from typing import Union
 
-import yaml
-
+from datapilot.config.config import load_config
 from datapilot.schemas.nodes import ModelNode
 from datapilot.schemas.nodes import SourceNode
 
@@ -219,18 +218,6 @@ def run_macro(macro: str, base_path: str) -> str:
     return dbt_compile.stdout
 
 
-def parse_yaml_file(file: str) -> Dict:
-    try:
-        with Path(file).open() as f:
-            return yaml.safe_load(f)
-    except FileNotFoundError:
-        raise
-    except yaml.YAMLError as e:
-        raise ValueError(f"Invalid YAML file: {file}") from e
-    except IsADirectoryError as e:
-        raise ValueError(f"Please provide a A valid file path. {file} is a directory") from e
-
-
 def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str, base_path: str = "./"):
     try:
         yaml_files = [Path(f).name for f in changed_files if Path(f).suffix in [".yml", ".yaml"]]
@@ -240,7 +227,7 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
         source_set = set()
 
         for file in yaml_files:
-            parsed_file = parse_yaml_file(file)
+            parsed_file = load_config(file)
             if "models" in parsed_file:
                 for model in parsed_file["models"]:
                     model_set.update(model.get("name", ""))
