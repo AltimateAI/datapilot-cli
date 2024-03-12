@@ -1,7 +1,7 @@
 from typing import Dict
 from typing import List
 
-from datapilot.config.utils import get_insight_configuration
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -19,12 +19,15 @@ class CheckModelHasTestsByGroup(ChecksInsight):
     TEST_COUNT_STR = "min_count"
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.test_list = get_insight_configuration(self.config, self.ALIAS, self.TESTS_LIST_STR)
+        self.test_list = get_check_config(self.config, self.ALIAS, self.TESTS_LIST_STR)
         self.test_groups = {
             tuple(test.get(self.TEST_GROUP_STR, [])): test.get(self.TEST_COUNT_STR, 0)
             for test in self.test_list
             if test.get(self.TEST_GROUP_STR)
         }
+        if not self.test_groups:
+            self.logger.warning(f"No test groups found in the configuration for {self.ALIAS}. Skipping the insight.")
+            return []
         insights = []
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):
@@ -113,3 +116,4 @@ class CheckModelHasTestsByGroup(ChecksInsight):
             },
             "required": [cls.TESTS_LIST_STR],
         }
+        return config_schema

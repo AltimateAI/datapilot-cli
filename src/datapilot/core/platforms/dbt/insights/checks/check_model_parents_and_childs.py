@@ -2,7 +2,6 @@ from typing import List
 from typing import Optional
 
 from datapilot.config.utils import get_check_config
-from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -61,11 +60,10 @@ class CheckModelParentsAndChilds(ChecksInsight):
         The parent and corresponding child information is present in self.children_map
         """
         insights = []
-        self.insight_config = get_insight_configuration(self.config)
-        self.min_parents = get_check_config(self.insight_config, self.ALIAS, self.MIN_PARENTS_STR)
-        self.max_parents = get_check_config(self.insight_config, self.ALIAS, self.MAX_PARENTS_STR)
-        self.min_childs = get_check_config(self.insight_config, self.ALIAS, self.MIN_CHILDS_STR)
-        self.max_childs = get_check_config(self.insight_config, self.ALIAS, self.MAX_CHILDS_STR)
+        self.min_parents = get_check_config(self.config, self.ALIAS, self.MIN_PARENTS_STR)
+        self.max_parents = get_check_config(self.config, self.ALIAS, self.MAX_PARENTS_STR)
+        self.min_childs = get_check_config(self.config, self.ALIAS, self.MIN_CHILDS_STR)
+        self.max_childs = get_check_config(self.config, self.ALIAS, self.MAX_CHILDS_STR)
 
         for node_id, node in self.nodes.items():
             if self.should_skip_model(node_id):

@@ -1,3 +1,4 @@
+from typing import ClassVar
 from typing import List
 from typing import Sequence
 from typing import Set
@@ -17,6 +18,7 @@ class CheckSourceHasAllColumns(ChecksInsight):
     ALIAS = "check_source_has_all_columns"
     DESCRIPTION = "Ensures that all columns in the database are also specified in the properties file. (usually schema.yml)."
     REASON_TO_FLAG = "Missing columns in the source can lead to confusion and inconsistency in analysis. "
+    FILES_REQUIRED: ClassVar = ["Manifest", "Catalog"]
 
     def __init__(self, catalog_wrapper: BaseCatalogWrapper, *args, **kwargs):
         self.catalog = catalog_wrapper

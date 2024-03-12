@@ -1,6 +1,7 @@
 from typing import List
 from typing import Set
 
+from datapilot.config.utils import get_check_config
 from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
@@ -15,16 +16,23 @@ class CheckSourceHasMetaKeys(ChecksInsight):
     ALIAS = "check_source_has_meta_keys"
     DESCRIPTION = "Check if the source has meta keys"
     REASON_TO_FLAG = "The source table is missing a description. Ensure that the source table has a description."
+    META_KEYS_STR = "meta_keys"
+    ALLOW_EXTRA_KEYS_STR = "allow_extra_keys"
 
     def _build_failure_result(
         self,
         source_id: int,
-        diff: Set[str],
+        missing: Set[str],
+        extra: Set[str],
     ) -> DBTInsightResult:
         """
         Build failure result for the insight if a model's parent schema is not whitelist or in blacklist.
         """
-        failure_message = f"The source:{source_id} does not have the following meta keys defined: {numbered_list(diff)}\n"
+        failure_message = ""
+        if missing:
+            failure_message += f"The source:{source_id} does not have the following meta keys defined: {numbered_list(missing)}\n"
+        if extra:
+            failure_message += f"The source:{source_id} has the following extra meta keys defined: {numbered_list(extra)}\n"
 
         recommendation = "Define the meta keys for the source to ensure consistency in analysis."
 
@@ -46,30 +54,62 @@ class CheckSourceHasMetaKeys(ChecksInsight):
         """
         insights = []
         self.insight_config = get_insight_configuration(self.config)
-        meta_keys = self.insight_config["check_source_has_meta_keys"]["meta_keys"]
+        self.meta_keys = get_check_config(self.config, self.ALIAS, self.META_KEYS_STR)
+        self.allow_extra_keys = get_check_config(self.config, self.ALIAS, self.ALLOW_EXTRA_KEYS_STR)
+
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping source {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.source:
-                diff = self._check_source_has_meta_keys(node_id, meta_keys)
-                if diff:
+                status_code, missing, extra = self._check_source_has_meta_keys(node_id)
+                if status_code:
                     insights.append(
                         DBTModelInsightResponse(
                             unique_id=node_id,
                             package_name=node.package_name,
                             original_file_path=node.original_file_path,
                             path=node.original_file_path,
-                            insight=self._build_failure_result(node_id, diff),
+                            insight=self._build_failure_result(node_id, missing, extra),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
         return insights
 
-    def _check_source_has_meta_keys(self, source_unique_id: str, meta_keys: List[str]):
-        source = self.get_node(source_unique_id)
-        if len(source.meta) > 0:
-            source_meta = set(source.meta.keys())
-            diff = set(meta_keys).difference(source_meta)
-            return diff
-        return set(meta_keys)
+    def _check_source_has_meta_keys(self, source_unique_id: str):
+        status_code = 0
+        model = self.get_node(source_unique_id)
+        meta = model.meta.dict() if model.meta else {}
+        model_meta_keys = set(meta.keys())
+        missing_keys = None
+        extra_keys = None
+        if model.meta:
+            missing_keys = model_meta_keys - set(model.meta.keys())
+        if missing_keys:
+            status_code = 1
+        if not self.allow_extra_keys:
+            extra_keys = set(model.meta.keys()) - model_meta_keys
+        return status_code, missing_keys, extra_keys
+
+    @classmethod
+    def get_config_schema(cls):
+        config_schema = super().get_config_schema()
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.META_KEYS_STR: {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                    },
+                    "description": "A list of meta keys that should be present in the model.",
+                },
+                cls.ALLOW_EXTRA_KEYS_STR: {
+                    "type": "boolean",
+                    "default": False,
+                },
+                "required": [cls.META_KEYS_STR],
+            },
+        }
+        return config_schema

@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_insight_configuration
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -13,6 +13,8 @@ class CheckSourceChilds(ChecksInsight):
     ALIAS = "check_source_childs"
     DESCRIPTION = "Check the source has a specific number (max/min) of childs"
     REASON_TO_FLAG = "The source has a number of childs that is not in the valid range"
+    MIN_CHILDS_STR = "min_childs"
+    MAX_CHILDS_STR = "max_childs"
 
     def _build_failure_result(
         self,
@@ -44,9 +46,8 @@ class CheckSourceChilds(ChecksInsight):
         The min and max number of childs is in the configuration file.
         """
         insights = []
-        self.insight_config = get_insight_configuration(self.config)
-        self.min_childs = self.insight_config["check_source_childs"]["min_childs"]
-        self.max_childs = self.insight_config["check_source_childs"]["max_childs"]
+        self.min_childs = get_check_config(self.config, self.ALIAS, self.MIN_CHILDS_STR)
+        self.max_childs = get_check_config(self.config, self.ALIAS, self.MAX_CHILDS_STR)
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
@@ -75,3 +76,23 @@ class CheckSourceChilds(ChecksInsight):
         if self.max_childs and len(source_childs) > self.max_childs:
             return False
         return True
+
+    @classmethod
+    def get_config_schema(cls):
+        config_schema = super().get_config_schema()
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.MAX_CHILDS_STR: {
+                    "type": "integer",
+                    "description": "The maximum number of childs a model can have.",
+                },
+                cls.MIN_CHILDS_STR: {
+                    "type": "integer",
+                    "description": "The minimum number of childs a model can have.",
+                    "default": "0",
+                },
+            },
+        }
+        return config_schema

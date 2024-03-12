@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_insight_configuration
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -13,6 +13,7 @@ class CheckSourceTags(ChecksInsight):
     ALIAS = "check_source_tags"
     DESCRIPTION = "Ensures that the source has only valid tags from the provided list."
     REASON_TO_FLAG = "The source has tags that are not in the valid tags list"
+    TESTS_STR = "tags"
 
     def _build_failure_result(
         self,
@@ -23,7 +24,7 @@ class CheckSourceTags(ChecksInsight):
         Build failure result for the insight if a source's tags are not in the provided tag list.
         """
 
-        failure_message = f"The source:{node_id}'s tags are not in the provided tag list:\n"
+        failure_message = f"The source:{node_id}'s tags: {tags} are not in the provided tag list: {self.tag_list}\n"
 
         recommendation = "Update the source's tags to adhere to the provided tag list."
 
@@ -33,7 +34,7 @@ class CheckSourceTags(ChecksInsight):
             message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"tags": tags},
+            metadata={"tags": tags, "source_id": node_id},
         )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
@@ -43,30 +44,34 @@ class CheckSourceTags(ChecksInsight):
         The provided tag list is in the configuration file.
         """
         insights = []
-        self.insight_config = get_insight_configuration(self.config)
-        self.tag_list = self.insight_config["check_source_tags"]["tag_list"]
+        self.tag_list = get_check_config(self.config, self.ALIAS, self.TESTS_STR)
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping source {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.source:
-                if not self.valid_tag(node.tags):
+                tag_list = self.valid_tag(node.tags)
+                if tag_list:
                     insights.append(
                         DBTModelInsightResponse(
                             unique_id=node_id,
                             package_name=node.package_name,
                             original_file_path=node.original_file_path,
                             path=node.original_file_path,
-                            insight=self._build_failure_result(node_id, node.tags),
+                            insight=self._build_failure_result(node_id, tag_list),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
         return insights
 
-    def valid_tag(self, tags: List[str]) -> bool:
+    def valid_tag(self, tags: List[str]) -> List[str]:
         """
         Check if the tags of the source are in the provided tag list.
         """
         if not self.tag_list:
             return True
-        return all(tag in self.tag_list for tag in tags)
+        tag_list = []
+        for tag in tags:
+            if tag not in self.tag_list:
+                tag_list.append(tag)
+        return tag_list

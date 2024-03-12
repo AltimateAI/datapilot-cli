@@ -1,6 +1,6 @@
 from typing import List
 
-from datapilot.config.utils import get_insight_configuration
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -13,25 +13,25 @@ class CheckSourceHasTests(ChecksInsight):
     ALIAS = "check_source_has_tests"
     DESCRIPTION = "Check if the source has tests"
     REASON_TO_FLAG = "The source table is missing tests. Ensure that the source table has tests."
+    TESTS_STR = "tests"
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         insights = []
-        self.insight_config = get_insight_configuration(self.config)
-        source_test_count_threshold = self.insight_config["check_source_has_tests"]["source_test_count_threshold"]
+        source_threshold = get_check_config(self.config, self.ALIAS, self.TESTS_STR)
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.source:
                 source_test_count = self.get_source_test_count(node_id)
-                if source_test_count < source_test_count_threshold:
+                if source_test_count < source_threshold:
                     insights.append(
                         DBTModelInsightResponse(
                             unique_id=node_id,
                             package_name=node.package_name,
                             path=node.original_file_path,
                             original_file_path=node.original_file_path,
-                            insight=self._build_failure_result(node_id, source_test_count, source_test_count_threshold),
+                            insight=self._build_failure_result(node_id, source_test_count, source_threshold),
                             severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                         )
                     )
@@ -64,3 +64,20 @@ class CheckSourceHasTests(ChecksInsight):
             if child.resource_type == AltimateResourceType.test:
                 count += 1
         return count
+
+    @classmethod
+    def get_config_schema(cls):
+        config_schema = super().get_config_schema()
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.TESTS_STR: {
+                    "type": "integer",
+                    "description": "Minimum number of tests required for each source",
+                    "default": 0,
+                },
+            },
+            "required": [cls.TESTS_STR],
+        }
+        return config_schema

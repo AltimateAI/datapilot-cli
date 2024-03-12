@@ -2,7 +2,6 @@ from typing import Dict
 from typing import List
 
 from datapilot.config.utils import get_check_config
-from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -20,11 +19,13 @@ class CheckModelHasTestsByType(ChecksInsight):
     TEST_COUNT_STR = "min_count"
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.insight_config = get_insight_configuration(self.config)
-        self.test_list = get_check_config(self.insight_config, self.ALIAS, self.TESTS_LIST_STR)
+        self.test_list = get_check_config(self.config, self.ALIAS, self.TESTS_LIST_STR)
         self.tests = {
             test.get(self.TEST_NAME_STR): test.get(self.TEST_COUNT_STR, 0) for test in self.test_list if test.get(self.TEST_NAME_STR)
         }
+        if not self.tests:
+            self.logger.warning(f"No tests found in the configuration for {self.ALIAS}. Skipping the insight.")
+            return []
 
         insights = []
         for node_id, node in self.nodes.items():
@@ -66,19 +67,18 @@ class CheckModelHasTestsByType(ChecksInsight):
             metadata={"model_unique_id": model_unique_id, "missing_tests": missing_tests},
         )
 
-    def _model_has_tests_by_type(self, node_id, test_types: List[str]) -> bool:
+    def _model_has_tests_by_type(self, node_id) -> bool:
         """
         For model, check all dependencies and if node type is test, check if it has the required types.
         Only return true if all child.type in test_types
         """
         test_count = {}
-
         for child_id in self.children_map.get(node_id, []):
             child = self.get_node(child_id)
             if child.resource_type == AltimateResourceType.test:
                 test_count[child.test_type] = test_count.get(child.test_type, 0) + 1
         missing_tests = []
-        for test_type in test_types:
+        for test_type in self.tests.keys():
             if test_count.get(test_type, 0) < self.tests.get(test_type, 0):
                 missing_tests.append(
                     {
@@ -112,3 +112,4 @@ class CheckModelHasTestsByType(ChecksInsight):
             },
             "required": [cls.TESTS_LIST_STR],
         }
+        return config_schema
