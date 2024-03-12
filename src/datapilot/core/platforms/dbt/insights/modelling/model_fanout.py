@@ -1,11 +1,11 @@
 from typing import List
 
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.modelling.base import DBTModellingInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.schemas.constants import CONFIG_METRICS
 
 
 class DBTModelFanout(DBTModellingInsight):
@@ -68,16 +68,8 @@ class DBTModelFanout(DBTModellingInsight):
             },
         )
 
-    def _get_fanout_threshold(self) -> int:
-        # Check if metrics configuration and specific metric alias are present in the config
-        metrics_config = self.config.get(CONFIG_METRICS, {})
-        metric_config = metrics_config.get(self.ALIAS, {})
-
-        # Return the configured fanout threshold or the default if not specified
-        return metric_config.get(self.FANOUT_THRESHOLD_STR, self.FANOUT_THRESHOLD)
-
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        fanout_threshold = self._get_fanout_threshold()
+        fanout_threshold = get_check_config(self.config, self.ALIAS, self.FANOUT_THRESHOLD_STR) or self.FANOUT_THRESHOLD
         insights = []
         self.logger.debug(f"Checking for models with fanout greater than {fanout_threshold}")
         for parent, children_set in self.children_map.items():
@@ -116,3 +108,24 @@ class DBTModelFanout(DBTModellingInsight):
 
         self.logger.debug(f"Found {len(insights)} models with high fanout")
         return insights
+
+    @classmethod
+    def get_config_schema(cls):
+        """
+        :return: The configuration schema for the test coverage insight.
+        """
+        config_schema = super().get_config_schema()
+
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.FANOUT_THRESHOLD_STR: {
+                    "type": "integer",
+                    "description": "The minimum test coverage percentage required for the models in the project",
+                    "default": cls.FANOUT_THRESHOLD,
+                },
+                "required": [cls.FANOUT_THRESHOLD_STR],
+            },
+        }
+        return config_schema

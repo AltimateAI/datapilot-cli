@@ -1,10 +1,10 @@
 from typing import List
 
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.performance.base import DBTPerformanceInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTProjectInsightResponse
-from datapilot.schemas.constants import CONFIG_METRICS
 from datapilot.utils.formatting.utils import numbered_list
 
 
@@ -59,14 +59,8 @@ class DBTChainViewLinking(DBTPerformanceInsight):
             },
         )
 
-    def _get_chain_length(self):
-        metrics_config = self.config.get(CONFIG_METRICS, {})
-        metric_config = metrics_config.get(self.ALIAS, {})
-        # Return the configured fanout threshold or the default if not specified
-        return metric_config.get(self.CHAIN_LENGTH_STR, self.CHAIN_LENGTH)
-
     def generate(self, *args, **kwargs) -> List[DBTProjectInsightResponse]:
-        chain_length = self._get_chain_length()
+        chain_length = get_check_config(self.config, self.ALIAS, self.CHAIN_LENGTH_STR) or self.CHAIN_LENGTH
         chain_views = self.find_long_chains(chain_length)
 
         if chain_views:
@@ -80,3 +74,24 @@ class DBTChainViewLinking(DBTPerformanceInsight):
                 )
             ]
         return []
+
+    @classmethod
+    def get_config_schema(cls):
+        """
+        :return: The configuration schema for the test coverage insight.
+        """
+        config_schema = super().get_config_schema()
+
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.CHAIN_LENGTH_STR: {
+                    "type": "integer",
+                    "description": "The minimum test coverage percentage required for the models in the project",
+                    "default": cls.CHAIN_LENGTH,
+                },
+                "required": [cls.CHAIN_LENGTH_STR],
+            },
+        }
+        return config_schema
