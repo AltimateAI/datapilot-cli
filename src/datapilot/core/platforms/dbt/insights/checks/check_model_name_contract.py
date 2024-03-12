@@ -1,4 +1,5 @@
 import re
+from typing import Dict
 from typing import List
 
 from datapilot.config.utils import get_check_config
@@ -25,7 +26,7 @@ class CheckModelNameContract(ChecksInsight):
     def _build_failure_result(
         self,
         node_id: str,
-        failure: dict[str, str],
+        failure: Dict[str, str],
     ) -> DBTInsightResult:
         """
         Build failure result for the insight if a column has a different name that doesn't match the contract.
