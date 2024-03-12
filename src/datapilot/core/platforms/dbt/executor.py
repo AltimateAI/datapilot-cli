@@ -53,6 +53,7 @@ class DBTInsightGenerator:
         self.macros = self.manifest_wrapper.get_macros()
         self.sources = self.manifest_wrapper.get_sources()
         self.exposures = self.manifest_wrapper.get_exposures()
+        self.seeds = self.manifest_wrapper.get_seeds()
         self.children_map = self.manifest_wrapper.parent_to_child_map(self.nodes)
         self.tests = self.manifest_wrapper.get_tests()
         self.project_name = self.manifest_wrapper.get_package()
@@ -111,6 +112,7 @@ class DBTInsightGenerator:
                     nodes=self.nodes,
                     macros=self.macros,
                     sources=self.sources,
+                    seeds=self.seeds,
                     exposures=self.exposures,
                     children_map=self.children_map,
                     tests=self.tests,

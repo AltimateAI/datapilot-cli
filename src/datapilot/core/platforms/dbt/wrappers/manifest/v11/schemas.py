@@ -42,3 +42,6 @@ TEST_TYPE_TO_NODE_MAP: Dict[str, Type] = {
     GENERIC: [GenericTestNode],
     SINGULAR: [SingularTestNode],
 }
+
+
+SeedNodeMap = SeedNode

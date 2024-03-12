@@ -67,8 +67,11 @@ class CheckMacroArgsHaveDesc(ChecksInsight):
         """
         Check if the macro has descriptions for its arguments.
         """
-        macro = self.get_node(macro_id) or []
-        for arg in macro.arguments:
+        macro = self.get_node(macro_id)
+        if not macro:
+            return True
+        args = macro.arguments or []
+        for arg in args:
             if not arg.description:
                 return False
         return True

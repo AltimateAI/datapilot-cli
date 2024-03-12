@@ -39,7 +39,7 @@ class CheckSourceHasFreshness(ChecksInsight):
         response for the check.
         Ensures that the source has freshness options
         """
-        self.freshness_keys = get_check_config(self.config, self.ALIAS, self.FRESHNESS_STR)
+        self.freshness_keys = get_check_config(self.config, self.ALIAS, self.FRESHNESS_STR) or []
         insights = []
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):

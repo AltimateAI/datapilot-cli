@@ -13,6 +13,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateSeedNode
 from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import BaseManifestWrapper
 
 
@@ -27,6 +28,7 @@ class DBTInsight(Insight):
         sources: Dict[str, AltimateManifestSourceNode],
         exposures: Dict[str, AltimateManifestExposureNode],
         tests: Dict[str, AltimateManifestTestNode],
+        seeds: Dict[str, AltimateSeedNode],
         macros: Dict[str, AltimateManifestMacroNode],
         children_map: Dict[str, List[str]],
         project_name: str,
@@ -37,10 +39,11 @@ class DBTInsight(Insight):
     ):
         self.manifest = manifest_wrapper
         self.nodes = nodes
-        self.macros = macros
+        self.macros = macros or {}
         self.sources = sources
         self.exposures = exposures
         self.tests = tests
+        self.seeds = seeds
         self.children_map = children_map
         self.project_name = project_name
         self.selected_models = selected_models
@@ -69,6 +72,8 @@ class DBTInsight(Insight):
             return self.tests[node_id]
         elif node_id in self.macros:
             return self.macros[node_id]
+        elif node_id in self.seeds:
+            return self.seeds[node_id]
         else:
             self.logger.debug(f"Model {node_id} not found in manifest")
             return None

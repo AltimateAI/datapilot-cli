@@ -62,7 +62,7 @@ class CheckModelParentsSchema(ChecksInsight):
                         path=self.nodes[node_id].original_file_path,
                         original_file_path=self.nodes[node_id].original_file_path,
                         insight=self._build_failure_result(node_id, parent_schema),
-                        severity=get_severity(self.nodes[node_id].resource_type),
+                        severity=get_severity(self.config, self.ALIAS, self.DEFAULT_SEVERITY),
                     )
                 )
         return insights
@@ -75,6 +75,12 @@ class CheckModelParentsSchema(ChecksInsight):
         if model.resource_type == AltimateResourceType.model:
             for parent in getattr(model.depends_on, "nodes", []):
                 parent_model = self.get_node(parent)
+                if not parent_model:
+                    continue
+
+                if parent_model.resource_type not in [AltimateResourceType.model, AltimateResourceType.source]:
+                    continue
+
                 if self.whitelist and (parent_model.schema_name not in self.whitelist):
                     return parent_model.schema_name
 

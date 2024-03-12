@@ -17,7 +17,7 @@ class CheckSourceHasTests(ChecksInsight):
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         insights = []
-        source_threshold = get_check_config(self.config, self.ALIAS, self.TESTS_STR)
+        source_threshold = get_check_config(self.config, self.ALIAS, self.TESTS_STR) or 1
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")

@@ -75,6 +75,12 @@ class CheckModelParentsDatabase(ChecksInsight):
         if model.resource_type == AltimateResourceType.model:
             for parent in getattr(model.depends_on, "nodes", []):
                 parent_model = self.get_node(parent)
+                if not parent_model:
+                    continue
+
+                if parent_model.resource_type not in [AltimateResourceType.model, AltimateResourceType.source]:
+                    continue
+
                 if self.whitelist and (parent_model.database not in self.whitelist):
                     return parent_model.database
 

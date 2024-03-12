@@ -45,6 +45,14 @@ Manifest = Union[
 Catalog = CatalogV1
 
 
+class AltimateDocs(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    show: Optional[bool] = True
+    node_color: Optional[Optional[str]] = None
+
+
 class AltimateDependsOn(BaseModel):
     nodes: Optional[List[str]]
     macros: Optional[List[str]]
@@ -192,6 +200,79 @@ class AltimateExternalTable(BaseModel):
 
 class AltimateSourceConfig(BaseModel):
     enabled: Optional[bool] = True
+
+
+class AltimateDeferRelation(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
+    database: Optional[str]
+    schema_name: str
+    alias: str
+    relation_name: Optional[str]
+
+
+class AltimateSeedConfig(BaseModel):
+    class Config:
+        extra = Extra.allow
+
+    _extra: Optional[Dict[str, Any]] = None
+    enabled: Optional[bool] = True
+    alias: Optional[Optional[str]] = None
+    schema_: Optional[Optional[str]] = None
+    database: Optional[Optional[str]] = None
+    tags: Optional[Union[List[str], str]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[Optional[str]] = None
+    materialized: Optional[str] = "seed"
+    incremental_strategy: Optional[Optional[str]] = None
+    persist_docs: Optional[Dict[str, Any]] = None
+    post_hook: Optional[List[AltimateHook]]
+    pre_hook: Optional[List[AltimateHook]]
+    quoting: Optional[Dict[str, Any]] = None
+    column_types: Optional[Dict[str, Any]] = None
+    full_refresh: Optional[Optional[bool]] = None
+    unique_key: Optional[Optional[Union[str, List[str]]]] = None
+    on_schema_change: Optional[Optional[str]] = "ignore"
+    on_configuration_change: Optional[Any] = None
+    grants: Optional[Dict[str, Any]] = None
+    packages: Optional[List[str]] = None
+    docs: Optional[AltimateDocs] = None
+    contract: Optional[Any] = None
+    delimiter: Optional[str] = ","
+    quote_columns: Optional[Optional[bool]] = None
+
+
+class AltimateSeedNode(BaseModel):
+    database: Optional[str]
+    schema_name: str
+    name: str
+    resource_type: AltimateResourceType
+    package_name: str
+    path: str
+    original_file_path: str
+    unique_id: str
+    fqn: List[str]
+    alias: str
+    checksum: Optional[AltimateFileHash]
+    config: Optional[AltimateSeedConfig] = None
+    tags: Optional[List[str]] = None
+    description: Optional[str] = ""
+    columns: Optional[Dict[str, AltimateManifestColumnInfo]] = None
+    meta: Optional[Dict[str, Any]] = None
+    group: Optional[Optional[str]] = None
+    docs: Optional[Any] = None
+    patch_path: Optional[Optional[str]] = None
+    build_path: Optional[Optional[str]] = None
+    deferred: Optional[bool] = False
+    unrendered_config: Optional[Dict[str, Any]] = None
+    created_at: Optional[float] = None
+    config_call_dict: Optional[Dict[str, Any]] = None
+    relation_name: Optional[Optional[str]] = None
+    raw_code: Optional[str] = ""
+    root_path: Optional[Optional[str]] = None
+    depends_on: Optional[AltimateDependsOn] = None
+    defer_relation: Optional[Optional[AltimateDeferRelation]] = None
 
 
 class AltimateManifestSourceNode(BaseModel):
@@ -349,14 +430,6 @@ class AltimateManifestTestNode(BaseModel):
     compiled_path: Optional[Optional[str]] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[Optional[str]] = None
-
-
-class AltimateDocs(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
-    show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
 
 
 class AltimateMacroArgument(BaseModel):

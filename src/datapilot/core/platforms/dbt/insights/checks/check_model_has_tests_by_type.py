@@ -21,7 +21,7 @@ class CheckModelHasTestsByType(ChecksInsight):
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         self.test_list = get_check_config(self.config, self.ALIAS, self.TESTS_LIST_STR) or []
         self.tests = {
-            test.get(self.TEST_NAME_STR): test.get(self.TEST_COUNT_STR, 0) for test in self.test_list if test.get(self.TEST_NAME_STR)
+            test.get(self.TEST_TYPE_STR): test.get(self.TEST_COUNT_STR, 0) for test in self.test_list if test.get(self.TEST_TYPE_STR)
         }
         if not self.tests:
             self.logger.warning(f"No tests found in the configuration for {self.ALIAS}. Skipping the insight.")
@@ -76,6 +76,7 @@ class CheckModelHasTestsByType(ChecksInsight):
         for child_id in self.children_map.get(node_id, []):
             child = self.get_node(child_id)
             if child.resource_type == AltimateResourceType.test:
+                self.logger.info(f"child_id: {child_id}, child: {type(child)}")
                 test_count[child.test_type] = test_count.get(child.test_type, 0) + 1
         missing_tests = []
         for test_type in self.tests.keys():

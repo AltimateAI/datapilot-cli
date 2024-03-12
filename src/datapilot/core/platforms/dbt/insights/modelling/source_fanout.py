@@ -96,12 +96,12 @@ class DBTSourceFanout(DBTModellingInsight):
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "object",
             "properties": {
-                cls.FANOUT_THRESHOLD_STR: {
+                cls.SOURCE_FANOUT_THRESHOLD_STR: {
                     "type": "integer",
                     "description": "The minimum test coverage percentage required for the models in the project",
-                    "default": cls.FANOUT_THRESHOLD,
+                    "default": cls.SOURCE_FANOUT_THRESHOLD,
                 },
-                "required": [cls.FANOUT_THRESHOLD_STR],
+                "required": [cls.SOURCE_FANOUT_THRESHOLD_STR],
             },
         }
         return config_schema

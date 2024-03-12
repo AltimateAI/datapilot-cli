@@ -31,7 +31,7 @@ class CheckSourceHasTestsByGroup(ChecksInsight):
                 self.logger.debug(f"Skipping source {node_id} as it is not enabled for selected models")
                 continue
             if node.resource_type == AltimateResourceType.source:
-                missing_test_groups = self._model_has_tests_by_group(node_id)
+                missing_test_groups = self._source_has_tests_by_group(node_id)
 
                 if missing_test_groups:
                     insights.append(
