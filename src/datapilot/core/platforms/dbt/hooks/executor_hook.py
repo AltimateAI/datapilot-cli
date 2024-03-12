@@ -5,7 +5,7 @@ from typing import Optional
 from typing import Sequence
 
 from datapilot.config.config import load_config
-from datapilot.config.utils import get_base_folder_configuration
+from datapilot.config.utils import get_insight_project_path
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
@@ -34,16 +34,17 @@ def main(argv: Optional[Sequence[str]] = None):
         config = load_config(args[0].config_path[0])
 
     changed_files = args[1]
-    base_folder = get_base_folder_configuration(config)
-    tmp_folder = base_folder if base_folder else get_tmp_dir_path()
+
+    tmp_folder = get_tmp_dir_path()
     manifest_path = Path(tmp_folder / "manifest.json")
     catalog_path = Path(tmp_folder / "catalog.json")
-    generate_partial_manifest_catalog(
-        changed_files,
-        manifest_path=manifest_path,
-        catalog_path=catalog_path,
+    base_path = get_insight_project_path(config)
+    selected_models = generate_partial_manifest_catalog(
+        changed_files, manifest_path=manifest_path, catalog_path=catalog_path, base_path=base_path
     )
-    insight_generator = DBTInsightGenerator(manifest_path=manifest_path, catalog_path=catalog_path, config=config)
+    insight_generator = DBTInsightGenerator(
+        manifest_path=manifest_path, catalog_path=catalog_path, config=config, selected_models=selected_models
+    )
     reports = insight_generator.run()
     if reports:
         model_report = generate_model_insights_table(reports[MODEL])

@@ -84,12 +84,6 @@ class DBTInsightGenerator:
                 return True
         return False
 
-    def _check_if_model_skipped(self, insight):
-        if self.selected_models:
-            if insight.ALIAS not in self.selected_models:
-                return True
-        return False
-
     def run(self):
         reports = {
             MODEL: {},

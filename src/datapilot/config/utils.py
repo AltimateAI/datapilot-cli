@@ -4,6 +4,7 @@ from typing import Optional
 from datapilot.core.platforms.dbt.constants import FOLDER
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.schemas.constants import CONFIG_INSIGHTS
+from datapilot.schemas.constants import CONFIG_INSIGHTS_PROJECT_PATH
 from datapilot.schemas.constants import CONFIG_MODEL_TYPE_PATTERNS
 
 
@@ -30,3 +31,7 @@ def get_check_config(config: Optional[Dict], insight_alias: str, config_key: str
     insights = config.get(CONFIG_INSIGHTS, {})
     insight = insights.get(insight_alias, {})
     return insight.get(config_key, None)
+
+
+def get_insight_project_path(config: Optional[Dict]):
+    return config.get(CONFIG_INSIGHTS_PROJECT_PATH, "./")

@@ -9,6 +9,8 @@ from typing import Dict
 from typing import List
 from typing import Union
 
+import yaml
+
 from datapilot.schemas.nodes import ModelNode
 from datapilot.schemas.nodes import SourceNode
 
@@ -139,19 +141,20 @@ def get_manifest_model_nodes(manifest: Dict, models: List) -> List[ModelNode]:
     return nodes
 
 
-def get_manifest_source_nodes(manifest: Dict) -> List[SourceNode]:
+def get_manifest_source_nodes(manifest: Dict, sources: List) -> List[SourceNode]:
     nodes = []
     for node in manifest["sources"].values():
-        nodes.append(
-            SourceNode(
-                unique_id=node["unique_id"],
-                name=node["source_name"],
-                resource_type=node["resource_type"],
-                table=node["identifier"],
-                database=node["database"],
-                table_schema=node["schema"],
+        if node["name"] in sources:
+            nodes.append(
+                SourceNode(
+                    unique_id=node["unique_id"],
+                    name=node["source_name"],
+                    resource_type=node["resource_type"],
+                    table=node["identifier"],
+                    database=node["database"],
+                    table_schema=node["schema"],
+                )
             )
-        )
     return nodes
 
 
@@ -206,27 +209,59 @@ def fill_catalog(table_columns_map: Dict, manifest: Dict, catalog: Dict, nodes: 
     return catalog
 
 
-def run_macro(macro: str) -> str:
+def run_macro(macro: str, base_path: str) -> str:
     dbt_compile = subprocess.run(
         ["dbt", "compile", "--inline", macro],  # noqa
         capture_output=True,
+        cwd=base_path,
         text=True,
     )
     return dbt_compile.stdout
 
 
-def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str):
+def parse_yaml_file(file: str) -> Dict:
     try:
-        models = [Path(f).stem for f in changed_files]
+        with Path(file).open() as f:
+            return yaml.safe_load(f)
+    except FileNotFoundError:
+        raise
+    except yaml.YAMLError as e:
+        raise ValueError(f"Invalid YAML file: {file}") from e
+    except IsADirectoryError as e:
+        raise ValueError(f"Please provide a A valid file path. {file} is a directory") from e
 
-        subprocess.run(["dbt", "parse"])  # noqa
+
+def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str, base_path: str = "./"):
+    try:
+        yaml_files = [Path(f).name for f in changed_files if Path(f).suffix in [".yml", ".yaml"]]
+        model_stem = [Path(f).stem for f in changed_files if Path(f).suffix in [".sql"]]
+
+        model_set = set()
+        source_set = set()
+
+        for file in yaml_files:
+            parsed_file = parse_yaml_file(file)
+            if "models" in parsed_file:
+                for model in parsed_file["models"]:
+                    model_set.update(model.get("name", ""))
+            if "sources" in parsed_file:
+                for source in parsed_file["sources"]:
+                    source_set.update(source.get("name", ""))
+
+        for model in model_stem:
+            model_set.add(model)
+
+        models = list(model_set)
+        sources = list(source_set)
+
+        subprocess.run(["dbt", "parse"], cwd=base_path)  # noqa
 
         manifest_file = Path("target/manifest.json")
         with manifest_file.open() as f:
             manifest = json.load(f)
 
         nodes = get_manifest_model_nodes(manifest, models)
-        sources = get_manifest_source_nodes(manifest)
+        sources = get_manifest_source_nodes(manifest, sources)
 
         nodes_str = ",\n".join(
             [
@@ -247,9 +282,7 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
             + '] %}{% for n in nodes %}{% if n["resource_type"] == "source" %}{% set columns = adapter.get_columns_in_relation(source(n["name"], n["table"])) %}{% else %}{% set columns = adapter.get_columns_in_relation(ref(n["name"])) %}{% endif %}{% set new_columns = [] %}{% for column in columns %}{% do new_columns.append({"column": column.name, "dtype": column.dtype}) %}{% endfor %}{% do result.update({n["unique_id"]:new_columns}) %}{% endfor %}{{ tojson(result) }}'
         )
 
-        dbt_compile_output = run_macro(query)
-
-        print(dbt_compile_output)
+        dbt_compile_output = run_macro(query, base_path)
 
         compiled_inline_node = dbt_compile_output.split("Compiled inline node is:")[1].strip().replace("'", "").strip()
 
@@ -278,6 +311,9 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
             json.dump(manifest, f)
         with Path.open(catalog_path, "w") as f:
             json.dump(catalog, f)
+
+        selected_models = [node.unique_id for node in nodes + sources]
+        return selected_models
     except Exception as e:
         raise Exception("Unable to generate partial manifest and catalog") from e
 
