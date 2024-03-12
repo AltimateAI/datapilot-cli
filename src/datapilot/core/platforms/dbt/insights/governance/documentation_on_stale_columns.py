@@ -1,3 +1,4 @@
+from typing import ClassVar
 from typing import List
 from typing import Tuple
 
@@ -34,6 +35,7 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
         "Review and update the documentation for model `{model_unique_id}`. Remove documentation entries for columns "
         "that are no longer present to maintain clarity and accuracy in the project documentation."
     )
+    FILES_REQUIRED: ClassVar = ["Manifest", "Catalog"]
 
     def __init__(self, catalog_wrapper: BaseCatalogWrapper, *args, **kwargs):
         self.catalog = catalog_wrapper

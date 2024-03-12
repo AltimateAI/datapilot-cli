@@ -1,3 +1,4 @@
+from typing import ClassVar
 from typing import List
 from typing import Tuple
 
@@ -33,6 +34,7 @@ class DBTMissingDocumentation(DBTGovernanceInsight):
         "Enhance the documentation for the columns listed above in the model `{model_unique_id}`. "
         "Documentation provides valuable context and aids in data understanding and collaboration."
     )
+    FILES_REQUIRED: ClassVar = ["Manifest", "Catalog"]
 
     def __init__(self, catalog_wrapper: BaseCatalogWrapper, *args, **kwargs):
         self.catalog = catalog_wrapper
