@@ -34,7 +34,9 @@ def main(argv: Optional[Sequence[str]] = None):
         config = load_config(args[0].config_path[0])
 
     changed_files = args[1]
+    import sys
 
+    print(f"Changed files: {changed_files}", file=sys.__stdout__)
     tmp_folder = get_tmp_dir_path()
     manifest_path = Path(tmp_folder / "manifest.json")
     catalog_path = Path(tmp_folder / "catalog.json")
@@ -45,7 +47,6 @@ def main(argv: Optional[Sequence[str]] = None):
     insight_generator = DBTInsightGenerator(
         manifest_path=manifest_path, catalog_path=catalog_path, config=config, selected_models=selected_models
     )
-    import sys
 
     print("se1ected models", selected_models, file=sys.__stdout__)
     reports = insight_generator.run()
