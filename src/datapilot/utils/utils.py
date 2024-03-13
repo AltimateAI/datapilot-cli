@@ -178,6 +178,10 @@ def get_table_name(node: Union[ModelNode, SourceNode], node_type: str) -> str:
 
 
 def fill_catalog(table_columns_map: Dict, manifest: Dict, catalog: Dict, nodes: List[Union[ModelNode, SourceNode]], node_type: str) -> Dict:
+    if not nodes:
+        catalog[node_type] = {}
+        return catalog
+
     for node in nodes:
         columns = {}
         for column in table_columns_map[node.unique_id]:
@@ -221,7 +225,9 @@ def run_macro(macro: str, base_path: str) -> str:
 def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str, base_path: str = "./"):
     try:
         print(f"Running generate_partial_manifest_catalog for {changed_files}")
-        yaml_files = [f for f in changed_files if Path(f).suffix in [".yml", ".yaml"]]
+        yaml_files = [
+            f for f in changed_files if Path(f).suffix in [".yml", ".yaml"] and Path(f).name not in ["dbt_project.yml", "profiles.yml"]
+        ]
         model_stem = [Path(f).stem for f in changed_files if Path(f).suffix in [".sql"]]
         print(f"yaml_files: {yaml_files}")
         print(f"model_stem: {model_stem}")
