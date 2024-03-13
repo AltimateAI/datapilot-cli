@@ -220,9 +220,11 @@ def run_macro(macro: str, base_path: str) -> str:
 
 def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str, base_path: str = "./"):
     try:
+        print(f"Running generate_partial_manifest_catalog for {changed_files}")
         yaml_files = [Path(f).name for f in changed_files if Path(f).suffix in [".yml", ".yaml"]]
         model_stem = [Path(f).stem for f in changed_files if Path(f).suffix in [".sql"]]
-
+        print(f"yaml_files: {yaml_files}")
+        print(f"model_stem: {model_stem}")
         model_set = set()
         source_set = set()
 
@@ -241,6 +243,8 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
         models = list(model_set)
         sources = list(source_set)
 
+        print(f"models: {models}")
+        print(f"sources: {sources}")
         subprocess.run(["dbt", "parse"], cwd=base_path)  # noqa
 
         manifest_file = Path("target/manifest.json")
