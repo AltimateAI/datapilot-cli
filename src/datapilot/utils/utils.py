@@ -143,7 +143,7 @@ def get_manifest_model_nodes(manifest: Dict, models: List) -> List[ModelNode]:
 def get_manifest_source_nodes(manifest: Dict, sources: List) -> List[SourceNode]:
     nodes = []
     for node in manifest["sources"].values():
-        if node["name"] in sources:
+        if node["source_name"] in sources:
             nodes.append(
                 SourceNode(
                     unique_id=node["unique_id"],
@@ -241,18 +241,18 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
             model_set.add(model)
 
         models = list(model_set)
-        sources = list(source_set)
+        source_list = list(source_set)
 
         print(f"models: {models}")
-        print(f"sources: {sources}")
+        print(f"sources: {source_list}")
         subprocess.run(["dbt", "parse"], cwd=base_path)  # noqa
 
-        manifest_file = Path("target/manifest.json")
+        manifest_file = Path(Path(base_path) / "target/manifest.json")
         with manifest_file.open() as f:
             manifest = json.load(f)
 
         nodes = get_manifest_model_nodes(manifest, models)
-        sources = get_manifest_source_nodes(manifest, sources)
+        sources = get_manifest_source_nodes(manifest, source_list)
 
         nodes_str = ",\n".join(
             [
