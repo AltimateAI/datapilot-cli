@@ -1,4 +1,5 @@
 import argparse
+import sys
 import time
 from pathlib import Path
 from typing import Optional
@@ -34,7 +35,9 @@ def main(argv: Optional[Sequence[str]] = None):
         config = load_config(args[0].config_path[0])
 
     changed_files = args[1]
-    import sys
+    if not changed_files:
+        print("No changed files detected. Exiting...", file=sys.__stdout__)
+        return
 
     print(f"Changed files: {changed_files}", file=sys.__stdout__)
     tmp_folder = get_tmp_dir_path()
