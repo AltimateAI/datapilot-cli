@@ -45,6 +45,9 @@ def main(argv: Optional[Sequence[str]] = None):
     insight_generator = DBTInsightGenerator(
         manifest_path=manifest_path, catalog_path=catalog_path, config=config, selected_models=selected_models
     )
+    import sys
+
+    print("se1ected models", selected_models, file=sys.__stdout__)
     reports = insight_generator.run()
     if reports:
         model_report = generate_model_insights_table(reports[MODEL])
