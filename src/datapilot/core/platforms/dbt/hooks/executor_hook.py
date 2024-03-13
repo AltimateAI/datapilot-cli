@@ -28,15 +28,17 @@ def main(argv: Optional[Sequence[str]] = None):
     )
 
     args = parser.parse_known_args(argv)
-
+    print(f"args: {args}", file=sys.__stdout__)
     config = {}
     if hasattr(args[0], "config_path") and args[0].config_path:
         print(f"Using config file: {args[0].config_path[0]}")
         config = load_config(args[0].config_path[0])
 
     changed_files = args[1]
+    print(f"Changed files: {changed_files}")
+
     if not changed_files:
-        print("No changed files detected. Exiting...", file=sys.__stdout__)
+        print("No changed files detected - test. Exiting...")
         return
 
     print(f"Changed files: {changed_files}", file=sys.__stdout__)
@@ -47,11 +49,10 @@ def main(argv: Optional[Sequence[str]] = None):
     selected_models = generate_partial_manifest_catalog(
         changed_files, manifest_path=manifest_path, catalog_path=catalog_path, base_path=base_path
     )
+    print("se1ected models", selected_models, file=sys.__stdout__)
     insight_generator = DBTInsightGenerator(
         manifest_path=manifest_path, catalog_path=catalog_path, config=config, selected_models=selected_models
     )
-
-    print("se1ected models", selected_models, file=sys.__stdout__)
     reports = insight_generator.run()
     if reports:
         model_report = generate_model_insights_table(reports[MODEL])
