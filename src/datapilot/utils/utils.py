@@ -221,7 +221,7 @@ def run_macro(macro: str, base_path: str) -> str:
 def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str, base_path: str = "./"):
     try:
         print(f"Running generate_partial_manifest_catalog for {changed_files}")
-        yaml_files = [Path(f).name for f in changed_files if Path(f).suffix in [".yml", ".yaml"]]
+        yaml_files = [f for f in changed_files if Path(f).suffix in [".yml", ".yaml"]]
         model_stem = [Path(f).stem for f in changed_files if Path(f).suffix in [".sql"]]
         print(f"yaml_files: {yaml_files}")
         print(f"model_stem: {model_stem}")
@@ -232,10 +232,10 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
             parsed_file = load_config(file)
             if "models" in parsed_file:
                 for model in parsed_file["models"]:
-                    model_set.update(model.get("name", ""))
+                    model_set.add(model.get("name", ""))
             if "sources" in parsed_file:
                 for source in parsed_file["sources"]:
-                    source_set.update(source.get("name", ""))
+                    source_set.add(source.get("name", ""))
 
         for model in model_stem:
             model_set.add(model)
