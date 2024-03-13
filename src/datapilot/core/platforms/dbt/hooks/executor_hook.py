@@ -28,7 +28,7 @@ def main(argv: Optional[Sequence[str]] = None):
     )
 
     args = parser.parse_known_args(argv)
-
+    print(f"args: {args}", file=sys.__stdout__)
     config = {}
     if hasattr(args[0], "config_path") and args[0].config_path:
         print(f"Using config file: {args[0].config_path[0]}")
