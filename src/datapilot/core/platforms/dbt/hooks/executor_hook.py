@@ -51,7 +51,10 @@ def main(argv: Optional[Sequence[str]] = None):
     )
     print("se1ected models", selected_models, file=sys.__stdout__)
     insight_generator = DBTInsightGenerator(
-        manifest_path=manifest_path, catalog_path=catalog_path, config=config, selected_models=selected_models
+        manifest_path=manifest_path,
+        catalog_path=catalog_path,
+        config=config,
+        # selected_models=selected_models
     )
     reports = insight_generator.run()
     if reports:
