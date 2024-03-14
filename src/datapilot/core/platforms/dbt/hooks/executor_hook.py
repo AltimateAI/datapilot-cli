@@ -54,7 +54,7 @@ def main(argv: Optional[Sequence[str]] = None):
         manifest_path=manifest_path,
         catalog_path=catalog_path,
         config=config,
-        # selected_models=selected_models
+        selected_model_ids=selected_models,
     )
     reports = insight_generator.run()
     if reports:
