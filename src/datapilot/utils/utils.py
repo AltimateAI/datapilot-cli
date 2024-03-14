@@ -126,7 +126,7 @@ def get_manifest_model_nodes(manifest: Dict, models: List) -> List[ModelNode]:
     nodes = []
     for node in manifest["nodes"].values():
         if node["name"] in models:
-            if node["resource_type"] == "model":
+            if node["resource_type"] == "model" and node["config"]["materialized"] in ["table", "view"]:
                 nodes.append(
                     ModelNode(
                         unique_id=node["unique_id"],

@@ -3,4 +3,5 @@
   description: datapilot executor
   entry: executor
   language: python
-  types_or: [yaml, sql]
+  types_or: [yml, yaml, sql]
+  require_serial: true
