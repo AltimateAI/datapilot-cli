@@ -2,6 +2,7 @@ import logging
 
 # from src.utils.formatting.utils import generate_model_insights_table
 from typing import Dict
+from typing import List
 from typing import Optional
 
 from datapilot.core.platforms.dbt.constants import MODEL
@@ -27,6 +28,7 @@ class DBTInsightGenerator:
         config: Optional[Dict] = None,
         target: str = "dev",
         selected_models: Optional[str] = None,
+        selected_model_ids: Optional[List[str]] = None,
     ):
         self.manifest_path = manifest_path
         self.catalog_path = catalog_path
@@ -65,7 +67,10 @@ class DBTInsightGenerator:
             "exposures": self.exposures,
             "tests": self.tests,
         }
-        if selected_models:
+        if selected_model_ids:
+            self.selected_models_flag = True
+            self.selected_models = selected_model_ids
+        elif selected_models:
             self.selected_models_flag = True
             self.selected_models = get_models(
                 selected_models,
