@@ -1,12 +1,9 @@
 import argparse
 import sys
 import time
-from asyncio.log import logger as logger3
-from logging import Logger
 from pathlib import Path
 from typing import Optional
 from typing import Sequence
-from venv import logger
 
 from datapilot.config.config import load_config
 from datapilot.config.utils import get_insight_project_path
@@ -21,11 +18,6 @@ from datapilot.utils.utils import get_tmp_dir_path
 
 
 def main(argv: Optional[Sequence[str]] = None):
-    print("test")
-    logger1 = Logger("test")
-    logger1.info("Houston, we have a %s", "interesting problem", exc_info=1)
-    logger.info("Starting dbt insight generation2")
-    logger3.info("Starting dbt insight generation3")
     start_time = time.time()
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
