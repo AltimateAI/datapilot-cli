@@ -222,7 +222,7 @@ def run_macro(macro: str, base_path: str) -> str:
     return dbt_compile.stdout
 
 
-def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog_path: str, base_path: str = "./"):
+def generate_partial_manifest_catalog(changed_files, base_path: str = "./"):
     try:
         print(f"Running generate_partial_manifest_catalog for {changed_files}")
         yaml_files = [
@@ -306,13 +306,8 @@ def generate_partial_manifest_catalog(changed_files, manifest_path: str, catalog
         catalog = fill_catalog(table_columns_map, manifest, catalog, nodes, "nodes")
         catalog = fill_catalog(table_columns_map, manifest, catalog, sources, "sources")
 
-        with Path.open(manifest_path, "w") as f:
-            json.dump(manifest, f)
-        with Path.open(catalog_path, "w") as f:
-            json.dump(catalog, f)
-
         selected_models = [node.unique_id for node in nodes + sources]
-        return selected_models
+        return selected_models, manifest, catalog
     except Exception as e:
         raise Exception("Unable to generate partial manifest and catalog") from e
 

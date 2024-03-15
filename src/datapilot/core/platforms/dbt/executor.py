@@ -10,9 +10,9 @@ from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.exceptions import AltimateCLIArgumentError
 from datapilot.core.platforms.dbt.factory import DBTFactory
 from datapilot.core.platforms.dbt.insights import INSIGHTS
+from datapilot.core.platforms.dbt.schemas.manifest import Catalog
+from datapilot.core.platforms.dbt.schemas.manifest import Manifest
 from datapilot.core.platforms.dbt.utils import get_models
-from datapilot.core.platforms.dbt.utils import load_catalog
-from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import RED
 from datapilot.utils.formatting.utils import YELLOW
 from datapilot.utils.formatting.utils import color_text
@@ -21,8 +21,8 @@ from datapilot.utils.formatting.utils import color_text
 class DBTInsightGenerator:
     def __init__(
         self,
-        manifest_path: str,
-        catalog_path: Optional[str] = None,
+        manifest: Manifest,
+        catalog: Optional[Catalog] = None,
         run_results_path: Optional[str] = None,
         env: Optional[str] = None,
         config: Optional[Dict] = None,
@@ -30,21 +30,17 @@ class DBTInsightGenerator:
         selected_models: Optional[str] = None,
         selected_model_ids: Optional[List[str]] = None,
     ):
-        self.manifest_path = manifest_path
-        self.catalog_path = catalog_path
         self.run_results_path = run_results_path
         self.target = target
         self.env = env
         self.config = config or {}
-        manifest = load_manifest(self.manifest_path)
 
         self.manifest_wrapper = DBTFactory.get_manifest_wrapper(manifest)
         self.manifest_present = True
         self.catalog_present = False
         self.catalog_wrapper = None
 
-        if catalog_path:
-            catalog = load_catalog(self.catalog_path)
+        if catalog:
             self.catalog_wrapper = DBTFactory.get_catalog_wrapper(catalog)
             self.catalog_present = True
 

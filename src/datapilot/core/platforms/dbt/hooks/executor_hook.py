@@ -1,7 +1,6 @@
 import argparse
 import sys
 import time
-from pathlib import Path
 from typing import Optional
 from typing import Sequence
 
@@ -14,7 +13,6 @@ from datapilot.core.platforms.dbt.formatting import generate_model_insights_tabl
 from datapilot.core.platforms.dbt.formatting import generate_project_insights_table
 from datapilot.utils.formatting.utils import tabulate_data
 from datapilot.utils.utils import generate_partial_manifest_catalog
-from datapilot.utils.utils import get_tmp_dir_path
 
 
 def main(argv: Optional[Sequence[str]] = None):
@@ -42,17 +40,12 @@ def main(argv: Optional[Sequence[str]] = None):
         return
 
     print(f"Changed files: {changed_files}", file=sys.__stdout__)
-    tmp_folder = get_tmp_dir_path()
-    manifest_path = Path(tmp_folder / "manifest.json")
-    catalog_path = Path(tmp_folder / "catalog.json")
     base_path = get_insight_project_path(config)
-    selected_models = generate_partial_manifest_catalog(
-        changed_files, manifest_path=manifest_path, catalog_path=catalog_path, base_path=base_path
-    )
+    selected_models, manifest, catalog = generate_partial_manifest_catalog(changed_files, base_path=base_path)
     print("se1ected models", selected_models, file=sys.__stdout__)
     insight_generator = DBTInsightGenerator(
-        manifest_path=manifest_path,
-        catalog_path=catalog_path,
+        manifest=manifest,
+        catalog=catalog,
         config=config,
         selected_model_ids=selected_models,
     )
