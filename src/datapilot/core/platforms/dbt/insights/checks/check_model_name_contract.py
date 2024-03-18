@@ -120,8 +120,8 @@ class CheckModelNameContract(ChecksInsight):
                         "properties": {
                             cls.PATTERN_STR: {"type": "string", "description": "The regex pattern to check the model name against"},
                             cls.FOLDER_STR: {"type": "string", "description": "The folder to apply the pattern to."},
-                            "required": [cls.PATTERN_STR, cls.FOLDER_STR],
                         },
+                        "required": [cls.PATTERN_STR, cls.FOLDER_STR],
                     },
                     "description": "A list of regex patterns to check the model name against. Each pattern is applied to the folder specified. If no pattern is found for the folder, the default pattern is used.",
                     "default": [],

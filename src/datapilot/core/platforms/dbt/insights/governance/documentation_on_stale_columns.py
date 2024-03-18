@@ -19,9 +19,8 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
     NAME = "Documentation of Stale Columns"
     ALIAS = "documentation_on_stale_columns"
     DESCRIPTION = (
-        "Checks for columns that are documented in the dbt project but have been removed from their respective models. "
-        "Maintaining accurate documentation is crucial for clarity and consistency, especially in collaborative "
-        "environments."
+        "Identify columns that have been documented but are no longer present in the model. "
+        "This insight helps in maintaining accurate and up-to-date documentation."
     )
     REASON_TO_FLAG = (
         "A column has been documented but is no longer present in the model/database. "
@@ -125,3 +124,7 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
             return False, "catalog is required for insight to run."
 
         return True, ""
+
+    @classmethod
+    def requires_catalog(cls) -> bool:
+        return True

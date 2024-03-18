@@ -9,7 +9,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckSourceHasTests(ChecksInsight):
-    NAME = "Check Source Has Tests"
+    NAME = "Source Has Tests"
     ALIAS = "check_source_has_tests"
     DESCRIPTION = "Check if the source has tests"
     REASON_TO_FLAG = "The source table is missing tests. Ensure that the source table has tests."

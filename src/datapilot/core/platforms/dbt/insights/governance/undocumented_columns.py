@@ -142,3 +142,7 @@ class DBTMissingDocumentation(DBTGovernanceInsight):
             return False, "catalog is required for insight to run."
 
         return True, ""
+
+    @classmethod
+    def requires_catalog(cls) -> bool:
+        return True

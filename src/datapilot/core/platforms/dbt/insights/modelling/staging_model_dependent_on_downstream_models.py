@@ -22,10 +22,7 @@ class DBTStagingModelsDependentOnDownstreamModels(DBTModellingInsight):
 
     NAME = "Staging Models Dependency Check"
     ALIAS = "staging_models_dependency"
-    DESCRIPTION = (
-        "Checks whether staging models depend on downstream models, instead of source or raw data models. "
-        "Staging models should ideally depend on upstream data sources to maintain a clear and logical data flow."
-    )
+    DESCRIPTION = "Staging models should not depend on downstream models."
     REASON_TO_FLAG = (
         "Best practice is for staging models to depend on source or raw data models, not on downstream models. "
         "Dependencies in the wrong direction can lead to complications in data processing and lineage tracing."

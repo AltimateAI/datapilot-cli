@@ -16,10 +16,7 @@ class DBTSourceDirectoryStructure(DBTStructureInsight):
 
     NAME = "Bad Source Directory Structure"
     ALIAS = "source_directory_structure"
-    DESCRIPTION = (
-        "This rule checks if sources are placed in the correct directories within the dbt project. "
-        "Proper directory placement is crucial for better organization and easy searchability of source files."
-    )
+    DESCRIPTION = "This rule identifies sources that are not placed in their correct directories. "
     REASON_TO_FLAG = (
         "Sources need to be organized in the correct directories to ensure an efficient and "
         "maintainable data architecture. Proper directory structure facilitates easy navigation, "

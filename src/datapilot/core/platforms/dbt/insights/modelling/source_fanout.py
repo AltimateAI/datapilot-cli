@@ -15,11 +15,7 @@ class DBTSourceFanout(DBTModellingInsight):
 
     NAME = "Source Fanout Analysis"
     ALIAS = "source_fanout"
-    DESCRIPTION = (
-        "Evaluates sources for high fanout, which occurs when a single source has a"
-        " large number of direct child models. High fanout can be indicative of a data model"
-        " that might be overly complex or overly reliant on a specific source."
-    )
+    DESCRIPTION = "Identifies sources with a high number of direct children."
     REASON_TO_FLAG = (
         "Identifying sources with high fanout can indicate areas where the data model might be overly complex "
         "or dependent on a single source. Such dependencies can introduce risks and "
@@ -101,7 +97,7 @@ class DBTSourceFanout(DBTModellingInsight):
                     "description": "The minimum test coverage percentage required for the models in the project",
                     "default": cls.SOURCE_FANOUT_THRESHOLD,
                 },
-                "required": [cls.SOURCE_FANOUT_THRESHOLD_STR],
             },
+            "required": [cls.SOURCE_FANOUT_THRESHOLD_STR],
         }
         return config_schema

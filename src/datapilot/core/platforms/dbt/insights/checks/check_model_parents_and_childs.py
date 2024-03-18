@@ -120,7 +120,7 @@ class CheckModelParentsAndChilds(ChecksInsight):
                 cls.MIN_CHILDS_STR: {
                     "type": "integer",
                     "description": "The minimum number of childs a model can have.",
-                    "default": "0",
+                    "default": 0,
                 },
                 cls.MAX_PARENTS_STR: {
                     "type": "integer",
@@ -132,6 +132,7 @@ class CheckModelParentsAndChilds(ChecksInsight):
                     "default": 0,
                 },
             },
+            "required": [cls.MAX_CHILDS_STR, cls.MAX_PARENTS_STR],
         }
         config_schema["files_required"] = cls.FILES_REQUIRED
         return config_schema

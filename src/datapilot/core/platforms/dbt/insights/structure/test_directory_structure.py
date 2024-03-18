@@ -15,10 +15,7 @@ class DBTTestDirectoryStructure(DBTStructureInsight):
 
     NAME = "Bad Test Directory Structure"
     ALIAS = "test_directory_structure"
-    DESCRIPTION = (
-        "This rule checks if tests are correctly placed in the same directories as their corresponding models. "
-        "Ensuring tests are co-located with their models aids in maintainability and clarity."
-    )
+    DESCRIPTION = "This rule checks if tests are correctly placed in the same directories as their corresponding models."
     REASON_TO_FLAG = (
         "It is important for tests to be placed in the same directory as their corresponding models to maintain "
         "a coherent and easy-to-navigate project structure. This practice enhances the ease of understanding "

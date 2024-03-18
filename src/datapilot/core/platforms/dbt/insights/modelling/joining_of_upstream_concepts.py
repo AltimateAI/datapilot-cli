@@ -16,9 +16,7 @@ class DBTRejoiningOfUpstreamConcepts(DBTModellingInsight):
     NAME = "Rejoining of Upstream Concepts"
     ALIAS = "rejoining_upstream_concepts"
     DESCRIPTION = (
-        "Detects scenarios where a parent's direct child is also a direct child of another one "
-        "of the parent's direct children. This pattern may indicate potential loops or unnecessary"
-        " complexity in the DAG."
+        "Detects scenarios where a parent's direct child is also a direct child of another one " "of the parent's direct children."
     )
     REASON_TO_FLAG = (
         "Flagged to identify cases where a parent model has a direct child that is also a direct child "

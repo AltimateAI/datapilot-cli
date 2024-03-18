@@ -20,10 +20,7 @@ class DBTModelNamingConvention(DBTStructureInsight):
 
     NAME = "Bad Model Naming Convention"
     ALIAS = "model_naming_convention_check"
-    DESCRIPTION = "This rule ensures all models in the data warehouse adhere to a predefined naming convention. "
-    "A consistent naming convention is crucial for clarity and understanding of the model's purpose, "
-    "helping to identify the model type (e.g., staging, fact, dimension) and enhancing navigation and "
-    "maintenance within the dbt project."
+    DESCRIPTION = "This rule identifies models that do not follow the naming convention."
     REASON_TO_FLAG = (
         "Inconsistent or unclear naming conventions can lead to confusion and errors in querying the data warehouse. "
         "A well-defined naming convention clarifies the model type and purpose, promoting better understanding "

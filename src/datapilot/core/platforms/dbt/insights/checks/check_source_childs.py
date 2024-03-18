@@ -9,7 +9,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckSourceChilds(ChecksInsight):
-    NAME = "Check Source Childs"
+    NAME = "Source has allowed number of children"
     ALIAS = "check_source_childs"
     DESCRIPTION = "Check the source has a specific number (max/min) of childs"
     REASON_TO_FLAG = "The source has a number of childs that is not in the valid range"

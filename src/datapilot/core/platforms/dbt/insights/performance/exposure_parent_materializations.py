@@ -16,12 +16,7 @@ class DBTExposureParentMaterialization(DBTPerformanceInsight):
 
     NAME = "Exposure Parent Materialization Check"
     ALIAS = "exposure_parent_bad_materialization"
-    DESCRIPTION = (
-        "Evaluates the materialization types of parent models of exposures. Ensures that exposures rely on "
-        "business logic encoded into dbt models or metrics rather than raw sources. Also checks if these parent "
-        "models are materialized in a manner that ensures performance efficiency, "
-        "considering their likely heavy use in downstream systems."
-    )
+    DESCRIPTION = "Exposures should depend on transformed data models or metrics, not raw untransformed sources. "
     REASON_TO_FLAG = (
         "Exposures should depend on transformed data models or metrics, not raw untransformed sources. "
         "Moreover, parent models of exposures, being heavily used in downstream systems, "

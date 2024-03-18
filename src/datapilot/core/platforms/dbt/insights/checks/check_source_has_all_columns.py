@@ -14,7 +14,7 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckSourceHasAllColumns(ChecksInsight):
-    NAME = "Check Source Has All Columns"
+    NAME = "Source Has All Columns"
     ALIAS = "check_source_has_all_columns"
     DESCRIPTION = "Ensures that all columns in the database are also specified in the properties file. (usually schema.yml)."
     REASON_TO_FLAG = "Missing columns in the source can lead to confusion and inconsistency in analysis. "
@@ -97,3 +97,7 @@ class CheckSourceHasAllColumns(ChecksInsight):
             return False, "Catalog is required for insight to run."
 
         return True, ""
+
+    @classmethod
+    def requires_catalog(cls) -> bool:
+        return True

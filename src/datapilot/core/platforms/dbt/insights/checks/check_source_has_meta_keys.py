@@ -12,10 +12,10 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckSourceHasMetaKeys(ChecksInsight):
-    NAME = "Check Source Has Meta Keys"
+    NAME = "Source has required metadata Keys"
     ALIAS = "check_source_has_meta_keys"
-    DESCRIPTION = "Check if the source has meta keys"
-    REASON_TO_FLAG = "The source table is missing a description. Ensure that the source table has a description."
+    DESCRIPTION = "Check if the source has required metadata keys"
+    REASON_TO_FLAG = "Missing meta keys in the source can lead to inconsistency in metadata management and understanding of the source. It's important to ensure that the source includes all the required meta keys as per the configuration."
     META_KEYS_STR = "meta_keys"
     ALLOW_EXTRA_KEYS_STR = "allow_extra_keys"
 
@@ -112,7 +112,7 @@ class CheckSourceHasMetaKeys(ChecksInsight):
                     "type": "boolean",
                     "default": False,
                 },
-                "required": [cls.META_KEYS_STR],
             },
+            "required": [cls.META_KEYS_STR],
         }
         return config_schema

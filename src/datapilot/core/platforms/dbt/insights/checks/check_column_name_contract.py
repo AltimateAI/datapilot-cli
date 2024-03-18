@@ -17,11 +17,7 @@ from datapilot.utils.formatting.utils import numbered_list
 class CheckColumnNameContract(ChecksInsight):
     NAME = "Column name follows contract pattern"
     ALIAS = "column_name_contract"
-    DESCRIPTION = (
-        "Checks that column names abide by a contract, as described in a blog post by Emily Riederer. "
-        "A contract consists of a regex pattern and a series of data types. "
-        "Ensuring consistent column naming conventions improves data understanding and usage of the dbt project."
-    )
+    DESCRIPTION = "Column names should adhere to the contract pattern defined for the data type. "
     REASON_TO_FLAG = (
         "Column names that do not adhere to the contract can lead to confusion and hinder effective data "
         "modeling and analysis. It's important to maintain consistent column naming conventions."
@@ -143,8 +139,8 @@ class CheckColumnNameContract(ChecksInsight):
                         "properties": {
                             cls.PATTERN_STR: {"type": "string", "description": "The regex pattern to check the column name against"},
                             cls.DATATYPE_STR: {"type": "string", "description": "The data type for which the pattern is defined"},
-                            "required": [cls.PATTERN_STR, cls.DATATYPE_STR],
                         },
+                        "required": [cls.PATTERN_STR, cls.DATATYPE_STR],
                     },
                     "description": "A list of patterns to check the column name against for different data types",
                     "default": [],

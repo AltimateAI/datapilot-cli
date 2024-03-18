@@ -10,9 +10,9 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckSourceHasTestsByGroup(ChecksInsight):
-    NAME = "Check Source Has Tests By Group"
+    NAME = "Source Has Tests By Group"
     ALIAS = "check_source_has_tests_by_group"
-    DESCRIPTION = "Checks that the source has tests with specific groups."
+    DESCRIPTION = "Check if sources have a number of tests for specific test groups."
     REASON_TO_FLAG = "Sources should have tests with specific groups for proper validation."
     TESTS_LIST_STR = "tests"
     TEST_GROUP_STR = "test_group"

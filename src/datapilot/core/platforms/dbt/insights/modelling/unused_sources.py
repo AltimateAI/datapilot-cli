@@ -13,11 +13,7 @@ class DBTUnusedSources(DBTModellingInsight):
 
     NAME = "Unused Sources Detection"
     ALIAS = "unused_sources"
-    DESCRIPTION = (
-        "Identifies sources that are defined in the project's YML files but not used in any models, "
-        "or sources that have become redundant due to model deprecation. Such unused sources contribute "
-        "to unnecessary complexity and clutter in the dbt project."
-    )
+    DESCRIPTION = "Detects sources in the dbt project that are not being referenced by any models."
     REASON_TO_FLAG = (
         "Unused sources, either defined in YML but not used in any model or leftover from deprecated models, "
         "represent unnecessary complexity in the project. It's important to keep the dbt project lean and relevant."

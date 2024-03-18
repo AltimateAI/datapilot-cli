@@ -16,11 +16,7 @@ class DBTModelFanout(DBTModellingInsight):
 
     NAME = "Model Fanout Analysis"
     ALIAS = "model_fanout"
-    DESCRIPTION = (
-        "Assesses parent models to identify high fanout scenarios. High fanout can indicate points in the DAG where "
-        "transformations may be more efficiently moved to the BI layer, or where common business logic could be "
-        "better positioned upstream in the data pipeline."
-    )
+    DESCRIPTION = "Identifies parent models with an unusually high number of children. "
     REASON_TO_FLAG = (
         "Flagged to highlight parent models with an unusually high number of leaf children. This can suggest areas "
         "in the data pipeline where complexity is increased and transformations might be optimized."
@@ -125,7 +121,7 @@ class DBTModelFanout(DBTModellingInsight):
                     "description": "The minimum test coverage percentage required for the models in the project",
                     "default": cls.FANOUT_THRESHOLD,
                 },
-                "required": [cls.FANOUT_THRESHOLD_STR],
             },
+            "required": [cls.FANOUT_THRESHOLD_STR],
         }
         return config_schema

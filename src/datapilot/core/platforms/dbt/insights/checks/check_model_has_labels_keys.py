@@ -13,12 +13,9 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckModelHasLabelsKeys(ChecksInsight):
-    NAME = "Check Model Has Labels Keys"
+    NAME = "Model Has labels"
     ALIAS = "check_model_has_labels_keys"
-    DESCRIPTION = (
-        "Checks that the model has the specified labels keys as defined in the properties file. "
-        "Ensuring that the model has the required labels keys helps in maintaining metadata consistency and understanding."
-    )
+    DESCRIPTION = "Models should have all the labels keys as per the configuration."
     REASON_TO_FLAG = (
         "Missing labels keys in the model can lead to inconsistency in metadata management and understanding of the model. "
         "It's important to ensure that the model includes all the required labels keys as per the configuration."
@@ -110,7 +107,7 @@ class CheckModelHasLabelsKeys(ChecksInsight):
                     "type": "boolean",
                     "default": False,
                 },
-                "required": [cls.LABEL_KEYS_STR],
             },
+            "required": [cls.LABEL_KEYS_STR],
         }
         return config_schema

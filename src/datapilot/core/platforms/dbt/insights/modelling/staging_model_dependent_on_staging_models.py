@@ -18,11 +18,7 @@ class DBTStagingModelsDependentOnStagingModels(DBTModellingInsight):
 
     NAME = "Staging Models Dependency on Staging Models"
     ALIAS = "staging_models_on_staging"
-    DESCRIPTION = (
-        "Checks if staging models are depending on other staging models instead of depending on source "
-        "or raw data models. Ensures that staging models are used appropriately, maintaining a clear "
-        "and logical data flow from sources to staging."
-    )
+    DESCRIPTION = "Staging models should not directly depend on other staging models."
     REASON_TO_FLAG = (
         "Best practice is for staging models to depend on source or raw data models, not on other staging models. "
         "Dependencies among staging models can lead to complicated data flows and hinder data lineage tracking."

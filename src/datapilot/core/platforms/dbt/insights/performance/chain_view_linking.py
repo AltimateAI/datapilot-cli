@@ -17,11 +17,7 @@ class DBTChainViewLinking(DBTPerformanceInsight):
     NAME = "Chain View Linking"
     ALIAS = "chain_view_linking"
     CHAIN_LENGTH = 4  # Default chain length, can be adjusted as needed
-    DESCRIPTION = (
-        "Analyzes the dbt project to identify long chains of non-physically-materialized models (views and ephemerals)."
-        " Such long chains can result in increased runtime for models built on top of them due to extended computation"
-        " and memory usage."
-    )
+    DESCRIPTION = "Checks for long chains of view/ephemeral models in the dbt project. Long chains can lead to slow computation "
     REASON_TO_FLAG = (
         "Long runtime can occur for a model when it is built on top of a long chain of 'non-physically-materialized'"
         " models. Identifying these chains is crucial to optimize performance and reduce computation overhead."
@@ -91,7 +87,7 @@ class DBTChainViewLinking(DBTPerformanceInsight):
                     "description": "The minimum test coverage percentage required for the models in the project",
                     "default": cls.CHAIN_LENGTH,
                 },
-                "required": [cls.CHAIN_LENGTH_STR],
             },
+            "required": [cls.CHAIN_LENGTH_STR],
         }
         return config_schema

@@ -13,9 +13,9 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckModelHasMetaKeys(ChecksInsight):
-    NAME = "Model Has valid meta Keys"
+    NAME = "Model has all valid keys in metadata"
     ALIAS = "check_model_has_valid_meta_keys"
-    DESCRIPTION = "Checks that the model always has a list of valid meta keys."
+    DESCRIPTION = "Model always has a list of valid metadata keys."
     REASON_TO_FLAG = (
         "Missing meta keys in the model can lead to inconsistency in metadata management and understanding of the model. "
         "It's important to ensure that the model includes all the required meta keys as per the configuration."
@@ -103,7 +103,7 @@ class CheckModelHasMetaKeys(ChecksInsight):
                     "type": "boolean",
                     "default": False,
                 },
-                "required": [cls.META_KEYS_STR],
             },
+            "required": [cls.META_KEYS_STR],
         }
         return config_schema

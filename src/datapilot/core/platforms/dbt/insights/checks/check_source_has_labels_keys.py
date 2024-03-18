@@ -105,7 +105,7 @@ class CheckSourceHasLabelsKeys(ChecksInsight):
                     "type": "boolean",
                     "default": False,
                 },
-                "required": [cls.LABEL_KEYS_STR],
             },
+            "required": [cls.LABEL_KEYS_STR],
         }
         return config_schema

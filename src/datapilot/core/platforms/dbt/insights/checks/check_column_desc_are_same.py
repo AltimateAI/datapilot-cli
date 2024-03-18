@@ -11,10 +11,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 class CheckColumnDescAreSame(ChecksInsight):
     NAME = "Column descriptions consistent for same column names"
     ALIAS = "column_descriptions_are_same"
-    DESCRIPTION = (
-        "Checks that models have the same descriptions for the same column names. "
-        "Consistent column descriptions improve understanding and usage of the dbt project."
-    )
+    DESCRIPTION = "Column description for the same column name should be same "
     REASON_TO_FLAG = (
         "Different descriptions for the same column names can lead to confusion and hinder effective data "
         "modeling and analysis. It's important to have consistent column descriptions."

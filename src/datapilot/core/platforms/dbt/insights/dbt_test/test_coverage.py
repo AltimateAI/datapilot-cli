@@ -17,11 +17,7 @@ class DBTTestCoverage(DBTTestInsight):
 
     NAME = "Low Test Coverage in dbt Models"
     ALIAS = "dbt_low_test_coverage"
-    DESCRIPTION = (
-        "Identifies dbt models in the project with low test coverage, where the test coverage percentage falls below "
-        "the minimum required threshold. Adequate test coverage is essential to maintain data integrity"
-        " and ensure the accuracy of data transformations."
-    )
+    DESCRIPTION = "Checks if the project test coverage is below the minimum threshold. "
     REASON_TO_FLAG = (
         "dbt models should have a minimum test coverage percentage to ensure the reliability and accuracy "
         "of data transformations. Low test coverage can lead to data quality issues."
@@ -117,7 +113,7 @@ class DBTTestCoverage(DBTTestInsight):
                     "description": "The minimum test coverage percentage required for the models in the project",
                     "default": cls.MIN_COVERAGE_PERCENT,
                 },
-                "required": [cls.MIN_COVERAGE_PERCENT_STR],
             },
+            "required": [cls.MIN_COVERAGE_PERCENT_STR],
         }
         return config_schema

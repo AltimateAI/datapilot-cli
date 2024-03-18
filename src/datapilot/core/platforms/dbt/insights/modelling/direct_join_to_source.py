@@ -22,11 +22,7 @@ class DBTDirectJoinSource(DBTModellingInsight):
 
     ALIAS = "source_staging_model_integrity"
     NAME = "Source-Staging Model Integrity"
-    DESCRIPTION = (
-        "Ensures that each source has a dedicated staging model and is not directly joined to downstream models. "
-        "This practice facilitates consistent data transformation and column renaming at the staging level, "
-        "promoting uniformity across all models consuming the source data."
-    )
+    DESCRIPTION = "A model should not have direct joins to both sources and other staging models. "
     REASON_TO_FLAG = (
         "Flagged when a model directly joins a source and a model without a staging intermediary. "
         "Direct source-model joins bypass the staging layer, leading to potential inconsistencies in data handling."

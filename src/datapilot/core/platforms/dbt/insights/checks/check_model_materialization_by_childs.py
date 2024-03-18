@@ -11,10 +11,7 @@ from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 class CheckModelMaterializationByChilds(ChecksInsight):
     NAME = "Model Materialization By Childs"
     ALIAS = "check_model_materialization_by_childs"
-    DESCRIPTION = (
-        "Checks the model materialization by a given threshold of child models."
-        "All models with less child models then the treshold should be materialized as views (or ephemerals), all the rest as tables or incrementals."
-    )
+    DESCRIPTION = "Fewer children than threshold ideally should be view or ephemeral, more or equal should be table or incremental."
     REASON_TO_FLAG = "The model is flagged due to inappropriate materialization: models with child counts above the threshold require robust and efficient data processing, hence they should be materialized as tables or incrementals for optimized query performance and data management."
     THRESHOLD_CHILDS_STR = "threshold_childs"
 

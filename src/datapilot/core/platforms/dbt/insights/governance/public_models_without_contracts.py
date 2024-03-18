@@ -15,11 +15,7 @@ class DBTPublicModelWithoutContracts(DBTGovernanceInsight):
 
     NAME = "Public Models Without Contracts"
     ALIAS = "public_models_without_contracts"
-    DESCRIPTION = (
-        "Identifies models in the dbt project that have public access, meaning they can be consumed by"
-        " any downstream consumer. However, these public models should have contracts to provide guarantees "
-        "regarding data types and columns."
-    )
+    DESCRIPTION = "Identify public models that don't have contracts."
     REASON_TO_FLAG = (
         "Public models are accessible to all downstream consumers, making it crucial to have clear "
         "contracts that specify data types and columns. This ensures consistency and predictability "

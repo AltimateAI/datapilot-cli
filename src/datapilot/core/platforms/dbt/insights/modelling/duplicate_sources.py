@@ -17,10 +17,7 @@ class DBTDuplicateSources(DBTModellingInsight):
 
     NAME = "Duplicate Sources"
     ALIAS = "Duplicate_Sources"
-    DESCRIPTION = (
-        "Identifies cases where multiple source nodes in a dbt project refer to the same database object. "
-        "Ensures that each database object is represented by a single, unique source node."
-    )
+    DESCRIPTION = "Duplicate sources should be avoided."
     REASON_TO_FLAG = (
         "Having multiple source nodes pointing to the same database location can lead to an inaccurate "
         "representation of data lineage and potential confusion in data management."

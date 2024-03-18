@@ -105,10 +105,6 @@ class CheckModelParentsDatabase(ChecksInsight):
                     "items": {"type": "string"},
                     "description": "List of databases that are not allowed as parent models or sources.",
                 },
-                "oneOf": [
-                    {"required": [cls.WHITELIST_STR]},
-                    {"required": [cls.BLACKLIST_STR]},
-                ],
             },
             "oneOf": [
                 {"required": ["WHITELIST_STR"], "not": {"required": ["BLACKLIST_STR"]}},

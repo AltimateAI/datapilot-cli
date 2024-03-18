@@ -124,3 +124,6 @@ class DBTInsight(Insight):
             "description": cls.DESCRIPTION,
             "config": {"$schema": "http://json-schema.org/draft-07/schema#", "type": "object", "properties": {}},
         }
+
+    def requires_catalog(cls) -> bool:
+        return False

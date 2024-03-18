@@ -8,12 +8,9 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckModelHasPropertiesFile(ChecksInsight):
-    NAME = "Check Model Has Properties File"
+    NAME = "Model has properties file"
     ALIAS = "check_model_has_properties_file"
-    DESCRIPTION = (
-        "Checks that the model has a properties file (.yml) defined. "
-        "Having a properties file helps in providing additional configuration and documentation for the model."
-    )
+    DESCRIPTION = "Models should have a properties/schema file (.yml) defined."
     REASON_TO_FLAG = (
         "Missing properties file for a model can lead to inadequate configuration and documentation, "
         "resulting in potential issues in data processing and understanding."

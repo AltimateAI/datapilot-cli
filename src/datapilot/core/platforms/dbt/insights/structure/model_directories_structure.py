@@ -19,11 +19,7 @@ class DBTModelDirectoryStructure(DBTStructureInsight):
 
     NAME = "Bad Model Directory Structure"
     ALIAS = "model_directory_structure"
-    DESCRIPTION = (
-        "This rule identifies models that are not placed in their correct directories. "
-        "Proper directory structure is essential for the organization, discoverability, "
-        "and maintenance of models within the dbt project."
-    )
+    DESCRIPTION = "This rule identifies models that are not placed in their correct directories. "
     REASON_TO_FLAG = (
         "Placing models in the correct directories is vital for maintaining a structured and "
         "efficient data warehouse. Incorrectly placed models can lead to confusion, hinder "
