@@ -1,7 +1,7 @@
 - id: executor
   name: datapilot executor
   description: datapilot executor
-  entry: executor
+  entry: datapilot_run_dbt_checks
   language: python
-  types_or: [ yaml, sql]
+  types_or: [yaml, sql]
   require_serial: true

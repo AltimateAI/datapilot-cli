@@ -22,7 +22,7 @@ pip install pre-commit
   - repo: https://github.com/AltimateAI/datapilot
     rev: <revision>
     hooks:
-      - id: executor
+      - id: datapilot_run_dbt_checks
         args: ["--config-path", "path/to/your/config/file"]
 ```
 
@@ -39,12 +39,8 @@ Usage
 
 Once the hook is installed, it will run automatically before each commit. If any issues are detected, the commit will be aborted, and you will be prompted to fix the issues before retrying the commit.
 
-You can also manually run the hook at any time using the following command:
 
-```
-pre-commit run --hook-stage commit executor --config-path path/to/your/config/file
-```
-Replace "path/to/your/config/file" with the path to your configuration file.
+If you want to manually run all pre-commit hooks on a repository, run `pre-commit run --all-files`. To run individual hooks use `pre-commit run <hook_id>`.
 
 
 Feedback and Contributions
