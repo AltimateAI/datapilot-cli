@@ -252,9 +252,9 @@ def generate_partial_manifest_catalog(changed_files, base_path: str = "./"):
         models = list(model_set)
         source_list = list(source_set)
 
-        print(f"models: {models}")
-        print(f"sources: {source_list}")
-        subprocess.run(["dbt", "parse"], cwd=base_path)  # noqa
+        # print(f"models: {models}")
+        # print(f"sources: {source_list}")
+        subprocess.run(["dbt", "parse"], cwd=base_path, stdout=subprocess.PIPE)  # noqa
 
         manifest_file = Path(Path(base_path) / "target/manifest.json")
         with manifest_file.open() as f:
