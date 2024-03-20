@@ -1,5 +1,4 @@
 import argparse
-import sys
 import time
 from typing import Optional
 from typing import Sequence
@@ -26,23 +25,23 @@ def main(argv: Optional[Sequence[str]] = None):
     )
 
     args = parser.parse_known_args(argv)
-    print(f"args: {args}", file=sys.__stdout__)
+    # print(f"args: {args}", file=sys.__stdout__)
     config = {}
     if hasattr(args[0], "config_path") and args[0].config_path:
-        print(f"Using config file: {args[0].config_path[0]}")
+        # print(f"Using config file: {args[0].config_path[0]}")
         config = load_config(args[0].config_path[0])
 
     changed_files = args[1]
-    print(f"Changed files: {changed_files}")
+    # print(f"Changed files: {changed_files}")
 
     if not changed_files:
-        print("No changed files detected - test. Exiting...")
+        # print("No changed files detected - test. Exiting...")
         return
 
-    print(f"Changed files: {changed_files}", file=sys.__stdout__)
+    # print(f"Changed files: {changed_files}", file=sys.__stdout__)
     base_path = get_insight_project_path(config)
     selected_models, manifest, catalog = generate_partial_manifest_catalog(changed_files, base_path=base_path)
-    print("se1ected models", selected_models, file=sys.__stdout__)
+    # print("se1ected models", selected_models, file=sys.__stdout__)
     insight_generator = DBTInsightGenerator(
         manifest=manifest,
         catalog=catalog,

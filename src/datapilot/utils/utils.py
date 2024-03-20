@@ -227,13 +227,13 @@ def run_macro(macro: str, base_path: str) -> str:
 
 def generate_partial_manifest_catalog(changed_files, base_path: str = "./"):
     try:
-        print(f"Running generate_partial_manifest_catalog for {changed_files}")
+        # print(f"Running generate_partial_manifest_catalog for {changed_files}")
         yaml_files = [
             f for f in changed_files if Path(f).suffix in [".yml", ".yaml"] and Path(f).name not in ["dbt_project.yml", "profiles.yml"]
         ]
         model_stem = [Path(f).stem for f in changed_files if Path(f).suffix in [".sql"]]
-        print(f"yaml_files: {yaml_files}")
-        print(f"model_stem: {model_stem}")
+        # print(f"yaml_files: {yaml_files}")
+        # print(f"model_stem: {model_stem}")
         model_set = set()
         source_set = set()
 
@@ -284,7 +284,7 @@ def generate_partial_manifest_catalog(changed_files, base_path: str = "./"):
 
         dbt_compile_output = run_macro(query, base_path)
 
-        print(dbt_compile_output)
+        # print(dbt_compile_output)
 
         compiled_inline_node = dbt_compile_output.split("Compiled inline node is:")[1].strip().replace("'", "").strip()
 
