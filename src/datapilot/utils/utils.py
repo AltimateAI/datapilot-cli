@@ -263,18 +263,14 @@ def generate_partial_manifest_catalog(changed_files, base_path: str = "./"):
         nodes = get_manifest_model_nodes(manifest, models)
         sources = get_manifest_source_nodes(manifest, source_list)
 
-        nodes_str = ",\n".join(
-            [
-                "{" + f'"name":"{node.name}","resource_type":"{node.resource_type}","unique_id":"{node.unique_id}","table":""' + "}"
-                for node in nodes
-            ]
-            + [
-                "{"
-                + f'"name":"{source.name}","resource_type":"{source.resource_type}","unique_id":"{source.unique_id}","table":"{source.table}"'
-                + "}"
-                for source in sources
-            ]
-        )
+        nodes_data = [{"name": node.name, "resource_type": node.resource_type, "unique_id": node.unique_id, "table": ""} for node in nodes]
+
+        sources_data = [
+            {"name": source.name, "resource_type": source.resource_type, "unique_id": source.unique_id, "table": source.table}
+            for source in sources
+        ]
+
+        nodes_str = ",\n".join(json.dumps(data) for data in nodes_data + sources_data)
 
         query = (
             "{% set result = {} %}{% set nodes = ["
