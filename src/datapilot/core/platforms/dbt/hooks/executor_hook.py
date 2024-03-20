@@ -69,6 +69,8 @@ def main(argv: Optional[Sequence[str]] = None):
             print("--" * 50)
             print(tabulate_data(project_report, headers="keys"))
 
+        exit(1)
+
     end_time = time.time()
     total_time = end_time - start_time
     print(f"Total time taken: {round(total_time, 2)} seconds")
