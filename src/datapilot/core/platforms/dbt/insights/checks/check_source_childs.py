@@ -1,6 +1,5 @@
 from typing import List
 
-from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -46,8 +45,8 @@ class CheckSourceChilds(ChecksInsight):
         The min and max number of childs is in the configuration file.
         """
         insights = []
-        self.min_childs = get_check_config(self.config, self.ALIAS, self.MIN_CHILDS_STR)
-        self.max_childs = get_check_config(self.config, self.ALIAS, self.MAX_CHILDS_STR)
+        self.min_childs = self.get_check_config(self.MIN_CHILDS_STR)
+        self.max_childs = self.get_check_config(self.MAX_CHILDS_STR)
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):
                 self.logger.debug(f"Skipping model {node_id} as it is not enabled for selected models")

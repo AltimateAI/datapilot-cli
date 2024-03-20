@@ -4,6 +4,7 @@ from typing import Dict
 from typing import List
 from typing import Union
 
+from datapilot.config.utils import get_check_config
 from datapilot.core.insights.base.insight import Insight
 from datapilot.core.insights.schema import Severity
 from datapilot.core.platforms.dbt.constants import NON_MATERIALIZED
@@ -127,3 +128,6 @@ class DBTInsight(Insight):
 
     def requires_catalog(cls) -> bool:
         return False
+
+    def get_check_config(self, key: str) -> any:
+        return get_check_config(self.config, self.ALIAS, key)

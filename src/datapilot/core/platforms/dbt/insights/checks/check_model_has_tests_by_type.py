@@ -1,7 +1,6 @@
 from typing import Dict
 from typing import List
 
-from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -19,7 +18,7 @@ class CheckModelHasTestsByType(ChecksInsight):
     TEST_COUNT_STR = "min_count"
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.test_list = get_check_config(self.config, self.ALIAS, self.TESTS_LIST_STR) or []
+        self.test_list = self.get_check_config(self.TESTS_LIST_STR) or []
         self.tests = {
             test.get(self.TEST_TYPE_STR): test.get(self.TEST_COUNT_STR, 0) for test in self.test_list if test.get(self.TEST_TYPE_STR)
         }

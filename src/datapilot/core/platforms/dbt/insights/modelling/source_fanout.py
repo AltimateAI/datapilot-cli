@@ -1,6 +1,5 @@
 from typing import List
 
-from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.modelling.base import DBTModellingInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -53,7 +52,7 @@ class DBTSourceFanout(DBTModellingInsight):
         )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        fanout_threshold = get_check_config(self.config, self.ALIAS, self.SOURCE_FANOUT_THRESHOLD_STR) or self.SOURCE_FANOUT_THRESHOLD
+        fanout_threshold = self.get_check_config(self.SOURCE_FANOUT_THRESHOLD_STR) or self.SOURCE_FANOUT_THRESHOLD
         insights = []
 
         for node_id, children_set in self.children_map.items():

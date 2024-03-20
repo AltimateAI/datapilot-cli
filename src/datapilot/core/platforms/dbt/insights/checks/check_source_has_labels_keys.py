@@ -3,7 +3,6 @@ from typing import Sequence
 from typing import Set
 from typing import Tuple
 
-from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -28,8 +27,8 @@ class CheckSourceHasLabelsKeys(ChecksInsight):
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
         insights = []
-        self.labels_keys = get_check_config(self.config, self.ALIAS, self.LABEL_KEYS_STR)
-        self.allow_extra_keys = get_check_config(self.config, self.ALIAS, self.ALLOW_EXTRA_KEYS_STR)
+        self.labels_keys = self.get_check_config(self.LABEL_KEYS_STR)
+        self.allow_extra_keys = self.get_check_config(self.ALLOW_EXTRA_KEYS_STR)
 
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):

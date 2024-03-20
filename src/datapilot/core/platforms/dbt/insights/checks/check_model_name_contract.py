@@ -2,7 +2,6 @@ import re
 from typing import Dict
 from typing import List
 
-from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -60,8 +59,8 @@ class CheckModelNameContract(ChecksInsight):
         identifying models with model name that matches a certain regex pattern.
         """
         insights = []
-        self.default_pattern = get_check_config(self.config, self.ALIAS, self.DEFAULT_PATTERN_STR)
-        pattern_configs = get_check_config(self.config, self.ALIAS, self.PATTERNS_LIST_STR)
+        self.default_pattern = self.get_check_config(self.DEFAULT_PATTERN_STR)
+        pattern_configs = self.get_check_config(self.PATTERNS_LIST_STR)
         if not pattern_configs:
             self.logger.debug(f"Model name contract not found in insight config for {self.ALIAS}. Skipping insight.")
             return []

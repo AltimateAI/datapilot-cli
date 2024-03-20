@@ -1,7 +1,6 @@
 from typing import List
 from typing import Set
 
-from datapilot.config.utils import get_check_config
 from datapilot.config.utils import get_insight_configuration
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
@@ -54,8 +53,8 @@ class CheckSourceHasMetaKeys(ChecksInsight):
         """
         insights = []
         self.insight_config = get_insight_configuration(self.config)
-        self.meta_keys = get_check_config(self.config, self.ALIAS, self.META_KEYS_STR) or []
-        self.allow_extra_keys = get_check_config(self.config, self.ALIAS, self.ALLOW_EXTRA_KEYS_STR)
+        self.meta_keys = self.get_check_config(self.META_KEYS_STR) or []
+        self.allow_extra_keys = self.get_check_config(self.ALLOW_EXTRA_KEYS_STR)
         if not self.meta_keys and not self.allow_extra_keys:
             self.logger.error(f"Meta keys are not provided in the configuration file for the insight: {self.ALIAS}")
             return insights

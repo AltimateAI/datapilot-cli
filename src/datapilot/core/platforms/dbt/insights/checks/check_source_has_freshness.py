@@ -1,6 +1,5 @@
 from typing import List
 
-from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -39,7 +38,7 @@ class CheckSourceHasFreshness(ChecksInsight):
         response for the check.
         Ensures that the source has freshness options
         """
-        self.freshness_keys = get_check_config(self.config, self.ALIAS, self.FRESHNESS_STR) or []
+        self.freshness_keys = self.get_check_config(self.FRESHNESS_STR) or []
         insights = []
         for node_id, node in self.sources.items():
             if self.should_skip_model(node_id):

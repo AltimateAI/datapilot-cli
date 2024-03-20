@@ -1,6 +1,5 @@
 from typing import List
 
-from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.performance.base import DBTPerformanceInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -56,7 +55,7 @@ class DBTChainViewLinking(DBTPerformanceInsight):
         )
 
     def generate(self, *args, **kwargs) -> List[DBTProjectInsightResponse]:
-        chain_length = get_check_config(self.config, self.ALIAS, self.CHAIN_LENGTH_STR) or self.CHAIN_LENGTH
+        chain_length = self.get_check_config(self.CHAIN_LENGTH_STR) or self.CHAIN_LENGTH
         chain_views = self.find_long_chains(chain_length)
 
         if chain_views:

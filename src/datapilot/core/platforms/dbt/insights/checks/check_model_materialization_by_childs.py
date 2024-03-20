@@ -1,6 +1,5 @@
 from typing import List
 
-from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import VIEW
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
@@ -73,7 +72,7 @@ class CheckModelMaterializationByChilds(ChecksInsight):
         threshold_childs will be taken from the config file.
         """
         insights = []
-        threshold_childs = get_check_config(self.config, self.ALIAS, self.THRESHOLD_CHILDS_STR)
+        threshold_childs = self.get_check_config(self.THRESHOLD_CHILDS_STR)
         if not threshold_childs:
             self.logger.info(f"Threshold childs are not provided in the configuration file for the insight {self.ALIAS}")
             return insights

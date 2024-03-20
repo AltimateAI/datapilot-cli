@@ -4,7 +4,6 @@ from typing import List
 from typing import Sequence
 from typing import Tuple
 
-from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.checks.base import ChecksInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
@@ -41,8 +40,8 @@ class CheckColumnNameContract(ChecksInsight):
         super().__init__(*args, **kwargs)
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        self.default_pattern = get_check_config(self.config, self.ALIAS, self.DEFAULT_PATTERN_STR)
-        datatype_configs = get_check_config(self.config, self.ALIAS, self.PATTERNS_LIST_STR)
+        self.default_pattern = self.get_check_config(self.DEFAULT_PATTERN_STR)
+        datatype_configs = self.get_check_config(self.PATTERNS_LIST_STR)
         # Patterns : [{"pattern": "^[a-z_]+$", "dtype": "string"}, {"pattern": "^[a-z_]+$", "dtype": "string"}]
         if not datatype_configs:
             self.logger.debug(f"Column name contract not found in insight config for {self.ALIAS}. Skipping insight.")

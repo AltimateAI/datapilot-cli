@@ -1,6 +1,5 @@
 from typing import List
 
-from datapilot.config.utils import get_check_config
 from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.constants import SINGULAR
 from datapilot.core.platforms.dbt.insights.dbt_test.base import DBTTestInsight
@@ -81,7 +80,7 @@ class DBTTestCoverage(DBTTestInsight):
         """
         self.logger.debug("Generating test coverage insights for DBT models")
 
-        min_coverage = get_check_config(self.config, self.ALIAS, self.MIN_COVERAGE_PERCENT_STR) or self.MIN_COVERAGE_PERCENT
+        min_coverage = self.get_check_config(self.MIN_COVERAGE_PERCENT_STR) or self.MIN_COVERAGE_PERCENT
         coverage = self._calculate_coverage()
 
         insights = []
