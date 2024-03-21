@@ -145,7 +145,7 @@ class CheckColumnNameContract(ChecksInsight):
                     "default": [],
                 },
             },
-            "required": [cls.DEFAULT_PATTERN_STR, cls.PATTERN_STR],
+            "required": [cls.DEFAULT_PATTERN_STR, cls.PATTERNS_LIST_STR],
         }
         config_schema["files_required"] = cls.FILES_REQUIRED
         return config_schema
