@@ -85,7 +85,7 @@ class CheckSourceHasFreshness(ChecksInsight):
                     "description": "The freshness options that should be defined for the source. If not provided, all freshness options are allowed.",
                     "items": {
                         "type": "string",
-                        "oneOf": [{"const": "error_after"}, {"const": "warn_after"}],
+                        "enum": ["error_after", "warn_after"],
                     },
                 },
             },
