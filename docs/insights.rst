@@ -196,10 +196,10 @@ The following insights are available in DataPilot:
 +--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
 | Name                                 | Description                                      | Files Required  | Overrides                 |
 +======================================+==================================================+=================+===========================+
-| check_column_desc_are_same           | | Checks if the column descriptions in the dbt   | Manifest        | None                      |
+| column_descriptions_are_same         | | Checks if the column descriptions in the dbt   | Manifest        | None                      |
 |                                      | | project are consistent across the project.     |                 |                           |
 +--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
-| check_column_name_contract           | | Checks if the column names in the dbt project  | Manifest,       | None                      |
+| column_name_contract                 | | Checks if the column names in the dbt project  | Manifest,       | None                      |
 |                                      | | abide by the column name contract which        | Catalog         |                           |
 |                                      | | consists of a regex pattern and a series       |                 |                           |
 |                                      | | of data types.                                 |                 |                           |
@@ -214,7 +214,7 @@ The following insights are available in DataPilot:
 |                                      | | have all the columns that are present in       | Catalog         |                           |
 |                                      | | the data catalog.                              |                 |                           |
 +--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
-| check_model_has_meta_keys            | | Checks if the models in the dbt project        | Manifest        | None                      |
+| check_model_has_valid_meta_keys      | | Checks if the models in the dbt project        | Manifest        | None                      |
 |                                      | | have meta keys.                                |                 |                           |
 +--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
 | check_model_has_properties_file      | | Checks if the models in the dbt project        | Manifest        | None                      |
@@ -233,7 +233,7 @@ The following insights are available in DataPilot:
 |                                      | | have materialization by a given threshold      |                 |                           |
 |                                      | | of child models.                               |                 |                           |
 +--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
-| check_model_name_contract            | | Checks if the models in the dbt project        | Manifest        | None                      |
+| model_name_by_folder                 | | Checks if the models in the dbt project        | Manifest        | None                      |
 |                                      | | abide by the model name contract which         |                 |                           |
 |                                      | | consists of a regex pattern.                   |                 |                           |
 +--------------------------------------+--------------------------------------------------+-----------------+---------------------------+

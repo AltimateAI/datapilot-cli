@@ -4,7 +4,6 @@ from typing import Optional
 from typing import Sequence
 
 from datapilot.config.config import load_config
-from datapilot.config.utils import get_insight_project_path
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
@@ -31,6 +30,10 @@ def main(argv: Optional[Sequence[str]] = None):
         # print(f"Using config file: {args[0].config_path[0]}")
         config = load_config(args[0].config_path[0])
 
+    base_path = "./"
+    if hasattr(args[0], "base_path") and args[0].base_path:
+        base_path = args[0].base_path[0]
+
     changed_files = args[1]
     # print(f"Changed files: {changed_files}")
 
@@ -39,7 +42,6 @@ def main(argv: Optional[Sequence[str]] = None):
         return
 
     # print(f"Changed files: {changed_files}", file=sys.__stdout__)
-    base_path = get_insight_project_path(config)
     selected_models, manifest, catalog = generate_partial_manifest_catalog(changed_files, base_path=base_path)
     # print("se1ected models", selected_models, file=sys.__stdout__)
     insight_generator = DBTInsightGenerator(
