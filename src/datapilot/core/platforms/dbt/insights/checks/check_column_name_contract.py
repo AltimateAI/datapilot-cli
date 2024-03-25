@@ -137,7 +137,15 @@ class CheckColumnNameContract(ChecksInsight):
                         "type": "object",
                         "properties": {
                             cls.PATTERN_STR: {"type": "string", "description": "The regex pattern to check the column name against"},
-                            cls.DATATYPE_STR: {"type": "string", "description": "The data type for which the pattern is defined"},
+                            cls.DATATYPE_STR: {
+                                "type": "string",
+                                "enum": [
+                                    "boolean",
+                                    "text",
+                                    "timestamp",
+                                ],
+                                "description": "The data type for which the pattern is defined",
+                            },
                         },
                         "required": [cls.PATTERN_STR, cls.DATATYPE_STR],
                     },
@@ -145,7 +153,7 @@ class CheckColumnNameContract(ChecksInsight):
                     "default": [],
                 },
             },
-            "required": [cls.DEFAULT_PATTERN_STR, cls.PATTERN_STR],
+            "required": [cls.DEFAULT_PATTERN_STR, cls.PATTERNS_LIST_STR],
         }
         config_schema["files_required"] = cls.FILES_REQUIRED
         return config_schema

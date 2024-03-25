@@ -101,9 +101,9 @@ class CheckModelHasTestsByName(ChecksInsight):
                         "type": "object",
                         "properties": {
                             cls.TEST_NAME_STR: {"type": "string", "description": "The name of the test"},
-                            cls.TESTS_LIST_STR: {"type": "integer", "description": "The minimum number of tests required", "default": 1},
-                            "required": [cls.TEST_NAME_STR, cls.TEST_COUNT_STR],
+                            cls.TEST_COUNT_STR: {"type": "integer", "description": "The minimum number of tests required", "default": 1},
                         },
+                        "required": [cls.TEST_NAME_STR, cls.TEST_COUNT_STR],
                     },
                     "description": "A list of tests with names and minimum counts required.",
                     "default": [],

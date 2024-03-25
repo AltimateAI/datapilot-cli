@@ -106,8 +106,8 @@ class CheckModelParentsDatabase(ChecksInsight):
                 },
             },
             "oneOf": [
-                {"required": ["WHITELIST_STR"], "not": {"required": ["BLACKLIST_STR"]}},
-                {"required": ["BLACKLIST_STR"], "not": {"required": ["WHITELIST_STR"]}},
+                {"required": [cls.WHITELIST_STR], "not": {"required": [cls.BLACKLIST_STR]}},
+                {"required": [cls.BLACKLIST_STR], "not": {"required": [cls.WHITELIST_STR]}},
             ],
         }
         return config_schema
