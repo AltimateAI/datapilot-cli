@@ -16,14 +16,13 @@ from datapilot.utils.utils import generate_partial_manifest_catalog
 def main(argv: Optional[Sequence[str]] = None):
     start_time = time.time()
     parser = argparse.ArgumentParser()
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument(
+    parser.add_argument(
         "--config-path",
         nargs="*",
         help="Path of the config file to be used for the insight generation",
     )
 
-    group.add_argument(
+    parser.add_argument(
         "--base-path",
         nargs="*",
         help="Base path of the dbt project",
