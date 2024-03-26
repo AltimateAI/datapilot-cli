@@ -23,6 +23,12 @@ def main(argv: Optional[Sequence[str]] = None):
         help="Path of the config file to be used for the insight generation",
     )
 
+    group.add_argument(
+        "--base-path",
+        nargs="*",
+        help="Base path of the dbt project",
+    )
+
     args = parser.parse_known_args(argv)
     # print(f"args: {args}", file=sys.__stdout__)
     config = {}
@@ -34,6 +40,7 @@ def main(argv: Optional[Sequence[str]] = None):
     if hasattr(args[0], "base_path") and args[0].base_path:
         base_path = args[0].base_path[0]
 
+    print(f"Config: {config}")
     print(f"Base path: {base_path}")
 
     changed_files = args[1]
