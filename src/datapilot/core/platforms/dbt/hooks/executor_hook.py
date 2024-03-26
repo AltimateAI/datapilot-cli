@@ -34,6 +34,8 @@ def main(argv: Optional[Sequence[str]] = None):
     if hasattr(args[0], "base_path") and args[0].base_path:
         base_path = args[0].base_path[0]
 
+    print(f"Base path: {base_path}")
+
     changed_files = args[1]
     # print(f"Changed files: {changed_files}")
 
