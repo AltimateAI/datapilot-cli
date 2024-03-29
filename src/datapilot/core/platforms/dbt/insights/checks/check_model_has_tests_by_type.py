@@ -103,7 +103,7 @@ class CheckModelHasTestsByType(ChecksInsight):
                         "properties": {
                             cls.TEST_TYPE_STR: {
                                 "type": "string",
-                                "enum": ["schema", "data"],
+                                "enum": ["singul", "data"],
                                 "description": "The type of the test",
                             },
                             cls.TEST_COUNT_STR: {"type": "integer", "description": "The minimum number of tests required", "default": 1},

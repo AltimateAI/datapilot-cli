@@ -74,7 +74,9 @@ class CheckSourceHasTestsByType(ChecksInsight):
         for child_id in self.children_map.get(node_id, []):
             child = self.get_node(child_id)
             if child.resource_type == AltimateResourceType.test:
-                test_count[child.test_type] = test_count.get(child.test_type, 0) + 1
+                child_tags = child.tags or []
+                test_type = "data" if "data" in child_tags else "schema"
+                test_count[test_type] = test_count.get(test_type, 0) + 1
         missing_tests = []
         for test_type in self.tests.keys():
             if test_count.get(test_type, 0) < self.tests.get(test_type, 0):
