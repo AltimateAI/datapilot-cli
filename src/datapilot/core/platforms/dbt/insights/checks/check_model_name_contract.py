@@ -109,7 +109,7 @@ class CheckModelNameContract(ChecksInsight):
             "properties": {
                 cls.DEFAULT_PATTERN_STR: {
                     "type": "string",
-                    "description": "The regex pattern to check the column name against if no pattern is found for the data type",
+                    "description": "The regex pattern to check the model name against",
                     "default": "^[a-z_]+$",
                 },
                 cls.PATTERNS_LIST_STR: {

@@ -105,7 +105,7 @@ class CheckSourceHasMetaKeys(ChecksInsight):
                     "items": {
                         "type": "string",
                     },
-                    "description": "A list of meta keys that should be present in the model.",
+                    "description": "A list of metadata keys that should be present in the sources properties.",
                 },
                 cls.ALLOW_EXTRA_KEYS_STR: {
                     "type": "boolean",

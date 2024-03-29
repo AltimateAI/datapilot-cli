@@ -96,7 +96,7 @@ class CheckModelHasMetaKeys(ChecksInsight):
                     "items": {
                         "type": "string",
                     },
-                    "description": "A list of meta keys that should be present in the model.",
+                    "description": "A list of metadata keys that should be present in the model properties files.",
                 },
                 cls.ALLOW_EXTRA_KEYS_STR: {
                     "type": "boolean",
