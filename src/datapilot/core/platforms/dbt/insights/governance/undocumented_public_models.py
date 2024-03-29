@@ -19,11 +19,7 @@ class DBTUndocumentedPublicModels(DBTGovernanceInsight):
 
     NAME = "Undocumented Public Models"
     ALIAS = "undocumented_public_models"
-    DESCRIPTION = (
-        "Identifies models in the dbt project that are marked as public but lack documentation. Public models should "
-        "be thoroughly documented to ensure that consumers of the data have a clear understanding "
-        "of their structure and purpose."
-    )
+    DESCRIPTION = "Identify public models that don't have documentation."
     REASON_TO_FLAG = (
         "Public models are accessible to a wide range of data consumers. To promote understanding and usability, "
         "it's essential to document these models comprehensively."

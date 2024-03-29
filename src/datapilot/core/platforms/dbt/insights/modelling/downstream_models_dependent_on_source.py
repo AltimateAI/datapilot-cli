@@ -21,10 +21,7 @@ class DBTDownstreamModelsDependentOnSource(DBTModellingInsight):
 
     NAME = "Downstream Models Dependent on Source"
     ALIAS = "downstream_source_dependence"
-    DESCRIPTION = (
-        "Evaluates if downstream models (marts or intermediates) are improperly dependent directly on a source. "
-        "Aims to ensure that all downstream models depend on staging models, not directly on source nodes."
-    )
+    DESCRIPTION = "Downstream models should not depend directly on source nodes. "
     REASON_TO_FLAG = (
         "Direct dependency of marts or intermediate models on a source node suggests a missing staging model. "
         "Staging models serve as atomic units, maintaining a one-to-one relationship with source data tables, "

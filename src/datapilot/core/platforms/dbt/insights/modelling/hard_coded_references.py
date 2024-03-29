@@ -17,10 +17,7 @@ class DBTHardCodedReferences(DBTModellingInsight):
 
     NAME = "Hard Coded References"
     ALIAS = "hard_coded_references"
-    DESCRIPTION = (
-        "Identifies and flags instances where SQL code within models contains hard-coded references. "
-        "These references can obscure data lineage and complicate project maintenance."
-    )
+    DESCRIPTION = "Models should not have hard-coded references to tables"
     REASON_TO_FLAG = (
         "Hard-coded references in SQL prevent easy identification and tracking of data lineage, "
         "and can lead to issues in maintainability and scalability of the data models."

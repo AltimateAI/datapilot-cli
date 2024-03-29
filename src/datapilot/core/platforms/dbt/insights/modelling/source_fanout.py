@@ -5,7 +5,6 @@ from datapilot.core.platforms.dbt.insights.modelling.base import DBTModellingIns
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.schemas.constants import CONFIG_METRICS
 
 
 class DBTSourceFanout(DBTModellingInsight):
@@ -15,11 +14,7 @@ class DBTSourceFanout(DBTModellingInsight):
 
     NAME = "Source Fanout Analysis"
     ALIAS = "source_fanout"
-    DESCRIPTION = (
-        "Evaluates sources for high fanout, which occurs when a single source has a"
-        " large number of direct child models. High fanout can be indicative of a data model"
-        " that might be overly complex or overly reliant on a specific source."
-    )
+    DESCRIPTION = "Identifies sources with a high number of direct children."
     REASON_TO_FLAG = (
         "Identifying sources with high fanout can indicate areas where the data model might be overly complex "
         "or dependent on a single source. Such dependencies can introduce risks and "
@@ -56,15 +51,8 @@ class DBTSourceFanout(DBTModellingInsight):
             },
         )
 
-    def _get_source_fanout_threshold(self) -> int:
-        metrics_config = self.config.get(CONFIG_METRICS, {})
-        metric_config = metrics_config.get(self.ALIAS, {})
-
-        # Return the configured fanout threshold or the default if not specified
-        return metric_config.get(self.SOURCE_FANOUT_THRESHOLD_STR, self.SOURCE_FANOUT_THRESHOLD)
-
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        fanout_threshold = self._get_source_fanout_threshold()
+        fanout_threshold = self.get_check_config(self.SOURCE_FANOUT_THRESHOLD_STR) or self.SOURCE_FANOUT_THRESHOLD
         insights = []
 
         for node_id, children_set in self.children_map.items():
@@ -91,3 +79,24 @@ class DBTSourceFanout(DBTModellingInsight):
                         )
                     )
         return insights
+
+    @classmethod
+    def get_config_schema(cls):
+        """
+        :return: The configuration schema for the test coverage insight.
+        """
+        config_schema = super().get_config_schema()
+
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.SOURCE_FANOUT_THRESHOLD_STR: {
+                    "type": "integer",
+                    "description": "The maximum number of direct children a source can have before being flagged.",
+                    "default": cls.SOURCE_FANOUT_THRESHOLD,
+                },
+            },
+            "required": [cls.SOURCE_FANOUT_THRESHOLD_STR],
+        }
+        return config_schema

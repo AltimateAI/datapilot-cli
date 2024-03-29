@@ -4,7 +4,6 @@ from datapilot.core.insights.utils import get_severity
 from datapilot.core.platforms.dbt.insights.performance.base import DBTPerformanceInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTProjectInsightResponse
-from datapilot.schemas.constants import CONFIG_METRICS
 from datapilot.utils.formatting.utils import numbered_list
 
 
@@ -17,11 +16,7 @@ class DBTChainViewLinking(DBTPerformanceInsight):
     NAME = "Chain View Linking"
     ALIAS = "chain_view_linking"
     CHAIN_LENGTH = 4  # Default chain length, can be adjusted as needed
-    DESCRIPTION = (
-        "Analyzes the dbt project to identify long chains of non-physically-materialized models (views and ephemerals)."
-        " Such long chains can result in increased runtime for models built on top of them due to extended computation"
-        " and memory usage."
-    )
+    DESCRIPTION = "Checks for long chains of view/ephemeral models in the dbt project. Long chains can lead to slow computation "
     REASON_TO_FLAG = (
         "Long runtime can occur for a model when it is built on top of a long chain of 'non-physically-materialized'"
         " models. Identifying these chains is crucial to optimize performance and reduce computation overhead."
@@ -59,14 +54,8 @@ class DBTChainViewLinking(DBTPerformanceInsight):
             },
         )
 
-    def _get_chain_length(self):
-        metrics_config = self.config.get(CONFIG_METRICS, {})
-        metric_config = metrics_config.get(self.ALIAS, {})
-        # Return the configured fanout threshold or the default if not specified
-        return metric_config.get(self.CHAIN_LENGTH_STR, self.CHAIN_LENGTH)
-
     def generate(self, *args, **kwargs) -> List[DBTProjectInsightResponse]:
-        chain_length = self._get_chain_length()
+        chain_length = self.get_check_config(self.CHAIN_LENGTH_STR) or self.CHAIN_LENGTH
         chain_views = self.find_long_chains(chain_length)
 
         if chain_views:
@@ -80,3 +69,24 @@ class DBTChainViewLinking(DBTPerformanceInsight):
                 )
             ]
         return []
+
+    @classmethod
+    def get_config_schema(cls):
+        """
+        :return: The configuration schema for the test coverage insight.
+        """
+        config_schema = super().get_config_schema()
+
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.CHAIN_LENGTH_STR: {
+                    "type": "integer",
+                    "description": "The maximum length of the chain of views to be considered.",
+                    "default": cls.CHAIN_LENGTH,
+                },
+            },
+            "required": [cls.CHAIN_LENGTH_STR],
+        }
+        return config_schema

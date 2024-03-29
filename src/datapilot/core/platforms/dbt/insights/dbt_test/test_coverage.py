@@ -6,7 +6,6 @@ from datapilot.core.platforms.dbt.insights.dbt_test.base import DBTTestInsight
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTProjectInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.schemas.constants import CONFIG_METRICS
 
 
 class DBTTestCoverage(DBTTestInsight):
@@ -17,11 +16,7 @@ class DBTTestCoverage(DBTTestInsight):
 
     NAME = "Low Test Coverage in dbt Models"
     ALIAS = "dbt_low_test_coverage"
-    DESCRIPTION = (
-        "Identifies dbt models in the project with low test coverage, where the test coverage percentage falls below "
-        "the minimum required threshold. Adequate test coverage is essential to maintain data integrity"
-        " and ensure the accuracy of data transformations."
-    )
+    DESCRIPTION = "Checks if the project test coverage is below the minimum threshold. "
     REASON_TO_FLAG = (
         "dbt models should have a minimum test coverage percentage to ensure the reliability and accuracy "
         "of data transformations. Low test coverage can lead to data quality issues."
@@ -77,16 +72,6 @@ class DBTTestCoverage(DBTTestInsight):
 
         return round((len(models_with_tests) / num_models) * 100) if num_models > 0 else 100
 
-    def _get_min_coverage_percent(self) -> int:
-        """
-        :return: The minimum required test coverage percentage.
-        """
-        metrics_config = self.config.get(CONFIG_METRICS, {})
-        metric_config = metrics_config.get(self.ALIAS, {})
-        self.logger.debug(f"METRIC CONFIG: {metric_config}")
-        # Return the configured fanout threshold or the default if not specified
-        return metric_config.get(self.MIN_COVERAGE_PERCENT_STR, self.MIN_COVERAGE_PERCENT)
-
     def generate(self, *args, **kwargs) -> List[DBTProjectInsightResponse]:
         """
         Generates insights for each DBT model in the project, focusing on test coverage.
@@ -94,7 +79,8 @@ class DBTTestCoverage(DBTTestInsight):
         :return: A list of DBTModelInsightResponse objects with insights for each model.
         """
         self.logger.debug("Generating test coverage insights for DBT models")
-        min_coverage = self._get_min_coverage_percent()
+
+        min_coverage = self.get_check_config(self.MIN_COVERAGE_PERCENT_STR) or self.MIN_COVERAGE_PERCENT
         coverage = self._calculate_coverage()
 
         insights = []
@@ -109,3 +95,24 @@ class DBTTestCoverage(DBTTestInsight):
 
         self.logger.debug("Completed generating test coverage insights")
         return insights
+
+    @classmethod
+    def get_config_schema(cls):
+        """
+        :return: The configuration schema for the test coverage insight.
+        """
+        config_schema = super().get_config_schema()
+
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.MIN_COVERAGE_PERCENT_STR: {
+                    "type": "integer",
+                    "description": "The minimum test coverage percentage required for the models in the project",
+                    "default": cls.MIN_COVERAGE_PERCENT,
+                },
+            },
+            "required": [cls.MIN_COVERAGE_PERCENT_STR],
+        }
+        return config_schema

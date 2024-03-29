@@ -15,11 +15,7 @@ class DBTExposureDependentOnPrivateModels(DBTGovernanceInsight):
 
     NAME = "Exposures Dependent on Private Models"
     ALIAS = "exposures_dependent_on_private_models"
-    DESCRIPTION = (
-        "Detects if exposures in the dbt project are dependent on private models. Exposures should ideally depend "
-        "on public, well-documented, and contracted models that represent trusted data sources "
-        "for downstream consumption."
-    )
+    DESCRIPTION = "Identify exposures that are dependent on private models. "
     REASON_TO_FLAG = (
         "Exposures illustrate how and where data is consumed in downstream tools. These tools should utilize "
         "data from public, trusted, and contracted sources to ensure data reliability and integrity."

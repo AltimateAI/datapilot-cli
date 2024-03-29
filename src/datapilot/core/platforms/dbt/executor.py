@@ -2,6 +2,7 @@ import logging
 
 # from src.utils.formatting.utils import generate_model_insights_table
 from typing import Dict
+from typing import List
 from typing import Optional
 
 from datapilot.core.platforms.dbt.constants import MODEL
@@ -9,9 +10,9 @@ from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.exceptions import AltimateCLIArgumentError
 from datapilot.core.platforms.dbt.factory import DBTFactory
 from datapilot.core.platforms.dbt.insights import INSIGHTS
+from datapilot.core.platforms.dbt.schemas.manifest import Catalog
+from datapilot.core.platforms.dbt.schemas.manifest import Manifest
 from datapilot.core.platforms.dbt.utils import get_models
-from datapilot.core.platforms.dbt.utils import load_catalog
-from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import RED
 from datapilot.utils.formatting.utils import YELLOW
 from datapilot.utils.formatting.utils import color_text
@@ -20,29 +21,26 @@ from datapilot.utils.formatting.utils import color_text
 class DBTInsightGenerator:
     def __init__(
         self,
-        manifest_path: str,
-        catalog_path: Optional[str] = None,
+        manifest: Manifest,
+        catalog: Optional[Catalog] = None,
         run_results_path: Optional[str] = None,
         env: Optional[str] = None,
         config: Optional[Dict] = None,
         target: str = "dev",
         selected_models: Optional[str] = None,
+        selected_model_ids: Optional[List[str]] = None,
     ):
-        self.manifest_path = manifest_path
-        self.catalog_path = catalog_path
         self.run_results_path = run_results_path
         self.target = target
         self.env = env
         self.config = config or {}
-        manifest = load_manifest(self.manifest_path)
 
         self.manifest_wrapper = DBTFactory.get_manifest_wrapper(manifest)
         self.manifest_present = True
         self.catalog_present = False
         self.catalog_wrapper = None
 
-        if catalog_path:
-            catalog = load_catalog(self.catalog_path)
+        if catalog:
             self.catalog_wrapper = DBTFactory.get_catalog_wrapper(catalog)
             self.catalog_present = True
 
@@ -50,8 +48,10 @@ class DBTInsightGenerator:
         self.logger = logging.getLogger("dbt-insight-generator")
 
         self.nodes = self.manifest_wrapper.get_nodes()
+        self.macros = self.manifest_wrapper.get_macros()
         self.sources = self.manifest_wrapper.get_sources()
         self.exposures = self.manifest_wrapper.get_exposures()
+        self.seeds = self.manifest_wrapper.get_seeds()
         self.children_map = self.manifest_wrapper.parent_to_child_map(self.nodes)
         self.tests = self.manifest_wrapper.get_tests()
         self.project_name = self.manifest_wrapper.get_package()
@@ -63,7 +63,10 @@ class DBTInsightGenerator:
             "exposures": self.exposures,
             "tests": self.tests,
         }
-        if selected_models:
+        if selected_model_ids:
+            self.selected_models_flag = True
+            self.selected_models = selected_model_ids
+        elif selected_models:
             self.selected_models_flag = True
             self.selected_models = get_models(
                 selected_models,
@@ -79,12 +82,6 @@ class DBTInsightGenerator:
     def _check_if_skipped(self, insight):
         if self.config.get("disabled_insights", False):
             if insight.ALIAS in self.config.get("disabled_insights", []):
-                return True
-        return False
-
-    def _check_if_model_skipped(self, insight):
-        if self.selected_models:
-            if insight.ALIAS not in self.selected_models:
                 return True
         return False
 
@@ -108,7 +105,9 @@ class DBTInsightGenerator:
                     manifest_wrapper=self.manifest_wrapper,
                     catalog_wrapper=self.catalog_wrapper,
                     nodes=self.nodes,
+                    macros=self.macros,
                     sources=self.sources,
+                    seeds=self.seeds,
                     exposures=self.exposures,
                     children_map=self.children_map,
                     tests=self.tests,

@@ -15,11 +15,7 @@ class DBTModelsMultipleSourcesJoined(DBTModellingInsight):
 
     NAME = "Multiple Sources Joined"
     ALIAS = "multiple_sources_joined"
-    DESCRIPTION = (
-        "Checks if a model directly joins multiple source tables. Encourages the use of a single staging"
-        " model per source, which then serves as the dependency for downstream models. This practice"
-        " enhances data consistency and maintainability."
-    )
+    DESCRIPTION = "Models should not directly join multiple sources."
     REASON_TO_FLAG = (
         "Best practice is to have a single staging model per source and use this staging model as a "
         "dependency for downstream models. Directly joining multiple sources in a single model can "

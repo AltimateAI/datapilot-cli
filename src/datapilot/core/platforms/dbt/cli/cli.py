@@ -11,6 +11,7 @@ from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
 from datapilot.core.platforms.dbt.formatting import generate_model_insights_table
 from datapilot.core.platforms.dbt.formatting import generate_project_insights_table
+from datapilot.core.platforms.dbt.utils import load_catalog
 from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import tabulate_data
 
@@ -56,7 +57,9 @@ def project_health(manifest_path, catalog_path, config_path=None, select=None):
     selected_models = []
     if select:
         selected_models = select.split(" ")
-    insight_generator = DBTInsightGenerator(manifest_path, catalog_path=catalog_path, config=config, selected_models=selected_models)
+    manifest = load_manifest(manifest_path)
+    catalog = load_catalog(catalog_path) if catalog_path else None
+    insight_generator = DBTInsightGenerator(manifest=manifest, catalog=catalog, config=config, selected_models=selected_models)
     reports = insight_generator.run()
 
     package_insights = reports[PROJECT]

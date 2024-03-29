@@ -1,0 +1,7 @@
+- id: datapilot_run_dbt_checks
+  name: datapilot run dbt checks
+  description: datapilot run dbt checks
+  entry: datapilot_run_dbt_checks
+  language: python
+  types_or: [yaml, sql]
+  require_serial: true

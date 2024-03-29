@@ -1,3 +1,4 @@
+from typing import ClassVar
 from typing import List
 from typing import Tuple
 
@@ -18,9 +19,8 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
     NAME = "Documentation of Stale Columns"
     ALIAS = "documentation_on_stale_columns"
     DESCRIPTION = (
-        "Checks for columns that are documented in the dbt project but have been removed from their respective models. "
-        "Maintaining accurate documentation is crucial for clarity and consistency, especially in collaborative "
-        "environments."
+        "Identify columns that have been documented but are no longer present in the model. "
+        "This insight helps in maintaining accurate and up-to-date documentation."
     )
     REASON_TO_FLAG = (
         "A column has been documented but is no longer present in the model/database. "
@@ -34,6 +34,7 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
         "Review and update the documentation for model `{model_unique_id}`. Remove documentation entries for columns "
         "that are no longer present to maintain clarity and accuracy in the project documentation."
     )
+    FILES_REQUIRED: ClassVar = ["Manifest", "Catalog"]
 
     def __init__(self, catalog_wrapper: BaseCatalogWrapper, *args, **kwargs):
         self.catalog = catalog_wrapper
@@ -123,3 +124,7 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
             return False, "catalog is required for insight to run."
 
         return True, ""
+
+    @classmethod
+    def requires_catalog(cls) -> bool:
+        return True

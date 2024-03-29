@@ -5,7 +5,6 @@ from datapilot.core.platforms.dbt.insights.modelling.base import DBTModellingIns
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
-from datapilot.schemas.constants import CONFIG_METRICS
 
 
 class DBTModelFanout(DBTModellingInsight):
@@ -16,11 +15,7 @@ class DBTModelFanout(DBTModellingInsight):
 
     NAME = "Model Fanout Analysis"
     ALIAS = "model_fanout"
-    DESCRIPTION = (
-        "Assesses parent models to identify high fanout scenarios. High fanout can indicate points in the DAG where "
-        "transformations may be more efficiently moved to the BI layer, or where common business logic could be "
-        "better positioned upstream in the data pipeline."
-    )
+    DESCRIPTION = "Identifies parent models with an unusually high number of children. "
     REASON_TO_FLAG = (
         "Flagged to highlight parent models with an unusually high number of leaf children. This can suggest areas "
         "in the data pipeline where complexity is increased and transformations might be optimized."
@@ -68,16 +63,8 @@ class DBTModelFanout(DBTModellingInsight):
             },
         )
 
-    def _get_fanout_threshold(self) -> int:
-        # Check if metrics configuration and specific metric alias are present in the config
-        metrics_config = self.config.get(CONFIG_METRICS, {})
-        metric_config = metrics_config.get(self.ALIAS, {})
-
-        # Return the configured fanout threshold or the default if not specified
-        return metric_config.get(self.FANOUT_THRESHOLD_STR, self.FANOUT_THRESHOLD)
-
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
-        fanout_threshold = self._get_fanout_threshold()
+        fanout_threshold = self.get_check_config(self.FANOUT_THRESHOLD_STR) or self.FANOUT_THRESHOLD
         insights = []
         self.logger.debug(f"Checking for models with fanout greater than {fanout_threshold}")
         for parent, children_set in self.children_map.items():
@@ -116,3 +103,24 @@ class DBTModelFanout(DBTModellingInsight):
 
         self.logger.debug(f"Found {len(insights)} models with high fanout")
         return insights
+
+    @classmethod
+    def get_config_schema(cls):
+        """
+        :return: The configuration schema for the test coverage insight.
+        """
+        config_schema = super().get_config_schema()
+
+        config_schema["config"] = {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+                cls.FANOUT_THRESHOLD_STR: {
+                    "type": "integer",
+                    "description": "The maximum number of direct leaf children a model can have before being flagged.",
+                    "default": cls.FANOUT_THRESHOLD,
+                },
+            },
+            "required": [cls.FANOUT_THRESHOLD_STR],
+        }
+        return config_schema

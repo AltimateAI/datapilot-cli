@@ -23,11 +23,7 @@ class MissingPrimaryKeyTests(DBTTestInsight):
     UNIQUE_COMBINATION_OF_COLUMNS = "unique_combination_of_columns"
     NAME = "Missing Primary Key Tests"
     ALIAS = "missing_primary_key_tests"
-    DESCRIPTION = (
-        "Identifies dbt models in the project that lack primary key tests. Tests in DBT are essential "
-        "for ensuring the correctness of models and resources. Models without primary key tests may be at risk "
-        "of data integrity issues, impacting project reliability and scalability."
-    )
+    DESCRIPTION = "Checks if the model has a primary key test. "
     REASON_TO_FLAG = (
         "dbt tests play a crucial role in asserting data correctness. The absence of primary key tests can increase "
         "the risk of data integrity issues, affecting project reliability and scalability."

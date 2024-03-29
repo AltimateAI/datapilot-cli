@@ -77,6 +77,7 @@ setup(
     entry_points={
         "console_scripts": [
             "datapilot = datapilot.cli.main:datapilot",
+            "datapilot_run_dbt_checks = datapilot.core.platforms.dbt.hooks.executor_hook:main",
         ]
     },
 )

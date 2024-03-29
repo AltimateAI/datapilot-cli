@@ -17,6 +17,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateFileHash
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateFreshnessThreshold
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestColumnInfo
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestMacroNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
@@ -26,12 +27,16 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateOwner
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateQuoting
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateRefArgs
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateSeedConfig
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateSeedNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateSourceConfig
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateTestConfig
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateTestMetadata
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import TEST_TYPE_TO_NODE_MAP
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import ExposureNode
+from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import MacroNode
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import ManifestNode
+from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import SeedNodeMap
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import SourceNode
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import TestNode
 from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import BaseManifestWrapper
@@ -106,6 +111,8 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             compiled=compiled,
             compiled_code=compiled_code,
             contract=contract,
+            meta=node.meta,
+            patch_path=node.patch_path,
         )
 
     def _get_source(self, source: SourceNode) -> AltimateManifestSourceNode:
@@ -147,6 +154,31 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             patch_path=source.patch_path,
             unrendered_config=source.unrendered_config,
             created_at=source.created_at,
+        )
+
+    def _get_macro(self, macro: MacroNode) -> AltimateManifestMacroNode:
+        return AltimateManifestMacroNode(
+            name=macro.name,
+            resource_type=AltimateResourceType(macro.resource_type.value),
+            package_name=macro.package_name,
+            path=macro.path,
+            original_file_path=macro.original_file_path,
+            unique_id=macro.unique_id,
+            macro_sql=macro.macro_sql,
+            depends_on=(
+                AltimateDependsOn(
+                    macros=macro.depends_on.macros,
+                )
+                if macro.depends_on
+                else None
+            ),
+            description=macro.description,
+            meta=macro.meta,
+            docs=macro.docs,
+            patch_path=macro.patch_path,
+            arguments=[AltimateRefArgs(**arg.dict()) for arg in macro.arguments] if macro.arguments else None,
+            created_at=macro.created_at,
+            supported_languages=macro.supported_languages,
         )
 
     def _get_exposure(self, exposure: ExposureNode) -> AltimateManifestExposureNode:
@@ -241,16 +273,61 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             compiled_code=test.compiled_code,
         )
 
+    def _get_seed(self, seed: SeedNodeMap) -> AltimateSeedNode:
+        return AltimateSeedNode(
+            database=seed.database,
+            schema_name=seed.schema_,
+            name=seed.name,
+            resource_type=AltimateResourceType(seed.resource_type.value),
+            package_name=seed.package_name,
+            path=seed.path,
+            original_file_path=seed.original_file_path,
+            unique_id=seed.unique_id,
+            fqn=seed.fqn,
+            alias=seed.alias,
+            checksum=AltimateFileHash(
+                name=seed.checksum.name,
+                checksum=seed.checksum.checksum,
+            )
+            if seed.checksum
+            else None,
+            config=AltimateSeedConfig(**seed.config.dict()) if seed.config else None,
+            description=seed.description,
+            tags=seed.tags,
+            columns={
+                name: AltimateManifestColumnInfo(
+                    name=column.name,
+                    description=column.description,
+                    meta=column.meta,
+                    data_type=column.data_type,
+                    quote=column.quote,
+                    tags=column.tags,
+                )
+                for name, column in seed.columns.items()
+            }
+            if seed.columns
+            else None,
+            meta=seed.meta,
+            group=seed.group,
+            docs=seed.docs.dict() if seed.docs else None,
+            patch_path=seed.patch_path,
+            build_path=seed.build_path,
+            deferred=seed.deferred,
+            unrendered_config=seed.unrendered_config,
+            created_at=seed.created_at,
+            config_call_dict=seed.config_call_dict,
+        )
+
     def get_nodes(
         self,
     ) -> Dict[str, AltimateManifestNode]:
         nodes = {}
         for node in self.manifest.nodes.values():
             if (
-                node.resource_type
+                node.resource_type.value
                 in [
-                    AltimateResourceType.seed,
-                    AltimateResourceType.test,
+                    AltimateResourceType.seed.value,
+                    AltimateResourceType.test.value,
                 ]
                 or node.package_name != self.get_package()
             ):
@@ -266,6 +343,13 @@ class ManifestV11Wrapper(BaseManifestWrapper):
         for source in self.manifest.sources.values():
             sources[source.unique_id] = self._get_source(source)
         return sources
+
+    def get_macros(self) -> Dict[str, AltimateManifestMacroNode]:
+        macros = {}
+        for macro in self.manifest.macros.values():
+            if macro.resource_type.value == AltimateResourceType.macro.value and macro.package_name == self.get_package():
+                macros[macro.unique_id] = self._get_macro(macro)
+        return macros
 
     def get_exposures(self) -> Dict[str, AltimateManifestExposureNode]:
         exposures = {}
@@ -288,6 +372,13 @@ class ManifestV11Wrapper(BaseManifestWrapper):
                 if any(isinstance(node, t) for t in types):
                     tests[node.unique_id] = self._get_tests(node)
         return tests
+
+    def get_seeds(self) -> Dict[str, AltimateSeedNode]:
+        seeds = {}
+        for seed in self.manifest.nodes.values():
+            if seed.resource_type.value == AltimateResourceType.seed.value:
+                seeds[seed.unique_id] = self._get_seed(seed)
+        return seeds
 
     def parent_to_child_map(self, nodes: Dict[str, AltimateManifestNode]) -> Dict[str, Set[str]]:
         """

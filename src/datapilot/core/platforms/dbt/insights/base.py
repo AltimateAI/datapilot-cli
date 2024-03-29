@@ -1,21 +1,26 @@
 from abc import abstractmethod
+from typing import ClassVar
 from typing import Dict
 from typing import List
 from typing import Union
 
+from datapilot.config.utils import get_insight_config
 from datapilot.core.insights.base.insight import Insight
 from datapilot.core.insights.schema import Severity
 from datapilot.core.platforms.dbt.constants import NON_MATERIALIZED
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestMacroNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateSeedNode
 from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import BaseManifestWrapper
 
 
 class DBTInsight(Insight):
     DEFAULT_SEVERITY = Severity.ERROR
+    FILES_REQUIRED: ClassVar = ["Manifest"]
 
     def __init__(
         self,
@@ -24,6 +29,8 @@ class DBTInsight(Insight):
         sources: Dict[str, AltimateManifestSourceNode],
         exposures: Dict[str, AltimateManifestExposureNode],
         tests: Dict[str, AltimateManifestTestNode],
+        seeds: Dict[str, AltimateSeedNode],
+        macros: Dict[str, AltimateManifestMacroNode],
         children_map: Dict[str, List[str]],
         project_name: str,
         selected_models: Union[List[str], None] = None,
@@ -33,9 +40,11 @@ class DBTInsight(Insight):
     ):
         self.manifest = manifest_wrapper
         self.nodes = nodes
+        self.macros = macros or {}
         self.sources = sources
         self.exposures = exposures
         self.tests = tests
+        self.seeds = seeds
         self.children_map = children_map
         self.project_name = project_name
         self.selected_models = selected_models
@@ -51,7 +60,9 @@ class DBTInsight(Insight):
 
     def get_node(
         self, node_id: str
-    ) -> Union[AltimateManifestNode, AltimateManifestSourceNode, AltimateManifestExposureNode, AltimateManifestTestNode,]:
+    ) -> Union[
+        AltimateManifestNode, AltimateManifestSourceNode, AltimateManifestExposureNode, AltimateManifestTestNode, AltimateManifestMacroNode
+    ]:
         if node_id in self.nodes:
             return self.nodes[node_id]
         elif node_id in self.sources:
@@ -60,6 +71,10 @@ class DBTInsight(Insight):
             return self.exposures[node_id]
         elif node_id in self.tests:
             return self.tests[node_id]
+        elif node_id in self.macros:
+            return self.macros[node_id]
+        elif node_id in self.seeds:
+            return self.seeds[node_id]
         else:
             self.logger.debug(f"Model {node_id} not found in manifest")
             return None
@@ -99,3 +114,20 @@ class DBTInsight(Insight):
             return model_unique_id not in self.selected_models
 
         return False
+
+    @classmethod
+    def get_config_schema(cls):
+        return {
+            "name": cls.NAME,
+            "alias": cls.ALIAS,
+            "type": cls.TYPE,
+            "files_required": cls.FILES_REQUIRED,
+            "description": cls.DESCRIPTION,
+            "config": {"$schema": "http://json-schema.org/draft-07/schema#", "type": "object", "properties": {}},
+        }
+
+    def requires_catalog(cls) -> bool:
+        return False
+
+    def get_check_config(self, key: str) -> any:
+        return get_insight_config(self.config, self.ALIAS, key)

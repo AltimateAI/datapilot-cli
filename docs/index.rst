@@ -10,6 +10,8 @@ Contents
    installation
    features
    insights
+   pre-commit
+   performance
    configuration
    contributing
    authors

@@ -189,3 +189,92 @@ The following insights are available in DataPilot:
 |                                      | | Co locating tests with models aids in          |                 |                           |
 |                                      | | maintainability and clarity.                   |                 |                           |
 +--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+
+6. Check Insights
+---------------------
+
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| Name                                 | Description                                      | Files Required  | Overrides                 |
++======================================+==================================================+=================+===========================+
+| column_descriptions_are_same         | | Checks if the column descriptions in the dbt   | Manifest        | None                      |
+|                                      | | project are consistent across the project.     |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| column_name_contract                 | | Checks if the column names in the dbt project  | Manifest,       | None                      |
+|                                      | | abide by the column name contract which        | Catalog         |                           |
+|                                      | | consists of a regex pattern and a series       |                 |                           |
+|                                      | | of data types.                                 |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_macro_args_have_desc           | | Checks if the macro arguments in the dbt       | Manifest        | None                      |
+|                                      | | project have descriptions.                     |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_macro_has_desc                 | | Checks if the macros in the dbt project        | Manifest        | None                      |
+|                                      | | have descriptions.                             |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_has_all_columns          | | Checks if the models in the dbt project        | Manifest,       | None                      |
+|                                      | | have all the columns that are present in       | Catalog         |                           |
+|                                      | | the data catalog.                              |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_has_valid_meta_keys      | | Checks if the models in the dbt project        | Manifest        | None                      |
+|                                      | | have meta keys.                                |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_has_properties_file      | | Checks if the models in the dbt project        | Manifest        | None                      |
+|                                      | | have a properties file.                        |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_has_tests_by_name        | | Checks if the models in the dbt project        | Manifest        | None                      |
+|                                      | | have tests by name.                            |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_has_tests_by_type        | | Checks if the models in the dbt project        | Manifest        | None                      |
+|                                      | | have tests by type.                            |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_has_tests_by_group       | | Checks if the models in the dbt project        | Manifest        | None                      |
+|                                      | | have tests by group.                           |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_materialization_by_childs| | Checks if the models in the dbt project        | Manifest        | None                      |
+|                                      | | have materialization by a given threshold      |                 |                           |
+|                                      | | of child models.                               |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| model_name_by_folder                 | | Checks if the models in the dbt project        | Manifest        | None                      |
+|                                      | | abide by the model name contract which         |                 |                           |
+|                                      | | consists of a regex pattern.                   |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_parents_and_childs       | | Checks if the model has min/max parents        | Manifest        | None                      |
+|                                      | | and childs.                                    |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_parents_database         | | Checks if the models in the dbt project        | Manifest        | None                      |
+|                                      | | has parent database in whitelist and           |                 |                           |
+|                                      | | not in blacklist.                              |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_parents_schema           | | Checks if the models in the dbt project        | Manifest        | None                      |
+|                                      | | has parent schema in whitelist and             |                 |                           |
+|                                      | | not in blacklist.                              |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_model_tags                     | | Checks if the models in the dbt project        | Manifest        | None                      |
+|                                      | | have tags in provided list of tags.            |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_childs                  | | Checks if the source has min/max childs        | Manifest        | None                      |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_columns_have_desc       | | Checks if the source columns have descriptions | Manifest,       | None                      |
+|                                      | | in the dbt project.                            | Catalog         |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_has_all_columns         | | Checks if the source has all columns           | Manifest,       | None                      |
+|                                      | | present in the data catalog.                   | Catalog         |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_has_freshness           | | Checks if the source has freshness             | Manifest        | None                      |
+|                                      | | options.                                       |                 |                           |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_has_loader              | | Checks if the source has loader                | Manifest        | None                      |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_has_meta_keys           | | Checks if the source has meta keys             | Manifest        | None                      |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_has_tests_by_name       | | Checks if the source has tests by name         | Manifest        | None                      |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_has_tests_by_type       | | Checks if the source has tests by type         | Manifest        | None                      |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_has_tests_by_group      | | Checks if the source has tests by group        | Manifest        | None                      |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_has_tests               | | Checks if the source has tests                 | Manifest        | None                      |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_table_has_desc          | | Checks if the source table has description     | Manifest        | None                      |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
+| check_source_tags                    | | Checks if the source has tags                  | Manifest        | None                      |
++--------------------------------------+--------------------------------------------------+-----------------+---------------------------+
