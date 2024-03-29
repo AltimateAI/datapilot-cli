@@ -117,7 +117,7 @@ class DBTModelFanout(DBTModellingInsight):
             "properties": {
                 cls.FANOUT_THRESHOLD_STR: {
                     "type": "integer",
-                    "description": "The minimum test coverage percentage required for the models in the project",
+                    "description": "The maximum number of direct leaf children a model can have before being flagged.",
                     "default": cls.FANOUT_THRESHOLD,
                 },
             },

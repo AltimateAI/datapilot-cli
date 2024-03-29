@@ -139,11 +139,6 @@ class CheckColumnNameContract(ChecksInsight):
                             cls.PATTERN_STR: {"type": "string", "description": "The regex pattern to check the column name against"},
                             cls.DATATYPE_STR: {
                                 "type": "string",
-                                "enum": [
-                                    "boolean",
-                                    "text",
-                                    "timestamp",
-                                ],
                                 "description": "The data type for which the pattern is defined",
                             },
                         },

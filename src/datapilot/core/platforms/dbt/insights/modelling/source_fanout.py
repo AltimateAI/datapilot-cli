@@ -93,7 +93,7 @@ class DBTSourceFanout(DBTModellingInsight):
             "properties": {
                 cls.SOURCE_FANOUT_THRESHOLD_STR: {
                     "type": "integer",
-                    "description": "The minimum test coverage percentage required for the models in the project",
+                    "description": "The maximum number of direct children a source can have before being flagged.",
                     "default": cls.SOURCE_FANOUT_THRESHOLD,
                 },
             },

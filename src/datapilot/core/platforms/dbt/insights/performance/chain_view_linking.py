@@ -83,7 +83,7 @@ class DBTChainViewLinking(DBTPerformanceInsight):
             "properties": {
                 cls.CHAIN_LENGTH_STR: {
                     "type": "integer",
-                    "description": "The minimum test coverage percentage required for the models in the project",
+                    "description": "The maximum length of the chain of views to be considered.",
                     "default": cls.CHAIN_LENGTH,
                 },
             },
