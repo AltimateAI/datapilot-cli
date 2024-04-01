@@ -14,7 +14,7 @@ class DBTExposureParentMaterialization(DBTPerformanceInsight):
     Checks if the dbt model has hard coded references to other models.
     """
 
-    NAME = "Exposure Parent Materialization Check"
+    NAME = "Exposure parent materialization check"
     ALIAS = "exposure_parent_bad_materialization"
     DESCRIPTION = "Exposures should depend on transformed data models or metrics, not raw untransformed sources. "
     REASON_TO_FLAG = (

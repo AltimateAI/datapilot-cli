@@ -14,7 +14,7 @@ class DBTSourceDirectoryStructure(DBTStructureInsight):
     DBTSourcesDirectoryStructure checks if sources are placed in the correct directories.
     """
 
-    NAME = "Bad Source Directory Structure"
+    NAME = "Bad source directory structure"
     ALIAS = "source_directory_structure"
     DESCRIPTION = "This rule identifies sources that are not placed in their correct directories. "
     REASON_TO_FLAG = (

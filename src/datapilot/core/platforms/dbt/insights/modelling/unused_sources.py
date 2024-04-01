@@ -11,7 +11,7 @@ class DBTUnusedSources(DBTModellingInsight):
     DBTUnusedSources identifies sources in a dbt project that are not being referenced by any models.
     """
 
-    NAME = "Unused Sources Detection"
+    NAME = "Unused sources detection"
     ALIAS = "unused_sources"
     DESCRIPTION = "Detects sources in the dbt project that are not being referenced by any models."
     REASON_TO_FLAG = (

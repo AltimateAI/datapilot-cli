@@ -13,7 +13,7 @@ class DBTRootModel(DBTModellingInsight):
     meaning these models cannot be traced back to a declared source or model.
     """
 
-    NAME = "Root Model Traceability"
+    NAME = "Root model traceability"
     ALIAS = "root_model"
     DESCRIPTION = "Identifies models in a dbt project with 0 direct parents, meaning these models cannot be traced back to a declared source or model."
     REASON_TO_FLAG = (

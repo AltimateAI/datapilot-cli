@@ -16,7 +16,7 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
     DBTDocumentationStaleColumns identifies columns that have been documented but are no longer present in the model.
     """
 
-    NAME = "Documentation of Stale Columns"
+    NAME = "Documentation of stale columns"
     ALIAS = "documentation_on_stale_columns"
     DESCRIPTION = (
         "Identify columns that have been documented but are no longer present in the model. "

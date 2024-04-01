@@ -9,7 +9,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckSourceHasTestsByName(ChecksInsight):
-    NAME = "Source Has Tests By Name"
+    NAME = "Source has tests by name"
     ALIAS = "check_source_has_tests_by_name"
     DESCRIPTION = "Checks that the source has tests with specific names."
     REASON_TO_FLAG = "Sources should have tests with specific names for proper validation."

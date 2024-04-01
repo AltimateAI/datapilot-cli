@@ -13,7 +13,7 @@ class DBTRejoiningOfUpstreamConcepts(DBTModellingInsight):
     model has no other downstream dependencies.
     """
 
-    NAME = "Rejoining of Upstream Concepts"
+    NAME = "Rejoining of upstream Concepts"
     ALIAS = "rejoining_upstream_concepts"
     DESCRIPTION = (
         "Detects scenarios where a parent's direct child is also a direct child of another one " "of the parent's direct children."

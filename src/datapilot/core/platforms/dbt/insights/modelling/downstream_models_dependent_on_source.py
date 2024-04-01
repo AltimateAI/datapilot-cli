@@ -19,7 +19,7 @@ class DBTDownstreamModelsDependentOnSource(DBTModellingInsight):
     in a dbt project that depend directly on a source node.
     """
 
-    NAME = "Downstream Models Dependent on Source"
+    NAME = "Downstream models dependent on source"
     ALIAS = "downstream_source_dependence"
     DESCRIPTION = "Downstream models should not depend directly on source nodes. "
     REASON_TO_FLAG = (

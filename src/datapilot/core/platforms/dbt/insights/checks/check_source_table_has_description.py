@@ -8,7 +8,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckSourceTableHasDescription(ChecksInsight):
-    NAME = "Source Table Has Description"
+    NAME = "Source table has description"
     ALIAS = "check_source_table_has_desc"
     DESCRIPTION = "Ensures that the source table has a description"
     REASON_TO_FLAG = "Missing description for the source table can lead to confusion and inconsistency in analysis. "

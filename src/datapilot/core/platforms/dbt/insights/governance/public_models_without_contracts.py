@@ -13,7 +13,7 @@ class DBTPublicModelWithoutContracts(DBTGovernanceInsight):
     DBTUndocumentedPublicModels identifies public models that are not documented.
     """
 
-    NAME = "Public Models Without Contracts"
+    NAME = "Public models without contracts"
     ALIAS = "public_models_without_contracts"
     DESCRIPTION = "Identify public models that don't have contracts."
     REASON_TO_FLAG = (

@@ -105,9 +105,5 @@ class CheckModelParentsSchema(ChecksInsight):
                     "description": "List of schemas that are not allowed as parent models or sources.",
                 },
             },
-            "oneOf": [
-                {"required": [cls.WHITELIST_STR], "not": {"required": [cls.BLACKLIST_STR]}},
-                {"required": [cls.BLACKLIST_STR], "not": {"required": [cls.WHITELIST_STR]}},
-            ],
         }
         return config_schema

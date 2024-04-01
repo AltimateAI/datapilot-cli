@@ -21,7 +21,7 @@ class MissingPrimaryKeyTests(DBTTestInsight):
     NOT_NULL = "not_null"
     UNIQUE = "unique"
     UNIQUE_COMBINATION_OF_COLUMNS = "unique_combination_of_columns"
-    NAME = "Missing Primary Key Tests"
+    NAME = "Missing primary key tests"
     ALIAS = "missing_primary_key_tests"
     DESCRIPTION = "Checks if the model has a primary key test. "
     REASON_TO_FLAG = (

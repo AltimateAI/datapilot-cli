@@ -8,7 +8,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckSourceHasLoader(ChecksInsight):
-    NAME = "Source Has Loader"
+    NAME = "Source has loader"
     ALIAS = "check_source_has_loader"
     DESCRIPTION = "Check if the source has a loader"
     REASON_TO_FLAG = "Missing loader for the source can lead to confusion and inconsistency in analysis. "

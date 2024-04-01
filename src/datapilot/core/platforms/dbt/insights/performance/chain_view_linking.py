@@ -13,7 +13,7 @@ class DBTChainViewLinking(DBTPerformanceInsight):
     """
 
     CHAIN_LENGTH_STR = "chain_length"
-    NAME = "Chain View Linking"
+    NAME = "Chain view linking"
     ALIAS = "chain_view_linking"
     CHAIN_LENGTH = 4  # Default chain length, can be adjusted as needed
     DESCRIPTION = "Checks for long chains of view/ephemeral models in the dbt project. Long chains can lead to slow computation "
