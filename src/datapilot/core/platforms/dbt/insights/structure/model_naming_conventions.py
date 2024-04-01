@@ -18,7 +18,7 @@ class DBTModelNamingConvention(DBTStructureInsight):
     DBTModelNamingConvention identifies models that do not follow the naming convention.
     """
 
-    NAME = "Bad Model Naming Convention"
+    NAME = "Bad model naming convention"
     ALIAS = "model_naming_convention_check"
     DESCRIPTION = "This rule identifies models that do not follow the naming convention."
     REASON_TO_FLAG = (

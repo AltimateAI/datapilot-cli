@@ -9,7 +9,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckModelHasTestsByGroup(ChecksInsight):
-    NAME = "Model Has Tests By Group"
+    NAME = "Model has tests by group"
     ALIAS = "check_model_has_tests_by_group"
     DESCRIPTION = "Check if models have a number of tests for specific test groups."
     REASON_TO_FLAG = "Models should have tests with specific groups for proper validation."

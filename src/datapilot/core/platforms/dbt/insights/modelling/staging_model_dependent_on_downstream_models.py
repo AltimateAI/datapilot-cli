@@ -20,7 +20,7 @@ class DBTStagingModelsDependentOnDownstreamModels(DBTModellingInsight):
     DBTStagingModelsDependentOnDownstream identifies staging models in a dbt project that depend on downstream models.
     """
 
-    NAME = "Staging Models Dependency Check"
+    NAME = "Staging models dependency check"
     ALIAS = "staging_models_dependency"
     DESCRIPTION = "Staging models should not depend on downstream models."
     REASON_TO_FLAG = (

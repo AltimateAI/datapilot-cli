@@ -12,7 +12,7 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckSourceHasLabelsKeys(ChecksInsight):
-    NAME = "Check Source Has Labels Keys"
+    NAME = "Check source has labels keys"
     ALIAS = "check_source_has_labels_keys"
     DESCRIPTION = (
         "Checks that the source has the specified labels keys as defined in the properties file. "

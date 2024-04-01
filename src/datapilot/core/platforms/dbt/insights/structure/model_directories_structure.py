@@ -17,7 +17,7 @@ class DBTModelDirectoryStructure(DBTStructureInsight):
     DBTModelDirectoryStructure checks if models are placed in the correct directories.
     """
 
-    NAME = "Bad Model Directory Structure"
+    NAME = "Bad model directory structure"
     ALIAS = "model_directory_structure"
     DESCRIPTION = "This rule identifies models that are not placed in their correct directories. "
     REASON_TO_FLAG = (

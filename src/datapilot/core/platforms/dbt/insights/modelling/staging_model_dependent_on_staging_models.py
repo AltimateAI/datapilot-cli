@@ -16,7 +16,7 @@ class DBTStagingModelsDependentOnStagingModels(DBTModellingInsight):
     DBTStagingModelsDependentOnStagingModels identifies staging models in a dbt project that depend on staging models.
     """
 
-    NAME = "Staging Models Dependency on Staging Models"
+    NAME = "Staging models dependency on staging Models"
     ALIAS = "staging_models_on_staging"
     DESCRIPTION = "Staging models should not directly depend on other staging models."
     REASON_TO_FLAG = (

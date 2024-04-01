@@ -11,7 +11,7 @@ from datapilot.utils.utils import is_superset_path
 
 
 class CheckModelNameContract(ChecksInsight):
-    NAME = "Valid Model Name by Folder"
+    NAME = "Valid Mmdel name by folder"
     ALIAS = "model_name_by_folder"
     DESCRIPTION = (
         "Check that model name abides to a contract (similar to check-column-name-contract). A contract consists of a regex pattern."

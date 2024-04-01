@@ -13,7 +13,7 @@ class DBTTestDirectoryStructure(DBTStructureInsight):
     DBTTestDirectoryStructure checks if tests are placed in the correct directories.
     """
 
-    NAME = "Bad Test Directory Structure"
+    NAME = "Bad test directory structure"
     ALIAS = "test_directory_structure"
     DESCRIPTION = "This rule checks if tests are correctly placed in the same directories as their corresponding models."
     REASON_TO_FLAG = (
