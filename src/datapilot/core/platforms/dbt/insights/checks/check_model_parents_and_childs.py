@@ -112,10 +112,7 @@ class CheckModelParentsAndChilds(ChecksInsight):
             "$schema": "http://json-schema.org/draft-07/schema#",
             "type": "object",
             "properties": {
-                cls.MAX_CHILDS_STR: {
-                    "type": "integer",
-                    "description": "The maximum number of childs a model can have.",
-                },
+                cls.MAX_CHILDS_STR: {"type": "integer", "description": "The maximum number of childs a model can have.", "default": 3},
                 cls.MIN_CHILDS_STR: {
                     "type": "integer",
                     "description": "The minimum number of childs a model can have.",
@@ -124,6 +121,7 @@ class CheckModelParentsAndChilds(ChecksInsight):
                 cls.MAX_PARENTS_STR: {
                     "type": "integer",
                     "description": "The maximum number of parents a model can have.",
+                    "default": 3,
                 },
                 cls.MIN_PARENTS_STR: {
                     "type": "integer",
