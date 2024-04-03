@@ -37,7 +37,7 @@ Development
 
 To set up `datapilot` for local development:
 
-1. Fork `datapilot <https://github.com/AltimateAI/datapilot>`_
+1. Fork `datapilot <https://github.com/AltimateAI/datapilot-cli>`_
    (look for the "Fork" button).
 2. Clone your fork locally::
 
