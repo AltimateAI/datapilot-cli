@@ -19,7 +19,7 @@ pip install pre-commit
 
 ```
     repos:
-  - repo: https://github.com/AltimateAI/datapilot
+  - repo: https://github.com/AltimateAI/datapilot-cli
     rev: <revision>
     hooks:
       - id: datapilot_run_dbt_checks
@@ -46,6 +46,6 @@ If you want to manually run all pre-commit hooks on a repository, run `pre-commi
 Feedback and Contributions
 --------------------------
 
-If you encounter any issues or have suggestions for improvements, please feel free to open an issue or pull request on the DataPilot GitHub repository at https://github.com/AltimateAI/datapilot.
+If you encounter any issues or have suggestions for improvements, please feel free to open an issue or pull request on the DataPilot GitHub repository at https://github.com/AltimateAI/datapilot-cli.
 
 Thank you for using DataPilot!

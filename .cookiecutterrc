@@ -27,7 +27,7 @@ default_context:
     command_line_interface: "click"
     command_line_interface_bin_name: "datapilot"
     coveralls: "no"
-    distribution_name: "altimate-datapilot"
+    distribution_name: "altimate-datapilot-cli"
     email: "info@altimate.ai"
     formatter_quote_style: "double"
     full_name: "Anand Gupta"

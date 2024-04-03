@@ -20,13 +20,13 @@ version = release = "0.0.8"
 pygments_style = "trac"
 templates_path = ["."]
 extlinks = {
-    "issue": ("https://github.com/AltimateAI/datapilot/issues/%s", "#"),
-    "pr": ("https://github.com/AltimateAI/datapilot/pull/%s", "PR #"),
+    "issue": ("https://github.com/AltimateAI/datapilot-cli/issues/%s", "#"),
+    "pr": ("https://github.com/AltimateAI/datapilot-cli/pull/%s", "PR #"),
 }
 html_theme = "sphinx_rtd_theme"
 # html_theme_path = [furo.get_html_theme_path()]
 # html_theme_options = {
-#     "githuburl": "https://github.com/AltimateAI/datapilot/",
+#     "githuburl": "https://github.com/AltimateAI/datapilot-cli/",
 # }
 
 html_use_smartypants = True

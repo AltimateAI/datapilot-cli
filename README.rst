@@ -20,7 +20,7 @@ Overview
     :target: https://datapilot.readthedocs.io/
     :alt: Documentation Status
 
-.. |github-actions| image:: https://github.com/AltimateAI/datapilot/actions/workflows/github-actions.yml/badge.svg
+.. |github-actions| image:: https://github.com/AltimateAI/datapilot-cli/actions/workflows/github-actions.yml/badge.svg
     :alt: GitHub Actions Build Status
     :target: https://github.com/AltimateAI/datapilot/actions
 
@@ -42,11 +42,11 @@ Installation
 
 ::
 
-    pip install altimate-datapilot
+    pip install altimate-datapilot-cli
 
 You can also install the in-development version with::
 
-    pip install https://github.com/AltimateAI/datapilot/archive/main.zip
+    pip install https://github.com/AltimateAI/datapilot-cli/archive/main.zip
 
 
 Documentation

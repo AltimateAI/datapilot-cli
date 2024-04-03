@@ -18,7 +18,7 @@ To install DataPilot, open your CLI and run the following command:
 
 .. code-block:: shell
 
-    pip install altimate-datapilot
+    pip install altimate-datapilot-cli
 
 This command will download and install the latest version of DataPilot along with its dependencies.
 

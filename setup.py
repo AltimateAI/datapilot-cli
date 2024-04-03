@@ -12,7 +12,7 @@ def read(*names, **kwargs):
 
 
 setup(
-    name="altimate-datapilot",
+    name="altimate-datapilot-cli",
     version="0.0.8",
     license="MIT",
     description="Assistant for Data Teams",
@@ -20,9 +20,9 @@ setup(
         re.compile("^.. start-badges.*^.. end-badges", re.M | re.S).sub("", read("README.rst")),
         re.sub(":[a-z]+:`~?(.*?)`", r"``\1``", read("CHANGELOG.rst")),
     ),
-    author="Anand Gupta",
+    author="Altimate Inc",
     author_email="info@altimate.ai",
-    url="https://github.com/AltimateAI/datapilot",
+    url="https://github.com/AltimateAI/datapilot-cli",
     packages=find_packages("src"),
     package_dir={"": "src"},
     py_modules=[path.stem for path in Path("src").glob("*.py")],
@@ -55,7 +55,7 @@ setup(
     project_urls={
         "Documentation": "https://datapilot.readthedocs.io/",
         "Changelog": "https://datapilot.readthedocs.io/en/latest/changelog.html",
-        "Issue Tracker": "https://github.com/AltimateAI/datapilot/issues",
+        "Issue Tracker": "https://github.com/AltimateAI/datapilot-cli/issues",
     },
     keywords=[
         # eg: "keyword1", "keyword2", "keyword3",
