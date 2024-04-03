@@ -11,9 +11,9 @@ extensions = [
 ]
 source_suffix = ".rst"
 master_doc = "index"
-project = "datapilot"
+project = "datapilot-cli"
 year = "2024"
-author = "Anand Gupta"
+author = "Altimate Inc."
 copyright = f"{year}, {author}"
 version = release = "0.0.8"
 
