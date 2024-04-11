@@ -17,10 +17,10 @@ class DBTFactory:
             return ManifestV11Wrapper(manifest)
         if isinstance(manifest, ManifestV10):
             return ManifestV10Wrapper(manifest)
-        raise AltimateNotSupportedError(f"Manifest version {manifest.metadata.dbt_schema_version} not supported")
+        raise AltimateNotSupportedError(f"dbt version {manifest.metadata.dbt_version} not supported")
 
     @classmethod
     def get_catalog_wrapper(cls, catalog: Catalog):
         if isinstance(catalog, CatalogV1):
             return CatalogV1Wrapper(catalog)
-        raise AltimateNotSupportedError(f"Catalog version {catalog.metadata.dbt_schema_version} not supported")
+        raise AltimateNotSupportedError(f"dbt version {catalog.metadata.dbt_version} not supported")
