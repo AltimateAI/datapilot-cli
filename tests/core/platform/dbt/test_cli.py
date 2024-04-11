@@ -35,3 +35,39 @@ def test_project_health_with_only_required_arg():
     assert result.exit_code == 0  # Ensure the command executed successfully
     # Validate behavior for when only the required argument is provided
     assert "-----------" in result.output
+
+
+def test_project_health_with_only_required_arg_version1_6():
+    runner = CliRunner()
+    manifest_path = "tests/data/manifest_v10.json"
+
+    # Simulate command invocation without optional arguments
+    result = runner.invoke(
+        project_health,
+        [
+            "--manifest-path",
+            manifest_path,
+        ],
+    )
+
+    assert result.exit_code == 0  # Ensure the command executed successfully
+    # Validate behavior for when only the required argument is provided
+    assert "-----------" in result.output
+
+
+def test_project_health_with_only_required_arg_version1_5():
+    runner = CliRunner()
+    manifest_path = "tests/data/manifest_v9.json"
+
+    # Simulate command invocation without optional arguments
+    result = runner.invoke(
+        project_health,
+        [
+            "--manifest-path",
+            manifest_path,
+        ],
+    )
+
+    assert result.exit_code == 0  # Ensure the command executed successfully
+    # Validate behavior for when only the required argument is provided
+    assert "-----------" in result.output
