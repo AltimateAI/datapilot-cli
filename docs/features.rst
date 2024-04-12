@@ -4,7 +4,7 @@ dbt
 project-health
 --------------
 
-The ``project-health`` feature in DataPilot is a comprehensive tool designed to analyze and report on various aspects of your dbt project.
+The ``project-health`` feature in DataPilot is a comprehensive tool designed to analyze and report on various aspects of your dbt project. This feature is currently supported for dbt version 1.6 and 1.7.
 
 How to Use
 ^^^^^^^^^^
