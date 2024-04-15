@@ -329,9 +329,6 @@ class AltimateMaturityEnum(Enum):
 
 
 class AltimateRefArgs(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
     name: str
     package: Optional[Optional[str]] = None
     version: Optional[Optional[Union[str, float]]] = None
