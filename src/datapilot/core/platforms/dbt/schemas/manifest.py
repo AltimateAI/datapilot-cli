@@ -329,6 +329,9 @@ class AltimateMaturityEnum(Enum):
 
 
 class AltimateRefArgs(BaseModel):
+    class Config:
+        extra = Extra.forbid
+
     name: str
     package: Optional[Optional[str]] = None
     version: Optional[Optional[Union[str, float]]] = None
@@ -435,7 +438,7 @@ class AltimateMacroArgument(BaseModel):
 
     name: str
     type: Optional[Optional[str]] = None
-    description: Optional[str] = ""
+    description: Optional[Optional[str]] = ""
 
 
 AltimateSupportedLanguage = SupportedLanguage
