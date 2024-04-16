@@ -15,6 +15,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateExposureType
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateExternalTable
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateFileHash
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateFreshnessThreshold
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateMacroArgument
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestColumnInfo
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestMacroNode
@@ -176,7 +177,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             meta=macro.meta,
             docs=macro.docs,
             patch_path=macro.patch_path,
-            arguments=[AltimateRefArgs(**arg.dict()) for arg in macro.arguments] if macro.arguments else None,
+            arguments=[AltimateMacroArgument(**arg.dict()) for arg in macro.arguments] if macro.arguments else None,
             created_at=macro.created_at,
             supported_languages=macro.supported_languages,
         )
