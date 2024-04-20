@@ -438,7 +438,7 @@ class AltimateMacroArgument(BaseModel):
 
     name: str
     type: Optional[Optional[str]] = None
-    description: Optional[str] = ""
+    description: Optional[Optional[str]] = ""
 
 
 AltimateSupportedLanguage = SupportedLanguage
