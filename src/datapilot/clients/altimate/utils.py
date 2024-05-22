@@ -46,10 +46,16 @@ def validate_credentials(
     return api_client.validate_credentials()
 
 
-def onboard_manifest(api_token, tenant, dbt_core_integration_id, file_type, file_path, backend_url) -> Dict:
+def onboard_manifest(
+    api_token, tenant, dbt_core_integration_id, dbt_core_integration_environment, file_type, file_path, backend_url
+) -> Dict:
     api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)
 
-    params = {"dbt_core_integration_id": dbt_core_integration_id, "file_type": file_type}
+    params = {
+        "dbt_core_integration_id": dbt_core_integration_id,
+        "dbt_core_integration_environment": dbt_core_integration_environment,
+        "file_type": file_type,
+    }
     signed_url_data = api_client.get_signed_url(params)
     if signed_url_data:
         signed_url = signed_url_data.get("url")
