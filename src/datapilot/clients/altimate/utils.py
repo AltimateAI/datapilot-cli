@@ -53,7 +53,7 @@ def onboard_manifest(
 
     params = {
         "dbt_core_integration_id": dbt_core_integration_id,
-        "dbt_core_integration_environment": dbt_core_integration_environment,
+        "dbt_core_integration_environment_type": dbt_core_integration_environment,
         "file_type": file_type,
     }
     signed_url_data = api_client.get_signed_url(params)
