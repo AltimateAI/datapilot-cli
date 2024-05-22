@@ -79,3 +79,20 @@ def onboard_manifest(
             "ok": False,
             "message": "Error in uploading the manifest.                                                                                                                              ",
         }
+
+
+def start_dbt_ingestion(api_token, tenant, dbt_core_integration_id, dbt_core_integration_environment, backend_url):
+    api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)
+    params = {
+        "dbt_core_integration_id": dbt_core_integration_id,
+        "dbt_core_integration_environment_type": dbt_core_integration_environment,
+    }
+    data = api_client.start_dbt_ingestion(params)
+    if data and data.get("ok"):
+        return {"ok": True}
+    else:
+        api_client.log("Error starting dbt ingestion worker")
+        return {
+            "ok": False,
+            "message": "Error starting dbt ingestion worker.                                                                                                                              ",
+        }

@@ -5,6 +5,7 @@ import click
 from datapilot.clients.altimate.utils import check_token_and_instance
 from datapilot.clients.altimate.utils import onboard_manifest
 from datapilot.clients.altimate.utils import validate_credentials
+from datapilot.clients.altimate.utils import start_dbt_ingestion
 from datapilot.config.config import load_config
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
@@ -125,11 +126,19 @@ def onboard(
     else:
         click.echo(f"{response['message']}")
 
-    if catalog_path:
-        response = onboard_manifest(
-            token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, "catalog", catalog_path, backend_url
-        )
-        if response["ok"]:
-            click.echo("Catalog onboarded successfully!")
-        else:
-            click.echo(f"{response['message']}")
+    if not catalog_path:
+        return
+
+    response = onboard_manifest(
+        token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, "catalog", catalog_path, backend_url
+    )
+    if response["ok"]:
+        click.echo("Catalog onboarded successfully!")
+    else:
+        click.echo(f"{response['message']}")
+
+    response = start_dbt_ingestion(token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, backend_url)
+    if response["ok"]:
+        click.echo("Onboarding completed successfully!")
+    else:
+        click.echo(f"{response['message']}")
