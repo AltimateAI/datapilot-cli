@@ -102,7 +102,6 @@ def onboard(
     manifest_path,
     catalog_path,
     backend_url="https://api.myaltimate.com",
-    env=None,
 ):
     """Onboard a manifest file to DBT."""
     check_token_and_instance(token, instance_name)
@@ -129,6 +128,8 @@ def onboard(
     if not catalog_path:
         return
 
+    manifest_file_id = response["dbt_core_integration_file_id"]
+
     response = onboard_manifest(
         token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, "catalog", catalog_path, backend_url
     )
@@ -137,7 +138,11 @@ def onboard(
     else:
         click.echo(f"{response['message']}")
 
-    response = start_dbt_ingestion(token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, backend_url)
+    catalog_file_id = response["dbt_core_integration_file_id"]
+
+    response = start_dbt_ingestion(
+        token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, manifest_file_id, catalog_file_id, backend_url
+    )
     if response["ok"]:
         click.echo("Onboarding completed successfully!")
     else:

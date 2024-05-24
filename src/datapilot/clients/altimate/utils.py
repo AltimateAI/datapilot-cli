@@ -68,7 +68,7 @@ def onboard_manifest(
         if upload_response:
             verify_params = {"dbt_core_integration_file_id": file_id}
             api_client.verify_upload(verify_params)
-            return {"ok": True}
+            return {"ok": True, "dbt_core_integration_file_id": file_id}
         else:
             api_client.log(f"Error uploading file: {upload_response.status_code}, {upload_response.text}")
             return {"ok": False, "message": f"Error uploading file: {upload_response.status_code}, {upload_response.text}"}
@@ -81,11 +81,15 @@ def onboard_manifest(
         }
 
 
-def start_dbt_ingestion(api_token, tenant, dbt_core_integration_id, dbt_core_integration_environment, backend_url):
+def start_dbt_ingestion(
+    api_token, tenant, dbt_core_integration_id, dbt_core_integration_environment, manifest_file_id, catalog_file_id, backend_url
+):
     api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)
     params = {
         "dbt_core_integration_id": dbt_core_integration_id,
         "dbt_core_integration_environment_type": dbt_core_integration_environment,
+        "manifest_file_id": manifest_file_id,
+        "catalog_file_id": catalog_file_id,
     }
     data = api_client.start_dbt_ingestion(params)
     if data and data.get("ok"):
