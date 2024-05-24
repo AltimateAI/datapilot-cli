@@ -3,7 +3,7 @@ import logging
 import click
 
 from datapilot.clients.altimate.utils import check_token_and_instance
-from datapilot.clients.altimate.utils import onboard_manifest
+from datapilot.clients.altimate.utils import onboard_file
 from datapilot.clients.altimate.utils import validate_credentials
 from datapilot.clients.altimate.utils import start_dbt_ingestion
 from datapilot.config.config import load_config
@@ -117,7 +117,7 @@ def onboard(
         click.echo(f"Error: {e}")
         return
 
-    response = onboard_manifest(
+    response = onboard_file(
         token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, "manifest", manifest_path, backend_url
     )
     if response["ok"]:
@@ -128,9 +128,7 @@ def onboard(
     if not catalog_path:
         return
 
-    manifest_file_id = response["dbt_core_integration_file_id"]
-
-    response = onboard_manifest(
+    response = onboard_file(
         token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, "catalog", catalog_path, backend_url
     )
     if response["ok"]:
@@ -138,11 +136,7 @@ def onboard(
     else:
         click.echo(f"{response['message']}")
 
-    catalog_file_id = response["dbt_core_integration_file_id"]
-
-    response = start_dbt_ingestion(
-        token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, manifest_file_id, catalog_file_id, backend_url
-    )
+    response = start_dbt_ingestion(token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, backend_url)
     if response["ok"]:
         click.echo("Onboarding completed successfully!")
     else:
