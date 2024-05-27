@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import Dict
 
-from pydantic import BaseModel
+from datapilot.schemas.base import AltimateBaseModel
 
 
 class Severity(Enum):
@@ -10,7 +10,7 @@ class Severity(Enum):
     ERROR = "ERROR"
 
 
-class InsightResult(BaseModel):
+class InsightResult(AltimateBaseModel):
     name: str
     type: str
     message: str
@@ -19,6 +19,6 @@ class InsightResult(BaseModel):
     metadata: Dict
 
 
-class InsightResponse(BaseModel):
+class InsightResponse(AltimateBaseModel):
     insight: InsightResult
     severity: Severity = Severity.ERROR

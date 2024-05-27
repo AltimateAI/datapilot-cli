@@ -6,10 +6,11 @@ from typing import Optional
 from typing import Union
 
 from pydantic.config import Extra
-from pydantic.main import BaseModel
+
+from datapilot.schemas.base import AltimateBaseModel
 
 
-class AltimateCatalogMetadata(BaseModel):
+class AltimateCatalogMetadata(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -20,7 +21,7 @@ class AltimateCatalogMetadata(BaseModel):
     env: ClassVar[Optional[Dict[str, str]]] = {}
 
 
-class AltimateCatalogTableMetadata(BaseModel):
+class AltimateCatalogTableMetadata(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -32,7 +33,7 @@ class AltimateCatalogTableMetadata(BaseModel):
     owner: Optional[Optional[str]] = None
 
 
-class AltimateCatalogColumnMetadata(BaseModel):
+class AltimateCatalogColumnMetadata(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -42,7 +43,7 @@ class AltimateCatalogColumnMetadata(BaseModel):
     name: str
 
 
-class AltimateCatalogStatsItem(BaseModel):
+class AltimateCatalogStatsItem(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -53,7 +54,7 @@ class AltimateCatalogStatsItem(BaseModel):
     include: bool
 
 
-class AltimateCatalogTable(BaseModel):
+class AltimateCatalogTable(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -63,7 +64,7 @@ class AltimateCatalogTable(BaseModel):
     unique_id: Optional[Optional[str]] = None
 
 
-class AltimateCatalogCatalogV1(BaseModel):
+class AltimateCatalogCatalogV1(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 

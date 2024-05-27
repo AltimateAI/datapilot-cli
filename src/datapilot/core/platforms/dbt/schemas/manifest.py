@@ -1,5 +1,6 @@
 from enum import Enum
 from typing import Any
+from typing import ClassVar
 from typing import Dict
 from typing import List
 from typing import Optional
@@ -18,11 +19,12 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
 from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedLanguage
-from pydantic import BaseModel
 from pydantic import Extra
 
+from datapilot.schemas.base import AltimateBaseModel
 
-class DBTVersion(BaseModel):
+
+class DBTVersion(AltimateBaseModel):
     MAJOR: int
     MINOR: int
     PATCH: Optional[int]
@@ -45,7 +47,7 @@ Manifest = Union[
 Catalog = CatalogV1
 
 
-class AltimateDocs(BaseModel):
+class AltimateDocs(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -53,21 +55,21 @@ class AltimateDocs(BaseModel):
     node_color: Optional[Optional[str]] = None
 
 
-class AltimateDependsOn(BaseModel):
+class AltimateDependsOn(AltimateBaseModel):
     nodes: Optional[List[str]]
     macros: Optional[List[str]]
 
 
-class AltimateManifestColumnInfo(BaseModel):
+class AltimateManifestColumnInfo(AltimateBaseModel):
     name: str
     description: Optional[str] = ""
-    meta: Optional[Dict[str, Any]] = {}
+    meta: ClassVar[Optional[Dict[str, Any]]] = {}
     data_type: Optional[Optional[str]] = None
     quote: Optional[Optional[bool]] = None
-    tags: Optional[List[str]] = []
+    tags: ClassVar[Optional[List[str]]] = []
 
 
-class AltimateFileHash(BaseModel):
+class AltimateFileHash(AltimateBaseModel):
     name: Optional[str]
     checksum: Optional[str]
 
@@ -97,7 +99,7 @@ class AltimateAccess(Enum):
     protected = "protected"
 
 
-class AltimateDBTContract(BaseModel):
+class AltimateDBTContract(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -106,7 +108,7 @@ class AltimateDBTContract(BaseModel):
     checksum: Optional[Optional[str]] = None
 
 
-class AltimateHook(BaseModel):
+class AltimateHook(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -116,7 +118,7 @@ class AltimateHook(BaseModel):
 
 
 # TODO: Need to add the rest of the fields
-class AltimateNodeConfig(BaseModel):
+class AltimateNodeConfig(AltimateBaseModel):
     class Config:
         extra = Extra.allow
 
@@ -140,7 +142,7 @@ class AltimateNodeConfig(BaseModel):
     on_schema_change: Optional[Optional[str]] = "ignore"
 
 
-class AltimateManifestNode(BaseModel):
+class AltimateManifestNode(AltimateBaseModel):
     database: Optional[str]
     resource_type: AltimateResourceType
     schema_name: str
@@ -170,27 +172,27 @@ class AltimateManifestNode(BaseModel):
     patch_path: Optional[Optional[str]] = None
 
 
-class AltimateQuoting(BaseModel):
+class AltimateQuoting(AltimateBaseModel):
     database: Optional[Optional[bool]] = None
     schema_: Optional[Optional[bool]] = None
     identifier: Optional[Optional[bool]] = None
     column: Optional[Optional[bool]] = None
 
 
-class AltimateFreshnessThreshold(BaseModel):
+class AltimateFreshnessThreshold(AltimateBaseModel):
     warn_after: Optional[Dict] = None
     error_after: Optional[Dict] = None
     filter: Optional[str] = None
 
 
-class AltimateExternalPartition(BaseModel):
+class AltimateExternalPartition(AltimateBaseModel):
     name: Optional[str] = ""
     description: Optional[str] = ""
     data_type: Optional[str] = ""
-    meta: Optional[Dict[str, Any]] = {}
+    meta: ClassVar[Optional[Dict[str, Any]]] = {}
 
 
-class AltimateExternalTable(BaseModel):
+class AltimateExternalTable(AltimateBaseModel):
     location: Optional[Optional[str]] = None
     file_format: Optional[Optional[str]] = None
     row_format: Optional[Optional[str]] = None
@@ -198,11 +200,11 @@ class AltimateExternalTable(BaseModel):
     partitions: Optional[Optional[List[AltimateExternalPartition]]] = None
 
 
-class AltimateSourceConfig(BaseModel):
+class AltimateSourceConfig(AltimateBaseModel):
     enabled: Optional[bool] = True
 
 
-class AltimateDeferRelation(BaseModel):
+class AltimateDeferRelation(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -212,7 +214,7 @@ class AltimateDeferRelation(BaseModel):
     relation_name: Optional[str]
 
 
-class AltimateSeedConfig(BaseModel):
+class AltimateSeedConfig(AltimateBaseModel):
     class Config:
         extra = Extra.allow
 
@@ -243,7 +245,7 @@ class AltimateSeedConfig(BaseModel):
     quote_columns: Optional[Optional[bool]] = None
 
 
-class AltimateSeedNode(BaseModel):
+class AltimateSeedNode(AltimateBaseModel):
     database: Optional[str]
     schema_name: str
     name: str
@@ -275,7 +277,7 @@ class AltimateSeedNode(BaseModel):
     defer_relation: Optional[Optional[AltimateDeferRelation]] = None
 
 
-class AltimateManifestSourceNode(BaseModel):
+class AltimateManifestSourceNode(AltimateBaseModel):
     database: Optional[str]
     resource_type: AltimateResourceType
     schema_name: str
@@ -313,7 +315,7 @@ class AltimateExposureType(Enum):
     application = "application"
 
 
-class AltimateOwner(BaseModel):
+class AltimateOwner(AltimateBaseModel):
     class Config:
         extra = Extra.allow
 
@@ -328,7 +330,7 @@ class AltimateMaturityEnum(Enum):
     high = "high"
 
 
-class AltimateRefArgs(BaseModel):
+class AltimateRefArgs(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -337,7 +339,7 @@ class AltimateRefArgs(BaseModel):
     version: Optional[Optional[Union[str, float]]] = None
 
 
-class AltimateExposureConfig(BaseModel):
+class AltimateExposureConfig(AltimateBaseModel):
     class Config:
         extra = Extra.allow
 
@@ -345,7 +347,7 @@ class AltimateExposureConfig(BaseModel):
     enabled: Optional[bool] = True
 
 
-class AltimateManifestExposureNode(BaseModel):
+class AltimateManifestExposureNode(AltimateBaseModel):
     name: str
     resource_type: AltimateResourceType
     package_name: str
@@ -370,7 +372,7 @@ class AltimateManifestExposureNode(BaseModel):
     created_at: Optional[float] = None
 
 
-class AltimateTestMetadata(BaseModel):
+class AltimateTestMetadata(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -379,7 +381,7 @@ class AltimateTestMetadata(BaseModel):
     namespace: Optional[Optional[str]] = None
 
 
-class AltimateTestConfig(BaseModel):
+class AltimateTestConfig(AltimateBaseModel):
     class Config:
         extra = Extra.allow
 
@@ -402,7 +404,7 @@ class AltimateTestConfig(BaseModel):
     error_if: Optional[str] = "!= 0"
 
 
-class AltimateManifestTestNode(BaseModel):
+class AltimateManifestTestNode(AltimateBaseModel):
     test_metadata: Optional[AltimateTestMetadata] = None
     test_type: Optional[str] = None
     name: str
@@ -432,7 +434,7 @@ class AltimateManifestTestNode(BaseModel):
     compiled_code: Optional[Optional[str]] = None
 
 
-class AltimateMacroArgument(BaseModel):
+class AltimateMacroArgument(AltimateBaseModel):
     class Config:
         extra = Extra.forbid
 
@@ -444,7 +446,7 @@ class AltimateMacroArgument(BaseModel):
 AltimateSupportedLanguage = SupportedLanguage
 
 
-class AltimateManifestMacroNode(BaseModel):
+class AltimateManifestMacroNode(AltimateBaseModel):
     name: str
     resource_type: AltimateResourceType
     package_name: str

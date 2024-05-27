@@ -1,7 +1,7 @@
-from pydantic import BaseModel
+from datapilot.schemas.base import AltimateBaseModel
 
 
-class ModelNode(BaseModel):
+class ModelNode(AltimateBaseModel):
     unique_id: str
     name: str
     resource_type: str
@@ -10,7 +10,7 @@ class ModelNode(BaseModel):
     table_schema: str
 
 
-class SourceNode(BaseModel):
+class SourceNode(AltimateBaseModel):
     unique_id: str
     name: str
     resource_type: str
