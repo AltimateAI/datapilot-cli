@@ -1,12 +1,7 @@
 from pydantic import BaseModel
-
-
-class Config:
-    protected_namespaces = ()
+from pydantic import ConfigDict
 
 
 class AltimateBaseModel(BaseModel):
-    model_unique_id: str
-
     class Config:
-        protected_namespaces = ()
+        model_config = ConfigDict(protected_namespaces=())
