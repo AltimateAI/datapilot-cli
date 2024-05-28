@@ -311,15 +311,15 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - uses: actions/setup-python@v5
-      with:
-        python-version: ${{ matrix.python }}
-        architecture: ${{ matrix.python_arch }}
     - name: install gettext on macos
       if: runner.os == 'macOS'
       run: |
         brew install gettext
         brew link --force gettext
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python }}
+        architecture: ${{ matrix.python_arch }}
     - name: install dependencies
       run: |
         python -mpip install --progress-bar=off -r ci/requirements.txt
