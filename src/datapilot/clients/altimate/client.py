@@ -83,7 +83,7 @@ class APIClient:
     def validate_credentials(self):
         endpoint = "/dbt/v3/validate-credentials"
         return self.get(endpoint)
-    
+
     def start_dbt_ingestion(self, params=None):
         endpoint = "/dbt/v1/start_dbt_ingestion"
         return self.post(endpoint, data=params)
