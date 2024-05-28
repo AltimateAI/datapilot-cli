@@ -92,7 +92,7 @@ def project_health(manifest_path, catalog_path, config_path=None, select=None):
     "--dbt_core_integration_environment", default="PROD", prompt="DBT Core Integration Environment", help="DBT Core Integration Environment"
 )
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
-@click.option("--catalog-path", required=False, prompt="Catalog Path", help="Path to the catalog file.")
+@click.option("--catalog-path", required=False, prompt=False, help="Path to the catalog file.")
 @click.option("--backend-url", required=False, help="Altimate's Backend URL", default="https://api.myaltimate.com")
 def onboard(
     token,
