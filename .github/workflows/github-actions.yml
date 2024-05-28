@@ -315,6 +315,11 @@ jobs:
       with:
         python-version: ${{ matrix.python }}
         architecture: ${{ matrix.python_arch }}
+    - name: install gettext on macos
+      if: runner.os == 'macOS'
+      run: |
+        brew install gettext
+        brew link --force gettext
     - name: install dependencies
       run: |
         python -mpip install --progress-bar=off -r ci/requirements.txt
