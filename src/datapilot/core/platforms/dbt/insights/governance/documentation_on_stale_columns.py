@@ -27,11 +27,11 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
         "This discrepancy can cause confusion and mislead users of the dbt project."
     )
     FAILURE_MESSAGE = (
-        "The following documented columns are no longer present in the model `{model_unique_id}`:\n{stale_columns}. "
+        "The following documented columns are no longer present in the model `{altimate_unique_id}`:\n{stale_columns}. "
         "This inconsistency can lead to confusion regarding the model's current structure."
     )
     RECOMMENDATION = (
-        "Review and update the documentation for model `{model_unique_id}`. Remove documentation entries for columns "
+        "Review and update the documentation for model `{altimate_unique_id}`. Remove documentation entries for columns "
         "that are no longer present to maintain clarity and accuracy in the project documentation."
     )
     FILES_REQUIRED: ClassVar = ["Manifest", "Catalog"]
@@ -40,22 +40,22 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
         self.catalog = catalog_wrapper
         super().__init__(*args, **kwargs)
 
-    def _build_failure_result(self, model_unique_id: str, columns: List[str]) -> DBTInsightResult:
+    def _build_failure_result(self, altimate_unique_id: str, columns: List[str]) -> DBTInsightResult:
         """
         Build failure result for the insight if a model is a root model with 0 direct parents.
 
-        :param model_unique_id: Unique ID of the current model being evaluated.
+        :param altimate_unique_id: Unique ID of the current model being evaluated.
         :param columns: List of columns that are documented but no longer present in the model.
         :return: An instance of InsightResult containing failure message and recommendation.
         """
-        self.logger.debug(f"Building failure result for model {model_unique_id} with stale columns {columns}")
+        self.logger.debug(f"Building failure result for model {altimate_unique_id} with stale columns {columns}")
 
         failure = self.FAILURE_MESSAGE.format(
             stale_columns=numbered_list(columns),
-            model_unique_id=model_unique_id,
+            altimate_unique_id=altimate_unique_id,
         )
 
-        recommendation = self.RECOMMENDATION.format(model_unique_id=model_unique_id)
+        recommendation = self.RECOMMENDATION.format(altimate_unique_id=altimate_unique_id)
 
         return DBTInsightResult(
             type=self.TYPE,
@@ -63,7 +63,7 @@ class DBTDocumentationStaleColumns(DBTGovernanceInsight):
             message=failure,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"stale_columns": columns, "model_unique_id": model_unique_id},
+            metadata={"stale_columns": columns, "altimate_unique_id": altimate_unique_id},
         )
 
     def _get_columns_documented(self, node_id) -> List[str]:

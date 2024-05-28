@@ -28,22 +28,22 @@ class DBTStagingModelsDependentOnDownstreamModels(DBTModellingInsight):
         "Dependencies in the wrong direction can lead to complications in data processing and lineage tracing."
     )
     FAILURE_MESSAGE = (
-        "Staging model `{current_model_unique_id}` has dependencies on downstream models, "
+        "Staging model `{current_altimate_unique_id}` has dependencies on downstream models, "
         "which is against best practices: \n{downstream_dependencies}"
     )
     RECOMMENDATION = (
-        "Refactor the staging model `{current_model_unique_id}` to ensure it depends on source or raw data models. "
+        "Refactor the staging model `{current_altimate_unique_id}` to ensure it depends on source or raw data models. "
         "This will align the model with best practices, enhancing data flow clarity and lineage tracing."
     )
     DOWNSTREAM_MODEL_TYPES_STR = "downstream_model_types"
     DOWNSTREAM_MODEL_TYPES: ClassVar[List[str]] = [MART, INTERMEDIATE]
 
-    def _build_failure_result(self, current_model_unique_id: str, downstream_dependencies: List[str]) -> DBTInsightResult:
+    def _build_failure_result(self, current_altimate_unique_id: str, downstream_dependencies: List[str]) -> DBTInsightResult:
         failure = self.FAILURE_MESSAGE.format(
-            current_model_unique_id=current_model_unique_id,
+            current_altimate_unique_id=current_altimate_unique_id,
             downstream_dependencies=numbered_list(downstream_dependencies),
         )
-        recommendation = self.RECOMMENDATION.format(current_model_unique_id=current_model_unique_id)
+        recommendation = self.RECOMMENDATION.format(current_altimate_unique_id=current_altimate_unique_id)
 
         return DBTInsightResult(
             type=self.TYPE,
@@ -52,7 +52,7 @@ class DBTStagingModelsDependentOnDownstreamModels(DBTModellingInsight):
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": current_model_unique_id,
+                "model": current_altimate_unique_id,
                 "downstream_dependencies": downstream_dependencies,
             },
         )

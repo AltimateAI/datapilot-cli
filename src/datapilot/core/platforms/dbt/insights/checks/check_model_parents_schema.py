@@ -66,11 +66,11 @@ class CheckModelParentsSchema(ChecksInsight):
                 )
         return insights
 
-    def _check_model_parents_schema(self, model_unique_id: str) -> bool:
+    def _check_model_parents_schema(self, altimate_unique_id: str) -> bool:
         """
         Check if the parent models or sources are from certain schema.
         """
-        model = self.get_node(model_unique_id)
+        model = self.get_node(altimate_unique_id)
         if model.resource_type == AltimateResourceType.model:
             for parent in getattr(model.depends_on, "nodes", []):
                 parent_model = self.get_node(parent)

@@ -22,31 +22,31 @@ class DBTPublicModelWithoutContracts(DBTGovernanceInsight):
         "in data consumption."
     )
     FAILURE_MESSAGE = (
-        "Model `{model_unique_id}` is marked as public but does not have a contract. "
+        "Model `{altimate_unique_id}` is marked as public but does not have a contract. "
         "This can lead to ambiguity regarding data types and columns, impacting downstream consumers."
     )
     RECOMMENDATION = (
-        "Enhance the model `{model_unique_id}` by adding clear contract entries for columns along "
+        "Enhance the model `{altimate_unique_id}` by adding clear contract entries for columns along "
         "with their data types. Contracts provide essential documentation and guarantees for downstream consumers."
     )
 
     def _build_failure_result(
         self,
-        model_unique_id: str,
+        altimate_unique_id: str,
     ) -> DBTInsightResult:
         """
         Build failure result for the insight if a model is a root model with 0 direct parents.
 
-        :param model_unique_id: Unique ID of the current model being evaluated.
+        :param altimate_unique_id: Unique ID of the current model being evaluated.
         :return: An instance of InsightResult containing failure message and recommendation.
         """
-        self.logger.debug(f"Building failure result model {model_unique_id} is public but not documented.")
+        self.logger.debug(f"Building failure result model {altimate_unique_id} is public but not documented.")
 
         failure = self.FAILURE_MESSAGE.format(
-            model_unique_id=model_unique_id,
+            altimate_unique_id=altimate_unique_id,
         )
         recommendation = self.RECOMMENDATION.format(
-            model_unique_id=model_unique_id,
+            altimate_unique_id=altimate_unique_id,
         )
 
         return DBTInsightResult(
@@ -56,7 +56,7 @@ class DBTPublicModelWithoutContracts(DBTGovernanceInsight):
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": model_unique_id,
+                "model": altimate_unique_id,
             },
         )
 

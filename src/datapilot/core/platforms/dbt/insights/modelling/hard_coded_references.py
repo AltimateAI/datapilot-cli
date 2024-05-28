@@ -24,27 +24,27 @@ class DBTHardCodedReferences(DBTModellingInsight):
     )
     SOURCE_FANOUT_THRESHOLD = 1  # Default threshold, can be overridden as needed
     FAILURE_MESSAGE = (
-        "Model `{model_unique_id}` contains hard-coded references, which may obscure data lineage. "
+        "Model `{altimate_unique_id}` contains hard-coded references, which may obscure data lineage. "
         "Detected hard-coded references: \n{hard_coded_references}"
     )
     RECOMMENDATION = (
-        "Replace hard-coded references in `{model_unique_id}` with dbt sources or model references to "
+        "Replace hard-coded references in `{altimate_unique_id}` with dbt sources or model references to "
         "improve clarity and maintainability of data lineage."
     )
 
-    def _build_failure_result(self, model_unique_id: str, hard_coded_references: List[str]) -> DBTInsightResult:
+    def _build_failure_result(self, altimate_unique_id: str, hard_coded_references: List[str]) -> DBTInsightResult:
         failure_message = self.FAILURE_MESSAGE.format(
-            model_unique_id=model_unique_id,
+            altimate_unique_id=altimate_unique_id,
             hard_coded_references=numbered_list(hard_coded_references),
         )
         return DBTInsightResult(
             name=self.NAME,
             type=self.TYPE,
             message=failure_message,
-            recommendation=self.RECOMMENDATION.format(model_unique_id=model_unique_id),
+            recommendation=self.RECOMMENDATION.format(altimate_unique_id=altimate_unique_id),
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": model_unique_id,
+                "model": altimate_unique_id,
                 "hard_coded_references": hard_coded_references,
             },
         )
@@ -63,7 +63,7 @@ class DBTHardCodedReferences(DBTModellingInsight):
                 hard_coded_references = get_hard_coded_references(raw_code)
                 if hard_coded_references:
                     insight_result = self._build_failure_result(
-                        model_unique_id=node.unique_id,
+                        altimate_unique_id=node.unique_id,
                         hard_coded_references=hard_coded_references,
                     )
                     insights.append(

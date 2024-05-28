@@ -22,28 +22,28 @@ class DBTTestDirectoryStructure(DBTStructureInsight):
         "and updating tests in parallel with model changes."
     )
     FAILURE_MESSAGE = (
-        "Incorrect Test Placement Detected: The test `{model_unique_id}` is not in the correct directory. "
+        "Incorrect Test Placement Detected: The test `{altimate_unique_id}` is not in the correct directory. "
         "For consistent project structure and easy maintenance, it should be placed in the same directory as "
         "its corresponding model."
     )
     RECOMMENDATION = (
-        "To rectify this, move the test `{model_unique_id}` to the directory `{convention}`, where its corresponding "
+        "To rectify this, move the test `{altimate_unique_id}` to the directory `{convention}`, where its corresponding "
         "model is located. This adjustment will align your test's location with best practices for"
         " project organization."
     )
 
-    def _build_failure_result(self, model_unique_id: str, convention: Optional[str]) -> DBTInsightResult:
+    def _build_failure_result(self, altimate_unique_id: str, convention: Optional[str]) -> DBTInsightResult:
         failure_message = self.FAILURE_MESSAGE.format(
-            model_unique_id=model_unique_id,
+            altimate_unique_id=altimate_unique_id,
         )
         return DBTInsightResult(
             name=self.NAME,
             type=self.TYPE,
             message=failure_message,
-            recommendation=self.RECOMMENDATION.format(model_unique_id=model_unique_id, convention=convention),
+            recommendation=self.RECOMMENDATION.format(altimate_unique_id=altimate_unique_id, convention=convention),
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": model_unique_id,
+                "model": altimate_unique_id,
                 "convention": convention,
             },
         )

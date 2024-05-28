@@ -8,7 +8,7 @@ def generate_ci_cd_report(insights_data):
     for insight in insights_data:
         print(divider)
         print(f"Project: {insight.package_name}")
-        print(f"Model ID: {insight.model_unique_id}")
+        print(f"Model ID: {insight.altimate_unique_id}")
         print(f"Name: {insight.metadata['model']}")
         print(f"Message: {insight.message}")
         print(f"Reason: {insight.reason_to_flag}")

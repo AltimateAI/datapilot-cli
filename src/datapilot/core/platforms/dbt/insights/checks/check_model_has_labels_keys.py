@@ -46,18 +46,18 @@ class CheckModelHasLabelsKeys(ChecksInsight):
                     )
         return insights
 
-    def _build_failure_result(self, model_unique_id: str, missing_keys: Sequence[str], extra_labels: Sequence[str]) -> DBTInsightResult:
+    def _build_failure_result(self, altimate_unique_id: str, missing_keys: Sequence[str], extra_labels: Sequence[str]) -> DBTInsightResult:
         failure_message = (
-            f"The following labels keys are missing in the model `{model_unique_id}`:\n{missing_keys}. "
+            f"The following labels keys are missing in the model `{altimate_unique_id}`:\n{missing_keys}. "
             "Ensure that the model includes all the required labels keys."
         )
         if not self.allow_extra_keys:
             failure_message += (
-                f"The following extra labels keys are present in the model `{model_unique_id}`:\n{extra_labels}. "
+                f"The following extra labels keys are present in the model `{altimate_unique_id}`:\n{extra_labels}. "
                 "Ensure that the model does not include any extra labels keys."
             )
         recommendation = (
-            f"Add the missing labels keys listed above in the model `{model_unique_id}`. "
+            f"Add the missing labels keys listed above in the model `{altimate_unique_id}`. "
             "Ensuring that the model has all the required labels keys helps in maintaining metadata consistency and understanding."
         )
 
@@ -66,11 +66,11 @@ class CheckModelHasLabelsKeys(ChecksInsight):
             name=self.NAME,
             message=failure_message.format(
                 missing_keys=numbered_list(missing_keys),
-                model_unique_id=model_unique_id,
+                altimate_unique_id=altimate_unique_id,
             ),
-            recommendation=recommendation.format(model_unique_id=model_unique_id),
+            recommendation=recommendation.format(altimate_unique_id=altimate_unique_id),
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"missing_keys": missing_keys, "model_unique_id": model_unique_id, "extra_keys": extra_labels},
+            metadata={"missing_keys": missing_keys, "altimate_unique_id": altimate_unique_id, "extra_keys": extra_labels},
         )
 
     def _check_labels_keys(self, node_id) -> Tuple[int, Set[str]]:

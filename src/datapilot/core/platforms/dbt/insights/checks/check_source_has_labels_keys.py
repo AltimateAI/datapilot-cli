@@ -49,26 +49,26 @@ class CheckSourceHasLabelsKeys(ChecksInsight):
                     )
         return insights
 
-    def _build_failure_result(self, model_unique_id: str, missing_keys: Sequence[str], extra_keys: Sequence[str]) -> DBTInsightResult:
+    def _build_failure_result(self, altimate_unique_id: str, missing_keys: Sequence[str], extra_keys: Sequence[str]) -> DBTInsightResult:
         failure_message = ""
         if missing_keys:
             failure_message += (
-                f"The model `{model_unique_id}` is missing the following labels keys: {missing_keys}. "
+                f"The model `{altimate_unique_id}` is missing the following labels keys: {missing_keys}. "
                 "Ensure that the model has the required labels keys."
             )
         if extra_keys:
             failure_message += (
-                f"The model `{model_unique_id}` has the following extra labels keys: {extra_keys}. "
+                f"The model `{altimate_unique_id}` has the following extra labels keys: {extra_keys}. "
                 "Ensure that the model does not include any extra labels keys."
             )
         recommendation = (
-            "Add the following labels keys to the model `{model_unique_id}`: {missing_keys}. "
+            "Add the following labels keys to the model `{altimate_unique_id}`: {missing_keys}. "
             "Ensuring that the model has the required labels keys helps in maintaining metadata consistency and understanding."
         )
         return DBTInsightResult(
-            failure_message=failure_message.format(model_unique_id=model_unique_id, missing_keys=numbered_list(missing_keys)),
-            recommendation=recommendation.format(model_unique_id=model_unique_id, missing_keys=numbered_list(missing_keys)),
-            metadata={"model_unique_id": model_unique_id, "missing_keys": missing_keys},
+            failure_message=failure_message.format(altimate_unique_id=altimate_unique_id, missing_keys=numbered_list(missing_keys)),
+            recommendation=recommendation.format(altimate_unique_id=altimate_unique_id, missing_keys=numbered_list(missing_keys)),
+            metadata={"altimate_unique_id": altimate_unique_id, "missing_keys": missing_keys},
         )
 
     def _check_labels_keys(self, node_id) -> Tuple[int, Set[str]]:

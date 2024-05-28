@@ -108,10 +108,10 @@ class DBTInsight(Insight):
 
         return long_chains
 
-    def should_skip_model(self, model_unique_id):
+    def should_skip_model(self, altimate_unique_id):
         """Check if a model is in the excluded models list."""
         if self.selected_models:
-            return model_unique_id not in self.selected_models
+            return altimate_unique_id not in self.selected_models
 
         return False
 

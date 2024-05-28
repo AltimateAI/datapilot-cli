@@ -29,7 +29,7 @@ class MissingPrimaryKeyTests(DBTTestInsight):
         "the risk of data integrity issues, affecting project reliability and scalability."
     )
     FAILURE_MESSAGE = (
-        "dbt model `{model_unique_id}` does not have a primary key test. " "This omission may lead to data integrity challenges."
+        "dbt model `{altimate_unique_id}` does not have a primary key test. " "This omission may lead to data integrity challenges."
     )
     RECOMMENDATION = (
         "To address this, apply a uniqueness test and a not-null test to the column representing the model's grain. "
@@ -38,22 +38,22 @@ class MissingPrimaryKeyTests(DBTTestInsight):
         " and unique_combination_of_columns test."
     )
 
-    def _build_failure_result(self, model_unique_id: str) -> DBTInsightResult:
+    def _build_failure_result(self, altimate_unique_id: str) -> DBTInsightResult:
         """
         Constructs a failure result for a given model.
 
-        :param model_unique_id: Unique ID of the model being evaluated.
+        :param altimate_unique_id: Unique ID of the model being evaluated.
         :return: An instance of DBTInsightResult containing failure details.
         """
-        self.logger.debug(f"Building failure result for model {model_unique_id}")
-        failure = self.FAILURE_MESSAGE.format(model_unique_id=model_unique_id)
+        self.logger.debug(f"Building failure result for model {altimate_unique_id}")
+        failure = self.FAILURE_MESSAGE.format(altimate_unique_id=altimate_unique_id)
         return DBTInsightResult(
             type=self.TYPE,
             name=self.NAME,
             message=failure,
             recommendation=self.RECOMMENDATION,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"model_unique_id": model_unique_id},
+            metadata={"altimate_unique_id": altimate_unique_id},
         )
 
     def _has_primary_key_test(self, column_tests: Optional[Dict[str, List]]) -> bool:

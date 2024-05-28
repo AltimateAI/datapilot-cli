@@ -45,18 +45,18 @@ class CheckModelHasMetaKeys(ChecksInsight):
                     )
         return insights
 
-    def _build_failure_result(self, model_unique_id: str, missing_keys: Sequence[str], extra_keys: Set[str]) -> DBTInsightResult:
+    def _build_failure_result(self, altimate_unique_id: str, missing_keys: Sequence[str], extra_keys: Set[str]) -> DBTInsightResult:
         failure_message = (
-            f"The following meta keys are missing in the model `{model_unique_id}`:\n{numbered_list(missing_keys)}. "
+            f"The following meta keys are missing in the model `{altimate_unique_id}`:\n{numbered_list(missing_keys)}. "
             "Ensure that the model includes all the required meta keys."
         )
         if not self.allow_extra_keys:
             failure_message += (
-                f"The following extra meta keys are present in the model `{model_unique_id}`:\n{numbered_list(extra_keys)}. "
+                f"The following extra meta keys are present in the model `{altimate_unique_id}`:\n{numbered_list(extra_keys)}. "
                 "Ensure that the model does not include any extra meta keys."
             )
         recommendation = (
-            f"Add the missing meta keys listed above in the model `{model_unique_id}`. "
+            f"Add the missing meta keys listed above in the model `{altimate_unique_id}`. "
             "Ensuring that the model has all the required meta keys helps in maintaining metadata consistency and understanding."
         )
 
@@ -64,9 +64,9 @@ class CheckModelHasMetaKeys(ChecksInsight):
             type=self.TYPE,
             name=self.NAME,
             message=failure_message,
-            recommendation=recommendation.format(model_unique_id=model_unique_id),
+            recommendation=recommendation.format(altimate_unique_id=altimate_unique_id),
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"missing_keys": missing_keys, "model_unique_id": model_unique_id, "extra_keys": extra_keys},
+            metadata={"missing_keys": missing_keys, "altimate_unique_id": altimate_unique_id, "extra_keys": extra_keys},
         )
 
     def _check_meta_keys(self, node_id) -> Tuple[int, Set[str], Set[str]]:

@@ -27,23 +27,23 @@ class DBTModelNamingConvention(DBTStructureInsight):
         "and effective data management. This rule flags models that deviate from established naming standards."
     )
     FAILURE_MESSAGE = (
-        "Naming Convention Violation Detected: The model `{model_unique_id}` does not comply with the "
+        "Naming Convention Violation Detected: The model `{altimate_unique_id}` does not comply with the "
         "established naming convention. It is identified as a `{model_type}` model, but its name does not "
         "reflect the required prefix or convention `{convention}`. Please update the model name to align "
         "with the naming standards."
     )
-    RECOMMENDATION = "Please rename the model `{model_unique_id}` to follow the appropriate naming convention. "
+    RECOMMENDATION = "Please rename the model `{altimate_unique_id}` to follow the appropriate naming convention. "
 
-    def _build_failure_result(self, model_unique_id: str, model_type: str, convention: Optional[str]) -> DBTInsightResult:
+    def _build_failure_result(self, altimate_unique_id: str, model_type: str, convention: Optional[str]) -> DBTInsightResult:
         if model_type != OTHER:
             failure_message = self.FAILURE_MESSAGE.format(
-                model_unique_id=model_unique_id,
+                altimate_unique_id=altimate_unique_id,
                 model_type=model_type,
                 convention=convention,
             )
         else:
             failure_message = (
-                f"The model `{model_unique_id}` was not classified as any of the known model types. "
+                f"The model `{altimate_unique_id}` was not classified as any of the known model types. "
                 "The naming conventions for it may not be appropriate"
             )
 
@@ -51,10 +51,10 @@ class DBTModelNamingConvention(DBTStructureInsight):
             name=self.NAME,
             type=self.TYPE,
             message=failure_message,
-            recommendation=self.RECOMMENDATION.format(model_unique_id=model_unique_id),
+            recommendation=self.RECOMMENDATION.format(altimate_unique_id=altimate_unique_id),
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": model_unique_id,
+                "model": altimate_unique_id,
                 "model_type": model_type,
                 "convention": convention,
             },

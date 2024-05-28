@@ -22,11 +22,11 @@ class CheckColumnNameContract(ChecksInsight):
         "modeling and analysis. It's important to maintain consistent column naming conventions."
     )
     FAILURE_MESSAGE = (
-        "The following columns in the model `{model_unique_id}` do not adhere to the contract:\n{columns}. "
+        "The following columns in the model `{altimate_unique_id}` do not adhere to the contract:\n{columns}. "
         "Inconsistent column naming conventions can impede understanding and usage of the model."
     )
     RECOMMENDATION = (
-        "Update the column names listed above in the model `{model_unique_id}` to adhere to the contract. "
+        "Update the column names listed above in the model `{altimate_unique_id}` to adhere to the contract. "
         "Consistent column naming conventions provide valuable context and aids in data understanding and collaboration."
     )
     PATTERN_STR = "pattern"
@@ -75,12 +75,12 @@ class CheckColumnNameContract(ChecksInsight):
                     )
         return insights
 
-    def _build_failure_result(self, model_unique_id: str, columns: Sequence[str]) -> DBTInsightResult:
+    def _build_failure_result(self, altimate_unique_id: str, columns: Sequence[str]) -> DBTInsightResult:
         failure_message = self.FAILURE_MESSAGE.format(
             columns=numbered_list(columns),
-            model_unique_id=model_unique_id,
+            altimate_unique_id=altimate_unique_id,
         )
-        recommendation = self.RECOMMENDATION.format(model_unique_id=model_unique_id)
+        recommendation = self.RECOMMENDATION.format(altimate_unique_id=altimate_unique_id)
 
         return DBTInsightResult(
             type=self.TYPE,
@@ -88,7 +88,7 @@ class CheckColumnNameContract(ChecksInsight):
             message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"columns": columns, "model_unique_id": model_unique_id},
+            metadata={"columns": columns, "altimate_unique_id": altimate_unique_id},
         )
 
     def _get_columns_in_model(self, node_id) -> List[str]:
