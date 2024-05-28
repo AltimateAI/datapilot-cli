@@ -2,12 +2,18 @@ import logging
 
 import click
 
-from datapilot.clients.altimate.utils import check_token_and_instance, onboard_file, start_dbt_ingestion, validate_credentials
+from datapilot.clients.altimate.utils import check_token_and_instance
+from datapilot.clients.altimate.utils import onboard_file
+from datapilot.clients.altimate.utils import start_dbt_ingestion
+from datapilot.clients.altimate.utils import validate_credentials
 from datapilot.config.config import load_config
-from datapilot.core.platforms.dbt.constants import MODEL, PROJECT
+from datapilot.core.platforms.dbt.constants import MODEL
+from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
-from datapilot.core.platforms.dbt.formatting import generate_model_insights_table, generate_project_insights_table
-from datapilot.core.platforms.dbt.utils import load_catalog, load_manifest
+from datapilot.core.platforms.dbt.formatting import generate_model_insights_table
+from datapilot.core.platforms.dbt.formatting import generate_project_insights_table
+from datapilot.core.platforms.dbt.utils import load_catalog
+from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import tabulate_data
 
 logging.basicConfig(level=logging.INFO)
