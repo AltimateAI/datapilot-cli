@@ -63,7 +63,6 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "click==8.1.7",
-        "sqlglot==18.3.0",
         "dbt-artifacts-parser==0.5.1",
         "ruamel.yaml==0.18.6",
         "tabulate==0.9.0",
