@@ -60,7 +60,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
             language,
             contract,
         ) = ([], [], None, None, None, None, None, "", "", None)
-        if node.resource_type.value != SEED:
+        if node.resource_type != SEED:
             sources = node.sources
             metrics = node.metrics
             depends_on_nodes = node.depends_on.nodes if node.depends_on else None
@@ -75,7 +75,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
             database=node.database,
             schema_name=node.schema_,
             name=node.name,
-            resource_type=AltimateResourceType(node.resource_type.value),
+            resource_type=AltimateResourceType(node.resource_type),
             package_name=node.package_name,
             path=node.path,
             description=node.description,
@@ -337,7 +337,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
         nodes = {}
         for node in self.manifest.nodes.values():
             if (
-                node.resource_type.value
+                node.resource_type
                 in [
                     AltimateResourceType.seed.value,
                     AltimateResourceType.test.value,
@@ -381,7 +381,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
 
         for node in self.manifest.nodes.values():
             # Check if the node is a test and of the correct type
-            if node.resource_type.value == AltimateResourceType.test.value:
+            if node.resource_type == AltimateResourceType.test.value:
                 if any(isinstance(node, t) for t in types):
                     tests[node.unique_id] = self._get_tests(node)
         return tests
