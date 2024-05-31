@@ -62,7 +62,7 @@ class APIClient:
         response = requests.post(url, headers=headers, json=data, timeout=timeout)
         self.logger.debug(f"Received POST response with status: {response.status_code }")
 
-        return response
+        return response.json()
 
     def put(self, endpoint, data, timeout=None):
         url = f"{self.base_url}{endpoint}"
@@ -83,3 +83,7 @@ class APIClient:
     def validate_credentials(self):
         endpoint = "/dbt/v3/validate-credentials"
         return self.get(endpoint)
+
+    def start_dbt_ingestion(self, params=None):
+        endpoint = "/dbt/v1/start_dbt_ingestion"
+        return self.post(endpoint, data=params)
