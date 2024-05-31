@@ -311,7 +311,14 @@ def generate_partial_manifest_catalog(changed_files, base_path: str = "./"):
         raise Exception("Unable to generate partial manifest and catalog") from e
 
 
-if __name__ == "__main__":
-    print("Running main")
-    print(generate_partial_manifest_catalog([], "/Users/gaurp/Desktop/manifest.json", ""))
-    print("Done running main")
+def map_url_to_instance(url, instance):
+    # Base URLs and their corresponding patterns
+    url_mapping = {
+        "https://api.tryaltimate.com": f"https://{instance}.demo.tryaltimate.com",
+        "https://api.myaltimate.com": f"https://{instance}.app.myaltimate.com",
+        "https://api.getaltimate.com": f"https://{instance}.app.getaltimate.com",
+        "http://localhost:8000": f"http://{instance}.localhost:3000",
+    }
+
+    # Check if the URL is in the dictionary and return the corresponding instance URL
+    return url_mapping.get(url)

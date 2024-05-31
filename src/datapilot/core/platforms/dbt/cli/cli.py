@@ -15,6 +15,7 @@ from datapilot.core.platforms.dbt.formatting import generate_project_insights_ta
 from datapilot.core.platforms.dbt.utils import load_catalog
 from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import tabulate_data
+from datapilot.utils.utils import map_url_to_instance
 
 logging.basicConfig(level=logging.INFO)
 
@@ -138,6 +139,11 @@ def onboard(
 
     response = start_dbt_ingestion(token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, backend_url)
     if response["ok"]:
-        click.echo("Onboarding completed successfully!")
+        url = map_url_to_instance(backend_url, instance_name)
+        if not url:
+            click.echo("Manifest and catalog ingestion has started.")
+        else:
+            url = f"{url}/settings/integrations/{dbt_core_integration_id}/{dbt_core_integration_environment}"
+            click.echo(f"Manifest and catalog ingestion has started. You can check the status at {url}")
     else:
         click.echo(f"{response['message']}")
