@@ -47,16 +47,13 @@ Catalog = CatalogV1
 
 
 class AltimateDocs(BaseModel):
-    class Config:
-        extra = Extra.forbid
-
     show: Optional[bool] = True
-    node_color: Optional[Optional[str]] = None
+    node_color: Optional[str] = None
 
 
 class AltimateDependsOn(BaseModel):
-    nodes: Optional[List[str]]
-    macros: Optional[List[str]]
+    nodes: Optional[List[str]] = None
+    macros: Optional[List[str]] = None
 
 
 class AltimateManifestColumnInfo(BaseModel):
@@ -165,7 +162,7 @@ class AltimateManifestNode(BaseModel):
     compiled_path: Optional[Optional[str]] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[Optional[str]] = None
-    access: Optional[AltimateAccess]
+    access: Optional[AltimateAccess] = "protected"
     contract: Optional[AltimateDBTContract] = None
     meta: Optional[Dict[str, Any]] = None
     patch_path: Optional[Optional[str]] = None
