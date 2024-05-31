@@ -317,7 +317,7 @@ def map_url_to_instance(url, instance):
         "https://api.tryaltimate.com": f"https://{instance}.demo.tryaltimate.com",
         "https://api.myaltimate.com": f"https://{instance}.app.myaltimate.com",
         "https://api.getaltimate.com": f"https://{instance}.app.getaltimate.com",
-        "http://localhost:8000": "http://{instance}.localhost:3000",
+        "http://localhost:8000": f"http://{instance}.localhost:3000",
     }
 
     # Check if the URL is in the dictionary and return the corresponding instance URL
