@@ -46,10 +46,14 @@ def validate_credentials(
     return api_client.validate_credentials()
 
 
-def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path, backend_url) -> Dict:
+def onboard_file(api_token, tenant, dbt_core_integration_id, dbt_core_integration_environment, file_type, file_path, backend_url) -> Dict:
     api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)
 
-    params = {"dbt_core_integration_id": dbt_core_integration_id, "file_type": "manifest"}
+    params = {
+        "dbt_core_integration_id": dbt_core_integration_id,
+        "dbt_core_integration_environment_type": dbt_core_integration_environment,
+        "file_type": file_type,
+    }
     signed_url_data = api_client.get_signed_url(params)
     if signed_url_data:
         signed_url = signed_url_data.get("url")
@@ -57,7 +61,7 @@ def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path, 
         api_client.log(f"Received signed URL: {signed_url}")
         api_client.log(f"Received File ID: {file_id}")
 
-        upload_response = upload_content_to_signed_url(manifest_path, signed_url)
+        upload_response = upload_content_to_signed_url(file_path, signed_url)
 
         if upload_response:
             verify_params = {"dbt_core_integration_file_id": file_id}
@@ -72,4 +76,21 @@ def onboard_manifest(api_token, tenant, dbt_core_integration_id, manifest_path, 
         return {
             "ok": False,
             "message": "Error in uploading the manifest.                                                                                                                              ",
+        }
+
+
+def start_dbt_ingestion(api_token, tenant, dbt_core_integration_id, dbt_core_integration_environment, backend_url):
+    api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)
+    params = {
+        "dbt_core_integration_id": dbt_core_integration_id,
+        "dbt_core_integration_environment_type": dbt_core_integration_environment,
+    }
+    data = api_client.start_dbt_ingestion(params)
+    if data and data.get("ok"):
+        return {"ok": True}
+    else:
+        api_client.log("Error starting dbt ingestion worker")
+        return {
+            "ok": False,
+            "message": "Error starting dbt ingestion worker.                                                                                                                              ",
         }
