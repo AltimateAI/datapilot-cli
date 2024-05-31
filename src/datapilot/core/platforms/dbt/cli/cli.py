@@ -138,6 +138,9 @@ def onboard(
 
     response = start_dbt_ingestion(token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, backend_url)
     if response["ok"]:
-        click.echo("Onboarding completed successfully!")
+        http, path = backend_url.split("://")
+        url = f"{http}://{instance_name}.{path}/settings/integrations/{dbt_core_integration_id}/{dbt_core_integration_environment}"
+
+        click.echo(f"Manifest and catalog ingestion has started. You can check the status at {url}")
     else:
         click.echo(f"{response['message']}")
