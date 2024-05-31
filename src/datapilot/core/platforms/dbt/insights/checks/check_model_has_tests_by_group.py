@@ -47,14 +47,12 @@ class CheckModelHasTestsByGroup(ChecksInsight):
                     )
         return insights
 
-    def _build_failure_result(self, altimate_unique_id: str, missing_test_groups: List[Dict]) -> DBTInsightResult:
+    def _build_failure_result(self, model_unique_id: str, missing_test_groups: List[Dict]) -> DBTInsightResult:
         missing_test_group_str = ""
         for test in missing_test_groups:
             missing_test_group_str += f"Test Group: {test.get(self.TEST_GROUP_STR)}, Min Count: {test.get(self.TEST_COUNT_STR)}, Actual Count: {test.get('actual_count')}\n"
 
-        failure_message = (
-            f"The model `{altimate_unique_id}` does not have enough tests for the following groups:\n{missing_test_group_str}. "
-        )
+        failure_message = f"The model `{model_unique_id}` does not have enough tests for the following groups:\n{missing_test_group_str}. "
         recommendation = (
             "Add tests with the specified groups for each model listed above. "
             "Having tests with specific groups ensures proper validation and data integrity."
@@ -66,7 +64,7 @@ class CheckModelHasTestsByGroup(ChecksInsight):
             message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"altimate_unique_id": altimate_unique_id, "missing_test_groups": missing_test_groups},
+            metadata={"model_unique_id": model_unique_id, "missing_test_groups": missing_test_groups},
         )
 
     def _model_has_tests_by_group(self, node_id) -> List[Dict]:

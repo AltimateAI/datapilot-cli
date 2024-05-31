@@ -28,30 +28,30 @@ class DBTDirectJoinSource(DBTModellingInsight):
         "Direct source-model joins bypass the staging layer, leading to potential inconsistencies in data handling."
     )
     FAILURE_MESSAGE = (
-        "Model `{current_altimate_unique_id}` has direct joins to both sources and other models. "
+        "Model `{current_model_unique_id}` has direct joins to both sources and other models. "
         "\n### Detected Sources\n{sources}\n\n### Connected Models \n{models}"
     )
     RECOMMENDATION = (
-        "Create a dedicated staging model for the source(s) and modify `{current_altimate_unique_id}` "
+        "Create a dedicated staging model for the source(s) and modify `{current_model_unique_id}` "
         "to depend on this staging model. This ensures consistent initial data processing steps."
     )
 
-    def _build_failure_result(self, current_altimate_unique_id: str, dependencies: Dict) -> DBTInsightResult:
+    def _build_failure_result(self, current_model_unique_id: str, dependencies: Dict) -> DBTInsightResult:
         """
         Build failure result for the insight if a model is directly joining to a source
         and other models.
 
-        :param current_altimate_unique_id: Unique ID of the current model being evaluated.
+        :param current_model_unique_id: Unique ID of the current model being evaluated.
         :param dependencies: A dictionary of dependencies categorized as 'source' and 'model'.
         :return: An instance of InsightResult containing failure message and recommendation and metadata.
         """
-        self.logger.debug(f"Found multiple sources and models for {current_altimate_unique_id}")
+        self.logger.debug(f"Found multiple sources and models for {current_model_unique_id}")
         failure = self.FAILURE_MESSAGE.format(
-            current_altimate_unique_id=current_altimate_unique_id,
+            current_model_unique_id=current_model_unique_id,
             sources=numbered_list(dependencies["source"]),
             models=numbered_list(dependencies["model"]),
         )
-        recommendation = self.RECOMMENDATION.format(current_altimate_unique_id=current_altimate_unique_id)
+        recommendation = self.RECOMMENDATION.format(current_model_unique_id=current_model_unique_id)
 
         return DBTInsightResult(
             type=self.TYPE,
@@ -60,7 +60,7 @@ class DBTDirectJoinSource(DBTModellingInsight):
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": current_altimate_unique_id,
+                "model": current_model_unique_id,
                 "dependencies": dependencies,
             },
         )

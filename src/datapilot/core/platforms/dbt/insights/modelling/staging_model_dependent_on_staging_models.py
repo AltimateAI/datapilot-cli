@@ -24,20 +24,20 @@ class DBTStagingModelsDependentOnStagingModels(DBTModellingInsight):
         "Dependencies among staging models can lead to complicated data flows and hinder data lineage tracking."
     )
     FAILURE_MESSAGE = (
-        "Staging model `{current_altimate_unique_id}` has dependencies on other staging models, "
+        "Staging model `{current_model_unique_id}` has dependencies on other staging models, "
         "which is against best practices: \n{downstream_dependencies}"
     )
     RECOMMENDATION = (
-        "Refactor staging model `{current_altimate_unique_id}` to ensure it depends on source or raw data models, "
+        "Refactor staging model `{current_model_unique_id}` to ensure it depends on source or raw data models, "
         "not on other staging models. This realignment with best practices promotes clear and effective data flow."
     )
 
-    def _build_failure_result(self, current_altimate_unique_id: str, downstream_dependencies: List[str]) -> DBTInsightResult:
+    def _build_failure_result(self, current_model_unique_id: str, downstream_dependencies: List[str]) -> DBTInsightResult:
         failure = self.FAILURE_MESSAGE.format(
-            current_altimate_unique_id=current_altimate_unique_id,
+            current_model_unique_id=current_model_unique_id,
             downstream_dependencies=numbered_list(downstream_dependencies),
         )
-        recommendation = self.RECOMMENDATION.format(current_altimate_unique_id=current_altimate_unique_id)
+        recommendation = self.RECOMMENDATION.format(current_model_unique_id=current_model_unique_id)
 
         return DBTInsightResult(
             type=self.TYPE,
@@ -46,7 +46,7 @@ class DBTStagingModelsDependentOnStagingModels(DBTModellingInsight):
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": current_altimate_unique_id,
+                "model": current_model_unique_id,
                 "downstream_dependencies": downstream_dependencies,
             },
         )

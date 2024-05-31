@@ -27,11 +27,11 @@ class DBTMissingDocumentation(DBTGovernanceInsight):
         "modeling and analysis. It's important to document data structures comprehensively."
     )
     FAILURE_MESSAGE = (
-        "The following columns in the model `{altimate_unique_id}` are missing documentation:\n{columns}. "
+        "The following columns in the model `{model_unique_id}` are missing documentation:\n{columns}. "
         "Lack of documentation can impede understanding and usage of the model."
     )
     RECOMMENDATION = (
-        "Enhance the documentation for the columns listed above in the model `{altimate_unique_id}`. "
+        "Enhance the documentation for the columns listed above in the model `{model_unique_id}`. "
         "Documentation provides valuable context and aids in data understanding and collaboration."
     )
     FILES_REQUIRED: ClassVar = ["Manifest", "Catalog"]
@@ -42,29 +42,29 @@ class DBTMissingDocumentation(DBTGovernanceInsight):
 
     def _build_failure_result(
         self,
-        altimate_unique_id: str,
+        model_unique_id: str,
         model_description_is_missing: bool,
         columns: List[str],
     ) -> DBTInsightResult:
         """
         Build failure result for the insight if a model is a root model with 0 direct parents.
 
-        :param altimate_unique_id: Unique ID of the current model being evaluated.
+        :param model_unique_id: Unique ID of the current model being evaluated.
         :param columns: List of columns that are documented but no longer present in the model.
         :return: An instance of InsightResult containing failure message and recommendation.
         """
-        self.logger.debug(f"Building failure result for model {altimate_unique_id} with stale columns {columns}")
+        self.logger.debug(f"Building failure result for model {model_unique_id} with stale columns {columns}")
         failure_message = ""
         if model_description_is_missing:
-            failure_message += f"The model {altimate_unique_id} is missing a description.\n"
+            failure_message += f"The model {model_unique_id} is missing a description.\n"
 
         if columns:
             failure_message += self.FAILURE_MESSAGE.format(
                 columns=numbered_list(columns),
-                altimate_unique_id=altimate_unique_id,
+                model_unique_id=model_unique_id,
             )
 
-        recommendation = self.RECOMMENDATION.format(altimate_unique_id=altimate_unique_id)
+        recommendation = self.RECOMMENDATION.format(model_unique_id=model_unique_id)
 
         return DBTInsightResult(
             type=self.TYPE,
@@ -74,7 +74,7 @@ class DBTMissingDocumentation(DBTGovernanceInsight):
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
                 "columns": columns,
-                "altimate_unique_id": altimate_unique_id,
+                "model_unique_id": model_unique_id,
                 "model_description_is_missing": model_description_is_missing,
             },
         )

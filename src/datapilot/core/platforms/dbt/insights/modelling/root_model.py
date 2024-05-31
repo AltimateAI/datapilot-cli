@@ -22,25 +22,25 @@ class DBTRootModel(DBTModellingInsight):
         " the overall data model."
     )
     FAILURE_MESSAGE = (
-        "Model `{current_altimate_unique_id}` is identified as a root model with no direct parents. "
+        "Model `{current_model_unique_id}` is identified as a root model with no direct parents. "
         "This can hinder traceability and clarity in the data model."
     )
     RECOMMENDATION = (
-        "Ensure that model `{current_altimate_unique_id}` is appropriately linked to a source or another model "
+        "Ensure that model `{current_model_unique_id}` is appropriately linked to a source or another model "
         "within the dbt project. This linkage is crucial for maintaining clear data lineage and project coherence."
     )
 
-    def _build_failure_result(self, current_altimate_unique_id: str) -> DBTInsightResult:
+    def _build_failure_result(self, current_model_unique_id: str) -> DBTInsightResult:
         """
         Build failure result for the insight if a model is a root model with 0 direct parents.
 
-        :param current_altimate_unique_id: Unique ID of the current model being evaluated.
+        :param current_model_unique_id: Unique ID of the current model being evaluated.
         :return: An instance of InsightResult containing failure message and recommendation.
         """
-        self.logger.debug(f"Building failure result for root model {current_altimate_unique_id}")
+        self.logger.debug(f"Building failure result for root model {current_model_unique_id}")
 
-        failure = self.FAILURE_MESSAGE.format(current_altimate_unique_id=current_altimate_unique_id)
-        recommendation = self.RECOMMENDATION.format(current_altimate_unique_id=current_altimate_unique_id)
+        failure = self.FAILURE_MESSAGE.format(current_model_unique_id=current_model_unique_id)
+        recommendation = self.RECOMMENDATION.format(current_model_unique_id=current_model_unique_id)
 
         return DBTInsightResult(
             type=self.TYPE,
@@ -48,7 +48,7 @@ class DBTRootModel(DBTModellingInsight):
             message=failure,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"model": current_altimate_unique_id},
+            metadata={"model": current_model_unique_id},
         )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:

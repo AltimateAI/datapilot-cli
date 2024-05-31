@@ -33,18 +33,18 @@ class DBTSourceDirectoryStructure(DBTStructureInsight):
         "practices for organizing source files in dbt projects."
     )
 
-    def _build_failure_result(self, altimate_unique_id: str, convention: Optional[str]) -> DBTInsightResult:
+    def _build_failure_result(self, model_unique_id: str, convention: Optional[str]) -> DBTInsightResult:
         failure_message = self.FAILURE_MESSAGE.format(
-            source_id=altimate_unique_id,
+            source_id=model_unique_id,
         )
         return DBTInsightResult(
             name=self.NAME,
             type=self.TYPE,
             message=failure_message,
-            recommendation=self.RECOMMENDATION.format(source_id=altimate_unique_id, convention=convention),
+            recommendation=self.RECOMMENDATION.format(source_id=model_unique_id, convention=convention),
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "source_id": altimate_unique_id,
+                "source_id": model_unique_id,
                 "convention": convention,
             },
         )
@@ -63,7 +63,7 @@ class DBTSourceDirectoryStructure(DBTStructureInsight):
             )
             if not valid_convention:
                 insight = self._build_failure_result(
-                    altimate_unique_id=source_id,
+                    model_unique_id=source_id,
                     convention=expected_directory,
                 )
                 insights.append(

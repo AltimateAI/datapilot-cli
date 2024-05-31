@@ -50,7 +50,7 @@ class CheckModelNameContract(ChecksInsight):
             message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"altimate_unique_id": node_id, **failure},
+            metadata={"model_unique_id": node_id, **failure},
         )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:
@@ -88,12 +88,12 @@ class CheckModelNameContract(ChecksInsight):
                     )
         return insights
 
-    def _check_model_name_contract(self, altimate_unique_id: str) -> bool:
+    def _check_model_name_contract(self, model_unique_id: str) -> bool:
         """
         Check if the model name abides to the contract.
         """
-        model_name = self.get_node(altimate_unique_id).name
-        model_path = self.get_node(altimate_unique_id).original_file_path
+        model_name = self.get_node(model_unique_id).name
+        model_path = self.get_node(model_unique_id).original_file_path
         for folder, pattern in self.patterns.items():
             if is_superset_path(folder, model_path):
                 if re.match(pattern, model_name, re.IGNORECASE) is None:

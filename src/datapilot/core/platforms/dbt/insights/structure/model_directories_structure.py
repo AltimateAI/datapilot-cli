@@ -26,19 +26,19 @@ class DBTModelDirectoryStructure(DBTStructureInsight):
         "discoverability, and complicate maintenance and scaling of the dbt project."
     )
     FAILURE_MESSAGE = (
-        "Incorrect Directory Placement Detected: The model `{altimate_unique_id}` is incorrectly "
+        "Incorrect Directory Placement Detected: The model `{model_unique_id}` is incorrectly "
         "placed in the current directory. As a `{model_type}` model, it should be located in "
         "the `{convention}` directory."
     )
     RECOMMENDATION = (
-        "To resolve this issue, please move the model `{altimate_unique_id}` to the `{convention}` "
+        "To resolve this issue, please move the model `{model_unique_id}` to the `{convention}` "
         "directory. This change will align the model's location with the established directory "
         "structure, improving organization and ease of access in your dbt project."
     )
 
-    def _build_failure_result(self, altimate_unique_id: str, model_type: str, convention: Optional[str]) -> DBTInsightResult:
+    def _build_failure_result(self, model_unique_id: str, model_type: str, convention: Optional[str]) -> DBTInsightResult:
         failure_message = self.FAILURE_MESSAGE.format(
-            altimate_unique_id=altimate_unique_id,
+            model_unique_id=model_unique_id,
             model_type=model_type,
             convention=convention,
         )
@@ -46,10 +46,10 @@ class DBTModelDirectoryStructure(DBTStructureInsight):
             name=self.NAME,
             type=self.TYPE,
             message=failure_message,
-            recommendation=self.RECOMMENDATION.format(altimate_unique_id=altimate_unique_id, convention=convention),
+            recommendation=self.RECOMMENDATION.format(model_unique_id=model_unique_id, convention=convention),
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": altimate_unique_id,
+                "model": model_unique_id,
                 "model_type": model_type,
                 "convention": convention,
             },
@@ -82,7 +82,7 @@ class DBTModelDirectoryStructure(DBTStructureInsight):
                             path=node.path,
                             original_file_path=node.original_file_path,
                             insight=self._build_failure_result(
-                                altimate_unique_id=node.unique_id,
+                                model_unique_id=node.unique_id,
                                 model_type=model_type,
                                 convention=message,
                             ),

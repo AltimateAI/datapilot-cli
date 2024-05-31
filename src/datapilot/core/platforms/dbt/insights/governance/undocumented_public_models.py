@@ -25,7 +25,7 @@ class DBTUndocumentedPublicModels(DBTGovernanceInsight):
         "it's essential to document these models comprehensively."
     )
     FAILURE_MESSAGE = (
-        "Model `{altimate_unique_id}` is marked as public but is not documented. "
+        "Model `{model_unique_id}` is marked as public but is not documented. "
         "Lack of documentation can lead to confusion for data consumers."
     )
     RECOMMENDATION = (
@@ -35,22 +35,22 @@ class DBTUndocumentedPublicModels(DBTGovernanceInsight):
 
     def _build_failure_result(
         self,
-        altimate_unique_id: str,
+        model_unique_id: str,
         model_description_is_missing: bool,
         columns: Optional[List[str]] = None,
     ) -> DBTInsightResult:
         """
         Build failure result for the insight if a model is a root model with 0 direct parents.
 
-        :param altimate_unique_id: Unique ID of the current model being evaluated.
+        :param model_unique_id: Unique ID of the current model being evaluated.
         :param model_description_is_missing: Whether the model description is missing.
         :param columns: List of columns that are missing documentation.
         :return: An instance of InsightResult containing failure message and recommendation.
         """
-        self.logger.debug(f"Building failure result model {altimate_unique_id} is public but not documented.")
+        self.logger.debug(f"Building failure result model {model_unique_id} is public but not documented.")
 
         failure = self.FAILURE_MESSAGE.format(
-            altimate_unique_id=altimate_unique_id,
+            model_unique_id=model_unique_id,
         )
         failure += "Missing Model documentation." if model_description_is_missing else ""
 
@@ -63,7 +63,7 @@ class DBTUndocumentedPublicModels(DBTGovernanceInsight):
             recommendation=self.RECOMMENDATION,
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": altimate_unique_id,
+                "model": model_unique_id,
                 "columns_without_documentation": columns,
                 "model_description_missing": model_description_is_missing,
             },

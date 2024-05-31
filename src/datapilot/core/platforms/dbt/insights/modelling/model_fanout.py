@@ -22,11 +22,11 @@ class DBTModelFanout(DBTModellingInsight):
     )
     FANOUT_THRESHOLD = 3  # Default threshold, can be overridden as needed
     FAILURE_MESSAGE = (
-        "Model `{parent_altimate_unique_id}` has `{leaf_children}` leaf children, "
+        "Model `{parent_model_unique_id}` has `{leaf_children}` leaf children, "
         "exceeding the fanout threshold of `{fanout_threshold}`. This level of fanout may lead to increased complexity."
     )
     RECOMMENDATION = (
-        "Consider reviewing and restructuring `{parent_altimate_unique_id}` to simplify its dependencies. "
+        "Consider reviewing and restructuring `{parent_model_unique_id}` to simplify its dependencies. "
         "Reducing the number of leaf children can lead to a more streamlined and maintainable data pipeline."
     )
 
@@ -34,20 +34,20 @@ class DBTModelFanout(DBTModellingInsight):
 
     def _build_failure_result(
         self,
-        parent_altimate_unique_id: str,
+        parent_model_unique_id: str,
         leaf_children: List[str],
         fanout_threshold: int,
     ) -> DBTInsightResult:
         # Logic to build the failure result
-        self.logger.debug(f"Found {len(leaf_children)} leaf children for {parent_altimate_unique_id}")
+        self.logger.debug(f"Found {len(leaf_children)} leaf children for {parent_model_unique_id}")
         failure_message = self.FAILURE_MESSAGE.format(
-            parent_altimate_unique_id=parent_altimate_unique_id,
+            parent_model_unique_id=parent_model_unique_id,
             leaf_children=len(leaf_children),
             fanout_threshold=fanout_threshold,
         )
 
         recommendation = self.RECOMMENDATION.format(
-            parent_altimate_unique_id=parent_altimate_unique_id,
+            parent_model_unique_id=parent_model_unique_id,
         )
 
         return DBTInsightResult(
@@ -57,7 +57,7 @@ class DBTModelFanout(DBTModellingInsight):
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": parent_altimate_unique_id,
+                "model": parent_model_unique_id,
                 "leaf_children_count": len(leaf_children),
                 "leaf_children": leaf_children,
             },

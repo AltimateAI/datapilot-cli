@@ -48,13 +48,13 @@ class CheckModelHasAllColumns(ChecksInsight):
                     )
         return insights
 
-    def _build_failure_result(self, altimate_unique_id: str, columns: Sequence[str]) -> DBTInsightResult:
+    def _build_failure_result(self, model_unique_id: str, columns: Sequence[str]) -> DBTInsightResult:
         failure_message = (
-            "The following columns in the model `{altimate_unique_id}` are missing:\n{columns}. "
+            "The following columns in the model `{model_unique_id}` are missing:\n{columns}. "
             "Ensure that the model includes all the required columns."
         )
         recommendation = (
-            "Add the missing columns listed above in the model `{altimate_unique_id}`. "
+            "Add the missing columns listed above in the model `{model_unique_id}`. "
             "Ensuring that the model has all the required columns helps in maintaining data integrity and consistency."
         )
 
@@ -63,11 +63,11 @@ class CheckModelHasAllColumns(ChecksInsight):
             name=self.NAME,
             message=failure_message.format(
                 columns=numbered_list(columns),
-                altimate_unique_id=altimate_unique_id,
+                model_unique_id=model_unique_id,
             ),
-            recommendation=recommendation.format(altimate_unique_id=altimate_unique_id),
+            recommendation=recommendation.format(model_unique_id=model_unique_id),
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"columns": columns, "altimate_unique_id": altimate_unique_id},
+            metadata={"columns": columns, "model_unique_id": model_unique_id},
         )
 
     def _check_model_columns(self, node_id) -> Tuple[int, Set[str]]:

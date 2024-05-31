@@ -47,7 +47,7 @@ class CheckModelParentsAndChilds(ChecksInsight):
                 "max_parents": self.max_parents,
                 "min_childs": self.min_childs,
                 "max_childs": self.max_childs,
-                "altimate_unique_id": node_id,
+                "model_unique_id": node_id,
             },
         )
 
@@ -89,19 +89,19 @@ class CheckModelParentsAndChilds(ChecksInsight):
                     )
         return insights
 
-    def _check_model_parents_and_childs(self, altimate_unique_id: str) -> Optional[str]:
+    def _check_model_parents_and_childs(self, model_unique_id: str) -> Optional[str]:
         """
         Check if the model has a specific number (max/min) of parents or/and childs.
         """
-        children = self.children_map.get(altimate_unique_id, [])
-        node = self.get_node(altimate_unique_id)
+        children = self.children_map.get(model_unique_id, [])
+        node = self.get_node(model_unique_id)
         parents = node.depends_on.nodes
         message = ""
         if len(parents) < self.min_parents or len(parents) > self.max_parents:
-            message += f"The model:{altimate_unique_id} doesn't have the required number of parents.\n Min parents: {self.min_parents}, Max parents: {self.max_parents}. It has f{len(parents)} parents\n"
+            message += f"The model:{model_unique_id} doesn't have the required number of parents.\n Min parents: {self.min_parents}, Max parents: {self.max_parents}. It has f{len(parents)} parents\n"
 
         if len(children) < self.min_childs or len(children) > self.max_childs:
-            message += f"The model:{altimate_unique_id} doesn't have the required number of childs.\n Min childs: {self.min_childs}, Max childs: {self.max_childs}. It has f{len(children)} childs\n"
+            message += f"The model:{model_unique_id} doesn't have the required number of childs.\n Min childs: {self.min_childs}, Max childs: {self.max_childs}. It has f{len(children)} childs\n"
 
         return message
 

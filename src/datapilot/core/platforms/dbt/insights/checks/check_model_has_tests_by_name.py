@@ -45,12 +45,12 @@ class CheckModelHasTestsByName(ChecksInsight):
                     )
         return insights
 
-    def _build_failure_result(self, altimate_unique_id: str, missing_tests: List[Dict]) -> DBTInsightResult:
+    def _build_failure_result(self, model_unique_id: str, missing_tests: List[Dict]) -> DBTInsightResult:
         tests_str = ""
         for test in missing_tests:
             tests_str += f"Test Name: {test.get(self.TEST_NAME_STR)}, Min Count: {test.get(self.TEST_COUNT_STR)}, Actual Count: {test.get('actual_count')}\n"
 
-        failure_message = f"The model `{altimate_unique_id}` does not have enough tests:\n{tests_str}. "
+        failure_message = f"The model `{model_unique_id}` does not have enough tests:\n{tests_str}. "
         recommendation = (
             "Add tests with the specified names for each model listed above. "
             "Having tests with specific names ensures proper validation and data integrity."
@@ -62,7 +62,7 @@ class CheckModelHasTestsByName(ChecksInsight):
             message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"altimate_unique_id": altimate_unique_id},
+            metadata={"model_unique_id": model_unique_id},
         )
 
     def _model_has_tests_by_name(self, node_id) -> bool:

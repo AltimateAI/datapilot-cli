@@ -22,11 +22,11 @@ class CheckSourceColumnsHaveDescriptions(ChecksInsight):
         self.catalog = catalog_wrapper
         super().__init__(*args, **kwargs)
 
-    def _build_failure_result(self, altimate_unique_id: str, columns: Sequence[str]) -> DBTInsightResult:
+    def _build_failure_result(self, model_unique_id: str, columns: Sequence[str]) -> DBTInsightResult:
         """
         Build failure result for the insight if a source has columns without descriptions.
         """
-        failure_message = f"The source:{altimate_unique_id} has columns without descriptions:\n"
+        failure_message = f"The source:{model_unique_id} has columns without descriptions:\n"
         failure_message += numbered_list(columns)
 
         recommendation = "Update the source to include descriptions for all columns."
@@ -36,7 +36,7 @@ class CheckSourceColumnsHaveDescriptions(ChecksInsight):
             message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"source_unique_id": altimate_unique_id, "columns": columns},
+            metadata={"source_unique_id": model_unique_id, "columns": columns},
         )
 
     def generate(self, *args, **kwargs) -> List[DBTModelInsightResponse]:

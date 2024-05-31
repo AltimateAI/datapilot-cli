@@ -28,34 +28,34 @@ class DBTDownstreamModelsDependentOnSource(DBTModellingInsight):
         "while providing a consistent format for downstream consumption."
     )
     FAILURE_MESSAGE = (
-        "Downstream model `{current_altimate_unique_id}` of type {model_type} is directly dependent on a source nodes."
+        "Downstream model `{current_model_unique_id}` of type {model_type} is directly dependent on a source nodes."
         "Direct source dependencies bypass the critical staging layer, leading to potential data consistency issues."
         " Source dependencies: {source_dependencies}"
     )
     RECOMMENDATION = (
         "Introduce or utilize an existing staging model for the source node involved. Refactor the downstream model "
-        "`{current_altimate_unique_id}` to select from this staging layer, ensuring a proper abstraction layer between "
+        "`{current_model_unique_id}` to select from this staging layer, ensuring a proper abstraction layer between "
         "raw data and downstream data artifacts."
     )
     MODEL_TYPES: ClassVar[List[str]] = [INTERMEDIATE, MART]
 
     def _build_failure_result(
         self,
-        current_altimate_unique_id: str,
+        current_model_unique_id: str,
         source_dependencies: List[str],
         model_type: str,
     ) -> DBTInsightResult:
         """
         Build failure result for the insight if a downstream model depends directly on a source node.
 
-        :param current_altimate_unique_id: Unique ID of the current model being evaluated.
+        :param current_model_unique_id: Unique ID of the current model being evaluated.
         :param source_dependencies: List of source dependencies for the current model.
         :return: An instance of InsightResult containing failure message and recommendation.
         """
-        self.logger.debug(f"Building failure result for model {current_altimate_unique_id} with direct source dependencies")
+        self.logger.debug(f"Building failure result for model {current_model_unique_id} with direct source dependencies")
 
         failure = self.FAILURE_MESSAGE.format(
-            current_altimate_unique_id=current_altimate_unique_id,
+            current_model_unique_id=current_model_unique_id,
             model_type=model_type,
             source_dependencies=numbered_list(source_dependencies),
         )
@@ -64,10 +64,10 @@ class DBTDownstreamModelsDependentOnSource(DBTModellingInsight):
             type=self.TYPE,
             name=self.NAME,
             message=failure,
-            recommendation=self.RECOMMENDATION.format(current_altimate_unique_id=current_altimate_unique_id),
+            recommendation=self.RECOMMENDATION.format(current_model_unique_id=current_model_unique_id),
             reason_to_flag=self.REASON_TO_FLAG,
             metadata={
-                "model": current_altimate_unique_id,
+                "model": current_model_unique_id,
                 "source_dependencies": source_dependencies,
                 "model_type": model_type,
             },

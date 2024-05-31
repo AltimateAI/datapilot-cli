@@ -37,9 +37,9 @@ class CheckModelHasPropertiesFile(ChecksInsight):
                     )
         return insights
 
-    def _build_failure_result(self, altimate_unique_id: str) -> DBTInsightResult:
+    def _build_failure_result(self, model_unique_id: str) -> DBTInsightResult:
         failure_message = (
-            f"The model {altimate_unique_id} do not have a properties file (.yml) defined."
+            f"The model {model_unique_id} do not have a properties file (.yml) defined."
             "Ensure that each model has a corresponding .yml file for additional configuration and documentation."
         )
         recommendation = (
@@ -53,7 +53,7 @@ class CheckModelHasPropertiesFile(ChecksInsight):
             message=failure_message,
             recommendation=recommendation,
             reason_to_flag=self.REASON_TO_FLAG,
-            metadata={"altimate_unique_id": altimate_unique_id},
+            metadata={"model_unique_id": model_unique_id},
         )
 
     def _check_properties_file(self, node_id) -> int:
