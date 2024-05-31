@@ -119,7 +119,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
     def _get_source(self, source: SourceNode) -> AltimateManifestSourceNode:
         return AltimateManifestSourceNode(
             database=source.database,
-            resource_type=AltimateResourceType(source.resource_type.value),
+            resource_type=AltimateResourceType(source.resource_type),
             schema_name=source.schema_,
             name=source.name,
             package_name=source.package_name,
@@ -160,7 +160,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
     def _get_macro(self, macro: MacroNode) -> AltimateManifestMacroNode:
         return AltimateManifestMacroNode(
             name=macro.name,
-            resource_type=AltimateResourceType(macro.resource_type.value),
+            resource_type=AltimateResourceType(macro.resource_type),
             package_name=macro.package_name,
             path=macro.path,
             original_file_path=macro.original_file_path,
@@ -185,7 +185,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
     def _get_exposure(self, exposure: ExposureNode) -> AltimateManifestExposureNode:
         return AltimateManifestExposureNode(
             name=exposure.name,
-            resource_type=AltimateResourceType(exposure.resource_type.value),
+            resource_type=AltimateResourceType(exposure.resource_type),
             package_name=exposure.package_name,
             path=exposure.path,
             original_file_path=exposure.original_file_path,
@@ -228,7 +228,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
             test_metadata=test_metadata,
             test_type=test_type,
             name=test.name,
-            resource_type=AltimateResourceType(test.resource_type.value),
+            resource_type=AltimateResourceType(test.resource_type),
             package_name=test.package_name,
             path=test.path,
             original_file_path=test.original_file_path,
@@ -287,7 +287,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
             database=seed.database,
             schema_name=seed.schema_,
             name=seed.name,
-            resource_type=AltimateResourceType(seed.resource_type.value),
+            resource_type=AltimateResourceType(seed.resource_type),
             package_name=seed.package_name,
             path=seed.path,
             original_file_path=seed.original_file_path,
@@ -360,7 +360,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
     def get_macros(self) -> Dict[str, AltimateManifestMacroNode]:
         macros = {}
         for macro in self.manifest.macros.values():
-            if macro.resource_type.value == AltimateResourceType.macro.value and macro.package_name == self.get_package():
+            if macro.resource_type == AltimateResourceType.macro.value and macro.package_name == self.get_package():
                 macros[macro.unique_id] = self._get_macro(macro)
         return macros
 
@@ -389,7 +389,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
     def get_seeds(self) -> Dict[str, AltimateSeedNode]:
         seeds = {}
         for seed in self.manifest.nodes.values():
-            if seed.resource_type.value == AltimateResourceType.seed.value:
+            if seed.resource_type == AltimateResourceType.seed.value:
                 seeds[seed.unique_id] = self._get_seed(seed)
         return seeds
 
