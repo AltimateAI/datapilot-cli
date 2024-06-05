@@ -11,6 +11,7 @@ from datapilot.core.platforms.dbt.constants import SEED
 from datapilot.core.platforms.dbt.constants import SINGULAR
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateDBTContract
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateDependsOn
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateDocs
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateExposureType
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateExternalTable
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateFileHash
@@ -175,7 +176,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             ),
             description=macro.description,
             meta=macro.meta,
-            docs=macro.docs,
+            docs=AltimateDocs(show=macro.docs.show, node_color=macro.docs.node_color) if macro.docs else None,
             patch_path=macro.patch_path,
             arguments=[AltimateMacroArgument(**arg.dict()) for arg in macro.arguments] if macro.arguments else None,
             created_at=macro.created_at,
