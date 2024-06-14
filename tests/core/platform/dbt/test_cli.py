@@ -86,3 +86,18 @@ def test_project_health_with_macro_args():
     assert result.exit_code == 0  # Ensure the command executed successfully
     # Validate behavior for when only the required argument is provided
     assert "-----------" in result.output
+
+
+def test_project_health_with_required_and_optional_args_v12():
+    runner = CliRunner()
+    manifest_path = "tests/data/manifest_v12.json"
+    catalog_path = "tests/data/catalog_v12.json"
+    config_path = "tests/data/config.yml"
+
+    # Simulate command invocation
+    result = runner.invoke(project_health, ["--manifest-path", manifest_path, "--catalog-path", catalog_path, "--config-path", config_path])
+
+    assert result.exit_code == 0  # Ensure the command executed successfully
+    # Add more assertions here to validate the behavior of your command,
+    # for example, checking that the output contains expected text.
+    assert "-----------" in result.output
