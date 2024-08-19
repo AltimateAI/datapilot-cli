@@ -9,7 +9,7 @@ from typing import Union
 from dbt_artifacts_parser.parser import parse_catalog
 from dbt_artifacts_parser.parser import parse_manifest
 
-from datapilot.core.platforms.dbt.constants import BASE
+from datapilot.core.platforms.dbt.constants import BASE, SUPPORTED_DBT_VERSION
 from datapilot.core.platforms.dbt.constants import FOLDER
 from datapilot.core.platforms.dbt.constants import INTERMEDIATE
 from datapilot.core.platforms.dbt.constants import MART
@@ -30,6 +30,8 @@ from datapilot.utils.utils import extract_dir_name_from_file_path
 from datapilot.utils.utils import extract_folders_in_path
 from datapilot.utils.utils import is_superset_path
 from datapilot.utils.utils import load_json
+
+from packaging import version
 
 MODEL_TYPE_PATTERNS = {
     STAGING: r"^stg_.*",  # Example: models starting with 'stg_'
@@ -73,6 +75,12 @@ def load_manifest(manifest_path: str) -> Manifest:
 
     try:
         manifest: Manifest = parse_manifest(manifest_dict)
+        dbt_version: version.Version = version.parse(manifest.metadata.dbt_version)
+
+        if dbt_version < version.parse(SUPPORTED_DBT_VERSION):
+            # raise a valueerror
+            raise ValueError(f"Unsupported DBT version: {dbt_version}. Minimum required version is {SUPPORTED_DBT_VERSION}.")
+
     except ValueError as e:
         raise AltimateInvalidManifestError(f"Invalid manifest file: {manifest_path}. Error: {e}") from e
 
