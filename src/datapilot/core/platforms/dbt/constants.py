@@ -32,3 +32,5 @@ OTHER_TEST_NODE = "other_test_node"
 
 
 FOLDER = "folder"
+
+SUPPORTED_DBT_VERSION = "1.6"
