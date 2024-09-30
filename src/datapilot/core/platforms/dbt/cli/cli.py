@@ -6,6 +6,7 @@ from datapilot.clients.altimate.utils import check_token_and_instance
 from datapilot.clients.altimate.utils import onboard_file
 from datapilot.clients.altimate.utils import start_dbt_ingestion
 from datapilot.clients.altimate.utils import validate_credentials
+from datapilot.clients.altimate.utils import validate_permissions
 from datapilot.config.config import load_config
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
@@ -109,6 +110,10 @@ def onboard(
 
     if not validate_credentials(token, backend_url, instance_name):
         click.echo("Error: Invalid credentials.")
+        return
+    
+    if not validate_permissions(token, backend_url, instance_name):
+        click.echo("Error: You don't have permission to perform this action.")
         return
 
     # This will throw error if manifest file is incorrect
