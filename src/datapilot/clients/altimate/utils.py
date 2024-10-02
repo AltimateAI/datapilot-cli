@@ -52,7 +52,7 @@ def validate_permissions(
     tenant,
 ) -> Response:
     api_client = APIClient(api_token=token, base_url=backend_url, tenant=tenant)
-    return api_client.validate_permissions()
+    return api_client.validate_upload_to_integration()
 
 def onboard_file(api_token, tenant, dbt_core_integration_id, dbt_core_integration_environment, file_type, file_path, backend_url) -> Dict:
     api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)

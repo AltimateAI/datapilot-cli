@@ -84,7 +84,7 @@ class APIClient:
         endpoint = "/dbt/v3/validate-credentials"
         return self.get(endpoint)
     
-    def validate_permissions(self):
+    def validate_upload_to_integration(self):
         endpoint = "/dbt/v1/validate-permissions"
         return self.get(endpoint)
 
