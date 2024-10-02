@@ -44,7 +44,7 @@ class APIClient:
             return response.json()
 
         except HTTPError as http_err:
-            self.logger.error(f"{http_err.response.json()} - Status code: {response.status_code}")
+            self.logger.debug(f"HTTP Error: {http_err.response.json()} - Status code: {response.status_code}")
         except ConnectionError as conn_err:
             self.logger.error(f"Connection error occurred: {conn_err}")
         except Timeout as timeout_err:
@@ -82,6 +82,10 @@ class APIClient:
 
     def validate_credentials(self):
         endpoint = "/dbt/v3/validate-credentials"
+        return self.get(endpoint)
+    
+    def validate_upload_to_integration(self):
+        endpoint = "/dbt/v1/validate-permissions"
         return self.get(endpoint)
 
     def start_dbt_ingestion(self, params=None):
