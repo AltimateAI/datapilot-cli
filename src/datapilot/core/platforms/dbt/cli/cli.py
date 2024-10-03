@@ -111,7 +111,7 @@ def onboard(
     if not validate_credentials(token, backend_url, instance_name):
         click.echo("Error: Invalid credentials.")
         return
-    
+
     if not validate_permissions(token, backend_url, instance_name):
         click.echo("Error: You don't have permission to perform this action.")
         return
