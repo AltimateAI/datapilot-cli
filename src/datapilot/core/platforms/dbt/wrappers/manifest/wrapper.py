@@ -1,6 +1,7 @@
 from abc import ABC
 from abc import abstractmethod
 from typing import Dict
+from typing import Optional
 from typing import Set
 
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
@@ -24,6 +25,10 @@ class BaseManifestWrapper(ABC):
 
     @abstractmethod
     def get_exposures(self) -> Dict[str, AltimateManifestExposureNode]:
+        pass
+
+    @abstractmethod
+    def get_adapter_type(self) -> Optional[str]:
         pass
 
     @abstractmethod
