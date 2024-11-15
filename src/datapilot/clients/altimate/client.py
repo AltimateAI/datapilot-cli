@@ -91,3 +91,16 @@ class APIClient:
     def start_dbt_ingestion(self, params=None):
         endpoint = "/dbt/v1/start_dbt_ingestion"
         return self.post(endpoint, data=params)
+
+    def get_project_governance_llm_checks(self, params=None):
+        endpoint = "/project_governance/checks"
+        return self.get(endpoint, params=params)
+
+    def run_project_governance_llm_checks(self, manifest, catalog, check_names):
+        endpoint = "/project_governance/run_checks"
+        data = {
+            "manifest": manifest,
+            "catalog": catalog,
+            "check_names": check_names,
+        }
+        return self.post(endpoint, data=data)
