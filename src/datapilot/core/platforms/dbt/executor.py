@@ -43,6 +43,8 @@ class DBTInsightGenerator:
         self.token = token
         self.instance_name = instance_name
         self.backend_url = backend_url
+        self.manifest = manifest
+        self.catalog = catalog
 
         self.manifest_wrapper = DBTFactory.get_manifest_wrapper(manifest)
         self.manifest_present = True
@@ -98,7 +100,7 @@ class DBTInsightGenerator:
         llm_checks = get_project_governance_llm_checks(self.token, self.instance_name, self.backend_url)
         check_names = [check["name"] for check in llm_checks if check["alias"] not in self.config.get("disabled_insights", [])]
         llm_check_results = run_project_governance_llm_checks(
-            self.token, self.instance_name, self.backend_url, self.manifest, self.catalog, check_names
+            self.token, self.instance_name, self.backend_url, self.manifest.json(), self.catalog.json(), check_names
         )
         return llm_check_results
 

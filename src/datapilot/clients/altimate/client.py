@@ -97,7 +97,7 @@ class APIClient:
         return self.get(endpoint, params=params)
 
     def run_project_governance_llm_checks(self, manifest, catalog, check_names):
-        endpoint = "/project_governance/run_checks"
+        endpoint = "/project_governance/check/run"
         data = {
             "manifest": manifest,
             "catalog": catalog,
