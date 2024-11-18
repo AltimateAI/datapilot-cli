@@ -3,13 +3,12 @@ import logging
 import click
 
 from datapilot.clients.altimate.utils import check_token_and_instance
-from datapilot.clients.altimate.utils import get_project_governance_llm_checks
 from datapilot.clients.altimate.utils import onboard_file
-from datapilot.clients.altimate.utils import run_project_governance_llm_checks
 from datapilot.clients.altimate.utils import start_dbt_ingestion
 from datapilot.clients.altimate.utils import validate_credentials
 from datapilot.clients.altimate.utils import validate_permissions
 from datapilot.config.config import load_config
+from datapilot.core.platforms.dbt.constants import LLM
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
@@ -30,8 +29,8 @@ def dbt():
 
 
 @dbt.command("project-health")
-@click.option("--token", prompt="API Token", help="Your API token for authentication.")
-@click.option("--instance-name", prompt="Instance Name", help="Your tenant ID.")
+@click.option("--token", required=False, prompt="API Token", help="Your API token for authentication.")
+@click.option("--instance-name", required=False, prompt="Instance Name", help="Your tenant ID.")
 @click.option(
     "--manifest-path",
     required=True,
@@ -70,15 +69,20 @@ def project_health(
     manifest = load_manifest(manifest_path)
     catalog = load_catalog(catalog_path) if catalog_path else None
 
-    llm_checks = get_project_governance_llm_checks(token, instance_name, backend_url)
-    check_names = [check["name"] for check in llm_checks if check["alias"] not in config.get("disabled_insights", [])]
-    llm_check_results = run_project_governance_llm_checks(token, instance_name, backend_url, manifest, catalog, check_names)
-
-    insight_generator = DBTInsightGenerator(manifest=manifest, catalog=catalog, config=config, selected_models=selected_models)
+    insight_generator = DBTInsightGenerator(
+        manifest=manifest,
+        catalog=catalog,
+        config=config,
+        selected_models=selected_models,
+        token=token,
+        instance_name=instance_name,
+        backend_url=backend_url,
+    )
     reports = insight_generator.run()
 
     package_insights = reports[PROJECT]
     model_insights = reports[MODEL]
+    llm_insights = reports[LLM]
     model_report = generate_model_insights_table(model_insights)
     if len(model_report) > 0:
         click.echo("--" * 50)
@@ -97,11 +101,11 @@ def project_health(
         click.echo("--" * 50)
         click.echo(tabulate_data(project_report, headers="keys"))
 
-    if llm_check_results:
+    if len(llm_insights):
         click.echo("--" * 50)
         click.echo("Project Governance LLM Insights")
         click.echo("--" * 50)
-        for check in llm_check_results["results"]:
+        for check in llm_insights:
             click.echo(f"Check: {check['name']}")
             for answer in check["answer"]:
                 click.echo(f"Rule: {answer['Rule']}")

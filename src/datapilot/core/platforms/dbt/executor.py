@@ -5,6 +5,9 @@ from typing import Dict
 from typing import List
 from typing import Optional
 
+from datapilot.clients.altimate.utils import get_project_governance_llm_checks
+from datapilot.clients.altimate.utils import run_project_governance_llm_checks
+from datapilot.core.platforms.dbt.constants import LLM
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.exceptions import AltimateCLIArgumentError
@@ -29,11 +32,17 @@ class DBTInsightGenerator:
         target: str = "dev",
         selected_models: Optional[str] = None,
         selected_model_ids: Optional[List[str]] = None,
+        token: Optional[str] = None,
+        instance_name: Optional[str] = None,
+        backend_url: Optional[str] = None,
     ):
         self.run_results_path = run_results_path
         self.target = target
         self.env = env
         self.config = config or {}
+        self.token = token
+        self.instance_name = instance_name
+        self.backend_url = backend_url
 
         self.manifest_wrapper = DBTFactory.get_manifest_wrapper(manifest)
         self.manifest_present = True
@@ -85,10 +94,19 @@ class DBTInsightGenerator:
                 return True
         return False
 
+    def run_llm_checks(self):
+        llm_checks = get_project_governance_llm_checks(self.token, self.instance_name, self.backend_url)
+        check_names = [check["name"] for check in llm_checks if check["alias"] not in self.config.get("disabled_insights", [])]
+        llm_check_results = run_project_governance_llm_checks(
+            self.token, self.instance_name, self.backend_url, self.manifest, self.catalog, check_names
+        )
+        return llm_check_results
+
     def run(self):
         reports = {
             MODEL: {},
             PROJECT: [],
+            LLM: [],
         }
         for insight_class in INSIGHTS:
             # TODO: Skip insight based on config
@@ -153,5 +171,10 @@ class DBTInsightGenerator:
                     )
             else:
                 self.logger.info(color_text(f"Skipping insight {insight_class.NAME} as {message}", YELLOW))
+
+        if self.token and self.instance_name and self.backend_url:
+            llm_check_results = self.run_llm_checks()
+            if llm_check_results:
+                reports[LLM].extend(llm_check_results["results"])
 
         return reports

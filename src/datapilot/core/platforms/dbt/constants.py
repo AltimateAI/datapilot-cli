@@ -4,6 +4,8 @@ TEST = "test"
 MODEL = "model"
 SOURCE = "source"
 
+LLM = "llm"
+
 
 PROJECT = "project"
 SQL = "sql"
