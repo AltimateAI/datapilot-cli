@@ -108,10 +108,9 @@ def project_health(
         for check in llm_insights:
             click.echo(f"Check: {check['name']}")
             for answer in check["answer"]:
-                click.echo(f"Rule: {answer['Rule']}")
-                click.echo(f"Location: {answer['Location']}")
-                click.echo(f"Issue: {answer['Issue']}")
-                click.echo(f"Fix: {answer['Fix']}")
+                click.echo(f"Path: {answer['path']}")
+                click.echo(f"Reason to Flag: {answer['reason_to_flag']}")
+                click.echo(f"Recommendation: {answer['recommendation']}")
                 click.echo("\n")
 
 
