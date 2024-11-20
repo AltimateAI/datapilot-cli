@@ -2,6 +2,7 @@ from abc import abstractmethod
 from typing import ClassVar
 from typing import Dict
 from typing import List
+from typing import Optional
 from typing import Union
 
 from datapilot.config.utils import get_insight_config
@@ -33,6 +34,7 @@ class DBTInsight(Insight):
         macros: Dict[str, AltimateManifestMacroNode],
         children_map: Dict[str, List[str]],
         project_name: str,
+        adapter_type: Optional[str],
         selected_models: Union[List[str], None] = None,
         excluded_models: Union[List[str], None] = None,
         *args,
@@ -47,6 +49,7 @@ class DBTInsight(Insight):
         self.seeds = seeds
         self.children_map = children_map
         self.project_name = project_name
+        self.adapter_type = adapter_type
         self.selected_models = selected_models
         self.excluded_models = excluded_models
         super().__init__(*args, **kwargs)

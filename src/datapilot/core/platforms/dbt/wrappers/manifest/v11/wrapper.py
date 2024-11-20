@@ -1,4 +1,5 @@
 from typing import Dict
+from typing import Optional
 from typing import Set
 
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import GenericTestNode
@@ -67,6 +68,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             depends_on_macros = node.depends_on.macros if node.depends_on else None
             compiled_path = node.compiled_path
             compiled = node.compiled
+            compiled_code = node.compiled_code
             raw_code = node.raw_code
             language = node.language
             contract = AltimateDBTContract(**node.contract.__dict__) if node.contract else None
@@ -380,6 +382,9 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             if seed.resource_type.value == AltimateResourceType.seed.value:
                 seeds[seed.unique_id] = self._get_seed(seed)
         return seeds
+
+    def get_adapter_type(self) -> Optional[str]:
+        return self.manifest.metadata.adapter_type
 
     def parent_to_child_map(self, nodes: Dict[str, AltimateManifestNode]) -> Dict[str, Set[str]]:
         """
