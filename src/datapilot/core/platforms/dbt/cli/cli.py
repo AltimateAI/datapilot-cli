@@ -8,7 +8,6 @@ from datapilot.clients.altimate.utils import start_dbt_ingestion
 from datapilot.clients.altimate.utils import validate_credentials
 from datapilot.clients.altimate.utils import validate_permissions
 from datapilot.config.config import load_config
-from datapilot.core.platforms.dbt.constants import LLM
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
@@ -82,7 +81,6 @@ def project_health(
 
     package_insights = reports[PROJECT]
     model_insights = reports[MODEL]
-    llm_insights = reports[LLM]
     model_report = generate_model_insights_table(model_insights)
     if len(model_report) > 0:
         click.echo("--" * 50)
@@ -100,18 +98,6 @@ def project_health(
         click.echo("Project Insights")
         click.echo("--" * 50)
         click.echo(tabulate_data(project_report, headers="keys"))
-
-    if len(llm_insights):
-        click.echo("--" * 50)
-        click.echo("Project Governance LLM Insights")
-        click.echo("--" * 50)
-        for check in llm_insights:
-            click.echo(f"Check: {check['name']}")
-            for answer in check["answer"]:
-                click.echo(f"Path: {answer['path']}")
-                click.echo(f"Reason to Flag: {answer['reason_to_flag']}")
-                click.echo(f"Recommendation: {answer['recommendation']}")
-                click.echo("\n")
 
 
 @dbt.command("onboard")

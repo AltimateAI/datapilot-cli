@@ -13,6 +13,8 @@ from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.exceptions import AltimateCLIArgumentError
 from datapilot.core.platforms.dbt.factory import DBTFactory
 from datapilot.core.platforms.dbt.insights import INSIGHTS
+from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
+from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
 from datapilot.core.platforms.dbt.schemas.manifest import Catalog
 from datapilot.core.platforms.dbt.schemas.manifest import Manifest
 from datapilot.core.platforms.dbt.utils import get_models
@@ -108,7 +110,6 @@ class DBTInsightGenerator:
         reports = {
             MODEL: {},
             PROJECT: [],
-            LLM: [],
         }
         for insight_class in INSIGHTS:
             # TODO: Skip insight based on config
@@ -176,7 +177,38 @@ class DBTInsightGenerator:
 
         if self.token and self.instance_name and self.backend_url:
             llm_check_results = self.run_llm_checks()
-            if llm_check_results:
-                reports[LLM].extend(llm_check_results["results"])
+            llm_reports = llm_check_results["results"]
+            llm_insights = {}
+            for report in llm_reports:
+                for answer in report["answer"]:
+                    location = answer["unique_id"]
+                    if location not in llm_insights:
+                        llm_insights[location] = []
+                        metadata = answer.get("metadata", {})
+                        metadata["source"] = LLM
+                        metadata["llm_id"] = report["id"]
+                        metadata["catagory"] = report["type"]
+                    llm_insights[location].append(
+                        DBTModelInsightResponse(
+                            insight=DBTInsightResult(
+                                type="Custom",
+                                name=report["name"],
+                                message=answer["message"],
+                                reason_to_flag=answer["reason_to_flag"],
+                                recommendation=answer["recommendation"],
+                                metadata=metadata,
+                            ),
+                            severity=answer["severity"],
+                            path=answer["path"],
+                            original_file_path=answer["original_file_path"],
+                            package_name=answer["package_name"],
+                            unique_id=answer["unique_id"],
+                        )
+                    )
+            for key, value in llm_insights.items():
+                if key in reports[MODEL]:
+                    reports[MODEL][key].extend(value)
+                else:
+                    reports[MODEL][key] = value
 
         return reports
