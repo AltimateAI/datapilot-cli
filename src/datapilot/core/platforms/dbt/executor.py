@@ -101,8 +101,16 @@ class DBTInsightGenerator:
     def run_llm_checks(self):
         llm_checks = get_project_governance_llm_checks(self.token, self.instance_name, self.backend_url)
         check_names = [check["name"] for check in llm_checks if check["alias"] not in self.config.get("disabled_insights", [])]
+        if len(check_names) == 0:
+            return {"results": []}
+
         llm_check_results = run_project_governance_llm_checks(
-            self.token, self.instance_name, self.backend_url, self.manifest.json(), self.catalog.json(), check_names
+            self.token,
+            self.instance_name,
+            self.backend_url,
+            self.manifest.json() if self.manifest else "",
+            self.catalog.json() if self.catalog else "",
+            check_names,
         )
         return llm_check_results
 
@@ -205,10 +213,12 @@ class DBTInsightGenerator:
                             unique_id=answer["unique_id"],
                         )
                     )
-            for key, value in llm_insights.items():
-                if key in reports[MODEL]:
-                    reports[MODEL][key].extend(value)
-                else:
-                    reports[MODEL][key] = value
+
+            if llm_insights:
+                for key, value in llm_insights.items():
+                    if key in reports[MODEL]:
+                        reports[MODEL][key].extend(value)
+                    else:
+                        reports[MODEL][key] = value
 
         return reports
