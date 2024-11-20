@@ -186,7 +186,7 @@ class DBTInsightGenerator:
                         llm_insights[location] = []
                         metadata = answer.get("metadata", {})
                         metadata["source"] = LLM
-                        metadata["llm_id"] = report["id"]
+                        metadata["teammate_check_id"] = report["id"]
                         metadata["category"] = report["type"]
                     llm_insights[location].append(
                         DBTModelInsightResponse(
