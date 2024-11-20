@@ -28,8 +28,8 @@ def dbt():
 
 
 @dbt.command("project-health")
-@click.option("--token", required=False, prompt="API Token", help="Your API token for authentication.")
-@click.option("--instance-name", required=False, prompt="Instance Name", help="Your tenant ID.")
+@click.option("--token", required=False, help="Your API token for authentication.")
+@click.option("--instance-name", required=False, help="Your tenant ID.")
 @click.option(
     "--manifest-path",
     required=True,
