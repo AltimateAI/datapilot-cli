@@ -209,7 +209,7 @@ class DBTInsightGenerator:
                             severity=answer["severity"],
                             path=answer["path"],
                             original_file_path=answer["original_file_path"],
-                            package_name=answer["package_name"],
+                            package_name=answer["package_name"] if answer.get("package_name") else "",
                             unique_id=answer["unique_id"],
                         )
                     )
