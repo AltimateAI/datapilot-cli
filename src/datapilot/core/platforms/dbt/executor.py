@@ -207,9 +207,9 @@ class DBTInsightGenerator:
                                 metadata=metadata,
                             ),
                             severity=answer["severity"],
-                            path=answer["path"],
-                            original_file_path=answer["original_file_path"],
-                            package_name=answer["package_name"] if answer.get("package_name") else "",
+                            path=answer["path"] if answer.get("path") else "",
+                            original_file_path=answer["original_file_path"] if answer.get("original_file_path") else "",
+                            package_name=answer.get["package_name"] if answer.get("package_name") else "",
                             unique_id=answer["unique_id"],
                         )
                     )
