@@ -185,7 +185,7 @@ class DBTInsightGenerator:
 
         if self.token and self.instance_name and self.backend_url:
             llm_check_results = self.run_llm_checks()
-            llm_reports = llm_check_results["results"]
+            llm_reports = llm_check_results.get("results", []) 
             llm_insights = {}
             for report in llm_reports:
                 for answer in report["answer"]:
