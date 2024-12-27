@@ -3,8 +3,8 @@ from typing import Optional
 from typing import Set
 
 from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
-from dbt_artifacts_parser.parsers.manifest.manifest_v12 import Node2
-from dbt_artifacts_parser.parsers.manifest.manifest_v12 import Node6
+from dbt_artifacts_parser.parsers.manifest.manifest_v12 import Nodes2
+from dbt_artifacts_parser.parsers.manifest.manifest_v12 import Nodes6
 
 from datapilot.core.platforms.dbt.constants import GENERIC
 from datapilot.core.platforms.dbt.constants import OTHER_TEST_NODE
@@ -116,6 +116,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
             contract=contract,
             meta=node.meta,
             patch_path=node.patch_path,
+            access=node.access.value,
         )
 
     def _get_source(self, source: SourceNode) -> AltimateManifestSourceNode:
@@ -177,7 +178,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
             ),
             description=macro.description,
             meta=macro.meta,
-            docs=macro.docs,
+            docs=macro.docs.dict() if macro.docs else None,
             patch_path=macro.patch_path,
             arguments=[AltimateMacroArgument(**arg.dict()) for arg in macro.arguments] if macro.arguments else None,
             created_at=macro.created_at,
@@ -219,10 +220,10 @@ class ManifestV12Wrapper(BaseManifestWrapper):
 
     def _get_tests(self, test: TestNode) -> AltimateManifestTestNode:
         test_metadata = None
-        if isinstance(test, Node6):
+        if isinstance(test, Nodes6):
             test_type = GENERIC
             test_metadata = AltimateTestMetadata(**test.test_metadata.dict()) if test.test_metadata else None
-        elif isinstance(test, Node2):
+        elif isinstance(test, Nodes2):
             test_type = SINGULAR
         else:
             test_type = OTHER_TEST_NODE
@@ -375,7 +376,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
     def get_tests(self, type=None) -> Dict[str, AltimateManifestTestNode]:
         tests = {}
         # Initialize types_union with TestNode
-        types = [Node2, Node6]
+        types = [Nodes2, Nodes6]
 
         # Add other types to the union if provided
         if type:
