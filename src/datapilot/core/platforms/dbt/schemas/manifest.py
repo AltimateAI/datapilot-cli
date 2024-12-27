@@ -54,8 +54,8 @@ class AltimateDocs(BaseModel):
 
 
 class AltimateDependsOn(BaseModel):
-    nodes: Optional[List[str]]
-    macros: Optional[List[str]]
+    nodes: Optional[List[str]] = None
+    macros: Optional[List[str]] = None
 
 
 class AltimateManifestColumnInfo(BaseModel):

@@ -116,6 +116,7 @@ class ManifestV10Wrapper(BaseManifestWrapper):
             contract=contract,
             meta=node.meta,
             patch_path=node.patch_path,
+            access=node.access.value,
         )
 
     def _get_source(self, source: SourceNode) -> AltimateManifestSourceNode:
@@ -177,7 +178,7 @@ class ManifestV10Wrapper(BaseManifestWrapper):
             ),
             description=macro.description,
             meta=macro.meta,
-            docs=macro.docs,
+            docs=macro.docs.dict() if macro.docs else None,
             patch_path=macro.patch_path,
             arguments=[AltimateMacroArgument(**arg.dict()) for arg in macro.arguments] if macro.arguments else None,
             created_at=macro.created_at,
