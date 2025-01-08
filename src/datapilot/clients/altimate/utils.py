@@ -103,3 +103,24 @@ def start_dbt_ingestion(api_token, tenant, dbt_core_integration_id, dbt_core_int
             "ok": False,
             "message": "Error starting dbt ingestion worker.                                                                                                                              ",
         }
+
+
+def get_project_governance_llm_checks(
+    api_token,
+    tenant,
+    backend_url,
+):
+    api_client = APIClient(api_token=api_token, base_url=backend_url, tenant=tenant)
+    return api_client.get_project_governance_llm_checks()
+
+
+def run_project_governance_llm_checks(
+    api_token,
+    tenant,
+    backend_url,
+    manifest,
+    catalog,
+    check_names,
+):
+    api_client = APIClient(api_token=api_token, base_url=backend_url, tenant=tenant)
+    return api_client.run_project_governance_llm_checks(manifest, catalog, check_names)

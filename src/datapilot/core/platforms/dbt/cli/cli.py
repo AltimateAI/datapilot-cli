@@ -28,6 +28,8 @@ def dbt():
 
 
 @dbt.command("project-health")
+@click.option("--token", required=False, help="Your API token for authentication.")
+@click.option("--instance-name", required=False, help="Your tenant ID.")
 @click.option(
     "--manifest-path",
     required=True,
@@ -49,7 +51,10 @@ def dbt():
     default=None,
     help="Selective model testing. Specify one or more models to run tests on.",
 )
-def project_health(manifest_path, catalog_path, config_path=None, select=None):
+@click.option("--backend-url", required=False, help="Altimate's Backend URL", default="https://api.myaltimate.com")
+def project_health(
+    token, instance_name, manifest_path, catalog_path, config_path=None, select=None, backend_url="https://api.myaltimate.com"
+):
     """
     Validate the DBT project's configuration and structure.
     :param manifest_path: Path to the DBT manifest file.
@@ -62,7 +67,16 @@ def project_health(manifest_path, catalog_path, config_path=None, select=None):
         selected_models = select.split(" ")
     manifest = load_manifest(manifest_path)
     catalog = load_catalog(catalog_path) if catalog_path else None
-    insight_generator = DBTInsightGenerator(manifest=manifest, catalog=catalog, config=config, selected_models=selected_models)
+
+    insight_generator = DBTInsightGenerator(
+        manifest=manifest,
+        catalog=catalog,
+        config=config,
+        selected_models=selected_models,
+        token=token,
+        instance_name=instance_name,
+        backend_url=backend_url,
+    )
     reports = insight_generator.run()
 
     package_insights = reports[PROJECT]
