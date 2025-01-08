@@ -134,10 +134,10 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             source_description=source.source_description,
             loader=source.loader,
             identifier=source.identifier,
-            quoting=AltimateQuoting(**source.quoting.dict()) if source.quoting else None,
+            quoting=AltimateQuoting(**source.quoting.model_dump()) if source.quoting else None,
             loaded_at_field=source.loaded_at_field,
-            freshness=AltimateFreshnessThreshold(**source.freshness.dict()) if source.freshness else None,
-            external=AltimateExternalTable(**source.external.dict()) if source.external else None,
+            freshness=AltimateFreshnessThreshold(**source.freshness.model_dump()) if source.freshness else None,
+            external=AltimateExternalTable(**source.external.model_dump()) if source.external else None,
             description=source.description,
             columns={
                 name: AltimateManifestColumnInfo(
@@ -154,7 +154,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             relation_name=source.relation_name,
             source_meta=source.source_meta,
             tags=source.tags,
-            config=AltimateSourceConfig(**source.config.dict()) if source.config else None,
+            config=AltimateSourceConfig(**source.config.model_dump()) if source.config else None,
             patch_path=source.patch_path,
             unrendered_config=source.unrendered_config,
             created_at=source.created_at,
@@ -178,9 +178,9 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             ),
             description=macro.description,
             meta=macro.meta,
-            docs=macro.docs.dict() if macro.docs else None,
+            docs=macro.docs.model_dump() if macro.docs else None,
             patch_path=macro.patch_path,
-            arguments=[AltimateMacroArgument(**arg.dict()) for arg in macro.arguments] if macro.arguments else None,
+            arguments=[AltimateMacroArgument(**arg.model_dump()) for arg in macro.arguments] if macro.arguments else None,
             created_at=macro.created_at,
             supported_languages=macro.supported_languages,
         )
@@ -195,13 +195,13 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             unique_id=exposure.unique_id,
             fqn=exposure.fqn,
             type=AltimateExposureType(exposure.type.value) if exposure.type else None,
-            owner=AltimateOwner(**exposure.owner.dict()) if exposure.owner else None,
+            owner=AltimateOwner(**exposure.owner.model_dump()) if exposure.owner else None,
             description=exposure.description,
             label=exposure.label,
             maturity=AltimateMaturityEnum(exposure.maturity.value) if exposure.maturity else None,
             meta=exposure.meta,
             tags=exposure.tags,
-            config=AltimateSourceConfig(**exposure.config.dict()) if exposure.config else None,
+            config=AltimateSourceConfig(**exposure.config.model_dump()) if exposure.config else None,
             unrendered_config=exposure.unrendered_config,
             url=exposure.url,
             depends_on=(
@@ -212,7 +212,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
                 if exposure.depends_on
                 else None
             ),
-            refs=[AltimateRefArgs(**ref.dict()) for ref in exposure.refs] if exposure.refs else None,
+            refs=[AltimateRefArgs(**ref.model_dump()) for ref in exposure.refs] if exposure.refs else None,
             sources=exposure.sources,
             metrics=exposure.metrics,
             created_at=exposure.created_at,
@@ -222,7 +222,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
         test_metadata = None
         if isinstance(test, GenericTestNode):
             test_type = GENERIC
-            test_metadata = AltimateTestMetadata(**test.test_metadata.dict()) if test.test_metadata else None
+            test_metadata = AltimateTestMetadata(**test.test_metadata.model_dump()) if test.test_metadata else None
         elif isinstance(test, SingularTestNode):
             test_type = SINGULAR
         else:
@@ -246,7 +246,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
                 if test.checksum
                 else None
             ),
-            config=AltimateTestConfig(**test.config.dict()) if test.config else None,
+            config=AltimateTestConfig(**test.config.model_dump()) if test.config else None,
             description=test.description,
             tags=test.tags,
             columns=(
@@ -269,7 +269,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             group=test.group,
             raw_code=test.raw_code,
             language=test.language,
-            refs=[AltimateRefArgs(**ref.dict()) for ref in test.refs] if test.refs else None,
+            refs=[AltimateRefArgs(**ref.model_dump()) for ref in test.refs] if test.refs else None,
             sources=test.sources,
             metrics=test.metrics,
             depends_on=(
@@ -305,7 +305,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
                 if seed.checksum
                 else None
             ),
-            config=AltimateSeedConfig(**seed.config.dict()) if seed.config else None,
+            config=AltimateSeedConfig(**seed.config.model_dump()) if seed.config else None,
             description=seed.description,
             tags=seed.tags,
             columns=(
@@ -325,7 +325,7 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             ),
             meta=seed.meta,
             group=seed.group,
-            docs=seed.docs.dict() if seed.docs else None,
+            docs=seed.docs.model_dump() if seed.docs else None,
             patch_path=seed.patch_path,
             build_path=seed.build_path,
             deferred=seed.deferred,

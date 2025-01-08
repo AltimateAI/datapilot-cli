@@ -74,7 +74,7 @@ class CheckSourceHasLabelsKeys(ChecksInsight):
     def _check_labels_keys(self, node_id) -> Tuple[int, Set[str]]:
         status_code = 0
         missing_keys = set(self.labels_keys) - set(self.get_node(node_id).label)
-        config = self.get_node(node_id).config.dict() if self.get_node(node_id).config else {}
+        config = self.get_node(node_id).config.model_dump() if self.get_node(node_id).config else {}
         labels = config.get("labels", {})
         label_keys = set(labels.keys())
         extra_keys = set()

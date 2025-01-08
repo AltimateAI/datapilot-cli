@@ -61,7 +61,7 @@ class CheckSourceHasFreshness(ChecksInsight):
 
     def _check_source_has_freshness(self, source_id: str) -> List[str]:
         source = self.get_node(source_id)
-        freshness = source.freshness.dict() if source.freshness else {}
+        freshness = source.freshness.model_dump() if source.freshness else {}
 
         if not freshness:
             return False

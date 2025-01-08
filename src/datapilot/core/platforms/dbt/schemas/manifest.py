@@ -19,7 +19,9 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedLanguage
 from pydantic import BaseModel
-from pydantic import Extra
+from pydantic import ConfigDict
+
+from datapilot.constants import Extra
 
 
 class DBTVersion(BaseModel):
@@ -46,8 +48,9 @@ Catalog = CatalogV1
 
 
 class AltimateDocs(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(
+        extra=Extra.forbid,
+    )
 
     show: Optional[bool] = True
     node_color: Optional[Optional[str]] = None
@@ -98,8 +101,9 @@ class AltimateAccess(Enum):
 
 
 class AltimateDBTContract(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(
+        extra=Extra.forbid,
+    )
 
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
@@ -107,8 +111,9 @@ class AltimateDBTContract(BaseModel):
 
 
 class AltimateHook(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(
+        extra=Extra.forbid,
+    )
 
     sql: str
     transaction: Optional[bool] = True
@@ -117,8 +122,9 @@ class AltimateHook(BaseModel):
 
 # TODO: Need to add the rest of the fields
 class AltimateNodeConfig(BaseModel):
-    class Config:
-        extra = Extra.allow
+    model_config = ConfigDict(
+        extra=Extra.allow,
+    )
 
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
@@ -203,8 +209,9 @@ class AltimateSourceConfig(BaseModel):
 
 
 class AltimateDeferRelation(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(
+        extra=Extra.forbid,
+    )
 
     database: Optional[str]
     schema_name: str
@@ -213,8 +220,9 @@ class AltimateDeferRelation(BaseModel):
 
 
 class AltimateSeedConfig(BaseModel):
-    class Config:
-        extra = Extra.allow
+    model_config = ConfigDict(
+        extra=Extra.allow,
+    )
 
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
@@ -314,8 +322,9 @@ class AltimateExposureType(Enum):
 
 
 class AltimateOwner(BaseModel):
-    class Config:
-        extra = Extra.allow
+    model_config = ConfigDict(
+        extra=Extra.allow,
+    )
 
     _extra: Optional[Dict[str, Any]] = None
     email: Optional[Optional[str]] = None
@@ -329,8 +338,9 @@ class AltimateMaturityEnum(Enum):
 
 
 class AltimateRefArgs(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(
+        extra=Extra.forbid,
+    )
 
     name: str
     package: Optional[Optional[str]] = None
@@ -338,8 +348,9 @@ class AltimateRefArgs(BaseModel):
 
 
 class AltimateExposureConfig(BaseModel):
-    class Config:
-        extra = Extra.allow
+    model_config = ConfigDict(
+        extra=Extra.allow,
+    )
 
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
@@ -371,8 +382,9 @@ class AltimateManifestExposureNode(BaseModel):
 
 
 class AltimateTestMetadata(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(
+        extra=Extra.forbid,
+    )
 
     name: str
     kwargs: Optional[Dict[str, Any]] = None
@@ -380,8 +392,9 @@ class AltimateTestMetadata(BaseModel):
 
 
 class AltimateTestConfig(BaseModel):
-    class Config:
-        extra = Extra.allow
+    model_config = ConfigDict(
+        extra=Extra.allow,
+    )
 
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
@@ -433,8 +446,9 @@ class AltimateManifestTestNode(BaseModel):
 
 
 class AltimateMacroArgument(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(
+        extra=Extra.forbid,
+    )
 
     name: str
     type: Optional[Optional[str]] = None
