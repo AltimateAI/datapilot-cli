@@ -72,7 +72,7 @@ class CheckModelHasMetaKeys(ChecksInsight):
     def _check_meta_keys(self, node_id) -> Tuple[int, Set[str], Set[str]]:
         status_code = 0
         model = self.get_node(node_id)
-        meta = model.meta.dict() if model.meta else {}
+        meta = model.meta if model.meta else {}
         model_meta_keys = set(meta.keys())
         missing_keys = None
         extra_keys = None
