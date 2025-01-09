@@ -8,67 +8,18 @@ on:
 
 jobs:
   test:
-    name: ${{ matrix.tox-env }} (${{ matrix.os }})
+    name: ${{ matrix.python-version }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-22.04, windows-latest, macos-latest]
-        tox-env:
-          - py38-cover
-          - py38-nocov
-          - py39-cover
-          - py39-nocov
-          - py310-cover
-          - py310-nocov
-          - py311-cover
-          - py311-nocov
-          - py312-cover
-          - py312-nocov
-          - pypy38-cover
-          - pypy38-nocov
-          - pypy39-cover
-          - pypy39-nocov
-          - pypy310-cover
-          - pypy310-nocov
-        include:
-          - tox-env: py38-cover
-            python-version: "3.8"
-          - tox-env: py38-nocov
-            python-version: "3.8"
-          - tox-env: py39-cover
-            python-version: "3.9"
-          - tox-env: py39-nocov
-            python-version: "3.9"
-          - tox-env: py310-cover
-            python-version: "3.10"
-          - tox-env: py310-nocov
-            python-version: "3.10"
-          - tox-env: py311-cover
-            python-version: "3.11"
-          - tox-env: py311-nocov
-            python-version: "3.11"
-          - tox-env: py312-cover
-            python-version: "3.12"
-          - tox-env: py312-nocov
-            python-version: "3.12"
-          - tox-env: pypy38-cover
-            python-version: "pypy-3.8"
-          - tox-env: pypy38-nocov
-            python-version: "pypy-3.8"
-          - tox-env: pypy39-cover
-            python-version: "pypy-3.9"
-          - tox-env: pypy39-nocov
-            python-version: "pypy-3.9"
-          - tox-env: pypy310-cover
-            python-version: "pypy-3.10"
-          - tox-env: pypy310-nocov
-            python-version: "pypy-3.10"
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12", "pypy-3.8", "pypy-3.9", "pypy-3.10"]
 
     steps:
       - uses: actions/checkout@v3
       
-      - name: Set up Python
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
@@ -81,9 +32,7 @@ jobs:
           python -m pip install tox tox-gh-actions
       
       - name: Test with tox
-        env:
-          TOXENV: ${{ matrix.tox-env }}
-        run: tox -v
+        run: tox --skip-missing-interpreters false
 
   check:
     runs-on: ubuntu-22.04
