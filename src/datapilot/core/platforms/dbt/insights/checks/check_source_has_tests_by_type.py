@@ -47,7 +47,11 @@ class CheckSourceHasTestsByType(ChecksInsight):
     def _build_failure_result(self, source_unique_id: str, missing_tests) -> DBTInsightResult:
         missing_test_type_str = ""
         for test in missing_tests:
-            missing_test_type_str += f"Test type: {test.get(self.TEST_TYPE_STR)}, Min Count: {test.get(self.TEST_COUNT_STR)}, Actual Count: {test.get('actual_count')}\n"
+            missing_test_type_str += (
+                f"Test type: {test.get(self.TEST_TYPE_STR)}, "
+                f"Min Count: {test.get(self.TEST_COUNT_STR)}, "
+                f"Actual Count: {test.get('actual_count')}\n"
+            )
 
         failure_message = f"The source `{source_unique_id}` does not have enough tests for the following types:\n{missing_test_type_str}. "
         recommendation = (

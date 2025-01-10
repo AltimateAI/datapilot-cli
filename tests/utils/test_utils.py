@@ -2,10 +2,14 @@ from pathlib import Path
 
 import pytest
 
-from datapilot.core.platforms.dbt.utils import get_manifest_wrapper
-from datapilot.core.platforms.dbt.utils import get_models
-from datapilot.utils.utils import extract_folders_in_path
-from datapilot.utils.utils import is_superset_path
+from datapilot.core.platforms.dbt.utils import (
+    get_manifest_wrapper,
+    get_models,
+)
+from datapilot.utils.utils import (
+    extract_folders_in_path,
+    is_superset_path,
+)
 
 test_cases = [
     (Path("/home/user/documents/file.txt"), ["home", "user", "documents"]),

@@ -122,7 +122,10 @@ class CheckModelNameContract(ChecksInsight):
                         },
                         "required": [cls.PATTERN_STR, cls.FOLDER_STR],
                     },
-                    "description": "A list of regex patterns to check the model name against. Each pattern is applied to the folder specified. If no pattern is found for the folder, the default pattern is used.",
+                    "description": (
+                        "A list of regex patterns to check the model name against. Each pattern is applied to the folder specified. "
+                        "If no pattern is found for the folder, the default pattern is used."
+                    ),
                     "default": [],
                 },
             },

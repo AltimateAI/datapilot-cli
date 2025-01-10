@@ -82,7 +82,10 @@ class CheckSourceHasFreshness(ChecksInsight):
             "properties": {
                 cls.FRESHNESS_STR: {
                     "type": "array",
-                    "description": "The freshness options that should be defined for the source. If not provided, all freshness options are allowed.",
+                    "description": (
+                        "The freshness options that should be defined for the source. "
+                        "If not provided, all freshness options are allowed."
+                    ),
                     "items": {
                         "type": "string",
                         "enum": ["error_after", "warn_after"],

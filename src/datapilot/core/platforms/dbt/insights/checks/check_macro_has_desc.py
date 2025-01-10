@@ -11,7 +11,11 @@ class CheckMacroHasDesc(ChecksInsight):
     NAME = "Macro has documentation"
     ALIAS = "check_macro_has_desc"
     DESCRIPTION = "Macros should be documented."
-    REASON_TO_FLAG = "Undocumented macros can cause misunderstandings and inefficiencies in data modeling and analysis, as they make it difficult to understand their purpose and usage. Clear descriptions are vital for accuracy and streamlined workflow."
+    REASON_TO_FLAG = (
+        "Undocumented macros can cause misunderstandings and inefficiencies in data modeling and analysis, "
+        "as they make it difficult to understand their purpose and usage. "
+        "Clear descriptions are vital for accuracy and streamlined workflow."
+    )
 
     def _build_failure_result(
         self,

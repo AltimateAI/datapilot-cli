@@ -273,9 +273,21 @@ def generate_partial_manifest_catalog(changed_files, base_path: str = "./"):
         nodes_str = ",\n".join(json.dumps(data) for data in nodes_data + sources_data)
 
         query = (
-            "{% set result = {} %}{% set nodes = ["
-            + nodes_str
-            + '] %}{% for n in nodes %}{% if n["resource_type"] == "source" %}{% set columns = adapter.get_columns_in_relation(source(n["name"], n["table"])) %}{% else %}{% set columns = adapter.get_columns_in_relation(ref(n["name"])) %}{% endif %}{% set new_columns = [] %}{% for column in columns %}{% do new_columns.append({"column": column.name, "dtype": column.dtype}) %}{% endfor %}{% do result.update({n["unique_id"]:new_columns}) %}{% endfor %}{{ tojson(result) }}'
+            "{% set result = {} %}"
+            "{% set nodes = [" + nodes_str + '] %}'
+            "{% for n in nodes %}"
+            "{% if n['resource_type'] == 'source' %}"
+            "{% set columns = adapter.get_columns_in_relation(source(n['name'], n['table'])) %}"
+            "{% else %}"
+            "{% set columns = adapter.get_columns_in_relation(ref(n['name'])) %}"
+            "{% endif %}"
+            "{% set new_columns = [] %}"
+            "{% for column in columns %}"
+            "{% do new_columns.append({'column': column.name, 'dtype': column.dtype}) %}"
+            "{% endfor %}"
+            "{% do result.update({n['unique_id']:new_columns}) %}"
+            "{% endfor %}"
+            "{{ tojson(result) }}"
         )
 
         dbt_compile_output = run_macro(query, base_path)

@@ -2,16 +2,20 @@ from pathlib import Path
 
 import pytest
 
-from datapilot.core.platforms.dbt.constants import BASE
-from datapilot.core.platforms.dbt.constants import INTERMEDIATE
-from datapilot.core.platforms.dbt.constants import MART
-from datapilot.core.platforms.dbt.constants import OTHER
-from datapilot.core.platforms.dbt.constants import STAGING
-from datapilot.core.platforms.dbt.utils import MODEL_TYPE_PATTERNS
-from datapilot.core.platforms.dbt.utils import _check_model_naming_convention
-from datapilot.core.platforms.dbt.utils import classify_model_type_by_folder
-from datapilot.core.platforms.dbt.utils import classify_model_type_by_name
-from datapilot.core.platforms.dbt.utils import get_hard_coded_references
+from datapilot.core.platforms.dbt.constants import (
+    BASE,
+    INTERMEDIATE,
+    MART,
+    OTHER,
+    STAGING,
+)
+from datapilot.core.platforms.dbt.utils import (
+    MODEL_TYPE_PATTERNS,
+    _check_model_naming_convention,
+    classify_model_type_by_folder,
+    classify_model_type_by_name,
+    get_hard_coded_references,
+)
 
 
 @pytest.mark.parametrize(

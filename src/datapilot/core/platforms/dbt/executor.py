@@ -88,10 +88,11 @@ class DBTInsightGenerator:
             )
             if not self.selected_models:
                 raise AltimateCLIArgumentError(
-                    f"Invalid values provided in the --select argument. Could not find models associated with pattern: --select {' '.join(selected_models)}"
+                    "Invalid values provided in the --select argument. "
+                    f"Could not find models associated with pattern: --select {' '.join(selected_models)}"
                 )
-        self.excluded_models = None
-        self.excluded_models_flag = False
+            self.excluded_models = None
+            self.excluded_models_flag = False
 
     def _check_if_skipped(self, insight):
         if self.config.get("disabled_insights", False):

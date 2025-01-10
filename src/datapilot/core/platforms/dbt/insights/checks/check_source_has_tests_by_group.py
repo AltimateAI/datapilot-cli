@@ -48,10 +48,15 @@ class CheckSourceHasTestsByGroup(ChecksInsight):
     def _build_failure_result(self, source_unique_id: str, missing_test_groups: List[Dict]) -> DBTInsightResult:
         missing_test_group_str = ""
         for test in missing_test_groups:
-            missing_test_group_str += f"Test Group: {test.get(self.TEST_GROUP_STR)}, Min Count: {test.get(self.TEST_COUNT_STR)}, Actual Count: {test.get('actual_count')}\n"
+            missing_test_group_str += (
+                f"Test Group: {test.get(self.TEST_GROUP_STR)}, "
+                f"Min Count: {test.get(self.TEST_COUNT_STR)}, "
+                f"Actual Count: {test.get('actual_count')}\n"
+            )
 
         failure_message = (
-            f"The source `{source_unique_id}` does not have enough tests for the following groups:\n{missing_test_group_str}. "
+            f"The source `{source_unique_id}` does not have enough tests for the following groups:\n"
+            f"{missing_test_group_str}. "
         )
         recommendation = (
             "Add tests with the specified groups for each source listed above. "
