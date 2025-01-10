@@ -48,7 +48,11 @@ class CheckSourceHasTestsByName(ChecksInsight):
     def _build_failure_result(self, source_unique_id: str, missing_tests: List[Dict]) -> DBTInsightResult:
         tests_str = ""
         for test in missing_tests:
-            tests_str += f"Test Name: {test.get(self.TEST_NAME_STR)}, Min Count: {test.get(self.TEST_COUNT_STR)}, Actual Count: {test.get('actual_count')}\n"
+            tests_str += (
+                f"Test Name: {test.get(self.TEST_NAME_STR)}, "
+                f"Min Count: {test.get(self.TEST_COUNT_STR)}, "
+                f"Actual Count: {test.get('actual_count')}\n"
+            )
 
         failure_message = f"The source `{source_unique_id}` does not have enough tests:\n{tests_str}. "
         recommendation = (

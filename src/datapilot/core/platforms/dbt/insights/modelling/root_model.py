@@ -15,7 +15,10 @@ class DBTRootModel(DBTModellingInsight):
 
     NAME = "Root model traceability"
     ALIAS = "root_model"
-    DESCRIPTION = "Identifies models in a dbt project with 0 direct parents, meaning these models cannot be traced back to a declared source or model."
+    DESCRIPTION = (
+        "Identifies models in a dbt project with 0 direct parents, "
+        "meaning these models cannot be traced back to a declared source or model."
+    )
     REASON_TO_FLAG = (
         "Best Practice is to ensure all models can be traced back to a source or another model in the project. "
         "Root models with no direct parents can lead to challenges in tracking data lineage and understanding"

@@ -55,7 +55,15 @@ def validate_permissions(
     return api_client.validate_upload_to_integration()
 
 
-def onboard_file(api_token, tenant, dbt_core_integration_id, dbt_core_integration_environment, file_type, file_path, backend_url) -> Dict:
+def onboard_file(
+    api_token,
+    tenant,
+    dbt_core_integration_id,
+    dbt_core_integration_environment,
+    file_type,
+    file_path,
+    backend_url,
+) -> Dict:
     api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)
 
     params = {
@@ -84,7 +92,7 @@ def onboard_file(api_token, tenant, dbt_core_integration_id, dbt_core_integratio
         api_client.log("Error getting signed URL.")
         return {
             "ok": False,
-            "message": "Error in uploading the manifest.                                                                                                                              ",
+            "message": "Error in uploading the manifest.",
         }
 
 
@@ -101,7 +109,7 @@ def start_dbt_ingestion(api_token, tenant, dbt_core_integration_id, dbt_core_int
         api_client.log("Error starting dbt ingestion worker")
         return {
             "ok": False,
-            "message": "Error starting dbt ingestion worker.                                                                                                                              ",
+            "message": "Error starting dbt ingestion worker.",
         }
 
 

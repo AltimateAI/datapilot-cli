@@ -108,6 +108,7 @@ class DBTDownstreamModelsDependentOnSource(DBTModellingInsight):
                         )
                     )
         self.logger.debug(
-            f"Finished generating insights for DBTDownstreamModelsDependentOnSource. Found  {len(insights)} models with direct source dependencies"
+            "Finished generating insights for DBTDownstreamModelsDependentOnSource. "
+            f"Found {len(insights)} models with direct source dependencies"
         )
         return insights

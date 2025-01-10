@@ -48,9 +48,16 @@ class CheckModelHasTestsByName(ChecksInsight):
     def _build_failure_result(self, model_unique_id: str, missing_tests: List[Dict]) -> DBTInsightResult:
         tests_str = ""
         for test in missing_tests:
-            tests_str += f"Test Name: {test.get(self.TEST_NAME_STR)}, Min Count: {test.get(self.TEST_COUNT_STR)}, Actual Count: {test.get('actual_count')}\n"
+            tests_str += (
+                f"Test Name: {test.get(self.TEST_NAME_STR)}, "
+                f"Min Count: {test.get(self.TEST_COUNT_STR)}, "
+                f"Actual Count: {test.get('actual_count')}\n"
+            )
 
-        failure_message = f"The model `{model_unique_id}` does not have enough tests:\n{tests_str}. "
+        failure_message = (
+            f"The model `{model_unique_id}` does not have enough tests:\n"
+            f"{tests_str}. "
+        )
         recommendation = (
             "Add tests with the specified names for each model listed above. "
             "Having tests with specific names ensures proper validation and data integrity."

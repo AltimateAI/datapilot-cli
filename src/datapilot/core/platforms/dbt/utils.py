@@ -265,67 +265,47 @@ def get_hard_coded_references(sql_code):
     # Define regex patterns to match different types of hard-coded references
     from_hard_coded_references = {
         "from_var_1": r"""(?ix)
-
-                    # first matching group
                     # from or join followed by at least 1 whitespace character
-                        (from | join)\s +
+                    (from | join)\s+
 
-                         # second matching group
-                         # opening {{, 0 or more whitespace character(s), var, 0 or more whitespace character(s), an opening parenthesis, 0 or more whitespace character(s), 1 or 0 quotation mark
-                         ({{\s * var\s * \(\s *[\'\"]?)
+                    # second matching group
+                    # opening {{, 0 or more whitespace character(s), var, 0 or more whitespace character(s)
+                    # an opening parenthesis, 0 or more whitespace character(s), 1 or 0 quotation mark
+                    ({{\s*var\s*\(\s*[\'\"]?)
 
-                         # third matching group
-                         # at least 1 of anything except a parenthesis or quotation mark
-                         ([^)\'\"]+)
+                    # third matching group
+                    # at least 1 of anything except a parenthesis or quotation mark
+                    ([^)\'\"]+)
 
-            # fourth matching group
-            # 1 or 0 quotation mark, 0 or more whitespace character(s)
-                ([\'\"]?\s*)
+                    # fourth matching group
+                    # 1 or 0 quotation mark, 0 or more whitespace character(s)
+                    ([\'\"]?\s*)
 
-            # fifth matching group
-            # a closing parenthesis, 0 or more whitespace character(s), closing }}
-                (\)\s *}})
-
+                    # fifth matching group
+                    # a closing parenthesis, 0 or more whitespace character(s), closing }}
+                    (\)\s*}})
     """,
         "from_var_2": r"""(?ix)
+                    # first matching group
+                    # from or join followed by at least 1 whitespace character
+                    (from|join)\s+
 
-    # first matching group
-    # from or join followed by at least 1 whitespace character
-        (
-    from | join)\s +
+                    # second matching group
+                    # opening {{, 0 or more whitespace character(s), var, 0 or more whitespace character(s)
+                    # an opening parenthesis, 0 or more whitespace character(s), 1 or 0 quotation mark
+                    ({{\s*var\s*\(\s*[\'\"]?)
 
-                 # second matching group
-                 # opening {{, 0 or more whitespace character(s), var, 0 or more whitespace character(s), an opening parenthesis, 0 or more whitespace character(s), 1 or 0 quotation mark
-                 ({{\s * var\s * \(\s *[\'\"]?)
+                    # third matching group
+                    # at least 1 of anything except a parenthesis or quotation mark
+                    ([^)\'\"]+)
 
-                 # third matching group
-                 # at least 1 of anything except a parenthesis or quotation mark
-                 ([^)\'\"]+)
+                    # fourth matching group
+                    # 1 or 0 quotation mark, 0 or more whitespace character(s)
+                    ([\'\"]?\s*)
 
-    # fourth matching group
-    # 1 or 0 quotation mark, 0 or more whitespace character(s)
-        ([\'\"]?\s*)
-
-    # fifth matching group
-    # a comma
-        (,)
-
-    # sixth matching group
-    # 0 or more whitespace character(s), 1 or 0 quotation mark
-    (\s *[\'\"]?)
-
-     # seventh matching group
-     # at least 1 of anything except a parenthesis or quotation mark
-     ([^)\'\"]+)
-
-    # eighth matching group
-    # 1 or 0 quotation mark, 0 or more whitespace character(s)
-        ([\'\"]?\s*)
-
-    # ninth matching group
-    # a closing parenthesis, 0 or more whitespace character(s), closing }}
-        (\)\s *}})
-
+                    # fifth matching group
+                    # a closing parenthesis, 0 or more whitespace character(s), closing }}
+                    (\)\s*}})
     """,
         "from_table_1": r"""(?ix)
 

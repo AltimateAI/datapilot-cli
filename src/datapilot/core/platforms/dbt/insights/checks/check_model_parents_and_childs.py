@@ -66,7 +66,8 @@ class CheckModelParentsAndChilds(ChecksInsight):
 
         if not self.max_childs and not self.max_parents:
             self.logger.info(
-                "max_children and max_parents are required values in the configuration. Please provide the required values. Skipping the insight."
+                "max_children and max_parents are required values in the configuration. "
+                "Please provide the required values. Skipping the insight."
             )
             return insights
 
@@ -98,10 +99,18 @@ class CheckModelParentsAndChilds(ChecksInsight):
         parents = node.depends_on.nodes
         message = ""
         if len(parents) < self.min_parents or len(parents) > self.max_parents:
-            message += f"The model:{model_unique_id} doesn't have the required number of parents.\n Min parents: {self.min_parents}, Max parents: {self.max_parents}. It has f{len(parents)} parents\n"
+            message += (
+                f"The model:{model_unique_id} doesn't have the required number of parents.\n"
+                f"Min parents: {self.min_parents}, Max parents: {self.max_parents}. "
+                f"It has {len(parents)} parents\n"
+            )
 
         if len(children) < self.min_childs or len(children) > self.max_childs:
-            message += f"The model:{model_unique_id} doesn't have the required number of childs.\n Min childs: {self.min_childs}, Max childs: {self.max_childs}. It has f{len(children)} childs\n"
+            message += (
+                f"The model:{model_unique_id} doesn't have the required number of childs.\n"
+                f"Min childs: {self.min_childs}, Max childs: {self.max_childs}. "
+                f"It has {len(children)} childs\n"
+            )
 
         return message
 
