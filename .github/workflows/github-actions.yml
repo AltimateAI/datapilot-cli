@@ -265,7 +265,7 @@ jobs:
             python_arch: 'x64'
             tox_env: 'py312-nocov'
             os: 'macos-13'
-          - name: 'pypy38-cover (ubuntu)'
+          {# - name: 'pypy38-cover (ubuntu)'
             python: 'pypy-3.8'
             toxpython: 'pypy3.8'
             python_arch: 'x64'
@@ -300,7 +300,7 @@ jobs:
             toxpython: 'pypy3.8'
             python_arch: 'x64'
             tox_env: 'pypy38-nocov'
-            os: 'macos-13'
+            os: 'macos-13' #}
           - name: 'pypy39-cover (ubuntu)'
             python: 'pypy-3.9'
             toxpython: 'pypy3.9'
