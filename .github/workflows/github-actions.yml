@@ -19,8 +19,6 @@ jobs:
             toxpython: 'python3.11'
             tox_env: 'docs'
             os: 'ubuntu-latest'
-            
-          # Python 3.9
           - name: 'py39-pydantic28-cover (ubuntu)'
             python: '3.9'
             toxpython: 'python3.9'
@@ -57,8 +55,6 @@ jobs:
             python_arch: 'x64'
             tox_env: 'py39-pydantic210-nocov'
             os: 'ubuntu-latest'
-
-          # Python 3.10
           - name: 'py310-pydantic28-cover'
             python: '3.10'
             toxpython: 'python3.10'
@@ -83,8 +79,6 @@ jobs:
             python_arch: 'x64'
             tox_env: 'py310-pydantic210-nocov'
             os: 'ubuntu-latest'
-
-          # Python 3.11
           - name: 'py311-pydantic28-cover'
             python: '3.11'
             toxpython: 'python3.11'
@@ -109,8 +103,6 @@ jobs:
             python_arch: 'x64'
             tox_env: 'py311-pydantic210-nocov'
             os: 'ubuntu-latest'
-
-          # Python 3.12
           - name: 'py312-pydantic28-cover'
             python: '3.12'
             toxpython: 'python3.12'
@@ -135,8 +127,6 @@ jobs:
             python_arch: 'x64'
             tox_env: 'py312-pydantic210-nocov'
             os: 'ubuntu-latest'
-
-          # PyPy 3.9
           - name: 'pypy39-pydantic28-cover'
             python: 'pypy-3.9'
             toxpython: 'pypy3.9'
@@ -161,8 +151,6 @@ jobs:
             python_arch: 'x64'
             tox_env: 'pypy39-pydantic210-nocov'
             os: 'ubuntu-latest'
-
-          # PyPy 3.10
           - name: 'pypy310-pydantic28-cover'
             python: 'pypy-3.10'
             toxpython: 'pypy3.10'
