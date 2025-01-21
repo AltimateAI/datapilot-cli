@@ -20,6 +20,7 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedLanguage
 from pydantic import BaseModel
 
+
 class DBTVersion(BaseModel):
     MAJOR: int
     MINOR: int
@@ -44,7 +45,6 @@ Catalog = CatalogV1
 
 
 class AltimateDocs(BaseModel):
-
     show: Optional[bool] = True
     node_color: Optional[Optional[str]] = None
 

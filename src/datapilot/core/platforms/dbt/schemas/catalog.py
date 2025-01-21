@@ -8,7 +8,6 @@ from typing import Union
 from pydantic.main import BaseModel
 
 
-
 class AltimateCatalogMetadata(BaseModel):
     dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/catalog/v1.json"
     dbt_version: Optional[str] = "0.19.0"
