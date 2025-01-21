@@ -5,17 +5,10 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from pydantic import ConfigDict
 from pydantic.main import BaseModel
-
-from datapilot.constants import Extra
 
 
 class AltimateCatalogMetadata(BaseModel):
-    model_config = ConfigDict(
-        extra=Extra.forbid,
-    )
-
     dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/catalog/v1.json"
     dbt_version: Optional[str] = "0.19.0"
     generated_at: Optional[datetime] = "2021-02-10T04:42:33.680487Z"
@@ -24,10 +17,6 @@ class AltimateCatalogMetadata(BaseModel):
 
 
 class AltimateCatalogTableMetadata(BaseModel):
-    model_config = ConfigDict(
-        extra=Extra.forbid,
-    )
-
     type: str
     database: Optional[Optional[str]] = None
     schema_name: str
@@ -37,10 +26,6 @@ class AltimateCatalogTableMetadata(BaseModel):
 
 
 class AltimateCatalogColumnMetadata(BaseModel):
-    model_config = ConfigDict(
-        extra=Extra.forbid,
-    )
-
     type: str
     comment: Optional[Optional[str]] = None
     index: int
@@ -48,10 +33,6 @@ class AltimateCatalogColumnMetadata(BaseModel):
 
 
 class AltimateCatalogStatsItem(BaseModel):
-    model_config = ConfigDict(
-        extra=Extra.forbid,
-    )
-
     id: str
     label: str
     value: Optional[Optional[Union[bool, str, float]]] = None
@@ -60,10 +41,6 @@ class AltimateCatalogStatsItem(BaseModel):
 
 
 class AltimateCatalogTable(BaseModel):
-    model_config = ConfigDict(
-        extra=Extra.forbid,
-    )
-
     metadata: AltimateCatalogTableMetadata
     columns: Dict[str, AltimateCatalogColumnMetadata]
     stats: Dict[str, AltimateCatalogStatsItem]
@@ -71,10 +48,6 @@ class AltimateCatalogTable(BaseModel):
 
 
 class AltimateCatalogCatalogV1(BaseModel):
-    model_config = ConfigDict(
-        extra=Extra.forbid,
-    )
-
     metadata: AltimateCatalogMetadata
     nodes: Dict[str, AltimateCatalogTable]
     sources: Dict[str, AltimateCatalogTable]
