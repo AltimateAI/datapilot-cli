@@ -175,7 +175,6 @@ jobs:
             python_arch: 'x64'
             tox_env: 'pypy310-pydantic210-nocov'
             os: 'ubuntu-latest'
-
     steps:
     - uses: actions/checkout@v4
       with:
