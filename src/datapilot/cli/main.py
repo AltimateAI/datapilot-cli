@@ -9,3 +9,10 @@ def datapilot():
 
 
 datapilot.add_command(dbt)
+
+try:
+    from datapilot.ingestion.cli import ingest
+
+    datapilot.add_command(ingest)
+except ImportError:
+    pass
