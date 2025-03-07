@@ -83,6 +83,7 @@ def project_health(
             matching_configs = [c for c in configs["items"] if c["name"] == config_name]
             if matching_configs:
                 # Get the config directly from the API response
+                click.echo(f"Using config: {config_name}")
                 config = matching_configs[0].get("config", {})
             else:
                 click.echo(f"No config found with name: {config_name}")
