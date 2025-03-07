@@ -3,6 +3,7 @@ import logging
 import click
 
 from datapilot.clients.altimate.utils import check_token_and_instance
+from datapilot.clients.altimate.utils import get_all_dbt_configs
 from datapilot.clients.altimate.utils import onboard_file
 from datapilot.clients.altimate.utils import start_dbt_ingestion
 from datapilot.clients.altimate.utils import validate_credentials
@@ -46,6 +47,11 @@ def dbt():
     help="Path to the DBT config file",
 )
 @click.option(
+    "--config-name",
+    required=False,
+    help="Name of the DBT config to use from the API",
+)
+@click.option(
     "--select",
     required=False,
     default=None,
@@ -53,7 +59,14 @@ def dbt():
 )
 @click.option("--backend-url", required=False, help="Altimate's Backend URL", default="https://api.myaltimate.com")
 def project_health(
-    token, instance_name, manifest_path, catalog_path, config_path=None, select=None, backend_url="https://api.myaltimate.com"
+    token,
+    instance_name,
+    manifest_path,
+    catalog_path,
+    config_path=None,
+    config_name=None,
+    select=None,
+    backend_url="https://api.myaltimate.com",
 ):
     """
     Validate the DBT project's configuration and structure.
@@ -62,6 +75,23 @@ def project_health(
     config = None
     if config_path:
         config = load_config(config_path)
+    elif config_name and token and instance_name:
+        # Get configs from API
+        configs = get_all_dbt_configs(token, instance_name, backend_url)
+        if configs and "items" in configs:
+            # Find config by name
+            matching_configs = [c for c in configs["items"] if c["name"] == config_name]
+            if matching_configs:
+                # Get the config directly from the API response
+                click.echo(f"Using config: {config_name}")
+                config = matching_configs[0].get("config", {})
+            else:
+                click.echo(f"No config found with name: {config_name}")
+                return
+        else:
+            click.echo("Failed to fetch configs from API")
+            return
+
     selected_models = []
     if select:
         selected_models = select.split(" ")

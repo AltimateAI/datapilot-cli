@@ -104,3 +104,9 @@ class APIClient:
             "check_names": check_names,
         }
         return self.post(endpoint, data=data)
+
+    def get_all_dbt_configs(self):
+        """Get all DBT configs with a page size of 100."""
+        endpoint = "/dbtconfig/"
+        params = {"size": 100}
+        return self.get(endpoint, params=params)

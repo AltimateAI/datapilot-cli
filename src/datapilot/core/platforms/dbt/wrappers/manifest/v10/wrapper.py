@@ -116,7 +116,7 @@ class ManifestV10Wrapper(BaseManifestWrapper):
             contract=contract,
             meta=node.meta,
             patch_path=node.patch_path,
-            access=node.access.value,
+            access=getattr(node.access, "value", None) if hasattr(node, "access") and node.access is not None else None,
         )
 
     def _get_source(self, source: SourceNode) -> AltimateManifestSourceNode:

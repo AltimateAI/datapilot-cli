@@ -124,3 +124,13 @@ def run_project_governance_llm_checks(
 ):
     api_client = APIClient(api_token=api_token, base_url=backend_url, tenant=tenant)
     return api_client.run_project_governance_llm_checks(manifest, catalog, check_names)
+
+
+def get_all_dbt_configs(
+    api_token,
+    tenant,
+    backend_url,
+):
+    """Get all DBT configs from the API."""
+    api_client = APIClient(api_token=api_token, base_url=backend_url, tenant=tenant)
+    return api_client.get_all_dbt_configs()
