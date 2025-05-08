@@ -66,7 +66,7 @@ setup(
         "dbt-artifacts-parser~=0.8.1",
         "ruamel.yaml~=0.18.6",
         "tabulate~=0.9.0",
-        "requests~=2.31.0",
+        "requests>=2.31,<2.33",
         "sqlglot~=25.30.0",
     ],
     extras_require={
