@@ -68,6 +68,7 @@ setup(
         "tabulate~=0.9.0",
         "requests>=2.31",
         "sqlglot~=25.30.0",
+        "mcp~=1.9.0"
     ],
     extras_require={
         # eg:

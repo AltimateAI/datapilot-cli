@@ -1,5 +1,6 @@
 import click
 
+from datapilot.core.mcp_utils.mcp import mcp
 from datapilot.core.platforms.dbt.cli.cli import dbt
 
 
@@ -9,3 +10,4 @@ def datapilot():
 
 
 datapilot.add_command(dbt)
+datapilot.add_command(mcp)
