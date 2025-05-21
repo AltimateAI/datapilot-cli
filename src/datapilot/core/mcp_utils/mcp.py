@@ -1,13 +1,15 @@
 import asyncio
-import logging
 import json
+import logging
 import shutil
 
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import stdio_client
 import click
+from mcp import ClientSession
+from mcp import StdioServerParameters
+from mcp.client.stdio import stdio_client
 
 logging.basicConfig(level=logging.INFO)
+
 
 # New mcp group
 @click.group()
@@ -34,10 +36,7 @@ def create_mcp_proxy():
     # Process inputs first
     for input_def in mcp_config.get("inputs", []):
         input_id = input_def["id"]
-        inputs[input_id] = click.prompt(
-            input_def.get("description", input_id),
-            hide_input=input_def.get("password", False)
-        )
+        inputs[input_id] = click.prompt(input_def.get("description", input_id), hide_input=input_def.get("password", False))
 
     # Process servers
     servers = mcp_config.get("servers", {})
@@ -55,13 +54,10 @@ def create_mcp_proxy():
         }
 
         # Execute with processed parameters
-        output = asyncio.run(list_tools(
-            command=server_config["command"],
-            args=processed_args,
-            env=processed_env
-        ))
+        output = asyncio.run(list_tools(command=server_config["command"], args=processed_args, env=processed_env))
         click.echo(f"\nServer: {server_name}")
         click.echo(json.dumps(output, indent=2))
+
 
 async def list_tools(command: str, args: list[str], env: dict[str, str]):
     command_path = shutil.which(command)
