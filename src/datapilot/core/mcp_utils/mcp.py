@@ -7,7 +7,6 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 import click
 
-
 logging.basicConfig(level=logging.INFO)
 
 # New mcp group
@@ -16,7 +15,7 @@ def mcp():
     """mcp specific commands."""
 
 
-@mcp.command("create-mcp-proxy")
+@mcp.command("inspect-mcp-server")
 def create_mcp_proxy():
     content = click.edit()
     if content is None:
@@ -31,7 +30,7 @@ def create_mcp_proxy():
 
     inputs = {}
     mcp_config = config.get("mcp", {})
-    
+
     # Process inputs first
     for input_def in mcp_config.get("inputs", []):
         input_id = input_def["id"]
@@ -45,7 +44,7 @@ def create_mcp_proxy():
     for server_name, server_config in servers.items():
         # Replace input tokens in args
         processed_args = [
-            inputs.get(arg[8:-1], arg) if isinstance(arg, str) and arg.startswith("${input:") else arg 
+            inputs.get(arg[8:-1], arg) if isinstance(arg, str) and arg.startswith("${input:") else arg
             for arg in server_config.get("args", [])
         ]
 
@@ -74,12 +73,12 @@ async def list_tools(command: str, args: list[str], env: dict[str, str]):
         args=args,
         env=env,  # Now using processed env
     )
-    
+
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
             tools = await session.list_tools()
-            return [
+            mcp_tools = [
                 {
                     "name": tool.name,
                     "description": tool.description,
@@ -88,3 +87,6 @@ async def list_tools(command: str, args: list[str], env: dict[str, str]):
                 for tool in tools.tools
             ]
 
+            return {
+                "tools": mcp_tools,
+            }
