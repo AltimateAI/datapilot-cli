@@ -124,7 +124,10 @@ def create_mcp_proxy():
             "config": input_configs,
             "command": server_config["command"],
             "args": [arg.replace("${input:", "${") if isinstance(arg, str) else arg for arg in server_config.get("args", [])],
-            "env": {k: v.replace("${input:", "${") if isinstance(v, str) else v for k, v in server_config.get("env", {}).items()},
+            "env": [
+                {"key": k, "value": v.replace("${input:", "${") if isinstance(v, str) else v}
+                for k, v in server_config.get("env", {}).items()
+            ],
             **output,
         }
         output_json = json.dumps(output_with_name, indent=2)
