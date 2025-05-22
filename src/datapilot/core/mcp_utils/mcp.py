@@ -82,12 +82,21 @@ def create_mcp_proxy():
         inputs_to_prompt = input_ids.intersection(existing_input_ids)
         inputs_to_prompt.update(input_ids)  # Add any undiscovered-by-config inputs
 
+        input_configs = []
         for input_id in inputs_to_prompt:
             input_def = next((d for d in mcp_config.get("inputs", []) if d["id"] == input_id), {})
             inputs[input_id] = click.prompt(
                 input_def.get("description", input_id),
                 hide_input=input_def.get("password", False),
             )
+            # Create InputParameters config entry
+            input_configs.append(InputParameter(
+                name=input_def.get("name", input_id),
+                type=input_def.get("type", "string"), 
+                required=input_def.get("required", True),
+                key=input_id,
+                description=input_def.get("description", "")
+            ).__dict__)
 
         # Replace input tokens in args
         processed_args = [
@@ -103,7 +112,11 @@ def create_mcp_proxy():
 
         # Execute with processed parameters
         output = asyncio.run(list_tools(command=server_config["command"], args=processed_args, env=processed_env))
-        output_with_name = {"name": server_name, **output}
+        output_with_name = {
+            "name": server_name,
+            "config": input_configs,
+            **output
+        }
         click.echo(json.dumps(output_with_name, indent=2))
 
 
