@@ -10,6 +10,18 @@ from mcp.client.stdio import stdio_client
 
 logging.basicConfig(level=logging.INFO)
 
+def find_input_tokens(data):
+    tokens = set()
+    if isinstance(data, list):
+        for item in data:
+            tokens.update(find_input_tokens(item))
+    elif isinstance(data, dict):
+        for value in data.values():
+            tokens.update(find_input_tokens(value))
+    elif isinstance(data, str) and data.startswith("${input:"):
+        tokens.add(data[8:-1].strip())
+    return tokens
+
 
 # New mcp group
 @click.group()
@@ -33,10 +45,18 @@ def create_mcp_proxy():
     inputs = {}
     mcp_config = config.get("mcp", {})
 
-    # Process inputs first
-    for input_def in mcp_config.get("inputs", []):
-        input_id = input_def["id"]
-        inputs[input_id] = click.prompt(input_def.get("description", input_id), hide_input=input_def.get("password", False))
+    # Collect all input IDs from config and server templates
+    input_ids = set()
+    input_ids.update(find_input_tokens(mcp_config.get("servers", {})))
+    input_ids.update(input_def["id"] for input_def in mcp_config.get("inputs", []))
+    
+    # Create prompt definitions merging config and discovered inputs
+    for input_id in input_ids:
+        input_def = next((d for d in mcp_config.get("inputs", []) if d["id"] == input_id), {})
+        inputs[input_id] = click.prompt(
+            input_def.get("description", input_id), 
+            hide_input=input_def.get("password", False)
+        )
 
     # Process servers
     servers = mcp_config.get("servers", {})
