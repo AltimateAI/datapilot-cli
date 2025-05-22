@@ -58,9 +58,24 @@ def create_mcp_proxy():
             hide_input=input_def.get("password", False)
         )
 
-    # Process servers
+    # Select server
     servers = mcp_config.get("servers", {})
-    for server_name, server_config in servers.items():
+    server_names = list(servers.keys())
+    
+    if not server_names:
+        raise click.UsageError("No servers configured in mcp config")
+        
+    if len(server_names) > 1:
+        server_name = click.prompt(
+            "Choose a server",
+            type=click.Choice(server_names),
+            show_choices=True
+        )
+    else:
+        server_name = server_names[0]
+    
+    if server_name in servers:
+        server_config = servers[server_name]
         # Replace input tokens in args
         processed_args = [
             inputs.get(arg[8:-1], arg) if isinstance(arg, str) and arg.startswith("${input:") else arg
