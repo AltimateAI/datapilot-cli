@@ -135,25 +135,28 @@ async def list_tools(command: str, args: list[str], env: dict[str, str]):
     if not command_path:
         raise click.UsageError(f"Command not found: {command}")
 
-    server_params = StdioServerParameters(
-        command=command_path,
-        args=args,
-        env=env,  # Now using processed env
-    )
+    try:
+        server_params = StdioServerParameters(
+            command=command_path,
+            args=args,
+            env=env,  # Now using processed env
+        )
 
-    async with stdio_client(server_params) as (read, write):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
-            tools = await session.list_tools()
-            mcp_tools = [
-                {
-                    "name": tool.name,
-                    "description": tool.description,
-                    "inputSchema": tool.inputSchema,
+        async with stdio_client(server_params) as (read, write):
+            async with ClientSession(read, write) as session:
+                await session.initialize()
+                tools = await session.list_tools()
+                mcp_tools = [
+                    {
+                        "name": tool.name,
+                        "description": tool.description,
+                        "inputSchema": tool.inputSchema,
+                    }
+                    for tool in tools.tools
+                ]
+
+                return {
+                    "tools": mcp_tools,
                 }
-                for tool in tools.tools
-            ]
-
-            return {
-                "tools": mcp_tools,
-            }
+    except Exception as e:
+        raise click.UsageError("Could not connect to MCP server: " + str(e))
