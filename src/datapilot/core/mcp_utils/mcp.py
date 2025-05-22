@@ -115,7 +115,7 @@ def create_mcp_proxy():
         }
 
         # Execute with processed parameters
-        output = asyncio.run(list_tools(command=server_config["command"], args=processed_args, env=processed_env))
+        output = asyncio.run(list_tools(server_config=server_config, command=server_config["command"], args=processed_args, env=processed_env))
         # Add processed parameters to output
         output_with_name = {
             "name": server_name,
@@ -141,7 +141,7 @@ def create_mcp_proxy():
             click.secho(f"\nFailed to copy to clipboard: {str(e)}", fg="yellow")
 
 
-async def list_tools(command: str, args: list[str], env: dict[str, str]):
+async def list_tools(server_config: dict, command: str, args: list[str], env: dict[str, str]):
     command_path = shutil.which(command)
     if not command_path:
         raise click.UsageError(f"Command not found: {command}")
