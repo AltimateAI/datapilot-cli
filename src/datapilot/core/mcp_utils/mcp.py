@@ -5,6 +5,7 @@ import shutil
 from dataclasses import dataclass
 
 import click
+import pyperclip
 from mcp import ClientSession
 from mcp import StdioServerParameters
 from mcp.client.stdio import stdio_client
@@ -117,7 +118,13 @@ def create_mcp_proxy():
             "config": input_configs,
             **output
         }
-        click.echo(json.dumps(output_with_name, indent=2))
+        output_json = json.dumps(output_with_name, indent=2)
+        click.echo(output_json)
+        try:
+            pyperclip.copy(output_json)
+            click.secho("\nOutput copied to clipboard!", fg="green")
+        except pyperclip.PyperclipException as e:
+            click.secho(f"\nFailed to copy to clipboard: {str(e)}", fg="yellow")
 
 
 async def list_tools(command: str, args: list[str], env: dict[str, str]):
