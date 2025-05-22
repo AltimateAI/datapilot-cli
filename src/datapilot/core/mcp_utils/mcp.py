@@ -87,13 +87,13 @@ def create_mcp_proxy():
             input_def = next((d for d in mcp_config.get("inputs", []) if d["id"] == input_id), {})
             inputs[input_id] = click.prompt(
                 input_def.get("description", input_id),
-                hide_input=input_def.get("password", False),
+                hide_input=True,
             )
             # Create InputParameters config entry
             input_configs.append(InputParameter(
                 name=input_def.get("name", input_id),
-                type=input_def.get("type", "string"), 
-                required=input_def.get("required", True),
+                type="password",
+                required=True,
                 key=input_id,
                 description=input_def.get("description", "")
             ).__dict__)
