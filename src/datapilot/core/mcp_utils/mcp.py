@@ -12,13 +12,15 @@ from mcp.client.stdio import stdio_client
 
 logging.basicConfig(level=logging.INFO)
 
+
 @dataclass
-class InputParameter():
+class InputParameter:
     name: str
     type: str
     required: bool
     key: str
     description: str
+
 
 def find_input_tokens(data):
     tokens = set()
@@ -66,11 +68,7 @@ def create_mcp_proxy():
         ctx.exit(1)
 
     if len(server_names) > 1:
-        server_name = click.prompt(
-            "Choose a server",
-            type=click.Choice(server_names),
-            show_choices=True
-        )
+        server_name = click.prompt("Choose a server", type=click.Choice(server_names), show_choices=True)
     else:
         server_name = server_names[0]
 
@@ -94,13 +92,15 @@ def create_mcp_proxy():
                 hide_input=True,
             )
             # Create InputParameters config entry
-            input_configs.append(InputParameter(
-                name=input_def.get("name", input_id),
-                type="password",
-                required=True,
-                key=input_id,
-                description=input_def.get("description", "")
-            ).__dict__)
+            input_configs.append(
+                InputParameter(
+                    name=input_def.get("name", input_id),
+                    type="password",
+                    required=True,
+                    key=input_id,
+                    description=input_def.get("description", ""),
+                ).__dict__
+            )
 
         # Replace input tokens in args
         processed_args = [
@@ -115,21 +115,17 @@ def create_mcp_proxy():
         }
 
         # Execute with processed parameters
-        output = asyncio.run(list_tools(server_config=server_config, command=server_config["command"], args=processed_args, env=processed_env))
+        output = asyncio.run(
+            list_tools(server_config=server_config, command=server_config["command"], args=processed_args, env=processed_env)
+        )
         # Add processed parameters to output
         output_with_name = {
             "name": server_name,
             "config": input_configs,
             "command": server_config["command"],
-            "args": [
-                arg.replace("${input:", "${") if isinstance(arg, str) else arg 
-                for arg in server_config.get("args", [])
-            ],
-            "env": {
-                k: v.replace("${input:", "${") if isinstance(v, str) else v
-                for k, v in server_config.get("env", {}).items()
-            },
-            **output
+            "args": [arg.replace("${input:", "${") if isinstance(arg, str) else arg for arg in server_config.get("args", [])],
+            "env": {k: v.replace("${input:", "${") if isinstance(v, str) else v for k, v in server_config.get("env", {}).items()},
+            **output,
         }
         output_json = json.dumps(output_with_name, indent=2)
         click.echo(output_json)
@@ -137,7 +133,7 @@ def create_mcp_proxy():
             pyperclip.copy(output_json)
             click.secho("\nOutput copied to clipboard!", fg="green")
         except pyperclip.PyperclipException as e:
-            click.secho(f"\nFailed to copy to clipboard: {str(e)}", fg="yellow")
+            click.secho(f"\nFailed to copy to clipboard: {e!s}", fg="yellow")
 
 
 async def list_tools(server_config: dict, command: str, args: list[str], env: dict[str, str]):
