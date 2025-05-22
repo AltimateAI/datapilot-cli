@@ -147,10 +147,15 @@ async def list_tools(command: str, args: list[str], env: dict[str, str]):
         raise click.UsageError(f"Command not found: {command}")
 
     try:
+        # Only support stdio server type
+        server_type = server_config.get("type", "stdio")
+        if server_type != "stdio":
+            raise click.UsageError(f"Only stdio MCP servers are supported. Found type: {server_type}")
+
         server_params = StdioServerParameters(
             command=command_path,
             args=args,
-            env=env,  # Now using processed env
+            env=env,
         )
 
         async with stdio_client(server_params) as (read, write):
