@@ -173,4 +173,4 @@ async def list_tools(server_config: dict, command: str, args: list[str], env: di
                     "tools": mcp_tools,
                 }
     except Exception as e:
-        raise click.UsageError("Could not connect to MCP server: " + str(e))
+        raise click.UsageError("Could not connect to MCP server: " + str(e)) from e
