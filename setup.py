@@ -69,6 +69,7 @@ setup(
         "requests>=2.31",
         "sqlglot~=25.30.0",
         "mcp~=1.9.0",
+        "pyperclip~=1.8.2",
     ],
     extras_require={
         # eg:
