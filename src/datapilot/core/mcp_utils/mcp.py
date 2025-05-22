@@ -56,11 +56,14 @@ def create_mcp_proxy():
     mcp_config = config.get("mcp", {})
 
     # Select server
-    servers = mcp_config.get("servers", {})
+    # Support both "servers" and "mcpServers" naming conventions
+    servers = mcp_config.get("mcpServers", mcp_config.get("servers", {}))
     server_names = list(servers.keys())
 
     if not server_names:
-        raise click.UsageError("No servers configured in mcp config")
+        ctx = click.get_current_context()
+        click.secho("Error: No servers configured in mcp config (tried keys: 'mcpServers' and 'servers')", fg="red")
+        ctx.exit(1)
 
     if len(server_names) > 1:
         server_name = click.prompt(
