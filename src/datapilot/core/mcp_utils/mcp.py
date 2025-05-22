@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import shutil
+from dataclasses import dataclass
 
 import click
 from mcp import ClientSession
@@ -9,6 +10,14 @@ from mcp import StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 logging.basicConfig(level=logging.INFO)
+
+@dataclass
+class InputParameter():
+    name: str
+    type: str
+    required: bool
+    key: str
+    description: str
 
 def find_input_tokens(data):
     tokens = set()
@@ -48,10 +57,10 @@ def create_mcp_proxy():
     # Select server
     servers = mcp_config.get("servers", {})
     server_names = list(servers.keys())
-    
+
     if not server_names:
         raise click.UsageError("No servers configured in mcp config")
-        
+
     if len(server_names) > 1:
         server_name = click.prompt(
             "Choose a server",
@@ -60,7 +69,7 @@ def create_mcp_proxy():
         )
     else:
         server_name = server_names[0]
-    
+
     if server_name in servers:
         server_config = servers[server_name]
 
