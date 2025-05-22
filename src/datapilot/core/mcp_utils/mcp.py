@@ -116,9 +116,20 @@ def create_mcp_proxy():
 
         # Execute with processed parameters
         output = asyncio.run(list_tools(command=server_config["command"], args=processed_args, env=processed_env))
+        # Add processed parameters to output
         output_with_name = {
             "name": server_name,
             "config": input_configs,
+            "command": server_config["command"],
+            "args": [
+                f"${{{input_id}}}" if any(input_val in str(arg) for input_val in inputs.values()) else arg
+                for arg, input_id in zip(server_config.get("args", []), inputs.keys())
+            ],
+            "env": {
+                k: f"${{{input_id}}}" if any(input_val in str(v) for input_val in inputs.values()) else v
+                for k, v in server_config.get("env", {}).items()
+                for input_id in inputs
+            },
             **output
         }
         output_json = json.dumps(output_with_name, indent=2)
