@@ -45,19 +45,6 @@ def create_mcp_proxy():
     inputs = {}
     mcp_config = config.get("mcp", {})
 
-    # Collect all input IDs from config and server templates
-    input_ids = set()
-    input_ids.update(find_input_tokens(mcp_config.get("servers", {})))
-    input_ids.update(input_def["id"] for input_def in mcp_config.get("inputs", []))
-    
-    # Create prompt definitions merging config and discovered inputs
-    for input_id in input_ids:
-        input_def = next((d for d in mcp_config.get("inputs", []) if d["id"] == input_id), {})
-        inputs[input_id] = click.prompt(
-            input_def.get("description", input_id), 
-            hide_input=input_def.get("password", False)
-        )
-
     # Select server
     servers = mcp_config.get("servers", {})
     server_names = list(servers.keys())
@@ -76,6 +63,23 @@ def create_mcp_proxy():
     
     if server_name in servers:
         server_config = servers[server_name]
+
+        # Collect input tokens ONLY from this server's config
+        input_ids = find_input_tokens(server_config.get("args", []))
+        input_ids.update(find_input_tokens(server_config.get("env", {})))
+
+        # Create prompt definitions using BOTH discovered tokens AND configured inputs
+        existing_input_ids = {i["id"] for i in mcp_config.get("inputs", [])}
+        inputs_to_prompt = input_ids.intersection(existing_input_ids)
+        inputs_to_prompt.update(input_ids)  # Add any undiscovered-by-config inputs
+
+        for input_id in inputs_to_prompt:
+            input_def = next((d for d in mcp_config.get("inputs", []) if d["id"] == input_id), {})
+            inputs[input_id] = click.prompt(
+                input_def.get("description", input_id),
+                hide_input=input_def.get("password", False),
+            )
+
         # Replace input tokens in args
         processed_args = [
             inputs.get(arg[8:-1], arg) if isinstance(arg, str) and arg.startswith("${input:") else arg
