@@ -51,6 +51,16 @@ def serve(ctx, port):
         def handle_knowledge_base(self, public_id):
             """Fetch and return knowledge base data."""
             url = f"{backend_url}/knowledge_bases/public/{public_id}"
+            
+            # Validate URL scheme for security
+            parsed_url = urlparse(url)
+            if parsed_url.scheme not in ('http', 'https'):
+                self.send_response(400)
+                self.send_header("Content-Type", "application/json")
+                self.end_headers()
+                error_msg = json.dumps({"error": "Invalid URL scheme. Only HTTP and HTTPS are allowed."})
+                self.wfile.write(error_msg.encode("utf-8"))
+                return
 
             headers = {"Authorization": f"Bearer {token}", "X-Tenant": instance_name, "Content-Type": "application/json"}
 
