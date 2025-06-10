@@ -72,10 +72,10 @@ def project_health(
     :param manifest_path: Path to the DBT manifest file.
     """
     # Get common options from parent context
-    token = ctx.parent.obj.get('token')
-    instance_name = ctx.parent.obj.get('instance_name')
-    backend_url = ctx.parent.obj.get('backend_url')
-    
+    token = ctx.parent.obj.get("token")
+    instance_name = ctx.parent.obj.get("instance_name")
+    backend_url = ctx.parent.obj.get("backend_url")
+
     config = None
     if config_path:
         config = load_config(config_path)
@@ -151,16 +151,16 @@ def onboard(
 ):
     """Onboard a manifest file to DBT."""
     # Get common options from parent context
-    token = ctx.parent.obj.get('token')
-    instance_name = ctx.parent.obj.get('instance_name')
-    backend_url = ctx.parent.obj.get('backend_url')
-    
+    token = ctx.parent.obj.get("token")
+    instance_name = ctx.parent.obj.get("instance_name")
+    backend_url = ctx.parent.obj.get("backend_url")
+
     # For onboard command, token and instance_name are required
     if not token:
         token = click.prompt("API Token")
     if not instance_name:
         instance_name = click.prompt("Instance Name")
-    
+
     check_token_and_instance(token, instance_name)
 
     if not validate_credentials(token, backend_url, instance_name):
