@@ -6,9 +6,9 @@ from pathlib import Path
 import click
 from dotenv import load_dotenv
 
+from datapilot.core.knowledge.cli import cli as knowledge
 from datapilot.core.mcp_utils.mcp import mcp
 from datapilot.core.platforms.dbt.cli.cli import dbt
-from datapilot.core.knowledge.cli import cli as knowledge
 
 
 def load_config_from_file():
