@@ -67,7 +67,7 @@ def serve(ctx, port):
             req = Request(url, headers=headers)
 
             try:
-                with urlopen(req, timeout=30) as response:  # noqa: S310 - URL scheme already validated above
+                with urlopen(req, timeout=30) as response:  # noqa: S310
                     data = response.read()
                     self.send_response(200)
                     self.send_header("Content-Type", "application/json")
