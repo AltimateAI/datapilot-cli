@@ -51,10 +51,10 @@ def serve(ctx, port):
         def handle_knowledge_base(self, public_id):
             """Fetch and return knowledge base data."""
             url = f"{backend_url}/knowledge_bases/public/{public_id}"
-            
+
             # Validate URL scheme for security
             parsed_url = urlparse(url)
-            if parsed_url.scheme not in ('http', 'https'):
+            if parsed_url.scheme not in ("http", "https"):
                 self.send_response(400)
                 self.send_header("Content-Type", "application/json")
                 self.end_headers()
