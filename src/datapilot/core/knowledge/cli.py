@@ -13,7 +13,7 @@ def cli():
 
 
 @cli.command()
-@click.option('--port', default=3000, help='Port to run the server on')
+@click.option('--port', default=4000, help='Port to run the server on')
 @click.pass_context
 def serve(ctx, port):
     """Serve knowledge bases via HTTP server."""
