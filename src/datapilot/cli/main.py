@@ -50,7 +50,7 @@ def process_config(config):
 
 
 @click.group()
-@click.option("--token", required=False, help="Your API token for authentication.")
+@click.option("--token", required=False, help="Your API token for authentication.", hide_input=True)
 @click.option("--instance-name", required=False, help="Your tenant ID.")
 @click.option("--backend-url", required=False, help="Altimate's Backend URL", default="https://api.myaltimate.com")
 @click.pass_context
