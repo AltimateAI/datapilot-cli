@@ -64,7 +64,7 @@ def serve(ctx, port):
 
             headers = {"Authorization": f"Bearer {token}", "X-Tenant": instance_name, "Content-Type": "application/json"}
 
-            req = Request(url, headers=headers)
+            req = Request(url, headers=headers)  # noqa: S310
 
             try:
                 # URL scheme validated above - only HTTP/HTTPS allowed
