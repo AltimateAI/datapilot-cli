@@ -18,7 +18,7 @@ def load_config_from_file():
         return {}
 
     try:
-        with open(config_path) as f:
+        with Path.open(config_path) as f:
             config = json.load(f)
         return config
     except (OSError, json.JSONDecodeError) as e:
