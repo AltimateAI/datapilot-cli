@@ -74,7 +74,8 @@ def serve(ctx, port):
                     self.end_headers()
                     self.wfile.write(data)
             except HTTPError as e:
-                error_data = e.read().decode("utf-8") if e.read() else '{"error": "HTTP Error"}'
+                error_body = e.read()
+                error_data = error_body.decode("utf-8") if error_body else '{"error": "HTTP Error"}'
                 self.send_response(e.code)
                 self.send_header("Content-Type", "application/json")
                 self.end_headers()
