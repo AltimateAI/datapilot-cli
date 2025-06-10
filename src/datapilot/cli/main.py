@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 from datapilot.core.mcp_utils.mcp import mcp
 from datapilot.core.platforms.dbt.cli.cli import dbt
+from datapilot.core.knowledge import cli as knowledge
 
 
 def load_config_from_file():
@@ -90,3 +91,4 @@ def datapilot(ctx, token, instance_name, backend_url):
 
 datapilot.add_command(dbt)
 datapilot.add_command(mcp)
+datapilot.add_command(knowledge)
