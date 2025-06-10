@@ -12,7 +12,7 @@ def test_project_health_with_required_and_optional_args():
 
     # Simulate command invocation
     result = runner.invoke(
-        datapilot, ["project-health", "--manifest-path", manifest_path, "--catalog-path", catalog_path, "--config-path", config_path]
+        datapilot, ["dbt", "project-health", "--manifest-path", manifest_path, "--catalog-path", catalog_path, "--config-path", config_path]
     )
 
     assert result.exit_code == 0  # Ensure the command executed successfully
@@ -29,6 +29,7 @@ def test_project_health_with_only_required_arg():
     result = runner.invoke(
         datapilot,
         [
+            "dbt",
             "project-health",
             "--manifest-path",
             manifest_path,
@@ -48,6 +49,7 @@ def test_project_health_with_only_required_arg_version1_6():
     result = runner.invoke(
         datapilot,
         [
+            "dbt",
             "project-health",
             "--manifest-path",
             manifest_path,
@@ -67,6 +69,7 @@ def test_project_health_with_macro_args():
     result = runner.invoke(
         datapilot,
         [
+            "dbt",
             "project-health",
             "--manifest-path",
             manifest_path,
@@ -83,6 +86,7 @@ def test_project_health_with_macro_args():
     result = runner.invoke(
         datapilot,
         [
+            "dbt",
             "project-health",
             "--manifest-path",
             manifest_path,
@@ -102,7 +106,7 @@ def test_project_health_with_required_and_optional_args_v12():
 
     # Simulate command invocation
     result = runner.invoke(
-        datapilot, ["project-health", "--manifest-path", manifest_path, "--catalog-path", catalog_path, "--config-path", config_path]
+        datapilot, ["dbt", "project-health", "--manifest-path", manifest_path, "--catalog-path", catalog_path, "--config-path", config_path]
     )
 
     assert result.exit_code == 0  # Ensure the command executed successfully
