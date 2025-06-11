@@ -24,13 +24,14 @@ logging.basicConfig(level=logging.INFO)
 
 # New dbt group
 @click.group()
-def dbt():
+@click.pass_context
+def dbt(ctx):
     """DBT specific commands."""
+    # Ensure context object exists
+    ctx.ensure_object(dict)
 
 
 @dbt.command("project-health")
-@click.option("--token", required=False, help="Your API token for authentication.")
-@click.option("--instance-name", required=False, help="Your tenant ID.")
 @click.option(
     "--manifest-path",
     required=True,
@@ -57,21 +58,24 @@ def dbt():
     default=None,
     help="Selective model testing. Specify one or more models to run tests on.",
 )
-@click.option("--backend-url", required=False, help="Altimate's Backend URL", default="https://api.myaltimate.com")
+@click.pass_context
 def project_health(
-    token,
-    instance_name,
+    ctx,
     manifest_path,
     catalog_path,
     config_path=None,
     config_name=None,
     select=None,
-    backend_url="https://api.myaltimate.com",
 ):
     """
     Validate the DBT project's configuration and structure.
     :param manifest_path: Path to the DBT manifest file.
     """
+    # Get common options from parent context
+    token = ctx.parent.obj.get("token")
+    instance_name = ctx.parent.obj.get("instance_name")
+    backend_url = ctx.parent.obj.get("backend_url")
+
     config = None
     if config_path:
         config = load_config(config_path)
@@ -131,25 +135,32 @@ def project_health(
 
 
 @dbt.command("onboard")
-@click.option("--token", prompt="API Token", help="Your API token for authentication.")
-@click.option("--instance-name", prompt="Instance Name", help="Your tenant ID.")
 @click.option("--dbt_core_integration_id", prompt="DBT Core Integration ID", help="DBT Core Integration ID")
 @click.option(
     "--dbt_core_integration_environment", default="PROD", prompt="DBT Core Integration Environment", help="DBT Core Integration Environment"
 )
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
 @click.option("--catalog-path", required=False, prompt=False, help="Path to the catalog file.")
-@click.option("--backend-url", required=False, help="Altimate's Backend URL", default="https://api.myaltimate.com")
+@click.pass_context
 def onboard(
-    token,
-    instance_name,
+    ctx,
     dbt_core_integration_id,
     dbt_core_integration_environment,
     manifest_path,
     catalog_path,
-    backend_url="https://api.myaltimate.com",
 ):
     """Onboard a manifest file to DBT."""
+    # Get common options from parent context
+    token = ctx.parent.obj.get("token")
+    instance_name = ctx.parent.obj.get("instance_name")
+    backend_url = ctx.parent.obj.get("backend_url")
+
+    # For onboard command, token and instance_name are required
+    if not token:
+        token = click.prompt("API Token")
+    if not instance_name:
+        instance_name = click.prompt("Instance Name")
+
     check_token_and_instance(token, instance_name)
 
     if not validate_credentials(token, backend_url, instance_name):

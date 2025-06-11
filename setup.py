@@ -70,6 +70,7 @@ setup(
         "sqlglot~=25.30.0",
         "mcp~=1.9.0",
         "pyperclip~=1.8.2",
+        "python-dotenv~=1.0.0",
     ],
     extras_require={
         # eg:

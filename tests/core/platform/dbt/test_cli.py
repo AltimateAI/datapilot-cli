@@ -1,7 +1,7 @@
 # test_app.py
 from click.testing import CliRunner
 
-from datapilot.core.platforms.dbt.cli.cli import project_health
+from datapilot.cli.main import datapilot
 
 
 def test_project_health_with_required_and_optional_args():
@@ -11,7 +11,9 @@ def test_project_health_with_required_and_optional_args():
     config_path = "tests/data/config.yml"
 
     # Simulate command invocation
-    result = runner.invoke(project_health, ["--manifest-path", manifest_path, "--catalog-path", catalog_path, "--config-path", config_path])
+    result = runner.invoke(
+        datapilot, ["dbt", "project-health", "--manifest-path", manifest_path, "--catalog-path", catalog_path, "--config-path", config_path]
+    )
 
     assert result.exit_code == 0  # Ensure the command executed successfully
     # Add more assertions here to validate the behavior of your command,
@@ -25,8 +27,10 @@ def test_project_health_with_only_required_arg():
 
     # Simulate command invocation without optional arguments
     result = runner.invoke(
-        project_health,
+        datapilot,
         [
+            "dbt",
+            "project-health",
             "--manifest-path",
             manifest_path,
         ],
@@ -43,8 +47,10 @@ def test_project_health_with_only_required_arg_version1_6():
 
     # Simulate command invocation without optional arguments
     result = runner.invoke(
-        project_health,
+        datapilot,
         [
+            "dbt",
+            "project-health",
             "--manifest-path",
             manifest_path,
         ],
@@ -61,8 +67,10 @@ def test_project_health_with_macro_args():
 
     # Simulate command invocation without optional arguments
     result = runner.invoke(
-        project_health,
+        datapilot,
         [
+            "dbt",
+            "project-health",
             "--manifest-path",
             manifest_path,
         ],
@@ -76,8 +84,10 @@ def test_project_health_with_macro_args():
 
     # Simulate command invocation without optional arguments
     result = runner.invoke(
-        project_health,
+        datapilot,
         [
+            "dbt",
+            "project-health",
             "--manifest-path",
             manifest_path,
         ],
@@ -95,7 +105,9 @@ def test_project_health_with_required_and_optional_args_v12():
     config_path = "tests/data/config.yml"
 
     # Simulate command invocation
-    result = runner.invoke(project_health, ["--manifest-path", manifest_path, "--catalog-path", catalog_path, "--config-path", config_path])
+    result = runner.invoke(
+        datapilot, ["dbt", "project-health", "--manifest-path", manifest_path, "--catalog-path", catalog_path, "--config-path", config_path]
+    )
 
     assert result.exit_code == 0  # Ensure the command executed successfully
     # Add more assertions here to validate the behavior of your command,
