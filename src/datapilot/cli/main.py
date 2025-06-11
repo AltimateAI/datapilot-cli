@@ -6,6 +6,7 @@ from pathlib import Path
 import click
 from dotenv import load_dotenv
 
+from datapilot import __version__
 from datapilot.core.knowledge.cli import cli as knowledge
 from datapilot.core.mcp_utils.mcp import mcp
 from datapilot.core.platforms.dbt.cli.cli import dbt
@@ -51,6 +52,7 @@ def process_config(config):
 
 
 @click.group()
+@click.version_option(version=__version__, prog_name="datapilot")
 @click.option("--token", required=False, help="Your API token for authentication.", hide_input=True)
 @click.option("--instance-name", required=False, help="Your tenant ID.")
 @click.option("--backend-url", required=False, help="Altimate's Backend URL", default="https://api.myaltimate.com")
