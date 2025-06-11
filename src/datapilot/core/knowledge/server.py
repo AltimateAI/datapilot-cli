@@ -9,9 +9,10 @@ from urllib.request import urlopen
 
 import click
 
+
 class KnowledgeBaseHandler(BaseHTTPRequestHandler):
     """HTTP request handler for serving knowledge bases and health checks."""
-    
+
     token: str = ""
     instance_name: str = ""
     backend_url: str = ""

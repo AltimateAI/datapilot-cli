@@ -1,6 +1,8 @@
 from http.server import HTTPServer
-from .server import KnowledgeBaseHandler
+
 import click
+
+from .server import KnowledgeBaseHandler
 
 
 @click.group(name="knowledge")
