@@ -62,9 +62,6 @@ def auth_options(f):
         file_config = load_config_from_file()
         file_config = process_config(file_config)
 
-        # Map config file keys to CLI option names
-        config_mapping = {"altimateApiKey": "token", "altimateInstanceName": "instance_name", "altimateUrl": "backend_url"}
-
         # Apply file config first, then override with CLI arguments if provided
         final_token = token
         final_instance_name = instance_name
