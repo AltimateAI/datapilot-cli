@@ -21,7 +21,7 @@ def serve(token, instance_name, backend_url, port):
         click.echo(
             "Error: API token and instance name are required. Use --token and --instance-name options or set them in config.", err=True
         )
-        raise click.Abort()
+        return
 
     # Set context data for the handler
     KnowledgeBaseHandler.token = token
