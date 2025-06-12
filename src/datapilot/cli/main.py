@@ -8,11 +8,8 @@ from datapilot.core.platforms.dbt.cli.cli import dbt
 
 @click.group()
 @click.version_option(version=__version__, prog_name="datapilot")
-@click.pass_context
-def datapilot(ctx):
+def datapilot():
     """Altimate CLI for DBT project management."""
-    # Ensure context object exists
-    ctx.ensure_object(dict)
 
 
 datapilot.add_command(dbt)

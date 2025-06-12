@@ -57,9 +57,10 @@ def dbt():
     default=None,
     help="Selective model testing. Specify one or more models to run tests on.",
 )
-@click.pass_context
 def project_health(
-    ctx,
+    token,
+    instance_name,
+    backend_url,
     manifest_path,
     catalog_path,
     config_path=None,
@@ -70,10 +71,6 @@ def project_health(
     Validate the DBT project's configuration and structure.
     :param manifest_path: Path to the DBT manifest file.
     """
-    # Get common options from context
-    token = ctx.obj.get("token")
-    instance_name = ctx.obj.get("instance_name")
-    backend_url = ctx.obj.get("backend_url")
 
     config = None
     if config_path:
@@ -141,19 +138,16 @@ def project_health(
 )
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
 @click.option("--catalog-path", required=False, prompt=False, help="Path to the catalog file.")
-@click.pass_context
 def onboard(
-    ctx,
+    token,
+    instance_name,
+    backend_url,
     dbt_core_integration_id,
     dbt_core_integration_environment,
     manifest_path,
     catalog_path,
 ):
     """Onboard a manifest file to DBT."""
-    # Get common options from context
-    token = ctx.obj.get("token")
-    instance_name = ctx.obj.get("instance_name")
-    backend_url = ctx.obj.get("backend_url")
 
     # For onboard command, token and instance_name are required
     if not token:
