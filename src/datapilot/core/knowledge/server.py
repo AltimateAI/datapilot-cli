@@ -22,7 +22,7 @@ class KnowledgeBaseHandler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
 
         # Match /knowledge_bases/{uuid} pattern
-        match = re.match(r"^/knowledge_bases/([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})$", path)
+        match = re.match(r"^/kb/([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})$", path)
 
         if match:
             public_id = match.group(1)
@@ -34,7 +34,7 @@ class KnowledgeBaseHandler(BaseHTTPRequestHandler):
 
     def handle_knowledge_base(self, public_id):
         """Fetch and return knowledge base data."""
-        url = f"{self.backend_url}/knowledge_bases/public/{public_id}"
+        url = f"{self.backend_url}/knowledge_bases/private/{public_id}"
 
         # Validate URL scheme for security
         parsed_url = urlparse(url)
