@@ -49,6 +49,7 @@ def process_config(config):
 
 def auth_options(f):
     """Decorator to add authentication options to commands."""
+
     @click.option("--token", required=False, help="Your API token for authentication.", hide_input=True)
     @click.option("--instance-name", required=False, help="Your tenant ID.")
     @click.option("--backend-url", required=False, help="Altimate's Backend URL", default="https://api.myaltimate.com")
@@ -86,5 +87,5 @@ def auth_options(f):
         ctx.obj.setdefault("backend_url", "https://api.myaltimate.com")
 
         return f(ctx, *args, **kwargs)
-    
+
     return wrapper
