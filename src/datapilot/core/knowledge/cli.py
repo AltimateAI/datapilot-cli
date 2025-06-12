@@ -3,8 +3,8 @@ from http.server import HTTPServer
 import click
 
 from datapilot.cli.decorators import auth_options
+from datapilot.clients.altimate.utils import validate_credentials
 
-from ...clients.altimate.utils import validate_credentials
 from .server import KnowledgeBaseHandler
 
 
