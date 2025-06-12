@@ -132,9 +132,20 @@ def project_health(
 
 @dbt.command("onboard")
 @auth_options
-@click.option("--dbt_core_integration_id", prompt="DBT Core Integration ID", help="DBT Core Integration ID")
 @click.option(
-    "--dbt_core_integration_environment", default="PROD", prompt="DBT Core Integration Environment", help="DBT Core Integration Environment"
+    "--dbt_core_integration_id",
+    "--dbt_integration_id",
+    "dbt_integration_id",  # This is the parameter name that will be passed to the function
+    prompt="DBT Integration ID",
+    help="DBT Core Integration ID or DBT Integration ID",
+)
+@click.option(
+    "--dbt_core_integration_environment",
+    "--dbt_integration_environment",
+    "dbt_integration_environment",  # This is the parameter name that will be passed to the function
+    default="PROD",
+    prompt="DBT Integration Environment",
+    help="DBT Core Integration Environment or DBT Integration Environment",
 )
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
 @click.option("--catalog-path", required=False, prompt=False, help="Path to the catalog file.")
@@ -142,8 +153,8 @@ def onboard(
     token,
     instance_name,
     backend_url,
-    dbt_core_integration_id,
-    dbt_core_integration_environment,
+    dbt_integration_id,
+    dbt_integration_environment,
     manifest_path,
     catalog_path,
 ):
@@ -165,16 +176,13 @@ def onboard(
         click.echo("Error: You don't have permission to perform this action.")
         return
 
-    # This will throw error if manifest file is incorrect
     try:
         load_manifest(manifest_path)
     except Exception as e:
         click.echo(f"Error: {e}")
         return
 
-    response = onboard_file(
-        token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, "manifest", manifest_path, backend_url
-    )
+    response = onboard_file(token, instance_name, dbt_integration_id, dbt_integration_environment, "manifest", manifest_path, backend_url)
     if response["ok"]:
         click.echo("Manifest onboarded successfully!")
     else:
@@ -183,21 +191,19 @@ def onboard(
     if not catalog_path:
         return
 
-    response = onboard_file(
-        token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, "catalog", catalog_path, backend_url
-    )
+    response = onboard_file(token, instance_name, dbt_integration_id, dbt_integration_environment, "catalog", catalog_path, backend_url)
     if response["ok"]:
         click.echo("Catalog onboarded successfully!")
     else:
         click.echo(f"{response['message']}")
 
-    response = start_dbt_ingestion(token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, backend_url)
+    response = start_dbt_ingestion(token, instance_name, dbt_integration_id, dbt_integration_environment, backend_url)
     if response["ok"]:
         url = map_url_to_instance(backend_url, instance_name)
         if not url:
             click.echo("Manifest and catalog ingestion has started.")
         else:
-            url = f"{url}/settings/integrations/{dbt_core_integration_id}/{dbt_core_integration_environment}"
+            url = f"{url}/settings/integrations/{dbt_integration_id}/{dbt_integration_environment}"
             click.echo(f"Manifest and catalog ingestion has started. You can check the status at {url}")
     else:
         click.echo(f"{response['message']}")
