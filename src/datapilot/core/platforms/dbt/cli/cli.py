@@ -132,7 +132,6 @@ def project_health(
 
 @dbt.command("onboard")
 @auth_options
-@click.option("--dbt_core_integration_id", prompt="DBT Core Integration ID", help="DBT Core Integration ID")
 @click.option(
     "--dbt_core_integration_id",
     "--dbt_integration_id",
@@ -151,7 +150,9 @@ def project_health(
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
 @click.option("--catalog-path", required=False, prompt=False, help="Path to the catalog file.")
 def onboard(
-    ctx,
+    token,
+    instance_name,
+    backend_url,
     dbt_integration_id,
     dbt_integration_environment,
     manifest_path,
