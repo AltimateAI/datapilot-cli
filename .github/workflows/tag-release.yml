@@ -1,0 +1,30 @@
+name: Tag Release
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  tag-release:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'version-bump')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    
+    - name: Get version from file
+      id: get_version
+      run: |
+        echo "version=$(grep current_version .bumpversion.cfg | cut -d '=' -f 2 | tr -d ' ')" >> $GITHUB_OUTPUT
+    
+    - name: Create and push tag
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git tag -a "v${{ steps.get_version.outputs.version }}" -m "Release version ${{ steps.get_version.outputs.version }}"
+        git push origin "v${{ steps.get_version.outputs.version }}"
