@@ -4,6 +4,7 @@ import click
 
 from datapilot.cli.decorators import auth_options
 
+from ...clients.altimate.utils import validate_credentials
 from .server import KnowledgeBaseHandler
 
 
@@ -21,6 +22,10 @@ def serve(token, instance_name, backend_url, port):
         click.echo(
             "Error: API token and instance name are required. Use --token and --instance-name options or set them in config.", err=True
         )
+        raise click.Abort
+
+    if not validate_credentials(token, backend_url, instance_name):
+        click.echo("Error: Invalid credentials.")
         raise click.Abort
 
     # Set context data for the handler
