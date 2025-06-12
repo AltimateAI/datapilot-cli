@@ -2,6 +2,7 @@ import logging
 
 import click
 
+from datapilot.cli.decorators import auth_options
 from datapilot.clients.altimate.utils import check_token_and_instance
 from datapilot.clients.altimate.utils import get_all_dbt_configs
 from datapilot.clients.altimate.utils import onboard_file
@@ -24,14 +25,12 @@ logging.basicConfig(level=logging.INFO)
 
 # New dbt group
 @click.group()
-@click.pass_context
-def dbt(ctx):
+def dbt():
     """DBT specific commands."""
-    # Ensure context object exists
-    ctx.ensure_object(dict)
 
 
 @dbt.command("project-health")
+@auth_options
 @click.option(
     "--manifest-path",
     required=True,
@@ -58,9 +57,10 @@ def dbt(ctx):
     default=None,
     help="Selective model testing. Specify one or more models to run tests on.",
 )
-@click.pass_context
 def project_health(
-    ctx,
+    token,
+    instance_name,
+    backend_url,
     manifest_path,
     catalog_path,
     config_path=None,
@@ -71,10 +71,6 @@ def project_health(
     Validate the DBT project's configuration and structure.
     :param manifest_path: Path to the DBT manifest file.
     """
-    # Get common options from parent context
-    token = ctx.parent.obj.get("token")
-    instance_name = ctx.parent.obj.get("instance_name")
-    backend_url = ctx.parent.obj.get("backend_url")
 
     config = None
     if config_path:
@@ -135,6 +131,7 @@ def project_health(
 
 
 @dbt.command("onboard")
+@auth_options
 @click.option("--dbt_core_integration_id", prompt="DBT Core Integration ID", help="DBT Core Integration ID")
 @click.option(
     "--dbt_core_integration_id",
@@ -153,7 +150,6 @@ def project_health(
 )
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
 @click.option("--catalog-path", required=False, prompt=False, help="Path to the catalog file.")
-@click.pass_context
 def onboard(
     ctx,
     dbt_integration_id,
@@ -162,10 +158,6 @@ def onboard(
     catalog_path,
 ):
     """Onboard a manifest file to DBT."""
-    # Get common options from parent context
-    token = ctx.parent.obj.get("token")
-    instance_name = ctx.parent.obj.get("instance_name")
-    backend_url = ctx.parent.obj.get("backend_url")
 
     # For onboard command, token and instance_name are required
     if not token:

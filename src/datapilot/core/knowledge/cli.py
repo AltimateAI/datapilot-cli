@@ -2,6 +2,8 @@ from http.server import HTTPServer
 
 import click
 
+from datapilot.cli.decorators import auth_options
+
 from .server import KnowledgeBaseHandler
 
 
@@ -11,20 +13,15 @@ def cli():
 
 
 @cli.command()
+@auth_options
 @click.option("--port", default=4000, help="Port to run the server on")
-@click.pass_context
-def serve(ctx, port):
+def serve(token, instance_name, backend_url, port):
     """Serve knowledge bases via HTTP server."""
-    # Get configuration from parent context
-    token = ctx.parent.obj.get("token")
-    instance_name = ctx.parent.obj.get("instance_name")
-    backend_url = ctx.parent.obj.get("backend_url")
-
     if not token or not instance_name:
         click.echo(
             "Error: API token and instance name are required. Use --token and --instance-name options or set them in config.", err=True
         )
-        ctx.exit(1)
+        raise click.Abort
 
     # Set context data for the handler
     KnowledgeBaseHandler.token = token
