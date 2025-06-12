@@ -13,7 +13,7 @@ def read(*names, **kwargs):
 
 setup(
     name="altimate-datapilot-cli",
-    version="0.0.19",
+    version="0.0.20",
     license="MIT",
     description="Assistant for Data Teams",
     long_description="{}\n{}".format(
@@ -70,6 +70,7 @@ setup(
         "sqlglot~=25.30.0",
         "mcp~=1.9.0",
         "pyperclip~=1.8.2",
+        "python-dotenv~=1.0.0",
     ],
     extras_require={
         # eg:
