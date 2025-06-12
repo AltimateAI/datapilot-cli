@@ -25,7 +25,7 @@ def serve(token, instance_name, backend_url, port):
         raise click.Abort
 
     if not validate_credentials(token, backend_url, instance_name):
-        click.echo("Error: Invalid credentials.")
+        click.echo("Error: Invalid credentials.", err=True)
         raise click.Abort
 
     # Set context data for the handler
