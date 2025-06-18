@@ -3,17 +3,19 @@ import os
 import re
 from functools import wraps
 from pathlib import Path
+from typing import Dict
+from typing import Optional
 
 import click
 from dotenv import load_dotenv
 
 
-def load_config_from_file():
+def load_config_from_file() -> Optional[Dict]:
     """Load configuration from ~/.altimate/altimate.json if it exists."""
     config_path = Path.home() / ".altimate" / "altimate.json"
 
     if not config_path.exists():
-        return {}
+        return None
 
     try:
         with config_path.open() as f:
@@ -21,7 +23,7 @@ def load_config_from_file():
         return config
     except (OSError, json.JSONDecodeError) as e:
         click.echo(f"Warning: Failed to load config from {config_path}: {e}", err=True)
-        return {}
+        return None
 
 
 def substitute_env_vars(value):
@@ -58,30 +60,22 @@ def auth_options(f):
         # Load .env file from current directory if it exists
         load_dotenv()
 
-        # Load configuration from file
-        file_config = load_config_from_file()
-        file_config = process_config(file_config)
-
-        # Apply file config first, then override with CLI arguments if provided
         final_token = token
         final_instance_name = instance_name
         final_backend_url = backend_url
 
-        # Use file config if CLI argument not provided
-        if final_token is None and "altimateApiKey" in file_config:
-            final_token = file_config["altimateApiKey"]
-        if final_instance_name is None and "altimateInstanceName" in file_config:
-            final_instance_name = file_config["altimateInstanceName"]
-        if final_backend_url == "https://api.myaltimate.com" and "altimateUrl" in file_config:
-            final_backend_url = file_config["altimateUrl"]
-
-        # Set defaults if nothing was provided
-        if final_token is None:
-            final_token = None
-        if final_instance_name is None:
-            final_instance_name = None
-        if final_backend_url is None:
-            final_backend_url = "https://api.myaltimate.com"
+        if final_token is None and final_instance_name is None:
+            # Try to Load configuration from file if no CLI arguments are provided
+            file_config = load_config_from_file()
+            if file_config is not None:
+                # File config is provided
+                file_config = process_config(file_config)
+                if "altimateApiKey" in file_config:
+                    final_token = file_config["altimateApiKey"]
+                if "altimateInstanceName" in file_config:
+                    final_instance_name = file_config["altimateInstanceName"]
+                if "altimateUrl" in file_config:
+                    final_backend_url = file_config["altimateUrl"] or final_backend_url
 
         return f(final_token, final_instance_name, final_backend_url, *args, **kwargs)
 
