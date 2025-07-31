@@ -18,6 +18,7 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
 from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedLanguage
+from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 from pydantic import BaseModel
 
 
@@ -28,6 +29,7 @@ class DBTVersion(BaseModel):
 
 
 Manifest = Union[
+    ManifestV12,
     ManifestV11,
     ManifestV10,
     ManifestV9,
