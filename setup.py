@@ -13,7 +13,7 @@ def read(*names, **kwargs):
 
 setup(
     name="altimate-datapilot-cli",
-    version="0.0.21",
+    version="0.0.22",
     license="MIT",
     description="Assistant for Data Teams",
     long_description="{}\n{}".format(
@@ -63,7 +63,7 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "click~=8.1.7",
-        "dbt-artifacts-parser~=0.8.1",
+        "dbt-artifacts-parser~=0.9.0",
         "ruamel.yaml~=0.18.6",
         "tabulate~=0.9.0",
         "requests>=2.31",
