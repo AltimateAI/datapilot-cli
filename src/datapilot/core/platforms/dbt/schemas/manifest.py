@@ -5,8 +5,6 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1 as BaseCatalogV1
-from dbt_artifacts_parser.parsers.catalog.catalog_v1 import Metadata as BaseMetadata
 from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
 from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
 from dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
@@ -43,21 +41,6 @@ Manifest = Union[
     ManifestV2,
     ManifestV1,
 ]
-
-
-class Metadata(BaseMetadata):
-    class Config:
-        extra = "allow"  # Allow extra fields in metadata
-
-
-class CatalogV1(BaseCatalogV1):
-    metadata: Metadata  # Use our custom metadata class
-
-    class Config:
-        extra = "allow"  # Allow extra fields
-
-
-Catalog = CatalogV1
 
 
 class AltimateDocs(BaseModel):

@@ -17,12 +17,12 @@ from datapilot.core.platforms.dbt.constants import OTHER
 from datapilot.core.platforms.dbt.constants import STAGING
 from datapilot.core.platforms.dbt.exceptions import AltimateInvalidManifestError
 from datapilot.core.platforms.dbt.factory import DBTFactory
+from datapilot.core.platforms.dbt.schemas.catalog import Catalog
+from datapilot.core.platforms.dbt.schemas.catalog import CatalogV1
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
-from datapilot.core.platforms.dbt.schemas.manifest import Catalog
-from datapilot.core.platforms.dbt.schemas.manifest import CatalogV1
 from datapilot.core.platforms.dbt.schemas.manifest import Manifest
 from datapilot.exceptions.exceptions import AltimateFileNotFoundError
 from datapilot.exceptions.exceptions import AltimateInvalidJSONError

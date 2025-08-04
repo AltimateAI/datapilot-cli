@@ -12,7 +12,7 @@ from typing import Union
 from dbt_artifacts_parser.parser import parse_manifest
 
 from datapilot.config.config import load_config
-from datapilot.core.platforms.dbt.schemas.manifest import CatalogV1
+from datapilot.core.platforms.dbt.schemas.catalog import CatalogV1
 from datapilot.schemas.nodes import ModelNode
 from datapilot.schemas.nodes import SourceNode
 

@@ -3,8 +3,8 @@ from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
 from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
 from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 
-from datapilot.core.platforms.dbt.schemas.manifest import Catalog
-from datapilot.core.platforms.dbt.schemas.manifest import CatalogV1
+from datapilot.core.platforms.dbt.schemas.catalog import Catalog
+from datapilot.core.platforms.dbt.schemas.catalog import CatalogV1
 from datapilot.core.platforms.dbt.schemas.manifest import Manifest
 from datapilot.core.platforms.dbt.wrappers.catalog.v1.wrapper import CatalogV1Wrapper
 from datapilot.core.platforms.dbt.wrappers.manifest.v10.wrapper import ManifestV10Wrapper

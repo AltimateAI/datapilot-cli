@@ -15,7 +15,7 @@ from datapilot.core.platforms.dbt.factory import DBTFactory
 from datapilot.core.platforms.dbt.insights import INSIGHTS
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
-from datapilot.core.platforms.dbt.schemas.manifest import Catalog
+from datapilot.core.platforms.dbt.schemas.catalog import Catalog
 from datapilot.core.platforms.dbt.schemas.manifest import Manifest
 from datapilot.core.platforms.dbt.utils import get_models
 from datapilot.utils.formatting.utils import RED

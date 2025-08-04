@@ -1,4 +1,4 @@
-from datapilot.core.platforms.dbt.schemas.manifest import CatalogV1
+from datapilot.core.platforms.dbt.schemas.catalog import CatalogV1
 from datapilot.core.platforms.dbt.wrappers.catalog.wrapper import BaseCatalogWrapper
 
 
