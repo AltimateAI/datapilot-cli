@@ -6,7 +6,6 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from dbt_artifacts_parser.parser import parse_catalog
 from dbt_artifacts_parser.parser import parse_manifest
 
 from datapilot.core.platforms.dbt.constants import BASE
@@ -23,6 +22,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
 from datapilot.core.platforms.dbt.schemas.manifest import Catalog
+from datapilot.core.platforms.dbt.schemas.manifest import CatalogV1
 from datapilot.core.platforms.dbt.schemas.manifest import Manifest
 from datapilot.exceptions.exceptions import AltimateFileNotFoundError
 from datapilot.exceptions.exceptions import AltimateInvalidJSONError
@@ -83,14 +83,14 @@ def load_catalog(catalog_path: str) -> Catalog:
     try:
         catalog_dict = load_json(catalog_path)
     except FileNotFoundError as e:
-        raise AltimateFileNotFoundError(f"Manifest file not found: {catalog_path}. Error: {e}") from e
+        raise AltimateFileNotFoundError(f"Catalog file not found: {catalog_path}. Error: {e}") from e
     except ValueError as e:
         raise AltimateInvalidJSONError(f"Invalid JSON file: {catalog_path}. Error: {e}") from e
 
     try:
-        catalog: Catalog = parse_catalog(catalog_dict)
+        catalog: Catalog = CatalogV1(**catalog_dict)
     except ValueError as e:
-        raise AltimateInvalidManifestError(f"Invalid manifest file: {catalog_path}. Error: {e}") from e
+        raise AltimateInvalidManifestError(f"Invalid catalog file: {catalog_path}. Error: {e}") from e
 
     return catalog
 
