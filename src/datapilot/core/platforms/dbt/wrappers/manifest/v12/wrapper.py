@@ -12,6 +12,7 @@ from datapilot.core.platforms.dbt.constants import SEED
 from datapilot.core.platforms.dbt.constants import SINGULAR
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateDBTContract
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateDependsOn
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateExposureConfig
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateExposureType
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateExternalTable
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateFileHash
@@ -204,7 +205,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
             maturity=AltimateMaturityEnum(exposure.maturity.value) if exposure.maturity else None,
             meta=exposure.meta,
             tags=exposure.tags,
-            config=AltimateSourceConfig(**exposure.config.model_dump()) if exposure.config else None,
+            config=AltimateExposureConfig(**exposure.config.model_dump()) if exposure.config else None,
             unrendered_config=exposure.unrendered_config,
             url=exposure.url,
             depends_on=(

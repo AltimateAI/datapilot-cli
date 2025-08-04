@@ -9,10 +9,10 @@ from typing import Dict
 from typing import List
 from typing import Union
 
-from dbt_artifacts_parser.parser import parse_catalog
 from dbt_artifacts_parser.parser import parse_manifest
 
 from datapilot.config.config import load_config
+from datapilot.core.platforms.dbt.schemas.catalog import CatalogV1
 from datapilot.schemas.nodes import ModelNode
 from datapilot.schemas.nodes import SourceNode
 
@@ -306,7 +306,7 @@ def generate_partial_manifest_catalog(changed_files, base_path: str = "./"):
         catalog = fill_catalog(table_columns_map, manifest, catalog, sources, "sources")
 
         selected_models = [node.unique_id for node in nodes + sources]
-        return selected_models, parse_manifest(manifest), parse_catalog(catalog)
+        return selected_models, parse_manifest(manifest), CatalogV1(**catalog)
     except Exception as e:
         raise Exception("Unable to generate partial manifest and catalog") from e
 

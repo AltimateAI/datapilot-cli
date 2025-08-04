@@ -6,6 +6,7 @@ from datapilot.cli.decorators import auth_options
 from datapilot.clients.altimate.utils import check_token_and_instance
 from datapilot.clients.altimate.utils import get_all_dbt_configs
 from datapilot.clients.altimate.utils import onboard_file
+from datapilot.clients.altimate.utils import resolve_integration_name_to_id
 from datapilot.clients.altimate.utils import start_dbt_ingestion
 from datapilot.clients.altimate.utils import validate_credentials
 from datapilot.clients.altimate.utils import validate_permissions
@@ -136,8 +137,13 @@ def project_health(
     "--dbt_core_integration_id",
     "--dbt_integration_id",
     "dbt_integration_id",  # This is the parameter name that will be passed to the function
-    prompt="DBT Integration ID",
     help="DBT Core Integration ID or DBT Integration ID",
+)
+@click.option(
+    "--dbt_core_integration_name",
+    "--dbt_integration_name",
+    "dbt_integration_name",  # This is the parameter name that will be passed to the function
+    help="DBT Core Integration Name or DBT Integration Name (alternative to ID)",
 )
 @click.option(
     "--dbt_core_integration_environment",
@@ -154,11 +160,12 @@ def onboard(
     instance_name,
     backend_url,
     dbt_integration_id,
+    dbt_integration_name,
     dbt_integration_environment,
     manifest_path,
     catalog_path,
 ):
-    """Onboard a manifest file to DBT."""
+    """Onboard a manifest file to DBT. You can specify either --dbt_integration_id or --dbt_integration_name."""
 
     # For onboard command, token and instance_name are required
     if not token:
@@ -175,6 +182,21 @@ def onboard(
     if not validate_permissions(token, backend_url, instance_name):
         click.echo("Error: You don't have permission to perform this action.")
         return
+
+    # Resolve integration name to ID if name is provided instead of ID
+    if not dbt_integration_id and not dbt_integration_name:
+        dbt_integration_id = click.prompt("DBT Integration ID")
+    elif dbt_integration_name and not dbt_integration_id:
+        click.echo(f"Resolving integration name '{dbt_integration_name}' to ID...")
+        resolved_id = resolve_integration_name_to_id(dbt_integration_name, token, instance_name, backend_url)
+        if resolved_id:
+            dbt_integration_id = resolved_id
+            click.echo(f"Found integration ID: {dbt_integration_id}")
+        else:
+            click.echo(f"Error: Integration with name '{dbt_integration_name}' not found.")
+            return
+    elif dbt_integration_name and dbt_integration_id:
+        click.echo("Warning: Both integration ID and name provided. Using ID and ignoring name.")
 
     try:
         load_manifest(manifest_path)

@@ -110,3 +110,8 @@ class APIClient:
         endpoint = "/dbtconfig/"
         params = {"size": 100}
         return self.get(endpoint, params=params)
+
+    def get_all_integrations(self):
+        """Get all integrations"""
+        endpoint = "/dbt/v1/project_integrations/"
+        return self.get(endpoint)
