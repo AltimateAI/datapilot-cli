@@ -150,9 +150,23 @@ def main(argv: Optional[Sequence[str]] = None):
     try:
         print("Generating partial manifest and catalog from changed files...", file=sys.stderr)
         selected_models, manifest, catalog = generate_partial_manifest_catalog(changed_files, base_path=base_path)
-        print(f"Generated manifest with {len(manifest.get('nodes', {}))} nodes", file=sys.stderr)
+
+        # Handle manifest object (could be ManifestV12 or similar)
+        if hasattr(manifest, "nodes"):
+            print(f"Generated manifest with {len(manifest.nodes)} nodes", file=sys.stderr)
+        elif hasattr(manifest, "get") and callable(manifest.get):
+            print(f"Generated manifest with {len(manifest.get('nodes', {}))} nodes", file=sys.stderr)
+        else:
+            print(f"Generated manifest object of type: {type(manifest).__name__}", file=sys.stderr)
+
+        # Handle catalog object (could be CatalogV1 or similar)
         if catalog:
-            print(f"Generated catalog with {len(catalog.get('nodes', {}))} nodes", file=sys.stderr)
+            if hasattr(catalog, "nodes"):
+                print(f"Generated catalog with {len(catalog.nodes)} nodes", file=sys.stderr)
+            elif hasattr(catalog, "get") and callable(catalog.get):
+                print(f"Generated catalog with {len(catalog.get('nodes', {}))} nodes", file=sys.stderr)
+            else:
+                print(f"Generated catalog object of type: {type(catalog).__name__}", file=sys.stderr)
         else:
             print("No catalog generated (catalog file not available)", file=sys.stderr)
 
