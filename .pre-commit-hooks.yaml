@@ -1,7 +1,13 @@
 - id: datapilot_run_dbt_checks
   name: datapilot run dbt checks
-  description: datapilot run dbt checks
+  description: Run DataPilot dbt project health checks on changed files
   entry: datapilot_run_dbt_checks
   language: python
   types_or: [yaml, sql]
   require_serial: true
+  # Optional arguments that can be passed to the hook:
+  # --config-path: Path to configuration file
+  # --token: API token for authentication
+  # --instance-name: Tenant/instance name
+  # --backend-url: Backend URL (defaults to https://api.myaltimate.com)
+  # --config-name: Name of config to use from API
