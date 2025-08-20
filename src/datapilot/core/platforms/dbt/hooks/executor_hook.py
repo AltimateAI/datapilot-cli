@@ -187,25 +187,34 @@ def main(argv: Optional[Sequence[str]] = None):
         if reports:
             print("Insights generated successfully. Analyzing results...", file=sys.stderr)
             model_report = generate_model_insights_table(reports[MODEL])
-            if len(model_report) > 0:
+            project_report = generate_project_insights_table(reports[PROJECT])
+
+            # Check if there are actual issues found
+            has_model_issues = len(model_report) > 0
+            has_project_issues = len(project_report) > 0
+
+            if has_model_issues:
                 print("--" * 50, file=sys.stderr)
                 print("Model Insights", file=sys.stderr)
                 print("--" * 50, file=sys.stderr)
-            for model_id, report in model_report.items():
-                print(f"Model: {model_id}", file=sys.stderr)
-                print(f"File path: {report['path']}", file=sys.stderr)
-                print(tabulate_data(report["table"], headers="keys"), file=sys.stderr)
-                print("\n", file=sys.stderr)
+                for model_id, report in model_report.items():
+                    print(f"Model: {model_id}", file=sys.stderr)
+                    print(f"File path: {report['path']}", file=sys.stderr)
+                    print(tabulate_data(report["table"], headers="keys"), file=sys.stderr)
+                    print("\n", file=sys.stderr)
 
-            project_report = generate_project_insights_table(reports[PROJECT])
-            if len(project_report) > 0:
+            if has_project_issues:
                 print("--" * 50, file=sys.stderr)
                 print("Project Insights", file=sys.stderr)
                 print("--" * 50, file=sys.stderr)
                 print(tabulate_data(project_report, headers="keys"), file=sys.stderr)
 
-            print("\nPre-commit hook failed: DataPilot found issues that need to be addressed.", file=sys.stderr)
-            sys.exit(1)
+            # Only fail if there are actual issues
+            if has_model_issues or has_project_issues:
+                print("\nPre-commit hook failed: DataPilot found issues that need to be addressed.", file=sys.stderr)
+                sys.exit(1)
+            else:
+                print("All checks passed! No issues found.", file=sys.stderr)
         else:
             print("No insights generated. All checks passed!", file=sys.stderr)
 
