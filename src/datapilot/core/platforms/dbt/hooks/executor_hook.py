@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Optional
 from typing import Sequence
 
+from datapilot.clients.altimate.utils import get_all_dbt_configs
 from datapilot.config.config import load_config
 from datapilot.core.platforms.dbt.constants import MODEL
 from datapilot.core.platforms.dbt.constants import PROJECT
@@ -34,6 +35,8 @@ def validate_config_file(config_path: str) -> bool:
 
 def main(argv: Optional[Sequence[str]] = None):
     start_time = time.time()
+    print("Starting DataPilot pre-commit hook...", file=sys.stderr)
+
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--config-path",
@@ -66,18 +69,60 @@ def main(argv: Optional[Sequence[str]] = None):
 
     args = parser.parse_known_args(argv)
 
-    # Validate config file if provided
-    config = {}
+    # Handle config loading like in project_health command
+    config = None
     if hasattr(args[0], "config_path") and args[0].config_path:
         config_path = args[0].config_path[0]
+        print(f"Loading config from file: {config_path}", file=sys.stderr)
         if not validate_config_file(config_path):
             print("Pre-commit hook failed: Invalid config file.", file=sys.stderr)
             sys.exit(1)
         config = load_config(config_path)
+        print("Config loaded successfully from file", file=sys.stderr)
+    elif (
+        hasattr(args[0], "config_name")
+        and args[0].config_name
+        and hasattr(args[0], "token")
+        and args[0].token
+        and hasattr(args[0], "instance_name")
+        and args[0].instance_name
+    ):
+        config_name = args[0].config_name
+        token = args[0].token
+        instance_name = args[0].instance_name
+        backend_url = getattr(args[0], "backend_url", "https://api.myaltimate.com")
+
+        print(f"Fetching config '{config_name}' from API...", file=sys.stderr)
+        try:
+            # Get configs from API
+            configs = get_all_dbt_configs(token, instance_name, backend_url)
+            if configs and "items" in configs:
+                # Find config by name
+                matching_configs = [c for c in configs["items"] if c["name"] == config_name]
+                if matching_configs:
+                    # Get the config directly from the API response
+                    print(f"Using config from API: {config_name}", file=sys.stderr)
+                    config = matching_configs[0].get("config", {})
+                else:
+                    print(f"No config found with name: {config_name}", file=sys.stderr)
+                    print("Pre-commit hook failed: Config not found.", file=sys.stderr)
+                    sys.exit(1)
+            else:
+                print("Failed to fetch configs from API", file=sys.stderr)
+                print("Pre-commit hook failed: Unable to fetch configs.", file=sys.stderr)
+                sys.exit(1)
+        except Exception as e:
+            print(f"Error fetching config from API: {e}", file=sys.stderr)
+            print("Pre-commit hook failed: API error.", file=sys.stderr)
+            sys.exit(1)
+    else:
+        print("No config provided. Using default configuration.", file=sys.stderr)
+        config = {}
 
     base_path = "./"
     if hasattr(args[0], "base_path") and args[0].base_path:
         base_path = args[0].base_path[0]
+        print(f"Using base path: {base_path}", file=sys.stderr)
 
     # Get authentication parameters
     token = getattr(args[0], "token", None)
@@ -99,9 +144,19 @@ def main(argv: Optional[Sequence[str]] = None):
         print("No changed files detected. Skipping datapilot checks.", file=sys.stderr)
         return
 
-    try:
-        selected_models, manifest, catalog = generate_partial_manifest_catalog(changed_files, base_path=base_path)
+    print(f"Processing {len(changed_files)} changed files...", file=sys.stderr)
+    print(f"Changed files: {', '.join(changed_files)}", file=sys.stderr)
 
+    try:
+        print("Generating partial manifest and catalog from changed files...", file=sys.stderr)
+        selected_models, manifest, catalog = generate_partial_manifest_catalog(changed_files, base_path=base_path)
+        print(f"Generated manifest with {len(manifest.get('nodes', {}))} nodes", file=sys.stderr)
+        if catalog:
+            print(f"Generated catalog with {len(catalog.get('nodes', {}))} nodes", file=sys.stderr)
+        else:
+            print("No catalog generated (catalog file not available)", file=sys.stderr)
+
+        print("Initializing DBT Insight Generator...", file=sys.stderr)
         insight_generator = DBTInsightGenerator(
             manifest=manifest,
             catalog=catalog,
@@ -112,9 +167,11 @@ def main(argv: Optional[Sequence[str]] = None):
             backend_url=backend_url,
         )
 
+        print("Running insight generation...", file=sys.stderr)
         reports = insight_generator.run()
 
         if reports:
+            print("Insights generated successfully. Analyzing results...", file=sys.stderr)
             model_report = generate_model_insights_table(reports[MODEL])
             if len(model_report) > 0:
                 print("--" * 50, file=sys.stderr)
@@ -135,6 +192,8 @@ def main(argv: Optional[Sequence[str]] = None):
 
             print("\nPre-commit hook failed: DataPilot found issues that need to be addressed.", file=sys.stderr)
             sys.exit(1)
+        else:
+            print("No insights generated. All checks passed!", file=sys.stderr)
 
     except Exception as e:
         print(f"Error running DataPilot checks: {e}", file=sys.stderr)
