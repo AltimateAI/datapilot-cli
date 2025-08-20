@@ -12,8 +12,9 @@ from datapilot.core.platforms.dbt.constants import PROJECT
 from datapilot.core.platforms.dbt.executor import DBTInsightGenerator
 from datapilot.core.platforms.dbt.formatting import generate_model_insights_table
 from datapilot.core.platforms.dbt.formatting import generate_project_insights_table
+from datapilot.core.platforms.dbt.utils import load_catalog
+from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.utils.formatting.utils import tabulate_data
-from datapilot.utils.utils import generate_partial_manifest_catalog
 
 
 def validate_config_file(config_path: str) -> bool:
@@ -65,6 +66,16 @@ def main(argv: Optional[Sequence[str]] = None):
     parser.add_argument(
         "--config-name",
         help="Name of the DBT config to use from the API",
+    )
+
+    parser.add_argument(
+        "--manifest-path",
+        help="Path to the DBT manifest file (defaults to ./target/manifest.json)",
+    )
+
+    parser.add_argument(
+        "--catalog-path",
+        help="Path to the DBT catalog file (defaults to ./target/catalog.json)",
     )
 
     args = parser.parse_known_args(argv)
@@ -138,44 +149,77 @@ def main(argv: Optional[Sequence[str]] = None):
         print("Warning: No instance name provided. Using default configuration.", file=sys.stderr)
         print("To specify an instance, use: --instance-name 'your-instance'", file=sys.stderr)
 
+    # Determine manifest and catalog paths
+    manifest_path = getattr(args[0], "manifest_path", None)
+    catalog_path = getattr(args[0], "catalog_path", None)
+
+    # Set default paths if not provided
+    if not manifest_path:
+        manifest_path = str(Path(base_path) / "target" / "manifest.json")
+        print(f"Using default manifest path: {manifest_path}", file=sys.stderr)
+    else:
+        print(f"Using provided manifest path: {manifest_path}", file=sys.stderr)
+
+    if not catalog_path:
+        catalog_path = str(Path(base_path) / "target" / "catalog.json")
+        print(f"Using default catalog path: {catalog_path}", file=sys.stderr)
+    else:
+        print(f"Using provided catalog path: {catalog_path}", file=sys.stderr)
+
+    # Load manifest
+    print("Loading manifest file...", file=sys.stderr)
+    try:
+        manifest = load_manifest(manifest_path)
+        if hasattr(manifest, "nodes"):
+            print(f"Manifest loaded successfully with {len(manifest.nodes)} nodes", file=sys.stderr)
+        elif hasattr(manifest, "get") and callable(manifest.get):
+            print(f"Manifest loaded successfully with {len(manifest.get('nodes', {}))} nodes", file=sys.stderr)
+        else:
+            print(f"Manifest loaded successfully, object type: {type(manifest).__name__}", file=sys.stderr)
+    except Exception as e:
+        print(f"Error loading manifest from {manifest_path}: {e}", file=sys.stderr)
+        print("Pre-commit hook failed: Unable to load manifest file.", file=sys.stderr)
+        sys.exit(1)
+
+    # Load catalog if available
+    catalog = None
+    if Path(catalog_path).exists():
+        print("Loading catalog file...", file=sys.stderr)
+        try:
+            catalog = load_catalog(catalog_path)
+            if hasattr(catalog, "nodes"):
+                print(f"Catalog loaded successfully with {len(catalog.nodes)} nodes", file=sys.stderr)
+            elif hasattr(catalog, "get") and callable(catalog.get):
+                print(f"Catalog loaded successfully with {len(catalog.get('nodes', {}))} nodes", file=sys.stderr)
+            else:
+                print(f"Catalog loaded successfully, object type: {type(catalog).__name__}", file=sys.stderr)
+        except Exception as e:
+            print(f"Warning: Error loading catalog from {catalog_path}: {e}", file=sys.stderr)
+            print("Continuing without catalog...", file=sys.stderr)
+            catalog = None
+    else:
+        print(f"Catalog file not found at {catalog_path}, continuing without catalog", file=sys.stderr)
+
+    # Get changed files for selective model testing
     changed_files = args[1]
+    selected_models = []
 
-    if not changed_files:
-        print("No changed files detected. Skipping datapilot checks.", file=sys.stderr)
-        return
-
-    print(f"Processing {len(changed_files)} changed files...", file=sys.stderr)
-    print(f"Changed files: {', '.join(changed_files)}", file=sys.stderr)
+    if changed_files:
+        print(f"Processing {len(changed_files)} changed files for selective testing...", file=sys.stderr)
+        print(f"Changed files: {', '.join(changed_files)}", file=sys.stderr)
+        # Extract model names from changed files for selective testing
+        # This could be enhanced to map file paths to model names
+        selected_models = changed_files
+    else:
+        print("No changed files detected. Running checks on all models.", file=sys.stderr)
 
     try:
-        print("Generating partial manifest and catalog from changed files...", file=sys.stderr)
-        selected_models, manifest, catalog = generate_partial_manifest_catalog(changed_files, base_path=base_path)
-
-        # Handle manifest object (could be ManifestV12 or similar)
-        if hasattr(manifest, "nodes"):
-            print(f"Generated manifest with {len(manifest.nodes)} nodes", file=sys.stderr)
-        elif hasattr(manifest, "get") and callable(manifest.get):
-            print(f"Generated manifest with {len(manifest.get('nodes', {}))} nodes", file=sys.stderr)
-        else:
-            print(f"Generated manifest object of type: {type(manifest).__name__}", file=sys.stderr)
-
-        # Handle catalog object (could be CatalogV1 or similar)
-        if catalog:
-            if hasattr(catalog, "nodes"):
-                print(f"Generated catalog with {len(catalog.nodes)} nodes", file=sys.stderr)
-            elif hasattr(catalog, "get") and callable(catalog.get):
-                print(f"Generated catalog with {len(catalog.get('nodes', {}))} nodes", file=sys.stderr)
-            else:
-                print(f"Generated catalog object of type: {type(catalog).__name__}", file=sys.stderr)
-        else:
-            print("No catalog generated (catalog file not available)", file=sys.stderr)
-
         print("Initializing DBT Insight Generator...", file=sys.stderr)
         insight_generator = DBTInsightGenerator(
             manifest=manifest,
             catalog=catalog,
             config=config,
-            selected_model_ids=selected_models,
+            selected_models=selected_models,
             token=token,
             instance_name=instance_name,
             backend_url=backend_url,
