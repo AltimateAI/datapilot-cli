@@ -101,7 +101,7 @@ def main(argv: Optional[Sequence[str]] = None):
                 matching_configs = [c for c in configs["items"] if c["name"] == config_name]
                 if matching_configs:
                     # Get the config directly from the API response
-                    print(f"Using config from API: {config_name}", file=sys.stderr)
+                    print(f"Using config from API: {config_name} id: {matching_configs[0]['id']}", file=sys.stderr)
                     config = matching_configs[0].get("config", {})
                 else:
                     print(f"No config found with name: {config_name}", file=sys.stderr)
