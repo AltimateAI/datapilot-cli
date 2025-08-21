@@ -57,13 +57,15 @@ pip install pre-commit
 ```yaml
 repos:
   - repo: https://github.com/AltimateAI/datapilot-cli
-    rev: v0.0.23  # Always use a specific version tag
+    rev: v0.0.27  # Always use a specific version tag
     hooks:
       - id: datapilot_run_dbt_checks
         args: [
           "--config-path", "./datapilot-config.yaml",
           "--token", "${DATAPILOT_TOKEN}",
-          "--instance-name", "${DATAPILOT_INSTANCE}"
+          "--instance-name", "${DATAPILOT_INSTANCE}",
+          "--manifest-path", "./target/manifest.json",
+          "--catalog-path", "./target/catalog.json"
         ]
 ```
 

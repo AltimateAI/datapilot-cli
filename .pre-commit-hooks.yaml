@@ -11,3 +11,6 @@
   # --instance-name: Tenant/instance name
   # --backend-url: Backend URL (defaults to https://api.myaltimate.com)
   # --config-name: Name of config to use from API
+  # --manifest-path: Path to DBT manifest file (defaults to ./target/manifest.json)
+  # --catalog-path: Path to DBT catalog file (defaults to ./target/catalog.json)
+  # --base-path: Base path of the dbt project (defaults to current directory)
