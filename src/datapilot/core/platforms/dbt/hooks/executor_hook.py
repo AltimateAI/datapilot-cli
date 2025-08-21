@@ -60,7 +60,7 @@ def setup_argument_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def extract_arguments(args) -> Tuple[str, str, str, str, str, str, str]:
+def extract_arguments(args) -> Tuple[str, str, str, str, str, str, str, str]:
     """Extract and return common arguments from parsed args."""
     config_name = getattr(args, "config_name", None)
     token = getattr(args, "token", None)
