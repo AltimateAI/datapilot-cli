@@ -42,6 +42,40 @@ The [--config-path] is an optional argument. You can provide a yaml file with ov
 
 Note: The dbt docs generate requires an active database connection and may take a long time for projects with large number of models.
 
+### Pre-commit Hook Integration
+
+DataPilot provides a pre-commit hook that automatically runs health checks on changed files before each commit. This ensures code quality and catches issues early in the development process.
+
+#### Quick Setup
+
+1. Install pre-commit:
+```bash
+pip install pre-commit
+```
+
+2. Add to your `.pre-commit-config.yaml`:
+```yaml
+repos:
+  - repo: https://github.com/AltimateAI/datapilot-cli
+    rev: v0.0.27  # Always use a specific version tag
+    hooks:
+      - id: datapilot_run_dbt_checks
+        args: [
+          "--config-path", "./datapilot-config.yaml",
+          "--token", "${DATAPILOT_TOKEN}",
+          "--instance-name", "${DATAPILOT_INSTANCE}",
+          "--manifest-path", "./target/manifest.json",
+          "--catalog-path", "./target/catalog.json"
+        ]
+```
+
+3. Install the hook:
+```bash
+pre-commit install
+```
+
+For detailed setup instructions, see the [Pre-commit Hook Setup Guide](docs/pre-commit-setup.md).
+
 ### Checks
 
 The following checks are available:
