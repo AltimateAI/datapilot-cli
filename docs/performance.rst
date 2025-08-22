@@ -1,9 +1,29 @@
 ===============================
-Performance of Pre-commit Hook
+Pre-commit Hook
 ===============================
 
 Overview
 --------
+You can use the pre-commit hook to run DataPilot checks on your dbt project. Do this by following the instructions below:
+
+1. Install pre-commit (https://pre-commit.com/#install)
+2. Create a file in the root of the project ``.pre-commit-config.yaml``
+3. Add to that file this below:
+4. Run ``pre-commit run --all-files`` to test it out
+
+.. code-block:: yaml
+
+    repos:
+      - repo: https://github.com/AltimateAI/datapilot-cli
+        rev: v0.0.27
+        hooks:
+          - id: datapilot_run_dbt_checks
+            args: [--config-name, "[The Config Name in the SaaS UI]", --token, "[YOUR API KEY]", --instance-name, "[Your tenant name]"]
+
+
+Performance
+-----------
+
 The primary objective is to ensure the pre-commit hook operates swiftly and efficiently, preventing any delay in the development workflow. To achieve this, various optimizations have been applied, focusing on minimizing the time and resources required during execution.
 
 Optimizations
