@@ -63,7 +63,7 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "click~=8.1.7",
-        "dbt-artifacts-parser~=0.9.0",
+        "dbt-artifacts-parser @ git+https://github.com/mdesmet/dbt-artifacts-parser.git@2c0810ee557feeeaca66a8c46a0b764bb8f3a0bc",
         "ruamel.yaml~=0.18.6",
         "tabulate~=0.9.0",
         "requests>=2.31",
