@@ -1,8 +1,4 @@
-# Remove the import of CatalogV1 from dbt_artifacts_parser since we use our custom version
-from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
-from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
-
+# Remove the import of CatalogV1 from vendor.dbt_artifacts_parser since we use our custom version
 from datapilot.core.platforms.dbt.schemas.catalog import Catalog
 from datapilot.core.platforms.dbt.schemas.catalog import CatalogV1
 from datapilot.core.platforms.dbt.schemas.manifest import Manifest
@@ -11,6 +7,9 @@ from datapilot.core.platforms.dbt.wrappers.manifest.v10.wrapper import ManifestV
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.wrapper import ManifestV11Wrapper
 from datapilot.core.platforms.dbt.wrappers.manifest.v12.wrapper import ManifestV12Wrapper
 from datapilot.exceptions.exceptions import AltimateNotSupportedError
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 
 
 class DBTFactory:

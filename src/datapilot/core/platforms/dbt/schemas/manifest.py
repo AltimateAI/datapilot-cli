@@ -5,20 +5,21 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
-from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
-from dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
-from dbt_artifacts_parser.parsers.manifest.manifest_v4 import ManifestV4
-from dbt_artifacts_parser.parsers.manifest.manifest_v5 import ManifestV5
-from dbt_artifacts_parser.parsers.manifest.manifest_v6 import ManifestV6
-from dbt_artifacts_parser.parsers.manifest.manifest_v7 import ManifestV7
-from dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
-from dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
-from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedLanguage
-from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 from pydantic import BaseModel
+
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v4 import ManifestV4
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v5 import ManifestV5
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v6 import ManifestV6
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v7 import ManifestV7
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedLanguage
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 
 
 class DBTVersion(BaseModel):

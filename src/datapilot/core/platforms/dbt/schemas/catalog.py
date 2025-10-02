@@ -5,9 +5,10 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1 as BaseCatalogV1
-from dbt_artifacts_parser.parsers.catalog.catalog_v1 import Metadata as BaseMetadata
 from pydantic.main import BaseModel
+
+from vendor.dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1 as BaseCatalogV1
+from vendor.dbt_artifacts_parser.parsers.catalog.catalog_v1 import Metadata as BaseMetadata
 
 
 class AltimateCatalogMetadata(BaseModel):

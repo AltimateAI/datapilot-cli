@@ -2,10 +2,6 @@ from typing import Dict
 from typing import Optional
 from typing import Set
 
-from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
-from dbt_artifacts_parser.parsers.manifest.manifest_v12 import Nodes2
-from dbt_artifacts_parser.parsers.manifest.manifest_v12 import Nodes6
-
 from datapilot.core.platforms.dbt.constants import GENERIC
 from datapilot.core.platforms.dbt.constants import OTHER_TEST_NODE
 from datapilot.core.platforms.dbt.constants import SEED
@@ -44,6 +40,9 @@ from datapilot.core.platforms.dbt.wrappers.manifest.v12.schemas import SeedNodeM
 from datapilot.core.platforms.dbt.wrappers.manifest.v12.schemas import SourceNode
 from datapilot.core.platforms.dbt.wrappers.manifest.v12.schemas import TestNode
 from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import BaseManifestWrapper
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import Nodes2
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import Nodes6
 
 
 class ManifestV12Wrapper(BaseManifestWrapper):
