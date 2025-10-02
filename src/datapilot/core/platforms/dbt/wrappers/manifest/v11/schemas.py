@@ -2,21 +2,20 @@ from typing import Dict
 from typing import Type
 from typing import Union
 
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import AnalysisNode
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import Exposure
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import GenericTestNode
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import HookNode
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import Macro
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ModelNode
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import RPCNode
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SeedNode
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SingularTestNode
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SnapshotNode
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SourceDefinition
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SqlNode
-
 from datapilot.core.platforms.dbt.constants import GENERIC
 from datapilot.core.platforms.dbt.constants import SINGULAR
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import AnalysisNode
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import Exposure
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import GenericTestNode
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import HookNode
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import Macro
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import ModelNode
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import RPCNode
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import SeedNode
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import SingularTestNode
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import SnapshotNode
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import SourceDefinition
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import SqlNode
 
 ManifestNode = Union[
     AnalysisNode,

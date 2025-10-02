@@ -6,8 +6,6 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from dbt_artifacts_parser.parser import parse_manifest
-
 from datapilot.core.platforms.dbt.constants import BASE
 from datapilot.core.platforms.dbt.constants import FOLDER
 from datapilot.core.platforms.dbt.constants import INTERMEDIATE
@@ -30,6 +28,7 @@ from datapilot.utils.utils import extract_dir_name_from_file_path
 from datapilot.utils.utils import extract_folders_in_path
 from datapilot.utils.utils import is_superset_path
 from datapilot.utils.utils import load_json
+from vendor.dbt_artifacts_parser.parser import parse_manifest
 
 MODEL_TYPE_PATTERNS = {
     STAGING: r"^stg_.*",  # Example: models starting with 'stg_'
