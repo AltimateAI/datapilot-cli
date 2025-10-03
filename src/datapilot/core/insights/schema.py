@@ -1,7 +1,6 @@
+from dataclasses import dataclass
 from enum import Enum
 from typing import Dict
-
-from pydantic import BaseModel
 
 
 class Severity(Enum):
@@ -10,7 +9,8 @@ class Severity(Enum):
     ERROR = "ERROR"
 
 
-class InsightResult(BaseModel):
+@dataclass
+class InsightResult:
     name: str
     type: str
     message: str
@@ -19,6 +19,7 @@ class InsightResult(BaseModel):
     metadata: Dict
 
 
-class InsightResponse(BaseModel):
+@dataclass
+class InsightResponse:
     insight: InsightResult
     severity: Severity = Severity.ERROR

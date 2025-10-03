@@ -1,11 +1,11 @@
+from dataclasses import dataclass
+from dataclasses import field
 from enum import Enum
 from typing import Any
 from typing import Dict
 from typing import List
 from typing import Optional
 from typing import Union
-
-from pydantic import BaseModel
 
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
@@ -22,7 +22,8 @@ from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedL
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 
 
-class DBTVersion(BaseModel):
+@dataclass
+class DBTVersion:
     MAJOR: int
     MINOR: int
     PATCH: Optional[int]
@@ -44,26 +45,30 @@ Manifest = Union[
 ]
 
 
-class AltimateDocs(BaseModel):
+@dataclass
+class AltimateDocs:
     show: Optional[bool] = True
     node_color: Optional[Optional[str]] = None
 
 
-class AltimateDependsOn(BaseModel):
+@dataclass
+class AltimateDependsOn:
     nodes: Optional[List[str]] = None
     macros: Optional[List[str]] = None
 
 
-class AltimateManifestColumnInfo(BaseModel):
+@dataclass
+class AltimateManifestColumnInfo:
     name: str
     description: Optional[str] = ""
-    meta: Optional[Dict[str, Any]] = {}
+    meta: Optional[Dict[str, Any]] = field(default_factory=dict)
     data_type: Optional[Optional[str]] = None
     quote: Optional[Optional[bool]] = None
-    tags: Optional[List[str]] = []
+    tags: Optional[List[str]] = field(default_factory=list)
 
 
-class AltimateFileHash(BaseModel):
+@dataclass
+class AltimateFileHash:
     name: Optional[str]
     checksum: Optional[str]
 
@@ -93,20 +98,23 @@ class AltimateAccess(Enum):
     protected = "protected"
 
 
-class AltimateDBTContract(BaseModel):
+@dataclass
+class AltimateDBTContract:
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
     checksum: Optional[Optional[str]] = None
 
 
-class AltimateHook(BaseModel):
+@dataclass
+class AltimateHook:
     sql: str
     transaction: Optional[bool] = True
     index: Optional[Optional[int]] = None
 
 
 # TODO: Need to add the rest of the fields
-class AltimateNodeConfig(BaseModel):
+@dataclass
+class AltimateNodeConfig:
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
     alias: Optional[Optional[str]] = None
@@ -118,8 +126,8 @@ class AltimateNodeConfig(BaseModel):
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[Optional[str]] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[AltimateHook]]
-    pre_hook: Optional[List[AltimateHook]]
+    post_hook: Optional[List[AltimateHook]] = None
+    pre_hook: Optional[List[AltimateHook]] = None
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
     full_refresh: Optional[Optional[bool]] = None
@@ -127,7 +135,8 @@ class AltimateNodeConfig(BaseModel):
     on_schema_change: Optional[Optional[str]] = "ignore"
 
 
-class AltimateManifestNode(BaseModel):
+@dataclass
+class AltimateManifestNode:
     database: Optional[str]
     resource_type: AltimateResourceType
     schema_name: str
@@ -138,10 +147,11 @@ class AltimateManifestNode(BaseModel):
     unique_id: str
     fqn: List[str]
     alias: str
+    checksum: Optional[AltimateFileHash]
+    access: Optional[AltimateAccess]
     config: Optional[AltimateNodeConfig] = None
     raw_code: Optional[str] = ""
     language: Optional[str] = "sql"
-    checksum: Optional[AltimateFileHash]
     description: Optional[str] = ""
     columns: Optional[Dict[str, AltimateManifestColumnInfo]] = None
     relation_name: Optional[Optional[str]] = None
@@ -151,33 +161,36 @@ class AltimateManifestNode(BaseModel):
     compiled_path: Optional[Optional[str]] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[Optional[str]] = None
-    access: Optional[AltimateAccess]
     contract: Optional[AltimateDBTContract] = None
     meta: Optional[Dict[str, Any]] = None
     patch_path: Optional[Optional[str]] = None
 
 
-class AltimateQuoting(BaseModel):
+@dataclass
+class AltimateQuoting:
     database: Optional[Optional[bool]] = None
     schema_: Optional[Optional[bool]] = None
     identifier: Optional[Optional[bool]] = None
     column: Optional[Optional[bool]] = None
 
 
-class AltimateFreshnessThreshold(BaseModel):
+@dataclass
+class AltimateFreshnessThreshold:
     warn_after: Optional[Dict] = None
     error_after: Optional[Dict] = None
     filter: Optional[str] = None
 
 
-class AltimateExternalPartition(BaseModel):
+@dataclass
+class AltimateExternalPartition:
     name: Optional[str] = ""
     description: Optional[str] = ""
     data_type: Optional[str] = ""
-    meta: Optional[Dict[str, Any]] = {}
+    meta: Optional[Dict[str, Any]] = field(default_factory=dict)
 
 
-class AltimateExternalTable(BaseModel):
+@dataclass
+class AltimateExternalTable:
     location: Optional[Optional[str]] = None
     file_format: Optional[Optional[str]] = None
     row_format: Optional[Optional[str]] = None
@@ -185,18 +198,21 @@ class AltimateExternalTable(BaseModel):
     partitions: Optional[Optional[List[AltimateExternalPartition]]] = None
 
 
-class AltimateSourceConfig(BaseModel):
+@dataclass
+class AltimateSourceConfig:
     enabled: Optional[bool] = True
 
 
-class AltimateDeferRelation(BaseModel):
+@dataclass
+class AltimateDeferRelation:
     database: Optional[str]
     schema_name: str
     alias: str
     relation_name: Optional[str]
 
 
-class AltimateSeedConfig(BaseModel):
+@dataclass
+class AltimateSeedConfig:
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
     alias: Optional[Optional[str]] = None
@@ -208,8 +224,8 @@ class AltimateSeedConfig(BaseModel):
     materialized: Optional[str] = "seed"
     incremental_strategy: Optional[Optional[str]] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[AltimateHook]]
-    pre_hook: Optional[List[AltimateHook]]
+    post_hook: Optional[List[AltimateHook]] = None
+    pre_hook: Optional[List[AltimateHook]] = None
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
     full_refresh: Optional[Optional[bool]] = None
@@ -224,7 +240,8 @@ class AltimateSeedConfig(BaseModel):
     quote_columns: Optional[Optional[bool]] = None
 
 
-class AltimateSeedNode(BaseModel):
+@dataclass
+class AltimateSeedNode:
     database: Optional[str]
     schema_name: str
     name: str
@@ -256,7 +273,8 @@ class AltimateSeedNode(BaseModel):
     defer_relation: Optional[Optional[AltimateDeferRelation]] = None
 
 
-class AltimateManifestSourceNode(BaseModel):
+@dataclass
+class AltimateManifestSourceNode:
     database: Optional[str]
     resource_type: AltimateResourceType
     schema_name: str
@@ -294,7 +312,8 @@ class AltimateExposureType(Enum):
     application = "application"
 
 
-class AltimateOwner(BaseModel):
+@dataclass
+class AltimateOwner:
     _extra: Optional[Dict[str, Any]] = None
     email: Optional[Optional[str]] = None
     name: Optional[Optional[str]] = None
@@ -306,18 +325,21 @@ class AltimateMaturityEnum(Enum):
     high = "high"
 
 
-class AltimateRefArgs(BaseModel):
+@dataclass
+class AltimateRefArgs:
     name: str
     package: Optional[Optional[str]] = None
     version: Optional[Optional[Union[str, float]]] = None
 
 
-class AltimateExposureConfig(BaseModel):
+@dataclass
+class AltimateExposureConfig:
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
 
 
-class AltimateManifestExposureNode(BaseModel):
+@dataclass
+class AltimateManifestExposureNode:
     name: str
     resource_type: AltimateResourceType
     package_name: str
@@ -342,13 +364,15 @@ class AltimateManifestExposureNode(BaseModel):
     created_at: Optional[float] = None
 
 
-class AltimateTestMetadata(BaseModel):
+@dataclass
+class AltimateTestMetadata:
     name: str
     kwargs: Optional[Dict[str, Any]] = None
     namespace: Optional[Optional[str]] = None
 
 
-class AltimateTestConfig(BaseModel):
+@dataclass
+class AltimateTestConfig:
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
     alias: Optional[Optional[str]] = None
@@ -368,9 +392,8 @@ class AltimateTestConfig(BaseModel):
     error_if: Optional[str] = "!= 0"
 
 
-class AltimateManifestTestNode(BaseModel):
-    test_metadata: Optional[AltimateTestMetadata] = None
-    test_type: Optional[str] = None
+@dataclass
+class AltimateManifestTestNode:
     name: str
     resource_type: AltimateResourceType
     package_name: str
@@ -380,6 +403,8 @@ class AltimateManifestTestNode(BaseModel):
     fqn: List[str]
     alias: str
     checksum: Optional[AltimateFileHash]
+    test_metadata: Optional[AltimateTestMetadata] = None
+    test_type: Optional[str] = None
     config: Optional[AltimateTestConfig] = None
     _event_status: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None
@@ -398,7 +423,8 @@ class AltimateManifestTestNode(BaseModel):
     compiled_code: Optional[Optional[str]] = None
 
 
-class AltimateMacroArgument(BaseModel):
+@dataclass
+class AltimateMacroArgument:
     name: str
     type: Optional[Optional[str]] = None
     description: Optional[Optional[str]] = ""
@@ -407,7 +433,8 @@ class AltimateMacroArgument(BaseModel):
 AltimateSupportedLanguage = SupportedLanguage
 
 
-class AltimateManifestMacroNode(BaseModel):
+@dataclass
+class AltimateManifestMacroNode:
     name: str
     resource_type: AltimateResourceType
     package_name: str

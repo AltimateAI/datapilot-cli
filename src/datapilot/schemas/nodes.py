@@ -1,7 +1,8 @@
-from pydantic import BaseModel
+from dataclasses import dataclass
 
 
-class ModelNode(BaseModel):
+@dataclass
+class ModelNode:
     unique_id: str
     name: str
     resource_type: str
@@ -10,10 +11,11 @@ class ModelNode(BaseModel):
     table_schema: str
 
 
-class SourceNode(BaseModel):
+@dataclass
+class SourceNode:
     unique_id: str
     name: str
     resource_type: str
-    table: str = ""
     database: str
     table_schema: str
+    table: str = ""
