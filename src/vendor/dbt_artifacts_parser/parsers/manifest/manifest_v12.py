@@ -3305,6 +3305,7 @@ class Disabled7(BaseParserModel):
     refs: Optional[list[Ref]] = None
     sources: Optional[list[list[str]]] = None
     metrics: Optional[list[list[str]]] = None
+    functions: Optional[list[str]] = None
     depends_on: Optional[DependsOn12] = Field(None, title="DependsOn")
     compiled_path: Optional[str] = None
     compiled: Optional[bool] = False
