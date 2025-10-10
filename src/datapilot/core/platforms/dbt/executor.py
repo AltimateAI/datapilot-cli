@@ -109,8 +109,8 @@ class DBTInsightGenerator:
             self.token,
             self.instance_name,
             self.backend_url,
-            self.manifest.json() if self.manifest else "",
-            self.catalog.json() if self.catalog else "",
+            self.manifest.model_dump_json() if self.manifest else "",
+            self.catalog.model_dump_json() if self.catalog else "",
             check_names,
         )
         return llm_check_results

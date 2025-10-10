@@ -5,7 +5,8 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from pydantic.main import BaseModel
+from pydantic import BaseModel
+from pydantic import ConfigDict
 
 from vendor.dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1 as BaseCatalogV1
 from vendor.dbt_artifacts_parser.parsers.catalog.catalog_v1 import Metadata as BaseMetadata
@@ -59,15 +60,12 @@ class AltimateCatalogCatalogV1(BaseModel):
 
 # Custom classes to handle extra fields in newer dbt versions
 class Metadata(BaseMetadata):
-    class Config:
-        extra = "allow"  # Allow extra fields in metadata
+    model_config = ConfigDict(extra="allow")
 
 
 class CatalogV1(BaseCatalogV1):
     metadata: Metadata  # Use our custom metadata class
-
-    class Config:
-        extra = "allow"  # Allow extra fields
+    model_config = ConfigDict(extra="allow")
 
 
 Catalog = CatalogV1

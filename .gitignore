@@ -33,6 +33,7 @@ pyvenv*/
 sdist
 var
 venv*/
+.venv/
 wheelhouse
 
 # Installer logs
@@ -62,6 +63,7 @@ nosetests.xml
 .project
 .pydevproject
 .vscode
+.github/meta/
 
 # Complexity
 output/*.html
