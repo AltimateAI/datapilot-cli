@@ -14,7 +14,7 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckModelHasAllColumns(ChecksInsight):
-    NAME = "Model has all columns as per catalog"
+    NAME = "model_missing_columns"
     ALIAS = "check_model_has_all_columns"
     DESCRIPTION = "Models should have all the columns as per the catalog."
     REASON_TO_FLAG = (

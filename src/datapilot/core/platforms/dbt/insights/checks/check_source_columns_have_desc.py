@@ -13,7 +13,7 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckSourceColumnsHaveDescriptions(ChecksInsight):
-    NAME = "Source columns have descriptions"
+    NAME = "source_columns_no_description"
     ALIAS = "check_source_columns_have_desc"
     DESCRIPTION = "Ensures that the source has columns with descriptions in the properties file (usually schema.yml)."
     REASON_TO_FLAG = "Missing descriptions for columns in the source can lead to confusion and inconsistency in analysis. "

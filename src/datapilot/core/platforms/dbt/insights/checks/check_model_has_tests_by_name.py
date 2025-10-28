@@ -9,7 +9,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckModelHasTestsByName(ChecksInsight):
-    NAME = "Model has tests by name"
+    NAME = "model_missing_required_tests"
     ALIAS = "check_model_has_tests_by_name"
     DESCRIPTION = "Checks that the model has tests with specific names."
     REASON_TO_FLAG = "Models should have tests with specific names for proper validation."

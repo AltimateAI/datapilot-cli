@@ -12,7 +12,7 @@ class DBTSourceFanout(DBTModellingInsight):
     DBTSourceFanout identifies instances where a source is the direct parent of multiple resources in the DAG.
     """
 
-    NAME = "Source fanout analysis"
+    NAME = "source_excessive_fanout"
     ALIAS = "source_fanout"
     DESCRIPTION = "Identifies sources with a high number of direct children."
     REASON_TO_FLAG = (

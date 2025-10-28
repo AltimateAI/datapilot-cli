@@ -8,7 +8,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckSourceHasFreshness(ChecksInsight):
-    NAME = "Source has freshness options"
+    NAME = "source_no_freshness"
     ALIAS = "check_source_has_freshness"
     DESCRIPTION = "Ensures that the source has freshness options"
     REASON_TO_FLAG = "Missing freshness options for the source can lead to confusion and inconsistency in analysis. "

@@ -8,7 +8,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckSourceHasTestsByType(ChecksInsight):
-    NAME = "Source has tests by type"
+    NAME = "source_insufficient_tests_by_type"
     ALIAS = "check_source_has_tests_by_type"
     DESCRIPTION = "Checks that the source has tests with specific types."
     REASON_TO_FLAG = "Sources should have tests with specific types for proper validation."

@@ -15,7 +15,7 @@ class DBTDuplicateSources(DBTModellingInsight):
     Ref: https://github.com/dbt-labs/dbt-project-evaluator/blob/main/models/marts/dag/fct_duplicate_sources.sql
     """
 
-    NAME = "Duplicate sources"
+    NAME = "duplicate_source"
     ALIAS = "Duplicate_Sources"
     DESCRIPTION = "Duplicate sources should be avoided."
     REASON_TO_FLAG = (
