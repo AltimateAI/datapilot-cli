@@ -8,7 +8,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckModelTags(ChecksInsight):
-    NAME = "Model only has valid tags"
+    NAME = "model_invalid_tags"
     ALIAS = "check_model_tags"
     DESCRIPTION = "Ensures that the model has only valid tags from the provided list."
     REASON_TO_FLAG = "The model has tags that are not in the valid tags list"

@@ -13,7 +13,7 @@ class DBTModelsMultipleSourcesJoined(DBTModellingInsight):
     DBTModelsMultipleSourcesJoined identifies models in a dbt project that reference more than one source.
     """
 
-    NAME = "Multiple sources joined"
+    NAME = "multi_source_joins"
     ALIAS = "multiple_sources_joined"
     DESCRIPTION = "Models should not directly join multiple sources."
     REASON_TO_FLAG = (

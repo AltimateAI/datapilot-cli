@@ -30,7 +30,7 @@ class SqlCheck(SqlInsight):
     This class identifies DBT models with SQL optimization issues.
     """
 
-    NAME = "sql optimization issues"
+    NAME = "model_unoptimized_sql"
     ALIAS = "check_sql_optimization"
     DESCRIPTION = "Checks if the model has SQL optimization issues. "
     REASON_TO_FLAG = "The query can be optimized."

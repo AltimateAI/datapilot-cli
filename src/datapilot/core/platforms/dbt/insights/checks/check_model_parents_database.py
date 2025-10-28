@@ -8,7 +8,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckModelParentsDatabase(ChecksInsight):
-    NAME = "Check model parents database"
+    NAME = "model_invalid_database"
     ALIAS = "check_model_parents_database"
     DESCRIPTION = "Ensures the parent models or sources are from certain database."
     REASON_TO_FLAG = "The model has a different database as parent model or source."

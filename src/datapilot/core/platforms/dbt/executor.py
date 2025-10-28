@@ -15,7 +15,7 @@ from datapilot.core.platforms.dbt.factory import DBTFactory
 from datapilot.core.platforms.dbt.insights import INSIGHTS
 from datapilot.core.platforms.dbt.insights.schema import DBTInsightResult
 from datapilot.core.platforms.dbt.insights.schema import DBTModelInsightResponse
-from datapilot.core.platforms.dbt.schemas.manifest import Catalog
+from datapilot.core.platforms.dbt.schemas.catalog import Catalog
 from datapilot.core.platforms.dbt.schemas.manifest import Manifest
 from datapilot.core.platforms.dbt.utils import get_models
 from datapilot.utils.formatting.utils import RED
@@ -109,8 +109,8 @@ class DBTInsightGenerator:
             self.token,
             self.instance_name,
             self.backend_url,
-            self.manifest.json() if self.manifest else "",
-            self.catalog.json() if self.catalog else "",
+            self.manifest.model_dump_json() if self.manifest else "",
+            self.catalog.model_dump_json() if self.catalog else "",
             check_names,
         )
         return llm_check_results

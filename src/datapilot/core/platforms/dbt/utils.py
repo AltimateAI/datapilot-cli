@@ -6,9 +6,6 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
-from dbt_artifacts_parser.parser import parse_catalog
-from dbt_artifacts_parser.parser import parse_manifest
-
 from datapilot.core.platforms.dbt.constants import BASE
 from datapilot.core.platforms.dbt.constants import FOLDER
 from datapilot.core.platforms.dbt.constants import INTERMEDIATE
@@ -18,11 +15,12 @@ from datapilot.core.platforms.dbt.constants import OTHER
 from datapilot.core.platforms.dbt.constants import STAGING
 from datapilot.core.platforms.dbt.exceptions import AltimateInvalidManifestError
 from datapilot.core.platforms.dbt.factory import DBTFactory
+from datapilot.core.platforms.dbt.schemas.catalog import Catalog
+from datapilot.core.platforms.dbt.schemas.catalog import CatalogV1
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestExposureNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
-from datapilot.core.platforms.dbt.schemas.manifest import Catalog
 from datapilot.core.platforms.dbt.schemas.manifest import Manifest
 from datapilot.exceptions.exceptions import AltimateFileNotFoundError
 from datapilot.exceptions.exceptions import AltimateInvalidJSONError
@@ -30,6 +28,7 @@ from datapilot.utils.utils import extract_dir_name_from_file_path
 from datapilot.utils.utils import extract_folders_in_path
 from datapilot.utils.utils import is_superset_path
 from datapilot.utils.utils import load_json
+from vendor.dbt_artifacts_parser.parser import parse_manifest
 
 MODEL_TYPE_PATTERNS = {
     STAGING: r"^stg_.*",  # Example: models starting with 'stg_'
@@ -83,14 +82,14 @@ def load_catalog(catalog_path: str) -> Catalog:
     try:
         catalog_dict = load_json(catalog_path)
     except FileNotFoundError as e:
-        raise AltimateFileNotFoundError(f"Manifest file not found: {catalog_path}. Error: {e}") from e
+        raise AltimateFileNotFoundError(f"Catalog file not found: {catalog_path}. Error: {e}") from e
     except ValueError as e:
         raise AltimateInvalidJSONError(f"Invalid JSON file: {catalog_path}. Error: {e}") from e
 
     try:
-        catalog: Catalog = parse_catalog(catalog_dict)
+        catalog: Catalog = CatalogV1(**catalog_dict)
     except ValueError as e:
-        raise AltimateInvalidManifestError(f"Invalid manifest file: {catalog_path}. Error: {e}") from e
+        raise AltimateInvalidManifestError(f"Invalid catalog file: {catalog_path}. Error: {e}") from e
 
     return catalog
 

@@ -9,7 +9,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckColumnDescAreSame(ChecksInsight):
-    NAME = "Column descriptions consistent for same column names"
+    NAME = "column_name_inconsistent_desc"
     ALIAS = "column_descriptions_are_same"
     DESCRIPTION = "Column description for the same column name should be same "
     REASON_TO_FLAG = (

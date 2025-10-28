@@ -9,7 +9,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckModelParentsAndChilds(ChecksInsight):
-    NAME = "Model has specific number of parents or/and childs"
+    NAME = "model_excessive_dependencies"
     ALIAS = "check_model_parents_and_childs"
     DESCRIPTION = "Ensures the model has a specific number (max/min) of parents or/and childs."
     REASON_TO_FLAG = (

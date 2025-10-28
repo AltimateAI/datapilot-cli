@@ -14,7 +14,7 @@ class DBTTestCoverage(DBTTestInsight):
     It aims to ensure that a minimum percentage of tests are applied to each model to maintain data integrity.
     """
 
-    NAME = "Low test coverage in dbt models"
+    NAME = "low_test_coverage"
     ALIAS = "dbt_low_test_coverage"
     DESCRIPTION = "Checks if the project test coverage is below the minimum threshold. "
     REASON_TO_FLAG = (

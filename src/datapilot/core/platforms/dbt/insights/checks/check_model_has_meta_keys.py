@@ -12,7 +12,7 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckModelHasMetaKeys(ChecksInsight):
-    NAME = "Model has all valid keys in metadata"
+    NAME = "model_invalid_meta_keys"
     ALIAS = "check_model_has_valid_meta_keys"
     DESCRIPTION = "Model always has a list of valid metadata keys."
     REASON_TO_FLAG = (

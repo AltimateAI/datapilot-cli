@@ -134,3 +134,28 @@ def get_all_dbt_configs(
     """Get all DBT configs from the API."""
     api_client = APIClient(api_token=api_token, base_url=backend_url, tenant=tenant)
     return api_client.get_all_dbt_configs()
+
+
+def get_all_integrations(
+    api_token,
+    tenant,
+    backend_url,
+):
+    """Get all integrations from the API."""
+    api_client = APIClient(api_token=api_token, base_url=backend_url, tenant=tenant)
+    return api_client.get_all_integrations()
+
+
+def resolve_integration_name_to_id(
+    integration_name,
+    api_token,
+    tenant,
+    backend_url,
+):
+    """Resolve integration name to ID."""
+    integrations = get_all_integrations(api_token, tenant, backend_url)
+    if integrations:
+        matching_integrations = [i for i in integrations if i.get("name") == integration_name]
+        if matching_integrations:
+            return matching_integrations[0].get("id")
+    return None

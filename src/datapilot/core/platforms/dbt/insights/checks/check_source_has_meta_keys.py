@@ -11,7 +11,7 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckSourceHasMetaKeys(ChecksInsight):
-    NAME = "Source has required metadata keys"
+    NAME = "source_invalid_meta_keys"
     ALIAS = "check_source_has_meta_keys"
     DESCRIPTION = "Check if the source has required metadata keys"
     REASON_TO_FLAG = "Missing meta keys in the source can lead to inconsistency in metadata management and understanding of the source. It's important to ensure that the source includes all the required meta keys as per the configuration."

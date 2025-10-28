@@ -2,16 +2,13 @@ from typing import Dict
 from typing import Optional
 from typing import Set
 
-from dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
-from dbt_artifacts_parser.parsers.manifest.manifest_v12 import Nodes2
-from dbt_artifacts_parser.parsers.manifest.manifest_v12 import Nodes6
-
 from datapilot.core.platforms.dbt.constants import GENERIC
 from datapilot.core.platforms.dbt.constants import OTHER_TEST_NODE
 from datapilot.core.platforms.dbt.constants import SEED
 from datapilot.core.platforms.dbt.constants import SINGULAR
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateDBTContract
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateDependsOn
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateExposureConfig
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateExposureType
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateExternalTable
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateFileHash
@@ -32,6 +29,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateSeedConfig
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateSeedNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateSourceConfig
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateSupportedLanguage
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateTestConfig
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateTestMetadata
 from datapilot.core.platforms.dbt.wrappers.manifest.v12.schemas import TEST_TYPE_TO_NODE_MAP
@@ -42,6 +40,9 @@ from datapilot.core.platforms.dbt.wrappers.manifest.v12.schemas import SeedNodeM
 from datapilot.core.platforms.dbt.wrappers.manifest.v12.schemas import SourceNode
 from datapilot.core.platforms.dbt.wrappers.manifest.v12.schemas import TestNode
 from datapilot.core.platforms.dbt.wrappers.manifest.wrapper import BaseManifestWrapper
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import Nodes2
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import Nodes6
 
 
 class ManifestV12Wrapper(BaseManifestWrapper):
@@ -87,7 +88,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
             alias=node.alias,
             raw_code=raw_code,
             language=language,
-            config=AltimateNodeConfig(**node.config.__dict__) if node.config else None,
+            config=AltimateNodeConfig(**node.config.model_dump()) if node.config else None,
             checksum=AltimateFileHash(
                 name=node.checksum.name if node.checksum else None,
                 checksum=node.checksum.checksum if node.checksum else None,
@@ -182,7 +183,9 @@ class ManifestV12Wrapper(BaseManifestWrapper):
             patch_path=macro.patch_path,
             arguments=[AltimateMacroArgument(**arg.model_dump()) for arg in macro.arguments] if macro.arguments else None,
             created_at=macro.created_at,
-            supported_languages=macro.supported_languages,
+            supported_languages=[AltimateSupportedLanguage(lang.value) for lang in macro.supported_languages]
+            if macro.supported_languages
+            else None,
         )
 
     def _get_exposure(self, exposure: ExposureNode) -> AltimateManifestExposureNode:
@@ -201,7 +204,7 @@ class ManifestV12Wrapper(BaseManifestWrapper):
             maturity=AltimateMaturityEnum(exposure.maturity.value) if exposure.maturity else None,
             meta=exposure.meta,
             tags=exposure.tags,
-            config=AltimateSourceConfig(**exposure.config.model_dump()) if exposure.config else None,
+            config=AltimateExposureConfig(**exposure.config.model_dump()) if exposure.config else None,
             unrendered_config=exposure.unrendered_config,
             url=exposure.url,
             depends_on=(

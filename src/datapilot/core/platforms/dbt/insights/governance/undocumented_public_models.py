@@ -17,7 +17,7 @@ class DBTUndocumentedPublicModels(DBTGovernanceInsight):
     DBTUndocumentedPublicModels identifies public models that are not documented.
     """
 
-    NAME = "Undocumented public models"
+    NAME = "undocumented_public_models"
     ALIAS = "undocumented_public_models"
     DESCRIPTION = "Identify public models that don't have documentation."
     REASON_TO_FLAG = (

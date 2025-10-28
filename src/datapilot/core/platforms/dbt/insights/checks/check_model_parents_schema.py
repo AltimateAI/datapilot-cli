@@ -8,7 +8,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckModelParentsSchema(ChecksInsight):
-    NAME = "Model Parents are from an allowed list of schemas"
+    NAME = "model_invalid_schema"
     ALIAS = "check_model_parents_schema"
     DESCRIPTION = "Ensures the parent models or sources are from certain schema."
     REASON_TO_FLAG = "The model has a different schema as parent model or source."

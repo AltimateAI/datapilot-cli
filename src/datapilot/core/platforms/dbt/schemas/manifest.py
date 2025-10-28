@@ -5,29 +5,31 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
-from dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
-from dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
-from dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
-from dbt_artifacts_parser.parsers.manifest.manifest_v4 import ManifestV4
-from dbt_artifacts_parser.parsers.manifest.manifest_v5 import ManifestV5
-from dbt_artifacts_parser.parsers.manifest.manifest_v6 import ManifestV6
-from dbt_artifacts_parser.parsers.manifest.manifest_v7 import ManifestV7
-from dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
-from dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
-from dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
-from dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedLanguage
 from pydantic import BaseModel
+
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v3 import ManifestV3
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v4 import ManifestV4
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v5 import ManifestV5
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v6 import ManifestV6
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v7 import ManifestV7
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedLanguage
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 
 
 class DBTVersion(BaseModel):
     MAJOR: int
     MINOR: int
-    PATCH: Optional[int]
+    PATCH: Optional[int] = None
 
 
 Manifest = Union[
+    ManifestV12,
     ManifestV11,
     ManifestV10,
     ManifestV9,
@@ -40,8 +42,6 @@ Manifest = Union[
     ManifestV2,
     ManifestV1,
 ]
-
-Catalog = CatalogV1
 
 
 class AltimateDocs(BaseModel):
@@ -64,8 +64,8 @@ class AltimateManifestColumnInfo(BaseModel):
 
 
 class AltimateFileHash(BaseModel):
-    name: Optional[str]
-    checksum: Optional[str]
+    name: Optional[str] = None
+    checksum: Optional[str] = None
 
 
 class AltimateResourceType(Enum):
@@ -118,8 +118,8 @@ class AltimateNodeConfig(BaseModel):
     materialized: Optional[str] = "view"
     incremental_strategy: Optional[Optional[str]] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[AltimateHook]]
-    pre_hook: Optional[List[AltimateHook]]
+    post_hook: Optional[List[AltimateHook]] = None
+    pre_hook: Optional[List[AltimateHook]] = None
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
     full_refresh: Optional[Optional[bool]] = None
@@ -128,7 +128,7 @@ class AltimateNodeConfig(BaseModel):
 
 
 class AltimateManifestNode(BaseModel):
-    database: Optional[str]
+    database: Optional[str] = None
     resource_type: AltimateResourceType
     schema_name: str
     name: str
@@ -141,7 +141,7 @@ class AltimateManifestNode(BaseModel):
     config: Optional[AltimateNodeConfig] = None
     raw_code: Optional[str] = ""
     language: Optional[str] = "sql"
-    checksum: Optional[AltimateFileHash]
+    checksum: Optional[AltimateFileHash] = None
     description: Optional[str] = ""
     columns: Optional[Dict[str, AltimateManifestColumnInfo]] = None
     relation_name: Optional[Optional[str]] = None
@@ -151,7 +151,7 @@ class AltimateManifestNode(BaseModel):
     compiled_path: Optional[Optional[str]] = None
     compiled: Optional[bool] = False
     compiled_code: Optional[Optional[str]] = None
-    access: Optional[AltimateAccess]
+    access: Optional[AltimateAccess] = None
     contract: Optional[AltimateDBTContract] = None
     meta: Optional[Dict[str, Any]] = None
     patch_path: Optional[Optional[str]] = None
@@ -190,10 +190,10 @@ class AltimateSourceConfig(BaseModel):
 
 
 class AltimateDeferRelation(BaseModel):
-    database: Optional[str]
+    database: Optional[str] = None
     schema_name: str
     alias: str
-    relation_name: Optional[str]
+    relation_name: Optional[str] = None
 
 
 class AltimateSeedConfig(BaseModel):
@@ -208,8 +208,8 @@ class AltimateSeedConfig(BaseModel):
     materialized: Optional[str] = "seed"
     incremental_strategy: Optional[Optional[str]] = None
     persist_docs: Optional[Dict[str, Any]] = None
-    post_hook: Optional[List[AltimateHook]]
-    pre_hook: Optional[List[AltimateHook]]
+    post_hook: Optional[List[AltimateHook]] = None
+    pre_hook: Optional[List[AltimateHook]] = None
     quoting: Optional[Dict[str, Any]] = None
     column_types: Optional[Dict[str, Any]] = None
     full_refresh: Optional[Optional[bool]] = None
@@ -225,7 +225,7 @@ class AltimateSeedConfig(BaseModel):
 
 
 class AltimateSeedNode(BaseModel):
-    database: Optional[str]
+    database: Optional[str] = None
     schema_name: str
     name: str
     resource_type: AltimateResourceType
@@ -235,7 +235,7 @@ class AltimateSeedNode(BaseModel):
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Optional[AltimateFileHash]
+    checksum: Optional[AltimateFileHash] = None
     config: Optional[AltimateSeedConfig] = None
     tags: Optional[List[str]] = None
     description: Optional[str] = ""
@@ -257,7 +257,7 @@ class AltimateSeedNode(BaseModel):
 
 
 class AltimateManifestSourceNode(BaseModel):
-    database: Optional[str]
+    database: Optional[str] = None
     resource_type: AltimateResourceType
     schema_name: str
     name: str
@@ -379,7 +379,7 @@ class AltimateManifestTestNode(BaseModel):
     unique_id: str
     fqn: List[str]
     alias: str
-    checksum: Optional[AltimateFileHash]
+    checksum: Optional[AltimateFileHash] = None
     config: Optional[AltimateTestConfig] = None
     _event_status: Optional[Dict[str, Any]] = None
     tags: Optional[List[str]] = None

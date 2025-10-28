@@ -5,7 +5,11 @@ from typing import List
 from typing import Optional
 from typing import Union
 
-from pydantic.main import BaseModel
+from pydantic import BaseModel
+from pydantic import ConfigDict
+
+from vendor.dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1 as BaseCatalogV1
+from vendor.dbt_artifacts_parser.parsers.catalog.catalog_v1 import Metadata as BaseMetadata
 
 
 class AltimateCatalogMetadata(BaseModel):
@@ -52,3 +56,16 @@ class AltimateCatalogCatalogV1(BaseModel):
     nodes: Dict[str, AltimateCatalogTable]
     sources: Dict[str, AltimateCatalogTable]
     errors: Optional[Optional[List[str]]] = None
+
+
+# Custom classes to handle extra fields in newer dbt versions
+class Metadata(BaseMetadata):
+    model_config = ConfigDict(extra="allow")
+
+
+class CatalogV1(BaseCatalogV1):
+    metadata: Metadata  # Use our custom metadata class
+    model_config = ConfigDict(extra="allow")
+
+
+Catalog = CatalogV1

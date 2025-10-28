@@ -21,7 +21,7 @@ class DBTDirectJoinSource(DBTModellingInsight):
     """
 
     ALIAS = "source_staging_model_integrity"
-    NAME = "Source-Staging Model Integrity"
+    NAME = "direct_join_to_source"
     DESCRIPTION = "A model should not have direct joins to both sources and other staging models. "
     REASON_TO_FLAG = (
         "Flagged when a model directly joins a source and a model without a staging intermediary. "

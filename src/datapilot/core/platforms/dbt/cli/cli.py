@@ -6,6 +6,7 @@ from datapilot.cli.decorators import auth_options
 from datapilot.clients.altimate.utils import check_token_and_instance
 from datapilot.clients.altimate.utils import get_all_dbt_configs
 from datapilot.clients.altimate.utils import onboard_file
+from datapilot.clients.altimate.utils import resolve_integration_name_to_id
 from datapilot.clients.altimate.utils import start_dbt_ingestion
 from datapilot.clients.altimate.utils import validate_credentials
 from datapilot.clients.altimate.utils import validate_permissions
@@ -132,9 +133,25 @@ def project_health(
 
 @dbt.command("onboard")
 @auth_options
-@click.option("--dbt_core_integration_id", prompt="DBT Core Integration ID", help="DBT Core Integration ID")
 @click.option(
-    "--dbt_core_integration_environment", default="PROD", prompt="DBT Core Integration Environment", help="DBT Core Integration Environment"
+    "--dbt_core_integration_id",
+    "--dbt_integration_id",
+    "dbt_integration_id",  # This is the parameter name that will be passed to the function
+    help="DBT Core Integration ID or DBT Integration ID",
+)
+@click.option(
+    "--dbt_core_integration_name",
+    "--dbt_integration_name",
+    "dbt_integration_name",  # This is the parameter name that will be passed to the function
+    help="DBT Core Integration Name or DBT Integration Name (alternative to ID)",
+)
+@click.option(
+    "--dbt_core_integration_environment",
+    "--dbt_integration_environment",
+    "dbt_integration_environment",  # This is the parameter name that will be passed to the function
+    default="PROD",
+    prompt="DBT Integration Environment",
+    help="DBT Core Integration Environment or DBT Integration Environment",
 )
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
 @click.option("--catalog-path", required=False, prompt=False, help="Path to the catalog file.")
@@ -142,12 +159,13 @@ def onboard(
     token,
     instance_name,
     backend_url,
-    dbt_core_integration_id,
-    dbt_core_integration_environment,
+    dbt_integration_id,
+    dbt_integration_name,
+    dbt_integration_environment,
     manifest_path,
     catalog_path,
 ):
-    """Onboard a manifest file to DBT."""
+    """Onboard a manifest file to DBT. You can specify either --dbt_integration_id or --dbt_integration_name."""
 
     # For onboard command, token and instance_name are required
     if not token:
@@ -165,16 +183,28 @@ def onboard(
         click.echo("Error: You don't have permission to perform this action.")
         return
 
-    # This will throw error if manifest file is incorrect
+    # Resolve integration name to ID if name is provided instead of ID
+    if not dbt_integration_id and not dbt_integration_name:
+        dbt_integration_id = click.prompt("DBT Integration ID")
+    elif dbt_integration_name and not dbt_integration_id:
+        click.echo(f"Resolving integration name '{dbt_integration_name}' to ID...")
+        resolved_id = resolve_integration_name_to_id(dbt_integration_name, token, instance_name, backend_url)
+        if resolved_id:
+            dbt_integration_id = resolved_id
+            click.echo(f"Found integration ID: {dbt_integration_id}")
+        else:
+            click.echo(f"Error: Integration with name '{dbt_integration_name}' not found.")
+            return
+    elif dbt_integration_name and dbt_integration_id:
+        click.echo("Warning: Both integration ID and name provided. Using ID and ignoring name.")
+
     try:
         load_manifest(manifest_path)
     except Exception as e:
         click.echo(f"Error: {e}")
         return
 
-    response = onboard_file(
-        token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, "manifest", manifest_path, backend_url
-    )
+    response = onboard_file(token, instance_name, dbt_integration_id, dbt_integration_environment, "manifest", manifest_path, backend_url)
     if response["ok"]:
         click.echo("Manifest onboarded successfully!")
     else:
@@ -183,21 +213,19 @@ def onboard(
     if not catalog_path:
         return
 
-    response = onboard_file(
-        token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, "catalog", catalog_path, backend_url
-    )
+    response = onboard_file(token, instance_name, dbt_integration_id, dbt_integration_environment, "catalog", catalog_path, backend_url)
     if response["ok"]:
         click.echo("Catalog onboarded successfully!")
     else:
         click.echo(f"{response['message']}")
 
-    response = start_dbt_ingestion(token, instance_name, dbt_core_integration_id, dbt_core_integration_environment, backend_url)
+    response = start_dbt_ingestion(token, instance_name, dbt_integration_id, dbt_integration_environment, backend_url)
     if response["ok"]:
         url = map_url_to_instance(backend_url, instance_name)
         if not url:
             click.echo("Manifest and catalog ingestion has started.")
         else:
-            url = f"{url}/settings/integrations/{dbt_core_integration_id}/{dbt_core_integration_environment}"
+            url = f"{url}/settings/integrations/{dbt_integration_id}/{dbt_integration_environment}"
             click.echo(f"Manifest and catalog ingestion has started. You can check the status at {url}")
     else:
         click.echo(f"{response['message']}")
