@@ -14,7 +14,7 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckSourceHasAllColumns(ChecksInsight):
-    NAME = "Source has all columns"
+    NAME = "source_missing_columns"
     ALIAS = "check_source_has_all_columns"
     DESCRIPTION = "Ensures that all columns in the database are also specified in the properties file. (usually schema.yml)."
     REASON_TO_FLAG = "Missing columns in the source can lead to confusion and inconsistency in analysis. "

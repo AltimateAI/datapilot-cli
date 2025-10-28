@@ -8,7 +8,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckSourceTags(ChecksInsight):
-    NAME = "Source has tags"
+    NAME = "source_invalid_tags"
     ALIAS = "check_source_tags"
     DESCRIPTION = "The source has only valid tags from the provided list."
     REASON_TO_FLAG = "The source has tags that are not in the valid tags list"

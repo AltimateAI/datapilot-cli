@@ -15,7 +15,7 @@ class DBTHardCodedReferences(DBTModellingInsight):
     Checks if the dbt model has hard coded references to other models.
     """
 
-    NAME = "Hard coded references"
+    NAME = "hardcoded_refs"
     ALIAS = "hard_coded_references"
     DESCRIPTION = "Models should not have hard-coded references to tables"
     REASON_TO_FLAG = (

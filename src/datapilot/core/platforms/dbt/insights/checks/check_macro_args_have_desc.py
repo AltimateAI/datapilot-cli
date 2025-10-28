@@ -8,7 +8,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckMacroArgsHaveDesc(ChecksInsight):
-    NAME = "Check macro arguments has description"
+    NAME = "macro_arg_no_desc"
     ALIAS = "check_macro_args_have_desc"
     DESCRIPTION = "Macro arguments should have a description. "
     REASON_TO_FLAG = "Clear descriptions for macro arguments are crucial as they prevent misunderstandings, enhance user comprehension, and simplify maintenance. This leads to more accurate data analysis and efficient workflows."

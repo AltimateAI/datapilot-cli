@@ -9,7 +9,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 
 
 class CheckModelHasTestsByType(ChecksInsight):
-    NAME = "Model has tests by type"
+    NAME = "model_insufficient_tests_by_type"
     ALIAS = "check_model_has_tests_by_type"
     DESCRIPTION = "Checks that the model has tests with specific types."
     REASON_TO_FLAG = "Models should have tests with specific types for proper validation."

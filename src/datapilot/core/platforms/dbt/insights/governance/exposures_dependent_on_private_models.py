@@ -13,7 +13,7 @@ class DBTExposureDependentOnPrivateModels(DBTGovernanceInsight):
     DBTExposureDependentOnPrivateModels identifies exposures that are dependent on private models.
     """
 
-    NAME = "Exposures dependent on private models"
+    NAME = "exposure_private_dependency"
     ALIAS = "exposures_dependent_on_private_models"
     DESCRIPTION = "Identify exposures that are dependent on private models. "
     REASON_TO_FLAG = (

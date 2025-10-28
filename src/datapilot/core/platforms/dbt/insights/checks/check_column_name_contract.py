@@ -14,7 +14,7 @@ from datapilot.utils.formatting.utils import numbered_list
 
 
 class CheckColumnNameContract(ChecksInsight):
-    NAME = "Column name follows contract pattern"
+    NAME = "column_name_pattern_violation"
     ALIAS = "column_name_contract"
     DESCRIPTION = "Column names should adhere to the contract pattern defined for the data type. "
     REASON_TO_FLAG = (

@@ -16,7 +16,7 @@ class DBTMissingDocumentation(DBTGovernanceInsight):
     DBTDocumentationStaleColumns identifies columns that have been documented but are no longer present in the model.
     """
 
-    NAME = "Missing documentation"
+    NAME = "model_undocumented_columns"
     ALIAS = "missing_documentation"
     DESCRIPTION = (
         "Detects columns and models in the dbt project that lack documentation. Proper documentation is essential "

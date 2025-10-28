@@ -13,7 +13,7 @@ class DBTModelFanout(DBTModellingInsight):
     of direct leaf children, indicating a high model fanout.
     """
 
-    NAME = "Model fanout analysis"
+    NAME = "model_excessive_fanout"
     ALIAS = "model_fanout"
     DESCRIPTION = "Identifies parent models with an unusually high number of children. "
     REASON_TO_FLAG = (
