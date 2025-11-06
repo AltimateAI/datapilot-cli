@@ -1,8 +1,30 @@
 # Running Tests
 
-## Quick Start
+## Quick Start (Using Make)
 
-The easiest way to run the catalog extra fields tests:
+The easiest way to run tests:
+
+```bash
+# First time setup - create virtual environment
+make venv
+source .venv/bin/activate
+
+# Install dependencies
+make install
+
+# Run all tests
+make test
+
+# Run just the catalog vendor tests
+make test-vendor
+
+# Run tests with coverage
+make test-cov
+```
+
+## Manual Test Commands
+
+If you prefer to run pytest directly:
 
 ```bash
 # Activate virtual environment
