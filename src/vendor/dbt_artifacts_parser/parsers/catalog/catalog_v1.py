@@ -15,19 +15,18 @@ from vendor.dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class Metadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     dbt_schema_version: Optional[str] = None
     dbt_version: Optional[str] = "1.9.0b2"
     generated_at: Optional[str] = None
     invocation_id: Optional[str] = None
-    invocation_started_at: Optional[str] = None
     env: Optional[dict[str, str]] = None
 
 
 class Metadata1(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     type: str
     schema_: str = Field(..., alias="schema")
@@ -39,7 +38,7 @@ class Metadata1(BaseParserModel):
 
 class Columns(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     type: str
     index: int
@@ -49,7 +48,7 @@ class Columns(BaseParserModel):
 
 class Stats(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     id: str
     label: str
@@ -60,7 +59,7 @@ class Stats(BaseParserModel):
 
 class Nodes(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     metadata: Metadata1 = Field(..., title="TableMetadata")
     columns: dict[str, Columns]
@@ -70,7 +69,7 @@ class Nodes(BaseParserModel):
 
 class Sources(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     metadata: Metadata1 = Field(..., title="TableMetadata")
     columns: dict[str, Columns]
@@ -80,7 +79,7 @@ class Sources(BaseParserModel):
 
 class CatalogV1(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     metadata: Metadata = Field(..., title="CatalogMetadata")
     nodes: dict[str, Nodes]
