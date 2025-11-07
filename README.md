@@ -1,3 +1,11 @@
+# DataPilot CLI
+
+[![Build Status](https://github.com/AltimateAI/datapilot-cli/workflows/build/badge.svg)](https://github.com/AltimateAI/datapilot-cli/actions)
+[![PyPI version](https://badge.fury.io/py/altimate-datapilot-cli.svg)](https://pypi.org/project/altimate-datapilot-cli/)
+[![Python Version](https://img.shields.io/pypi/pyversions/altimate-datapilot-cli.svg)](https://pypi.org/project/altimate-datapilot-cli/)
+[![License](https://img.shields.io/github/license/AltimateAI/datapilot-cli.svg)](https://github.com/AltimateAI/datapilot-cli/blob/main/LICENSE)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+[![Maintained](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/AltimateAI/datapilot-cli/graphs/commit-activity)
 
 ## Introduction
 

@@ -4,32 +4,39 @@ Overview
 
 .. start-badges
 
-.. list-table::
-    :stub-columns: 1
-
-    * - docs
-      - |docs|
-    * - tests
-      - | |github-actions|
-        | |codecov|
-        | |scrutinizer|
-    * - package
-      - | |version| |wheel| |supported-versions| |supported-implementations|
-        | |commits-since|
 .. |docs| image:: https://readthedocs.org/projects/datapilot/badge/?style=flat
     :target: https://datapilot.readthedocs.io/
     :alt: Documentation Status
 
-.. |github-actions| image:: https://github.com/AltimateAI/datapilot-cli/actions/workflows/github-actions.yml/badge.svg
-    :alt: GitHub Actions Build Status
-    :target: https://github.com/AltimateAI/datapilot/actions
+.. |build| image:: https://github.com/AltimateAI/datapilot-cli/workflows/build/badge.svg
+    :target: https://github.com/AltimateAI/datapilot-cli/actions
+    :alt: Build Status
 
 .. |codecov| image:: https://codecov.io/gh/anandgupta42/datapilot/branch/main/graphs/badge.svg?branch=main
     :alt: Coverage Status
     :target: https://app.codecov.io/github/anandgupta42/datapilot
 
+.. |pypi| image:: https://badge.fury.io/py/altimate-datapilot-cli.svg
+    :target: https://pypi.org/project/altimate-datapilot-cli/
+    :alt: PyPI Package
 
+.. |pyversion| image:: https://img.shields.io/pypi/pyversions/altimate-datapilot-cli.svg
+    :target: https://pypi.org/project/altimate-datapilot-cli/
+    :alt: Python Versions
 
+.. |license| image:: https://img.shields.io/github/license/AltimateAI/datapilot-cli.svg
+    :target: https://github.com/AltimateAI/datapilot-cli/blob/main/LICENSE
+    :alt: License
+
+.. |ruff| image:: https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json
+    :target: https://github.com/astral-sh/ruff
+    :alt: Ruff
+
+.. |maintained| image:: https://img.shields.io/badge/Maintained%3F-yes-green.svg
+    :target: https://github.com/AltimateAI/datapilot-cli/graphs/commit-activity
+    :alt: Maintained
+
+|docs| |build| |codecov| |pypi| |pyversion| |license| |ruff| |maintained|
 
 .. end-badges
 
