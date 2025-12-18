@@ -1,6 +1,4 @@
 """Tests for catalog v1 parser, specifically testing extra fields handling."""
-import pytest
-
 from vendor.dbt_artifacts_parser.parsers.catalog.catalog_v1 import Metadata
 
 
