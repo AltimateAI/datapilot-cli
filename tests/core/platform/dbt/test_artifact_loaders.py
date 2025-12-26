@@ -1,7 +1,6 @@
 import pytest
 
 from datapilot.core.platforms.dbt.utils import load_run_results
-from datapilot.core.platforms.dbt.utils import load_semantic_manifest
 from datapilot.core.platforms.dbt.utils import load_sources
 from datapilot.exceptions.exceptions import AltimateFileNotFoundError
 
@@ -35,19 +34,3 @@ class TestLoadSources:
     def test_load_sources_file_not_found(self):
         with pytest.raises(AltimateFileNotFoundError):
             load_sources("nonexistent_file.json")
-
-
-class TestLoadSemanticManifest:
-    def test_load_semantic_manifest_v1(self):
-        semantic_manifest_path = "tests/data/semantic_manifest_v1.json"
-        semantic_manifest = load_semantic_manifest(semantic_manifest_path)
-
-        assert semantic_manifest is not None
-        assert len(semantic_manifest.semantic_models) == 1
-        assert semantic_manifest.semantic_models[0]["name"] == "orders"
-        assert len(semantic_manifest.metrics) == 1
-        assert semantic_manifest.metrics[0]["name"] == "revenue"
-
-    def test_load_semantic_manifest_file_not_found(self):
-        with pytest.raises(AltimateFileNotFoundError):
-            load_semantic_manifest("nonexistent_file.json")

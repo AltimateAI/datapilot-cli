@@ -126,4 +126,3 @@ def test_onboard_help_shows_all_artifact_options():
     assert "--catalog-path" in result.output
     assert "--run-results-path" in result.output
     assert "--sources-path" in result.output
-    assert "--semantic-manifest-path" in result.output

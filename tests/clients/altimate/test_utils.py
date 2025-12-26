@@ -5,7 +5,7 @@ from datapilot.clients.altimate.utils import onboard_file
 class TestOnboardFile:
     def test_supported_artifact_types(self):
         """Test that all expected artifact types are supported."""
-        expected_types = {"manifest", "catalog", "run_results", "sources", "semantic_manifest"}
+        expected_types = {"manifest", "catalog", "run_results", "sources"}
         assert SUPPORTED_ARTIFACT_TYPES == expected_types
 
     def test_unsupported_file_type_returns_error(self):

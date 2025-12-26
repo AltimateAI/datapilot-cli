@@ -6,5 +6,4 @@ SUPPORTED_ARTIFACT_TYPES = {
     "catalog",
     "run_results",
     "sources",
-    "semantic_manifest",
 }
