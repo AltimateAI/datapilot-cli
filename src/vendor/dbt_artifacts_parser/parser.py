@@ -35,6 +35,7 @@ from vendor.dbt_artifacts_parser.parsers.run_results.run_results_v3 import RunRe
 from vendor.dbt_artifacts_parser.parsers.run_results.run_results_v4 import RunResultsV4
 from vendor.dbt_artifacts_parser.parsers.run_results.run_results_v5 import RunResultsV5
 from vendor.dbt_artifacts_parser.parsers.run_results.run_results_v6 import RunResultsV6
+from vendor.dbt_artifacts_parser.parsers.semantic_manifest.semantic_manifest_v1 import SemanticManifestV1
 from vendor.dbt_artifacts_parser.parsers.sources.sources_v1 import SourcesV1
 from vendor.dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from vendor.dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
@@ -345,3 +346,20 @@ def parse_sources_v3(sources: dict) -> SourcesV3:
     if dbt_schema_version == ArtifactTypes.SOURCES_V3.value.dbt_schema_version:
         return SourcesV3(**sources)
     raise ValueError("Not a sources.json v3")
+
+
+#
+# semantic-manifest
+#
+def parse_semantic_manifest(semantic_manifest: dict) -> SemanticManifestV1:
+    """Parse semantic_manifest.json
+
+    Args:
+        semantic_manifest: A dict of semantic_manifest.json
+
+    Returns:
+        SemanticManifestV1
+    """
+    # Semantic manifest uses a flexible schema, so we accept any valid dict
+    # The schema version check is optional since the format may vary
+    return SemanticManifestV1(**semantic_manifest)

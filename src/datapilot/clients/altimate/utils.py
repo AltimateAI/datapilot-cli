@@ -7,6 +7,7 @@ import click
 from requests import Response
 
 from datapilot.clients.altimate.client import APIClient
+from datapilot.clients.altimate.constants import SUPPORTED_ARTIFACT_TYPES
 
 
 def check_token_and_instance(
@@ -56,6 +57,27 @@ def validate_permissions(
 
 
 def onboard_file(api_token, tenant, dbt_core_integration_id, dbt_core_integration_environment, file_type, file_path, backend_url) -> Dict:
+    """
+    Upload a dbt artifact file to the Altimate backend.
+
+    Args:
+        api_token: API authentication token
+        tenant: Tenant/instance name
+        dbt_core_integration_id: ID of the dbt integration
+        dbt_core_integration_environment: Environment type (e.g., PROD)
+        file_type: Type of artifact - one of: manifest, catalog, run_results, sources, semantic_manifest
+        file_path: Path to the artifact file
+        backend_url: URL of the Altimate backend
+
+    Returns:
+        Dict with 'ok' boolean and optional 'message' on failure
+    """
+    if file_type not in SUPPORTED_ARTIFACT_TYPES:
+        return {
+            "ok": False,
+            "message": f"Unsupported file type: {file_type}. Supported types: {', '.join(sorted(SUPPORTED_ARTIFACT_TYPES))}",
+        }
+
     api_client = APIClient(api_token, base_url=backend_url, tenant=tenant)
 
     params = {

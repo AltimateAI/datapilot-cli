@@ -1,0 +1,58 @@
+{
+  "semantic_models": [
+    {
+      "name": "orders",
+      "description": "Order model for semantic layer",
+      "node_relation": {
+        "schema_name": "jaffle_shop",
+        "relation_name": "orders"
+      },
+      "entities": [
+        {
+          "name": "order_id",
+          "type": "primary"
+        },
+        {
+          "name": "customer_id",
+          "type": "foreign"
+        }
+      ],
+      "dimensions": [
+        {
+          "name": "order_date",
+          "type": "time"
+        },
+        {
+          "name": "status",
+          "type": "categorical"
+        }
+      ],
+      "measures": [
+        {
+          "name": "order_total",
+          "agg": "sum",
+          "expr": "amount"
+        },
+        {
+          "name": "order_count",
+          "agg": "count",
+          "expr": "1"
+        }
+      ]
+    }
+  ],
+  "metrics": [
+    {
+      "name": "revenue",
+      "description": "Total revenue",
+      "type": "simple",
+      "type_params": {
+        "measure": "order_total"
+      }
+    }
+  ],
+  "project_configuration": {
+    "time_spine_table_configurations": []
+  },
+  "saved_queries": []
+}

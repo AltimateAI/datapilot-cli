@@ -18,6 +18,9 @@ from datapilot.core.platforms.dbt.formatting import generate_model_insights_tabl
 from datapilot.core.platforms.dbt.formatting import generate_project_insights_table
 from datapilot.core.platforms.dbt.utils import load_catalog
 from datapilot.core.platforms.dbt.utils import load_manifest
+from datapilot.core.platforms.dbt.utils import load_run_results
+from datapilot.core.platforms.dbt.utils import load_semantic_manifest
+from datapilot.core.platforms.dbt.utils import load_sources
 from datapilot.utils.formatting.utils import tabulate_data
 from datapilot.utils.utils import map_url_to_instance
 
@@ -155,6 +158,9 @@ def project_health(
 )
 @click.option("--manifest-path", required=True, prompt="Manifest Path", help="Path to the manifest file.")
 @click.option("--catalog-path", required=False, prompt=False, help="Path to the catalog file.")
+@click.option("--run-results-path", required=False, prompt=False, help="Path to the run_results.json file.")
+@click.option("--sources-path", required=False, prompt=False, help="Path to the sources.json file (source freshness results).")
+@click.option("--semantic-manifest-path", required=False, prompt=False, help="Path to the semantic_manifest.json file.")
 def onboard(
     token,
     instance_name,
@@ -164,6 +170,9 @@ def onboard(
     dbt_integration_environment,
     manifest_path,
     catalog_path,
+    run_results_path,
+    sources_path,
+    semantic_manifest_path,
 ):
     """Onboard a manifest file to DBT. You can specify either --dbt_integration_id or --dbt_integration_name."""
 
@@ -198,34 +207,98 @@ def onboard(
     elif dbt_integration_name and dbt_integration_id:
         click.echo("Warning: Both integration ID and name provided. Using ID and ignoring name.")
 
+    # Validate manifest (required)
     try:
         load_manifest(manifest_path)
     except Exception as e:
         click.echo(f"Error: {e}")
         return
 
+    # Validate optional artifacts if provided
+    if catalog_path:
+        try:
+            load_catalog(catalog_path)
+        except Exception as e:
+            click.echo(f"Error validating catalog: {e}")
+            return
+
+    if run_results_path:
+        try:
+            load_run_results(run_results_path)
+        except Exception as e:
+            click.echo(f"Error validating run_results: {e}")
+            return
+
+    if sources_path:
+        try:
+            load_sources(sources_path)
+        except Exception as e:
+            click.echo(f"Error validating sources: {e}")
+            return
+
+    if semantic_manifest_path:
+        try:
+            load_semantic_manifest(semantic_manifest_path)
+        except Exception as e:
+            click.echo(f"Error validating semantic_manifest: {e}")
+            return
+
+    # Onboard manifest (required)
     response = onboard_file(token, instance_name, dbt_integration_id, dbt_integration_environment, "manifest", manifest_path, backend_url)
     if response["ok"]:
         click.echo("Manifest onboarded successfully!")
     else:
         click.echo(f"{response['message']}")
-
-    if not catalog_path:
         return
 
-    response = onboard_file(token, instance_name, dbt_integration_id, dbt_integration_environment, "catalog", catalog_path, backend_url)
-    if response["ok"]:
-        click.echo("Catalog onboarded successfully!")
-    else:
-        click.echo(f"{response['message']}")
+    # Onboard optional artifacts
+    artifacts_uploaded = ["manifest"]
 
+    if catalog_path:
+        response = onboard_file(token, instance_name, dbt_integration_id, dbt_integration_environment, "catalog", catalog_path, backend_url)
+        if response["ok"]:
+            click.echo("Catalog onboarded successfully!")
+            artifacts_uploaded.append("catalog")
+        else:
+            click.echo(f"{response['message']}")
+
+    if run_results_path:
+        response = onboard_file(
+            token, instance_name, dbt_integration_id, dbt_integration_environment, "run_results", run_results_path, backend_url
+        )
+        if response["ok"]:
+            click.echo("Run results onboarded successfully!")
+            artifacts_uploaded.append("run_results")
+        else:
+            click.echo(f"{response['message']}")
+
+    if sources_path:
+        response = onboard_file(token, instance_name, dbt_integration_id, dbt_integration_environment, "sources", sources_path, backend_url)
+        if response["ok"]:
+            click.echo("Sources onboarded successfully!")
+            artifacts_uploaded.append("sources")
+        else:
+            click.echo(f"{response['message']}")
+
+    if semantic_manifest_path:
+        response = onboard_file(
+            token, instance_name, dbt_integration_id, dbt_integration_environment, "semantic_manifest", semantic_manifest_path, backend_url
+        )
+        if response["ok"]:
+            click.echo("Semantic manifest onboarded successfully!")
+            artifacts_uploaded.append("semantic_manifest")
+        else:
+            click.echo(f"{response['message']}")
+
+    # Start ingestion
     response = start_dbt_ingestion(token, instance_name, dbt_integration_id, dbt_integration_environment, backend_url)
     if response["ok"]:
         url = map_url_to_instance(backend_url, instance_name)
+        artifacts_str = ", ".join(artifacts_uploaded)
         if not url:
-            click.echo("Manifest and catalog ingestion has started.")
+            click.echo(f"Ingestion has started for: {artifacts_str}")
         else:
             url = f"{url}/settings/integrations/{dbt_integration_id}/{dbt_integration_environment}"
-            click.echo(f"Manifest and catalog ingestion has started. You can check the status at {url}")
+            click.echo(f"Ingestion has started for: {artifacts_str}. You can check the status at {url}")
     else:
         click.echo(f"{response['message']}")

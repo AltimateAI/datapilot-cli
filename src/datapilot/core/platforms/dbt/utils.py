@@ -22,6 +22,9 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestSourceNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateManifestTestNode
 from datapilot.core.platforms.dbt.schemas.manifest import Manifest
+from datapilot.core.platforms.dbt.schemas.run_results import RunResults
+from datapilot.core.platforms.dbt.schemas.semantic_manifest import SemanticManifest
+from datapilot.core.platforms.dbt.schemas.sources import Sources
 from datapilot.exceptions.exceptions import AltimateFileNotFoundError
 from datapilot.exceptions.exceptions import AltimateInvalidJSONError
 from datapilot.utils.utils import extract_dir_name_from_file_path
@@ -29,6 +32,9 @@ from datapilot.utils.utils import extract_folders_in_path
 from datapilot.utils.utils import is_superset_path
 from datapilot.utils.utils import load_json
 from vendor.dbt_artifacts_parser.parser import parse_manifest
+from vendor.dbt_artifacts_parser.parser import parse_run_results
+from vendor.dbt_artifacts_parser.parser import parse_semantic_manifest
+from vendor.dbt_artifacts_parser.parser import parse_sources
 
 MODEL_TYPE_PATTERNS = {
     STAGING: r"^stg_.*",  # Example: models starting with 'stg_'
@@ -94,8 +100,52 @@ def load_catalog(catalog_path: str) -> Catalog:
     return catalog
 
 
-def load_run_results(run_results_path: str) -> Manifest:
-    raise NotImplementedError
+def load_run_results(run_results_path: str) -> RunResults:
+    try:
+        run_results_dict = load_json(run_results_path)
+    except FileNotFoundError as e:
+        raise AltimateFileNotFoundError(f"Run results file not found: {run_results_path}. Error: {e}") from e
+    except ValueError as e:
+        raise AltimateInvalidJSONError(f"Invalid JSON file: {run_results_path}. Error: {e}") from e
+
+    try:
+        run_results: RunResults = parse_run_results(run_results_dict)
+    except ValueError as e:
+        raise AltimateInvalidManifestError(f"Invalid run results file: {run_results_path}. Error: {e}") from e
+
+    return run_results
+
+
+def load_sources(sources_path: str) -> Sources:
+    try:
+        sources_dict = load_json(sources_path)
+    except FileNotFoundError as e:
+        raise AltimateFileNotFoundError(f"Sources file not found: {sources_path}. Error: {e}") from e
+    except ValueError as e:
+        raise AltimateInvalidJSONError(f"Invalid JSON file: {sources_path}. Error: {e}") from e
+
+    try:
+        sources: Sources = parse_sources(sources_dict)
+    except ValueError as e:
+        raise AltimateInvalidManifestError(f"Invalid sources file: {sources_path}. Error: {e}") from e
+
+    return sources
+
+
+def load_semantic_manifest(semantic_manifest_path: str) -> SemanticManifest:
+    try:
+        semantic_manifest_dict = load_json(semantic_manifest_path)
+    except FileNotFoundError as e:
+        raise AltimateFileNotFoundError(f"Semantic manifest file not found: {semantic_manifest_path}. Error: {e}") from e
+    except ValueError as e:
+        raise AltimateInvalidJSONError(f"Invalid JSON file: {semantic_manifest_path}. Error: {e}") from e
+
+    try:
+        semantic_manifest: SemanticManifest = parse_semantic_manifest(semantic_manifest_dict)
+    except ValueError as e:
+        raise AltimateInvalidManifestError(f"Invalid semantic manifest file: {semantic_manifest_path}. Error: {e}") from e
+
+    return semantic_manifest
 
 
 # TODO: Add tests!

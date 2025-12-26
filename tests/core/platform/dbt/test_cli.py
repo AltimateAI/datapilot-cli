@@ -113,3 +113,17 @@ def test_project_health_with_required_and_optional_args_v12():
     # Add more assertions here to validate the behavior of your command,
     # for example, checking that the output contains expected text.
     assert "-----------" in result.output
+
+
+def test_onboard_help_shows_all_artifact_options():
+    """Test that the onboard command shows all artifact options in help."""
+    runner = CliRunner()
+
+    result = runner.invoke(datapilot, ["dbt", "onboard", "--help"])
+
+    assert result.exit_code == 0
+    assert "--manifest-path" in result.output
+    assert "--catalog-path" in result.output
+    assert "--run-results-path" in result.output
+    assert "--sources-path" in result.output
+    assert "--semantic-manifest-path" in result.output

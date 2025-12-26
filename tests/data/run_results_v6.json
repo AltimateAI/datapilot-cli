@@ -1,0 +1,33 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/run-results/v6.json",
+    "dbt_version": "1.9.0",
+    "generated_at": "2024-12-24T10:00:00.000000Z",
+    "invocation_id": "test-invocation-id",
+    "env": {}
+  },
+  "results": [
+    {
+      "status": "success",
+      "timing": [
+        {
+          "name": "compile",
+          "started_at": "2024-12-24T10:00:00.000000Z",
+          "completed_at": "2024-12-24T10:00:01.000000Z"
+        },
+        {
+          "name": "execute",
+          "started_at": "2024-12-24T10:00:01.000000Z",
+          "completed_at": "2024-12-24T10:00:02.000000Z"
+        }
+      ],
+      "thread_id": "Thread-1",
+      "execution_time": 2.0,
+      "adapter_response": {},
+      "message": "CREATE TABLE",
+      "unique_id": "model.jaffle_shop.stg_customers"
+    }
+  ],
+  "elapsed_time": 5.0,
+  "args": {}
+}
