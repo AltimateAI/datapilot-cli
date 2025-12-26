@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "dbt_schema_version": "https://schemas.getdbt.com/dbt/sources/v3.json",
+    "dbt_version": "1.9.0",
+    "generated_at": "2024-12-24T10:00:00.000000Z",
+    "invocation_id": "test-invocation-id",
+    "env": {}
+  },
+  "results": [
+    {
+      "unique_id": "source.jaffle_shop.raw.customers",
+      "max_loaded_at": "2024-12-24T09:00:00.000000Z",
+      "snapshotted_at": "2024-12-24T10:00:00.000000Z",
+      "max_loaded_at_time_ago_in_s": 3600.0,
+      "status": "pass",
+      "criteria": {
+        "warn_after": {
+          "count": 24,
+          "period": "hour"
+        },
+        "error_after": {
+          "count": 48,
+          "period": "hour"
+        }
+      },
+      "adapter_response": {},
+      "timing": [
+        {
+          "name": "execute",
+          "started_at": "2024-12-24T10:00:00.000000Z",
+          "completed_at": "2024-12-24T10:00:01.000000Z"
+        }
+      ],
+      "thread_id": "Thread-1",
+      "execution_time": 1.0
+    }
+  ],
+  "elapsed_time": 2.0
+}
