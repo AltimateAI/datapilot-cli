@@ -159,6 +159,7 @@ def project_health(
 @click.option("--catalog-path", required=False, prompt=False, help="Path to the catalog file.")
 @click.option("--run-results-path", required=False, prompt=False, help="Path to the run_results.json file.")
 @click.option("--sources-path", required=False, prompt=False, help="Path to the sources.json file (source freshness results).")
+@click.option("--semantic-manifest-path", required=False, prompt=False, help="Path to the semantic_manifest.json file.")
 def onboard(
     token,
     instance_name,
@@ -170,6 +171,7 @@ def onboard(
     catalog_path,
     run_results_path,
     sources_path,
+    semantic_manifest_path,
 ):
     """Onboard a manifest file to DBT. You can specify either --dbt_integration_id or --dbt_integration_name."""
 
@@ -267,6 +269,16 @@ def onboard(
         if response["ok"]:
             click.echo("Sources onboarded successfully!")
             artifacts_uploaded.append("sources")
+        else:
+            click.echo(f"{response['message']}")
+
+    if semantic_manifest_path:
+        response = onboard_file(
+            token, instance_name, dbt_integration_id, dbt_integration_environment, "semantic_manifest", semantic_manifest_path, backend_url
+        )
+        if response["ok"]:
+            click.echo("Semantic manifest onboarded successfully!")
+            artifacts_uploaded.append("semantic_manifest")
         else:
             click.echo(f"{response['message']}")
 
