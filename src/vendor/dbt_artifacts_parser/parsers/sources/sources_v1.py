@@ -16,7 +16,7 @@ from vendor.dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class FreshnessMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/sources/v1.json"
     dbt_version: Optional[str] = "0.19.0"
@@ -31,7 +31,7 @@ class Status(Enum):
 
 class SourceFreshnessRuntimeError(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     unique_id: str
     error: Optional[Union[str, int]] = None
@@ -53,7 +53,7 @@ class Period(Enum):
 
 class Time(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     count: int
     period: Period
@@ -61,7 +61,7 @@ class Time(BaseParserModel):
 
 class FreshnessThreshold(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     warn_after: Optional[Time] = None
     error_after: Optional[Time] = None
@@ -70,7 +70,7 @@ class FreshnessThreshold(BaseParserModel):
 
 class SourceFreshnessOutput(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     unique_id: str
     max_loaded_at: datetime
@@ -83,7 +83,7 @@ class SourceFreshnessOutput(BaseParserModel):
 
 class SourcesV1(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     metadata: FreshnessMetadata
     results: list[Union[SourceFreshnessRuntimeError, SourceFreshnessOutput]]

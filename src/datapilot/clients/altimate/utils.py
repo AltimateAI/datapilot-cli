@@ -106,7 +106,7 @@ def onboard_file(api_token, tenant, dbt_core_integration_id, dbt_core_integratio
         api_client.log("Error getting signed URL.")
         return {
             "ok": False,
-            "message": "Error in uploading the manifest.                                                                                                                              ",
+            "message": f"Error in uploading the {file_type}.",
         }
 
 

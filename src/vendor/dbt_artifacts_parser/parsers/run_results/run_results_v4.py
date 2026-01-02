@@ -16,7 +16,7 @@ from vendor.dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class BaseArtifactMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     dbt_schema_version: str
     dbt_version: Optional[str] = "1.0.0b2"
@@ -48,7 +48,7 @@ class Status2(Enum):
 
 class TimingInfo(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     started_at: Optional[datetime] = None
@@ -57,7 +57,7 @@ class TimingInfo(BaseParserModel):
 
 class FreshnessMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/sources/v3.json"
     dbt_version: Optional[str] = "1.0.0b2"
@@ -72,7 +72,7 @@ class Status3(Enum):
 
 class SourceFreshnessRuntimeError(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     unique_id: str
     error: Optional[Union[str, int]] = None
@@ -94,7 +94,7 @@ class Period(Enum):
 
 class Time(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     count: Optional[int] = None
     period: Optional[Period] = None
@@ -102,7 +102,7 @@ class Time(BaseParserModel):
 
 class RunResultOutput(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     status: Union[Status, Status1, Status2]
     timing: list[TimingInfo]
@@ -116,7 +116,7 @@ class RunResultOutput(BaseParserModel):
 
 class FreshnessThreshold(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     warn_after: Optional[Time] = {"count": None, "period": None}
     error_after: Optional[Time] = {"count": None, "period": None}
@@ -125,7 +125,7 @@ class FreshnessThreshold(BaseParserModel):
 
 class RunResultsV4(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     metadata: BaseArtifactMetadata
     results: list[RunResultOutput]
@@ -135,7 +135,7 @@ class RunResultsV4(BaseParserModel):
 
 class SourceFreshnessOutput(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     unique_id: str
     max_loaded_at: datetime

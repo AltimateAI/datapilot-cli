@@ -6,6 +6,7 @@ from typing import Optional
 from typing import Union
 
 from pydantic import BaseModel
+from pydantic import ConfigDict
 
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v1 import ManifestV1
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v2 import ManifestV2
@@ -23,6 +24,8 @@ from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV1
 
 
 class DBTVersion(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     MAJOR: int
     MINOR: int
     PATCH: Optional[int] = None
@@ -45,16 +48,22 @@ Manifest = Union[
 
 
 class AltimateDocs(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     show: Optional[bool] = True
     node_color: Optional[Optional[str]] = None
 
 
 class AltimateDependsOn(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     nodes: Optional[List[str]] = None
     macros: Optional[List[str]] = None
 
 
 class AltimateManifestColumnInfo(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     name: str
     description: Optional[str] = ""
     meta: Optional[Dict[str, Any]] = {}
@@ -64,6 +73,8 @@ class AltimateManifestColumnInfo(BaseModel):
 
 
 class AltimateFileHash(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     name: Optional[str] = None
     checksum: Optional[str] = None
 
@@ -94,12 +105,16 @@ class AltimateAccess(Enum):
 
 
 class AltimateDBTContract(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
     checksum: Optional[Optional[str]] = None
 
 
 class AltimateHook(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     sql: str
     transaction: Optional[bool] = True
     index: Optional[Optional[int]] = None
@@ -107,6 +122,8 @@ class AltimateHook(BaseModel):
 
 # TODO: Need to add the rest of the fields
 class AltimateNodeConfig(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
     alias: Optional[Optional[str]] = None
@@ -128,6 +145,8 @@ class AltimateNodeConfig(BaseModel):
 
 
 class AltimateManifestNode(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     database: Optional[str] = None
     resource_type: AltimateResourceType
     schema_name: str
@@ -158,6 +177,8 @@ class AltimateManifestNode(BaseModel):
 
 
 class AltimateQuoting(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     database: Optional[Optional[bool]] = None
     schema_: Optional[Optional[bool]] = None
     identifier: Optional[Optional[bool]] = None
@@ -165,12 +186,16 @@ class AltimateQuoting(BaseModel):
 
 
 class AltimateFreshnessThreshold(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     warn_after: Optional[Dict] = None
     error_after: Optional[Dict] = None
     filter: Optional[str] = None
 
 
 class AltimateExternalPartition(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     name: Optional[str] = ""
     description: Optional[str] = ""
     data_type: Optional[str] = ""
@@ -178,6 +203,8 @@ class AltimateExternalPartition(BaseModel):
 
 
 class AltimateExternalTable(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     location: Optional[Optional[str]] = None
     file_format: Optional[Optional[str]] = None
     row_format: Optional[Optional[str]] = None
@@ -186,10 +213,14 @@ class AltimateExternalTable(BaseModel):
 
 
 class AltimateSourceConfig(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     enabled: Optional[bool] = True
 
 
 class AltimateDeferRelation(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     database: Optional[str] = None
     schema_name: str
     alias: str
@@ -197,6 +228,8 @@ class AltimateDeferRelation(BaseModel):
 
 
 class AltimateSeedConfig(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
     alias: Optional[Optional[str]] = None
@@ -225,6 +258,8 @@ class AltimateSeedConfig(BaseModel):
 
 
 class AltimateSeedNode(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     database: Optional[str] = None
     schema_name: str
     name: str
@@ -257,6 +292,8 @@ class AltimateSeedNode(BaseModel):
 
 
 class AltimateManifestSourceNode(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     database: Optional[str] = None
     resource_type: AltimateResourceType
     schema_name: str
@@ -295,6 +332,8 @@ class AltimateExposureType(Enum):
 
 
 class AltimateOwner(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     _extra: Optional[Dict[str, Any]] = None
     email: Optional[Optional[str]] = None
     name: Optional[Optional[str]] = None
@@ -307,17 +346,23 @@ class AltimateMaturityEnum(Enum):
 
 
 class AltimateRefArgs(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     name: str
     package: Optional[Optional[str]] = None
     version: Optional[Optional[Union[str, float]]] = None
 
 
 class AltimateExposureConfig(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
 
 
 class AltimateManifestExposureNode(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     name: str
     resource_type: AltimateResourceType
     package_name: str
@@ -343,12 +388,16 @@ class AltimateManifestExposureNode(BaseModel):
 
 
 class AltimateTestMetadata(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     name: str
     kwargs: Optional[Dict[str, Any]] = None
     namespace: Optional[Optional[str]] = None
 
 
 class AltimateTestConfig(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     _extra: Optional[Dict[str, Any]] = None
     enabled: Optional[bool] = True
     alias: Optional[Optional[str]] = None
@@ -369,6 +418,8 @@ class AltimateTestConfig(BaseModel):
 
 
 class AltimateManifestTestNode(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     test_metadata: Optional[AltimateTestMetadata] = None
     test_type: Optional[str] = None
     name: str
@@ -399,6 +450,8 @@ class AltimateManifestTestNode(BaseModel):
 
 
 class AltimateMacroArgument(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     name: str
     type: Optional[Optional[str]] = None
     description: Optional[Optional[str]] = ""
@@ -408,6 +461,8 @@ AltimateSupportedLanguage = SupportedLanguage
 
 
 class AltimateManifestMacroNode(BaseModel):
+    model_config = ConfigDict(extra="allow")
+
     name: str
     resource_type: AltimateResourceType
     package_name: str
