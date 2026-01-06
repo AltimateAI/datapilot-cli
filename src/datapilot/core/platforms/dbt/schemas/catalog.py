@@ -13,8 +13,6 @@ from vendor.dbt_artifacts_parser.parsers.catalog.catalog_v1 import Metadata as B
 
 
 class AltimateCatalogMetadata(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
     dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/catalog/v1.json"
     dbt_version: Optional[str] = "0.19.0"
     generated_at: Optional[datetime] = "2021-02-10T04:42:33.680487Z"
@@ -23,8 +21,6 @@ class AltimateCatalogMetadata(BaseModel):
 
 
 class AltimateCatalogTableMetadata(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
     type: str
     database: Optional[Optional[str]] = None
     schema_name: str
@@ -34,8 +30,6 @@ class AltimateCatalogTableMetadata(BaseModel):
 
 
 class AltimateCatalogColumnMetadata(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
     type: str
     comment: Optional[Optional[str]] = None
     index: int
@@ -43,8 +37,6 @@ class AltimateCatalogColumnMetadata(BaseModel):
 
 
 class AltimateCatalogStatsItem(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
     id: str
     label: str
     value: Optional[Optional[Union[bool, str, float]]] = None
@@ -53,8 +45,6 @@ class AltimateCatalogStatsItem(BaseModel):
 
 
 class AltimateCatalogTable(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
     metadata: AltimateCatalogTableMetadata
     columns: Dict[str, AltimateCatalogColumnMetadata]
     stats: Dict[str, AltimateCatalogStatsItem]
@@ -62,8 +52,6 @@ class AltimateCatalogTable(BaseModel):
 
 
 class AltimateCatalogCatalogV1(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
     metadata: AltimateCatalogMetadata
     nodes: Dict[str, AltimateCatalogTable]
     sources: Dict[str, AltimateCatalogTable]

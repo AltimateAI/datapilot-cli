@@ -1,10 +1,7 @@
 from pydantic import BaseModel
-from pydantic import ConfigDict
 
 
 class ModelNode(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
     unique_id: str
     name: str
     resource_type: str
@@ -14,8 +11,6 @@ class ModelNode(BaseModel):
 
 
 class SourceNode(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
     unique_id: str
     name: str
     resource_type: str

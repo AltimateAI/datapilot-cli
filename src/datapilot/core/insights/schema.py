@@ -2,7 +2,6 @@ from enum import Enum
 from typing import Dict
 
 from pydantic import BaseModel
-from pydantic import ConfigDict
 
 
 class Severity(Enum):
@@ -12,8 +11,6 @@ class Severity(Enum):
 
 
 class InsightResult(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
     name: str
     type: str
     message: str
@@ -23,7 +20,5 @@ class InsightResult(BaseModel):
 
 
 class InsightResponse(BaseModel):
-    model_config = ConfigDict(extra="allow")
-
     insight: InsightResult
     severity: Severity = Severity.ERROR
