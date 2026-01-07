@@ -64,6 +64,12 @@ class BatchResults(BaseParserModel):
     failed: Optional[list[list]] = None
 
 
+class AdapterResponse(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+
+
 class Result(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -72,7 +78,7 @@ class Result(BaseParserModel):
     timing: list[TimingItem]
     thread_id: str
     execution_time: float
-    adapter_response: dict[str, Any]
+    adapter_response: AdapterResponse
     message: Optional[str] = None
     failures: Optional[int] = None
     unique_id: str
@@ -82,6 +88,12 @@ class Result(BaseParserModel):
     batch_results: Optional[BatchResults] = None
 
 
+class Args(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+
+
 class RunResultsV6(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -89,4 +101,4 @@ class RunResultsV6(BaseParserModel):
     metadata: Metadata = Field(..., title="BaseArtifactMetadata")
     results: list[Result]
     elapsed_time: float
-    args: Optional[dict[str, Any]] = None
+    args: Optional[Args] = None

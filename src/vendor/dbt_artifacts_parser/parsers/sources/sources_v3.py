@@ -85,6 +85,12 @@ class TimingItem(BaseParserModel):
     completed_at: Optional[str] = None
 
 
+class AdapterResponse(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+
+
 class Results1(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
@@ -95,7 +101,7 @@ class Results1(BaseParserModel):
     max_loaded_at_time_ago_in_s: float
     status: Status1
     criteria: Criteria = Field(..., title="FreshnessThreshold")
-    adapter_response: dict[str, Any]
+    adapter_response: AdapterResponse
     timing: list[TimingItem]
     thread_id: str
     execution_time: float
