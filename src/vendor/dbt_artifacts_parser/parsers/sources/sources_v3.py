@@ -16,7 +16,7 @@ from vendor.dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class Metadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     dbt_schema_version: Optional[str] = None
     dbt_version: Optional[str] = "1.9.0b2"
@@ -31,7 +31,7 @@ class Status(Enum):
 
 class Results(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     unique_id: str
     error: Optional[Union[str, int]] = None
@@ -53,7 +53,7 @@ class Period(Enum):
 
 class WarnAfter(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     count: Optional[int] = None
     period: Optional[Period] = None
@@ -61,7 +61,7 @@ class WarnAfter(BaseParserModel):
 
 class ErrorAfter(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     count: Optional[int] = None
     period: Optional[Period] = None
@@ -69,7 +69,7 @@ class ErrorAfter(BaseParserModel):
 
 class Criteria(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     warn_after: Optional[WarnAfter] = None
     error_after: Optional[ErrorAfter] = None
@@ -78,16 +78,22 @@ class Criteria(BaseParserModel):
 
 class TimingItem(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     started_at: Optional[str] = None
     completed_at: Optional[str] = None
 
 
+class AdapterResponse(BaseParserModel):
+    model_config = ConfigDict(
+        extra="allow",
+    )
+
+
 class Results1(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     unique_id: str
     max_loaded_at: str
@@ -95,7 +101,7 @@ class Results1(BaseParserModel):
     max_loaded_at_time_ago_in_s: float
     status: Status1
     criteria: Criteria = Field(..., title="FreshnessThreshold")
-    adapter_response: dict[str, Any]
+    adapter_response: AdapterResponse
     timing: list[TimingItem]
     thread_id: str
     execution_time: float
@@ -103,7 +109,7 @@ class Results1(BaseParserModel):
 
 class SourcesV3(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     metadata: Metadata = Field(..., title="FreshnessMetadata")
     results: list[Union[Results, Results1]]
