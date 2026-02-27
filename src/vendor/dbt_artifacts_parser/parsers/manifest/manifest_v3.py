@@ -18,7 +18,7 @@ from vendor.dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class ManifestMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/manifest/v3.json"
     dbt_version: Optional[str] = "0.21.0rc1"
@@ -39,7 +39,7 @@ class ResourceType(Enum):
 
 class FileHash(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     checksum: str
@@ -47,7 +47,7 @@ class FileHash(BaseParserModel):
 
 class Hook(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     sql: str
     transaction: Optional[bool] = True
@@ -56,7 +56,7 @@ class Hook(BaseParserModel):
 
 class DependsOn(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     macros: Optional[list[str]] = []
     nodes: Optional[list[str]] = []
@@ -76,14 +76,14 @@ class ColumnInfo(BaseParserModel):
 
 class Docs(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     show: Optional[bool] = True
 
 
 class InjectedCTE(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     id: str
     sql: str
@@ -131,7 +131,7 @@ class ResourceType5(Enum):
 
 class TestMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     kwargs: Optional[dict[str, Any]] = {}
@@ -177,7 +177,7 @@ class ResourceType9(Enum):
 
 class ParsedDataTestNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     database: Optional[str] = None
@@ -247,7 +247,7 @@ class ResourceType13(Enum):
 
 class ParsedSchemaTestNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     test_metadata: TestMetadata
@@ -307,7 +307,7 @@ class ResourceType14(Enum):
 
 class ParsedSeedNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     database: Optional[str] = None
@@ -396,7 +396,7 @@ class ResourceType16(Enum):
 
 class Quoting(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[bool] = None
     schema_: Optional[bool] = Field(None, alias="schema")
@@ -406,7 +406,7 @@ class Quoting(BaseParserModel):
 
 class FreshnessMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     dbt_schema_version: Optional[str] = "https://schemas.getdbt.com/dbt/sources/v2.json"
     dbt_version: Optional[str] = "0.21.0rc1"
@@ -421,7 +421,7 @@ class Status(Enum):
 
 class SourceFreshnessRuntimeError(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     unique_id: str
     error: Optional[Union[str, int]] = None
@@ -443,7 +443,7 @@ class Period(Enum):
 
 class Time(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     count: int
     period: Period
@@ -451,7 +451,7 @@ class Time(BaseParserModel):
 
 class TimingInfo(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     started_at: Optional[datetime] = None
@@ -481,14 +481,14 @@ class ResourceType17(Enum):
 
 class MacroDependsOn(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     macros: Optional[list[str]] = []
 
 
 class MacroArgument(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     type: Optional[str] = None
@@ -497,7 +497,7 @@ class MacroArgument(BaseParserModel):
 
 class ParsedDocumentation(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     unique_id: str
     package_name: str
@@ -538,7 +538,7 @@ class Maturity(Enum):
 
 class ExposureOwner(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     email: str
     name: Optional[str] = None
@@ -566,7 +566,7 @@ class NodeConfig(BaseParserModel):
 
 class CompiledDataTestNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     compiled: bool
@@ -625,7 +625,7 @@ class CompiledDataTestNode(BaseParserModel):
 
 class CompiledModelNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     compiled: bool
@@ -684,7 +684,7 @@ class CompiledModelNode(BaseParserModel):
 
 class CompiledHookNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     compiled: bool
@@ -744,7 +744,7 @@ class CompiledHookNode(BaseParserModel):
 
 class CompiledRPCNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     compiled: bool
@@ -803,7 +803,7 @@ class CompiledRPCNode(BaseParserModel):
 
 class CompiledSchemaTestNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     test_metadata: TestMetadata
@@ -864,7 +864,7 @@ class CompiledSchemaTestNode(BaseParserModel):
 
 class CompiledSeedNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     compiled: bool
@@ -924,7 +924,7 @@ class CompiledSeedNode(BaseParserModel):
 
 class CompiledSnapshotNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     compiled: bool
@@ -983,7 +983,7 @@ class CompiledSnapshotNode(BaseParserModel):
 
 class ParsedAnalysisNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     database: Optional[str] = None
@@ -1037,7 +1037,7 @@ class ParsedAnalysisNode(BaseParserModel):
 
 class ParsedHookNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     database: Optional[str] = None
@@ -1092,7 +1092,7 @@ class ParsedHookNode(BaseParserModel):
 
 class ParsedModelNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     database: Optional[str] = None
@@ -1146,7 +1146,7 @@ class ParsedModelNode(BaseParserModel):
 
 class ParsedRPCNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     database: Optional[str] = None
@@ -1200,7 +1200,7 @@ class ParsedRPCNode(BaseParserModel):
 
 class ParsedSnapshotNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     database: Optional[str] = None
@@ -1235,7 +1235,7 @@ class ParsedSnapshotNode(BaseParserModel):
 
 class FreshnessThreshold(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     warn_after: Optional[Time] = None
     error_after: Optional[Time] = None
@@ -1244,7 +1244,7 @@ class FreshnessThreshold(BaseParserModel):
 
 class SourceFreshnessOutput(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     unique_id: str
     max_loaded_at: datetime
@@ -1271,7 +1271,7 @@ class ExternalTable(BaseParserModel):
 
 class ParsedMacro(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     unique_id: str
     package_name: str
@@ -1293,7 +1293,7 @@ class ParsedMacro(BaseParserModel):
 
 class ParsedExposure(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     fqn: list[str]
     unique_id: str
@@ -1318,7 +1318,7 @@ class ParsedExposure(BaseParserModel):
 
 class CompiledAnalysisNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     raw_sql: str
     compiled: bool
@@ -1377,7 +1377,7 @@ class CompiledAnalysisNode(BaseParserModel):
 
 class ParsedSourceDefinition(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     fqn: list[str]
     database: Optional[str] = None
@@ -1413,7 +1413,7 @@ class ParsedSourceDefinition(BaseParserModel):
 
 class ManifestV3(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     metadata: ManifestMetadata = Field(..., description="Metadata about the manifest")
     nodes: dict[
