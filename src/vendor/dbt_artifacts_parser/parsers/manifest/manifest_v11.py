@@ -19,7 +19,7 @@ from vendor.dbt_artifacts_parser.parsers.base import BaseParserModel
 
 class ManifestMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     dbt_schema_version: Optional[str] = None
     dbt_version: Optional[str] = "1.8.0a1"
@@ -38,7 +38,7 @@ class ManifestMetadata(BaseParserModel):
 
 class FileHash(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     checksum: str
@@ -46,7 +46,7 @@ class FileHash(BaseParserModel):
 
 class Hook(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     sql: str
     transaction: Optional[bool] = True
@@ -55,7 +55,7 @@ class Hook(BaseParserModel):
 
 class Docs(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     show: Optional[bool] = True
     node_color: Optional[str] = None
@@ -63,7 +63,7 @@ class Docs(BaseParserModel):
 
 class ContractConfig(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
@@ -115,7 +115,7 @@ class Type(Enum):
 
 class ColumnLevelConstraint(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     type: Type
     name: Optional[str] = None
@@ -140,7 +140,7 @@ class ColumnInfo(BaseParserModel):
 
 class RefArgs(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     package: Optional[str] = None
@@ -149,7 +149,7 @@ class RefArgs(BaseParserModel):
 
 class DependsOn(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     macros: Optional[list[str]] = None
     nodes: Optional[list[str]] = None
@@ -157,7 +157,7 @@ class DependsOn(BaseParserModel):
 
 class InjectedCTE(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     id: str
     sql: str
@@ -165,7 +165,7 @@ class InjectedCTE(BaseParserModel):
 
 class Contract(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     enforced: Optional[bool] = False
     alias_types: Optional[bool] = True
@@ -174,7 +174,7 @@ class Contract(BaseParserModel):
 
 class AnalysisNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
@@ -242,7 +242,7 @@ class TestConfig(BaseParserModel):
 
 class SingularTestNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
@@ -287,7 +287,7 @@ class SingularTestNode(BaseParserModel):
 
 class HookNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
@@ -369,7 +369,7 @@ class ModelConfig(BaseParserModel):
 
 class ModelLevelConstraint(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     type: Type
     name: Optional[str] = None
@@ -381,7 +381,7 @@ class ModelLevelConstraint(BaseParserModel):
 
 class DeferRelation(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
@@ -391,7 +391,7 @@ class DeferRelation(BaseParserModel):
 
 class ModelNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
@@ -442,7 +442,7 @@ class ModelNode(BaseParserModel):
 
 class RPCNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
@@ -487,7 +487,7 @@ class RPCNode(BaseParserModel):
 
 class SqlNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
@@ -532,7 +532,7 @@ class SqlNode(BaseParserModel):
 
 class TestMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     kwargs: Optional[dict[str, Any]] = None
@@ -541,7 +541,7 @@ class TestMetadata(BaseParserModel):
 
 class GenericTestNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     test_metadata: TestMetadata
     database: Optional[str] = None
@@ -624,7 +624,7 @@ class SnapshotConfig(BaseParserModel):
 
 class SnapshotNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
@@ -701,14 +701,14 @@ class SeedConfig(BaseParserModel):
 
 class MacroDependsOn(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     macros: Optional[list[str]] = None
 
 
 class SeedNode(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
@@ -744,7 +744,7 @@ class SeedNode(BaseParserModel):
 
 class Quoting(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[bool] = None
     schema_: Optional[bool] = Field(None, alias="schema")
@@ -760,7 +760,7 @@ class Period(Enum):
 
 class Time(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     count: Optional[int] = None
     period: Optional[Period] = None
@@ -768,7 +768,7 @@ class Time(BaseParserModel):
 
 class FreshnessThreshold(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     warn_after: Optional[Time] = None
     error_after: Optional[Time] = None
@@ -808,7 +808,7 @@ class SourceConfig(BaseParserModel):
 
 class SourceDefinition(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
@@ -842,7 +842,7 @@ class SourceDefinition(BaseParserModel):
 
 class MacroArgument(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     type: Optional[str] = None
@@ -856,7 +856,7 @@ class SupportedLanguage(Enum):
 
 class Macro(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     resource_type: Literal["macro"]
@@ -877,7 +877,7 @@ class Macro(BaseParserModel):
 
 class Documentation(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     resource_type: Literal["doc"]
@@ -921,7 +921,7 @@ class Maturity(Enum):
 
 class Exposure(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     resource_type: Literal["exposure"]
@@ -949,21 +949,21 @@ class Exposure(BaseParserModel):
 
 class WhereFilter(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     where_sql_template: str
 
 
 class WhereFilterIntersection(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     where_filters: list[WhereFilter]
 
 
 class MetricInputMeasure(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     filter: Optional[WhereFilterIntersection] = None
@@ -982,7 +982,7 @@ class Granularity(Enum):
 
 class MetricTimeWindow(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     count: int
     granularity: Granularity
@@ -998,7 +998,7 @@ class OffsetToGrain(Enum):
 
 class MetricInput(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     filter: Optional[WhereFilterIntersection] = None
@@ -1017,7 +1017,7 @@ class GrainToDate(Enum):
 
 class MetricTypeParams(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     measure: Optional[MetricInputMeasure] = None
     input_measures: Optional[list[MetricInputMeasure]] = None
@@ -1031,7 +1031,7 @@ class MetricTypeParams(BaseParserModel):
 
 class FileSlice(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     filename: str
     content: str
@@ -1041,7 +1041,7 @@ class FileSlice(BaseParserModel):
 
 class SourceFileMetadata(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     repo_file_path: str
     file_slice: FileSlice
@@ -1065,7 +1065,7 @@ class Type3(Enum):
 
 class Metric(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     resource_type: Literal["metric"]
@@ -1094,7 +1094,7 @@ class Metric(BaseParserModel):
 
 class Group(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     resource_type: Literal["group"]
@@ -1107,7 +1107,7 @@ class Group(BaseParserModel):
 
 class QueryParams(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     metrics: list[str]
     group_by: list[str]
@@ -1121,7 +1121,7 @@ class ExportAs(Enum):
 
 class ExportConfig(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     export_as: ExportAs
     schema_name: Optional[str] = None
@@ -1130,7 +1130,7 @@ class ExportConfig(BaseParserModel):
 
 class Export(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     config: ExportConfig
@@ -1167,7 +1167,7 @@ class ResourceType(Enum):
 
 class SavedQuery(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     resource_type: ResourceType
@@ -1191,7 +1191,7 @@ class SavedQuery(BaseParserModel):
 
 class NodeRelation(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     alias: str
     schema_name: str
@@ -1201,7 +1201,7 @@ class NodeRelation(BaseParserModel):
 
 class Defaults(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     agg_time_dimension: Optional[str] = None
 
@@ -1215,7 +1215,7 @@ class Type4(Enum):
 
 class Entity(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     type: Type4
@@ -1227,7 +1227,7 @@ class Entity(BaseParserModel):
 
 class MeasureAggregationParameters(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     percentile: Optional[float] = None
     use_discrete_percentile: Optional[bool] = False
@@ -1248,7 +1248,7 @@ class WindowChoice(Enum):
 
 class NonAdditiveDimension(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     window_choice: WindowChoice
@@ -1269,7 +1269,7 @@ class Agg(Enum):
 
 class Measure(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     agg: Agg
@@ -1284,7 +1284,7 @@ class Measure(BaseParserModel):
 
 class DimensionValidityParams(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     is_start: Optional[bool] = False
     is_end: Optional[bool] = False
@@ -1300,7 +1300,7 @@ class TimeGranularity(Enum):
 
 class DimensionTypeParams(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     time_granularity: TimeGranularity
     validity_params: Optional[DimensionValidityParams] = None
@@ -1313,7 +1313,7 @@ class Type5(Enum):
 
 class Dimension(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     type: Type5
@@ -1337,7 +1337,7 @@ class SemanticModelConfig(BaseParserModel):
 
 class SemanticModel(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     name: str
     resource_type: ResourceType
@@ -1366,7 +1366,7 @@ class SemanticModel(BaseParserModel):
 
 class ManifestV11(BaseParserModel):
     model_config = ConfigDict(
-        extra="forbid",
+        extra="allow",
     )
     metadata: ManifestMetadata = Field(..., description="Metadata about the manifest")
     nodes: dict[
