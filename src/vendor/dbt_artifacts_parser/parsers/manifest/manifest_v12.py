@@ -4109,7 +4109,7 @@ class Disabled13(BaseParserModel):
     overrides: Optional[Overrides] = None
     depends_on: Optional[DependsOn12] = Field(None, title="DependsOn")
     config: Optional[Config53] = Field(None, title="UnitTestConfig")
-    checksum: Optional[str] = None
+    checksum: Optional[Union[str, Checksum]] = None
     schema_: Optional[str] = Field(None, alias="schema")
     created_at: Optional[float] = None
     versions: Optional[Versions] = None
@@ -4381,7 +4381,7 @@ class UnitTests(BaseParserModel):
     overrides: Optional[Overrides] = None
     depends_on: Optional[DependsOn12] = Field(None, title="DependsOn")
     config: Optional[Config60] = Field(None, title="UnitTestConfig")
-    checksum: Optional[str] = None
+    checksum: Optional[Union[str, Checksum]] = None
     schema_: Optional[str] = Field(None, alias="schema")
     created_at: Optional[float] = None
     versions: Optional[Versions] = None
