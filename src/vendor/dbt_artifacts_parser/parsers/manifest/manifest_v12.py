@@ -288,6 +288,7 @@ class Nodes(BaseParserModel):
     unique_id: str
     fqn: list[str]
     alias: str
+    identifier: Optional[str] = None
     checksum: Checksum = Field(..., title="FileHash")
     config: Optional[Config] = Field(None, title="SeedConfig")
     tags: Optional[list[str]] = None
@@ -431,6 +432,7 @@ class Nodes1(BaseParserModel):
     unique_id: str
     fqn: list[str]
     alias: str
+    identifier: Optional[str] = None
     checksum: Checksum = Field(..., title="FileHash")
     config: Optional[Config3] = Field(None, title="NodeConfig")
     tags: Optional[list[str]] = None
@@ -538,6 +540,7 @@ class Nodes2(BaseParserModel):
     unique_id: str
     fqn: list[str]
     alias: str
+    identifier: Optional[str] = None
     checksum: Checksum = Field(..., title="FileHash")
     config: Optional[Config5] = Field(None, title="TestConfig")
     tags: Optional[list[str]] = None
@@ -674,6 +677,7 @@ class Nodes3(BaseParserModel):
     unique_id: str
     fqn: list[str]
     alias: str
+    identifier: Optional[str] = None
     checksum: Checksum = Field(..., title="FileHash")
     config: Optional[Config7] = Field(None, title="NodeConfig")
     tags: Optional[list[str]] = None
@@ -951,6 +955,7 @@ class Nodes4(BaseParserModel):
     unique_id: str
     fqn: list[str]
     alias: str
+    identifier: Optional[str] = None
     checksum: Checksum = Field(..., title="FileHash")
     config: Optional[Config9] = Field(None, title="ModelConfig")
     tags: Optional[list[str]] = None
@@ -1088,6 +1093,7 @@ class Nodes5(BaseParserModel):
     unique_id: str
     fqn: list[str]
     alias: str
+    identifier: Optional[str] = None
     checksum: Checksum = Field(..., title="FileHash")
     config: Optional[Config12] = Field(None, title="NodeConfig")
     tags: Optional[list[str]] = None
@@ -1204,6 +1210,7 @@ class Nodes6(BaseParserModel):
     unique_id: str
     fqn: list[str]
     alias: str
+    identifier: Optional[str] = None
     checksum: Checksum = Field(..., title="FileHash")
     config: Optional[Config14] = Field(None, title="TestConfig")
     tags: Optional[list[str]] = None
@@ -1421,6 +1428,7 @@ class Nodes7(BaseParserModel):
     unique_id: str
     fqn: list[str]
     alias: str
+    identifier: Optional[str] = None
     checksum: Checksum = Field(..., title="FileHash")
     config: Config16 = Field(..., title="SnapshotConfig")
     tags: Optional[list[str]] = None
