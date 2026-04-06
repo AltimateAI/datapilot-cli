@@ -14,6 +14,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 #
+import logging
+import re
 from typing import Union
 
 from vendor.dbt_artifacts_parser.parsers.catalog.catalog_v1 import CatalogV1
@@ -40,6 +42,18 @@ from vendor.dbt_artifacts_parser.parsers.sources.sources_v2 import SourcesV2
 from vendor.dbt_artifacts_parser.parsers.sources.sources_v3 import SourcesV3
 from vendor.dbt_artifacts_parser.parsers.utils import get_dbt_schema_version
 from vendor.dbt_artifacts_parser.parsers.version_map import ArtifactTypes
+
+logger = logging.getLogger(__name__)
+
+# Fields with strict discriminated unions that break on dbt schema changes
+# but are not consumed by downstream wrappers
+_UNUSED_STRICT_FIELDS = {"disabled"}
+
+# Regex to extract manifest version number from schema URL
+_MANIFEST_VERSION_RE = re.compile(r"https://schemas\.getdbt\.com/dbt/manifest/v(\d+)\.json")
+
+# The latest manifest class we support, used as fallback for unknown versions
+_LATEST_MANIFEST_CLASS = ManifestV12
 
 
 #
@@ -71,6 +85,27 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 #
 # manifest
 #
+def _strip_unused_fields(manifest: dict) -> dict:
+    """Remove fields that have strict discriminated unions but are unused downstream.
+
+    These fields (e.g. `disabled`) use complex Pydantic unions that break when
+    dbt Cloud changes its schema, but our wrappers never read them.
+    """
+    return {k: v for k, v in manifest.items() if k not in _UNUSED_STRICT_FIELDS}
+
+
+def _try_parse_manifest(manifest: dict, model_class):
+    """Attempt to parse manifest, falling back to stripping unused fields on failure."""
+    try:
+        return model_class(**manifest)
+    except Exception:
+        stripped = _strip_unused_fields(manifest)
+        try:
+            return model_class(**stripped)
+        except Exception:
+            raise
+
+
 def parse_manifest(
     manifest: dict,
 ) -> Union[
@@ -100,31 +135,36 @@ def parse_manifest(
         ]
     """
     dbt_schema_version = get_dbt_schema_version(artifact_json=manifest)
-    if dbt_schema_version == ArtifactTypes.MANIFEST_V1.value.dbt_schema_version:
-        return ManifestV1(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V2.value.dbt_schema_version:
-        return ManifestV2(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V3.value.dbt_schema_version:
-        return ManifestV3(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V4.value.dbt_schema_version:
-        return ManifestV4(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V5.value.dbt_schema_version:
-        return ManifestV5(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V6.value.dbt_schema_version:
-        return ManifestV6(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V7.value.dbt_schema_version:
-        return ManifestV7(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V8.value.dbt_schema_version:
-        return ManifestV8(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V9.value.dbt_schema_version:
-        return ManifestV9(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V10.value.dbt_schema_version:
-        return ManifestV10(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V11.value.dbt_schema_version:
-        return ManifestV11(**manifest)
-    elif dbt_schema_version == ArtifactTypes.MANIFEST_V12.value.dbt_schema_version:
-        return ManifestV12(**manifest)
-    raise ValueError("Not a manifest.json")
+
+    version_to_class = {
+        ArtifactTypes.MANIFEST_V1.value.dbt_schema_version: ManifestV1,
+        ArtifactTypes.MANIFEST_V2.value.dbt_schema_version: ManifestV2,
+        ArtifactTypes.MANIFEST_V3.value.dbt_schema_version: ManifestV3,
+        ArtifactTypes.MANIFEST_V4.value.dbt_schema_version: ManifestV4,
+        ArtifactTypes.MANIFEST_V5.value.dbt_schema_version: ManifestV5,
+        ArtifactTypes.MANIFEST_V6.value.dbt_schema_version: ManifestV6,
+        ArtifactTypes.MANIFEST_V7.value.dbt_schema_version: ManifestV7,
+        ArtifactTypes.MANIFEST_V8.value.dbt_schema_version: ManifestV8,
+        ArtifactTypes.MANIFEST_V9.value.dbt_schema_version: ManifestV9,
+        ArtifactTypes.MANIFEST_V10.value.dbt_schema_version: ManifestV10,
+        ArtifactTypes.MANIFEST_V11.value.dbt_schema_version: ManifestV11,
+        ArtifactTypes.MANIFEST_V12.value.dbt_schema_version: ManifestV12,
+    }
+
+    model_class = version_to_class.get(dbt_schema_version)
+    if model_class:
+        return _try_parse_manifest(manifest, model_class)
+
+    # Forward-compatibility: unknown manifest version — try latest known class
+    match = _MANIFEST_VERSION_RE.match(dbt_schema_version)
+    if match:
+        logger.warning(
+            "Unknown manifest schema version %s, attempting parse with latest known class",
+            dbt_schema_version,
+        )
+        return _try_parse_manifest(manifest, _LATEST_MANIFEST_CLASS)
+
+    raise ValueError(f"Not a manifest.json (schema version: {dbt_schema_version})")
 
 
 def parse_manifest_v1(manifest: dict) -> ManifestV1:
