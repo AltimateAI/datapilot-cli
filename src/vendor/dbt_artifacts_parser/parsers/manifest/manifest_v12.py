@@ -2209,7 +2209,7 @@ class Disabled(BaseParserModel):
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
     name: str
-    resource_type: Literal["seed"]
+    resource_type: Optional[Literal["seed"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -2335,7 +2335,7 @@ class Disabled1(BaseParserModel):
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
     name: str
-    resource_type: Literal["analysis"]
+    resource_type: Optional[Literal["analysis"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -2442,7 +2442,7 @@ class Disabled2(BaseParserModel):
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
     name: str
-    resource_type: Literal["test"]
+    resource_type: Optional[Literal["test"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -2577,7 +2577,7 @@ class Disabled3(BaseParserModel):
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
     name: str
-    resource_type: Literal["operation"]
+    resource_type: Optional[Literal["operation"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -2828,7 +2828,7 @@ class Disabled4(BaseParserModel):
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
     name: str
-    resource_type: Literal["model"]
+    resource_type: Optional[Literal["model"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -2965,7 +2965,7 @@ class Disabled5(BaseParserModel):
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
     name: str
-    resource_type: Literal["sql_operation"]
+    resource_type: Optional[Literal["sql_operation"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -3072,7 +3072,7 @@ class Disabled6(BaseParserModel):
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
     name: str
-    resource_type: Literal["test"]
+    resource_type: Optional[Literal["test"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -3277,7 +3277,7 @@ class Disabled7(BaseParserModel):
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
     name: str
-    resource_type: Literal["snapshot"]
+    resource_type: Optional[Literal["snapshot"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -3435,7 +3435,7 @@ class Disabled8(BaseParserModel):
     database: Optional[str] = None
     schema_: str = Field(..., alias="schema")
     name: str
-    resource_type: Literal["source"]
+    resource_type: Optional[Literal["source"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -3488,7 +3488,7 @@ class Disabled9(BaseParserModel):
         extra="allow",
     )
     name: str
-    resource_type: Literal["exposure"]
+    resource_type: Optional[Literal["exposure"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -3712,7 +3712,7 @@ class Disabled10(BaseParserModel):
         extra="allow",
     )
     name: str
-    resource_type: Literal["metric"]
+    resource_type: Optional[Literal["metric"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -3812,7 +3812,7 @@ class Disabled11(BaseParserModel):
         extra="allow",
     )
     name: str
-    resource_type: Literal["saved_query"]
+    resource_type: Optional[Literal["saved_query"]] = None
     package_name: str
     path: str
     original_file_path: str
@@ -4015,7 +4015,7 @@ class Disabled12(BaseParserModel):
         extra="allow",
     )
     name: str
-    resource_type: ResourceType
+    resource_type: Optional[ResourceType] = None
     package_name: str
     path: str
     original_file_path: str
@@ -4099,7 +4099,7 @@ class Disabled13(BaseParserModel):
     given: list[GivenItem]
     expect: Expect = Field(..., title="UnitTestOutputFixture")
     name: str
-    resource_type: ResourceType
+    resource_type: Optional[ResourceType] = None
     package_name: str
     path: str
     original_file_path: str
