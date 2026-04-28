@@ -45,9 +45,14 @@ from vendor.dbt_artifacts_parser.parsers.version_map import ArtifactTypes
 
 logger = logging.getLogger(__name__)
 
-# Fields with strict discriminated unions that break on dbt schema changes
-# but are not consumed by downstream wrappers
-_UNUSED_STRICT_FIELDS = {"disabled"}
+# Fields with strict discriminated unions or required nested shapes that
+# frequently drift as dbt evolves its schema, but are not consumed by any
+# downstream wrapper. Mapped to safe sentinel values used when the original
+# manifest fails validation.
+_UNUSED_STRICT_FIELDS = {
+    "disabled": {},
+    "docs": {},
+}
 
 # Regex to extract manifest version number from schema URL
 _MANIFEST_VERSION_RE = re.compile(r"https://schemas\.getdbt\.com/dbt/manifest/v(\d+)\.json")
@@ -85,23 +90,27 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 #
 # manifest
 #
-def _strip_unused_fields(manifest: dict) -> dict:
-    """Remove fields that have strict discriminated unions but are unused downstream.
+def _sanitize_unused_fields(manifest: dict) -> dict:
+    """Overwrite unused-but-required fields with safe sentinel values.
 
-    These fields (e.g. `disabled`) use complex Pydantic unions that break when
-    dbt Cloud changes its schema, but our wrappers never read them.
+    Some manifest fields (e.g. `disabled`, top-level `docs`) are declared as
+    required on the Pydantic model but are never read by downstream wrappers.
+    When dbt Cloud changes their shape — or omits required sub-fields like
+    `resource_type` — validation fails. Removing the keys does not help
+    because the model still raises "Field required". Overwriting with an
+    empty dict satisfies the type contract without affecting consumers.
     """
-    return {k: v for k, v in manifest.items() if k not in _UNUSED_STRICT_FIELDS}
+    return {**manifest, **_UNUSED_STRICT_FIELDS}
 
 
 def _try_parse_manifest(manifest: dict, model_class):
-    """Attempt to parse manifest, falling back to stripping unused fields on failure."""
+    """Attempt to parse manifest, falling back to sanitizing unused fields on failure."""
     try:
         return model_class(**manifest)
     except Exception:
-        stripped = _strip_unused_fields(manifest)
+        sanitized = _sanitize_unused_fields(manifest)
         try:
-            return model_class(**stripped)
+            return model_class(**sanitized)
         except Exception:
             raise
 
