@@ -67,7 +67,7 @@ setup(
         "ruamel.yaml~=0.18.6",
         "tabulate~=0.9.0",
         "requests>=2.31",
-        "sqlglot~=25.30.0",
+        "sqlglot[c]==30.7.0",
         "mcp~=1.9.0",
         "pyperclip~=1.8.2",
         "python-dotenv~=1.0.0",
