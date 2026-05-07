@@ -15,7 +15,7 @@ project = "datapilot-cli"
 year = "2024"
 author = "Altimate Inc."
 copyright = f"{year}, {author}"
-version = release = "0.2.3"
+version = release = "0.3.0"
 
 pygments_style = "trac"
 templates_path = ["."]
