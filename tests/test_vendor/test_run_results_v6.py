@@ -5,7 +5,8 @@ statuses), which previously raised a ``ValidationError`` and caused the entire
 run_results.json to be silently dropped during ingestion.
 """
 from vendor.dbt_artifacts_parser.parser import parse_run_results
-from vendor.dbt_artifacts_parser.parsers.run_results.run_results_v6 import Result, Status
+from vendor.dbt_artifacts_parser.parsers.run_results.run_results_v6 import Result
+from vendor.dbt_artifacts_parser.parsers.run_results.run_results_v6 import Status
 
 V6_SCHEMA = "https://schemas.getdbt.com/dbt/run-results/v6.json"
 
