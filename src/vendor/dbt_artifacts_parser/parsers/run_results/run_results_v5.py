@@ -33,10 +33,22 @@ class TimingInfo(BaseParserModel):
     completed_at: Optional[str] = None
 
 
-class Status(Enum):
+class Status(str, Enum):
     success = "success"
     error = "error"
     skipped = "skipped"
+    reused = "reused"
+
+    @classmethod
+    def _missing_(cls, value):
+        # Forward-compatibility: dbt periodically introduces new run statuses
+        # (e.g. "reused" in dbt 2.0). Surface unknown values as real members so
+        # downstream `.value` access keeps working instead of failing validation
+        # and silently dropping the entire run_results.json.
+        member = str.__new__(cls, value)
+        member._name_ = str(value)
+        member._value_ = value
+        return member
 
 
 class Status1(Enum):
@@ -58,7 +70,7 @@ class RunResultOutput(BaseParserModel):
     model_config = ConfigDict(
         extra="allow",
     )
-    status: Union[Status, Status1, Status2]
+    status: Union[Status1, Status2, Status]
     timing: list[TimingInfo]
     thread_id: str
     execution_time: float
