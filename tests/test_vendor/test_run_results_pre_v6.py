@@ -15,9 +15,7 @@ VERSIONS = [1, 2, 3, 4, 5]
 
 
 def _module(version: int):
-    return importlib.import_module(
-        f"vendor.dbt_artifacts_parser.parsers.run_results.run_results_v{version}"
-    )
+    return importlib.import_module(f"vendor.dbt_artifacts_parser.parsers.run_results.run_results_v{version}")
 
 
 def _result(status: str, unique_id: str) -> dict:
@@ -57,10 +55,7 @@ class TestRunResultStatusPreV6:
     def test_known_statuses_preserve_value(self, version):
         mod = _module(version)
         for status in ("success", "error", "skipped"):
-            assert (
-                mod.RunResultOutput(**_result(status, "model.proj.a")).status.value
-                == status
-            )
+            assert mod.RunResultOutput(**_result(status, "model.proj.a")).status.value == status
 
     def test_unknown_future_status_parses(self, version):
         mod = _module(version)
@@ -71,10 +66,7 @@ class TestRunResultStatusPreV6:
         """Test/freshness statuses must keep their `.value` (resolved via Status1/Status2)."""
         mod = _module(version)
         for status in ("pass", "fail", "warn", "runtime error"):
-            assert (
-                mod.RunResultOutput(**_result(status, "test.proj.t")).status.value
-                == status
-            )
+            assert mod.RunResultOutput(**_result(status, "test.proj.t")).status.value == status
 
 
 @pytest.mark.parametrize("version", VERSIONS)
@@ -82,9 +74,7 @@ class TestParseRunResultsEntryPointPreV6:
     """The public `parse_run_results` must parse a full file containing `reused`."""
 
     def test_file_with_reused_result_parses_fully(self, version):
-        run_results = parse_run_results(
-            _run_results(version, "success", "reused", "skipped", "pass", "error", "no-op")
-        )
+        run_results = parse_run_results(_run_results(version, "success", "reused", "skipped", "pass", "error", "no-op"))
         # Previously this whole file was dropped because of the single `reused` row.
         assert len(run_results.results) == 6
         assert {r.status.value for r in run_results.results} == {
