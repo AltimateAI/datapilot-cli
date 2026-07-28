@@ -1,8 +1,7 @@
-import logging
-
 import click
 
 from datapilot.cli.decorators import auth_options
+from datapilot.cli.decorators import debug_option
 from datapilot.clients.altimate.utils import check_token_and_instance
 from datapilot.clients.altimate.utils import get_all_dbt_configs
 from datapilot.clients.altimate.utils import onboard_file
@@ -21,9 +20,11 @@ from datapilot.core.platforms.dbt.utils import load_manifest
 from datapilot.core.platforms.dbt.utils import load_run_results
 from datapilot.core.platforms.dbt.utils import load_sources
 from datapilot.utils.formatting.utils import tabulate_data
+from datapilot.utils.logging_utils import configure_logging
 from datapilot.utils.utils import map_url_to_instance
 
-logging.basicConfig(level=logging.INFO)
+# Honour DATAPILOT_DEBUG even for code paths that never reach a command callback.
+configure_logging()
 
 
 # New dbt group
@@ -33,6 +34,7 @@ def dbt():
 
 
 @dbt.command("project-health")
+@debug_option
 @auth_options
 @click.option(
     "--manifest-path",
@@ -134,6 +136,7 @@ def project_health(
 
 
 @dbt.command("onboard")
+@debug_option
 @auth_options
 @click.option(
     "--dbt_core_integration_id",

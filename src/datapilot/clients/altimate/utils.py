@@ -8,6 +8,7 @@ from requests import Response
 
 from datapilot.clients.altimate.client import APIClient
 from datapilot.clients.altimate.constants import SUPPORTED_ARTIFACT_TYPES
+from datapilot.utils.logging_utils import redact_url
 
 
 def check_token_and_instance(
@@ -89,7 +90,7 @@ def onboard_file(api_token, tenant, dbt_core_integration_id, dbt_core_integratio
     if signed_url_data:
         signed_url = signed_url_data.get("url")
         file_id = signed_url_data.get("dbt_core_integration_file_id")
-        api_client.log(f"Received signed URL: {signed_url}")
+        api_client.log(f"Received signed URL: {redact_url(signed_url)}")
         api_client.log(f"Received File ID: {file_id}")
 
         upload_response = upload_content_to_signed_url(file_path, signed_url)

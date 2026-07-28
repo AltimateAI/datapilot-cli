@@ -6,6 +6,8 @@ from requests.exceptions import HTTPError
 from requests.exceptions import RequestException
 from requests.exceptions import Timeout
 
+from datapilot.utils.logging_utils import redact_url
+
 
 class APIClient:
     def __init__(self, api_token="", base_url="", tenant=""):
@@ -36,6 +38,8 @@ class APIClient:
 
         try:
             self.logger.debug(f"Sending GET request for tenant {self.tenant} at url: {url}")
+            if params:
+                self.logger.debug(f"Request params: {params}")
             response = requests.get(url, headers=headers, params=params, timeout=timeout)
 
             # Check if the response was successful
@@ -67,7 +71,8 @@ class APIClient:
     def put(self, endpoint, data, timeout=None):
         url = f"{self.base_url}{endpoint}"
 
-        self.logger.debug(f"Sending PUT request for tenant {self.tenant} at url: {url}")
+        # Presigned upload URLs carry AWS credentials in the query string.
+        self.logger.debug(f"Sending PUT request for tenant {self.tenant} at url: {redact_url(url)}")
         response = requests.put(url, data=data, timeout=timeout)
         self.logger.debug(f"Received PUT response with status: {response.status_code}")
         return response

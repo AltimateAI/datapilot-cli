@@ -42,6 +42,35 @@ The [--catalog-path] is an optional argument. If you don't specify a catalog pat
 
 The [--config-path] is an optional argument. You can provide a yaml file with overrides for the default behavior of the insights.
 
+#### Verbose / Debug Logging
+
+By default, API failures are reported as a short summary such as `Error in uploading the manifest.`
+To see the underlying HTTP status codes and the error bodies returned by the API, enable debug
+logging with either the `--debug` flag or the `DATAPILOT_DEBUG` environment variable:
+
+```shell
+datapilot dbt onboard --debug ...
+
+# Or, for CI/CD pipelines where the command line is generated:
+export DATAPILOT_DEBUG=1
+datapilot dbt onboard ...
+```
+
+This turns the generic message into an actionable one:
+
+```
+DEBUG:APIClient:Sending GET request for tenant acme at url: https://api.myaltimate.com/dbt/v1/signed_url
+DEBUG:APIClient:Request params: {'dbt_core_integration_id': '2', 'dbt_core_integration_environment_type': 'DEV', 'file_type': 'manifest'}
+DEBUG:APIClient:HTTP Error: {'detail': 'dbt_core_integration with id:2 and env:DEV not found'} - Status code: 400
+Error in uploading the manifest.
+```
+
+Note that `--dbt_core_integration_environment` is matched exactly, including case, against the
+environments configured for your integration.
+
+Debug output is safe to share: the API token is never logged, and the credentials in presigned
+upload URLs are redacted to `?<redacted>`.
+
 #### Generating Manifest and Catalog Files for dbt Projects
 
 1. Generate Manifest File (manifest.json). Open your dbt project's root directory in a terminal or command prompt. Run `dbt compile`. This command generates manifest.json in the target folder under your dbt project directory structure.

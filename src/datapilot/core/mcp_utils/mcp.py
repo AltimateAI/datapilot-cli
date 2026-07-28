@@ -1,6 +1,5 @@
 import asyncio
 import json
-import logging
 import shutil
 from dataclasses import dataclass
 
@@ -10,7 +9,9 @@ from mcp import ClientSession
 from mcp import StdioServerParameters
 from mcp.client.stdio import stdio_client
 
-logging.basicConfig(level=logging.INFO)
+from datapilot.utils.logging_utils import configure_logging
+
+configure_logging()
 
 
 @dataclass
