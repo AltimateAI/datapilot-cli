@@ -25,8 +25,22 @@ class Metadata(BaseParserModel):
     env: Optional[dict[str, str]] = None
 
 
-class Status(Enum):
+class Status(str, Enum):
     runtime_error = "runtime error"
+
+    @classmethod
+    def _missing_(cls, value):
+        # dbt 2.0 capitalizes freshness statuses (e.g. "Runtime Error").
+        # Canonicalize case here, but stay NARROW otherwise: this enum is the
+        # runtime-error union arm and must not swallow freshness rows (see
+        # Status1 below for the permissive arm). Same class of fix as
+        # run_results_v6.Status (AI-7435 / PR #106).
+        if isinstance(value, str):
+            low = value.lower()
+            for member in cls:
+                if member.value == low:
+                    return member
+        return None
 
 
 class Results(BaseParserModel):
@@ -38,11 +52,30 @@ class Results(BaseParserModel):
     status: Status
 
 
-class Status1(Enum):
+class Status1(str, Enum):
     pass_ = "pass"
     warn = "warn"
     error = "error"
     runtime_error = "runtime error"
+
+    @classmethod
+    def _missing_(cls, value):
+        # dbt 2.0 (>= 2.0.0-preview.202) emits capitalized freshness statuses
+        # ("Pass", "Error") where every earlier dbt emitted lowercase. That made
+        # ALL source freshness results fail validation and silently dropped the
+        # whole sources.json during ingestion. Canonicalize known values by
+        # case; surface truly unknown future statuses as real members so
+        # downstream `.value` access keeps working (same forward-compat pattern
+        # as run_results_v6.Status, AI-7435 / PR #106).
+        if isinstance(value, str):
+            low = value.lower()
+            for member in cls:
+                if member.value == low:
+                    return member
+        member = str.__new__(cls, value)
+        member._name_ = str(value)
+        member._value_ = value
+        return member
 
 
 class Period(Enum):
