@@ -9,6 +9,27 @@ from typing import Optional
 import click
 from dotenv import load_dotenv
 
+from datapilot.utils.logging_utils import DEBUG_ENV_VAR
+from datapilot.utils.logging_utils import configure_logging
+
+
+def debug_option(f):
+    """Decorator adding a --debug flag, also settable via DATAPILOT_DEBUG."""
+
+    @click.option(
+        "--debug",
+        is_flag=True,
+        default=False,
+        envvar=DEBUG_ENV_VAR,
+        help=f"Enable verbose debug logging, including API status codes and error responses. Can also be set with {DEBUG_ENV_VAR}=1.",
+    )
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        configure_logging(debug=kwargs.pop("debug", False))
+        return f(*args, **kwargs)
+
+    return wrapper
+
 
 def load_config_from_file() -> Optional[Dict]:
     """Load configuration from ~/.altimate/altimate.json if it exists."""
