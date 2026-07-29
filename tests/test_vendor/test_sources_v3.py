@@ -7,6 +7,8 @@ silently dropped during ingestion (observed live: harvestgroup, 50 runs/day).
 Same defect class as run_results_v6 ``reused`` (AI-7435 / PR #106).
 """
 from vendor.dbt_artifacts_parser.parser import parse_sources
+from vendor.dbt_artifacts_parser.parsers.sources.sources_v3 import Results
+from vendor.dbt_artifacts_parser.parsers.sources.sources_v3 import Results1
 from vendor.dbt_artifacts_parser.parsers.sources.sources_v3 import Status
 from vendor.dbt_artifacts_parser.parsers.sources.sources_v3 import Status1
 
@@ -90,3 +92,28 @@ def test_runtime_error_arm_canonicalizes_case_but_stays_narrow():
     runtime_row = {"unique_id": "source.p.s.x", "status": "runtime error", "error": "boom"}
     parsed = parse_sources(_sources([runtime_row]))
     assert parsed.results[0].status.value == "runtime error"
+
+
+def test_union_arm_routing_mixed_artifact():
+    """Arm routing, not just status values: a classic dbt 1.x runtime-error row
+    must parse into the runtime shape (``Results``) while dbt 2.0 capitalized
+    freshness rows — including 'Error' — must parse into the freshness shape
+    (``Results1``). dbt 2.0 (Fusion) has no runtime-error variant at all
+    (crates/dbt-schemas/src/schemas/common.rs: FreshnessStatus = Pass|Warn|Error),
+    so 'Error' is always a freshness failure, never a runtime error."""
+    runtime_row = {"unique_id": "source.p.s.rt", "status": "runtime error", "error": "boom"}
+    parsed = parse_sources(
+        _sources(
+            [
+                runtime_row,
+                _freshness_result("Pass", "source.p.s.a"),
+                _freshness_result("Error", "source.p.s.b"),
+            ]
+        )
+    )
+    assert type(parsed.results[0]) is Results
+    assert parsed.results[0].status is Status.runtime_error
+    assert type(parsed.results[1]) is Results1
+    assert parsed.results[1].status is Status1.pass_
+    assert type(parsed.results[2]) is Results1
+    assert parsed.results[2].status is Status1.error
