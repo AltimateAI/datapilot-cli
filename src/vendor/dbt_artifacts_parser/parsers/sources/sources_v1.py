@@ -38,11 +38,32 @@ class SourceFreshnessRuntimeError(BaseParserModel):
     status: Status
 
 
-class Status1(Enum):
+class Status1(str, Enum):
     pass_ = "pass"
     warn = "warn"
     error = "error"
     runtime_error = "runtime error"
+
+    @classmethod
+    def _missing_(cls, value):
+        # The dbt Fusion engine serializes freshness statuses with its Rust
+        # variant names -- "Pass" / "Warn" / "Error" -- while the published
+        # sources schema it stamps into the artifact, and every dbt-core
+        # release, use the lowercase forms. Fold case first so a Fusion
+        # artifact resolves to the canonical lowercase member and `.value`
+        # stays stable for downstream storage.
+        if isinstance(value, str):
+            folded = value.casefold()
+            for member in cls:
+                if member.value.casefold() == folded:
+                    return member
+        # Forward-compatibility: surface any other unknown status as a real
+        # member so downstream `.value` access keeps working instead of failing
+        # validation and silently dropping the entire sources.json.
+        member = str.__new__(cls, value)
+        member._name_ = str(value)
+        member._value_ = value
+        return member
 
 
 class Period(Enum):
