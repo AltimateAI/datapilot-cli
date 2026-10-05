@@ -1,0 +1,75 @@
+"""Tests for manifest v12 parsing against manifests produced by dbt-core 1.11+.
+
+dbt-core 1.11 added the built-in ``materialization_function_default`` macro, whose
+``supported_languages`` include ``"javascript"``. The v12 ``SupportedLanguage`` enum
+only allowed ``python``/``sql``, so EVERY manifest from dbt-core 1.11+ failed to parse
+and project governance broke for all users on current dbt.
+
+The failure was masked by the ``disabled`` fallback: it dropped ``disabled`` from the
+manifest, but v12 declares that field required (nullable), so the retry always raised
+``disabled: Field required`` instead of the real error.
+"""
+import copy
+import json
+from pathlib import Path
+
+import pytest
+
+from vendor.dbt_artifacts_parser.parser import parse_manifest
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
+
+MANIFEST_V12 = Path(__file__).parent.parent / "data" / "manifest_v12.json"
+FUNCTION_MACRO_ID = "macro.dbt.materialization_function_default"
+
+
+@pytest.fixture
+def manifest() -> dict:
+    with MANIFEST_V12.open() as f:
+        return json.load(f)
+
+
+def _with_function_macro(manifest: dict) -> dict:
+    """Add the macro dbt-core 1.11+ ships, cloned from an existing macro in the fixture."""
+    manifest = copy.deepcopy(manifest)
+    macro = copy.deepcopy(next(iter(manifest["macros"].values())))
+    macro.update(
+        unique_id=FUNCTION_MACRO_ID,
+        name="materialization_function_default",
+        supported_languages=["sql", "python", "javascript"],
+    )
+    manifest["macros"][FUNCTION_MACRO_ID] = macro
+    return manifest
+
+
+def test_parses_javascript_supported_language(manifest):
+    """GIVEN a dbt-core 1.11+ manifest containing a macro that supports JavaScript
+    WHEN it is parsed
+    THEN parsing succeeds and the language is preserved."""
+    parsed = parse_manifest(_with_function_macro(manifest))
+
+    assert isinstance(parsed, ManifestV12)
+    languages = [lang.value for lang in parsed.macros[FUNCTION_MACRO_ID].supported_languages]
+    assert languages == ["sql", "python", "javascript"]
+
+
+def test_unparseable_disabled_falls_back_to_none(manifest):
+    """GIVEN a manifest whose ``disabled`` section does not match the strict schema
+    WHEN it is parsed
+    THEN the fallback nulls ``disabled`` (required in v12) and parsing succeeds."""
+    manifest["disabled"] = {"model.proj.broken": [{"resource_type": "not-a-real-type"}]}
+
+    parsed = parse_manifest(manifest)
+
+    assert isinstance(parsed, ManifestV12)
+    assert parsed.disabled is None
+
+
+def test_unrelated_errors_still_raise(manifest):
+    """GIVEN a manifest that is invalid outside the ``disabled`` section
+    WHEN it is parsed
+    THEN the original validation error surfaces instead of being masked."""
+    manifest = _with_function_macro(manifest)
+    manifest["macros"][FUNCTION_MACRO_ID]["supported_languages"] = ["cobol"]
+
+    with pytest.raises(ValueError, match="supported_languages"):
+        parse_manifest(manifest)

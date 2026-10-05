@@ -86,12 +86,13 @@ def parse_catalog_v1(catalog: dict) -> CatalogV1:
 # manifest
 #
 def _strip_unused_fields(manifest: dict) -> dict:
-    """Remove fields that have strict discriminated unions but are unused downstream.
+    """Null out fields that have strict discriminated unions but are unused downstream.
 
     These fields (e.g. `disabled`) use complex Pydantic unions that break when
-    dbt Cloud changes its schema, but our wrappers never read them.
+    dbt Cloud changes its schema, but our wrappers never read them. They are
+    set to None rather than dropped because v11+ declare them required (but nullable).
     """
-    return {k: v for k, v in manifest.items() if k not in _UNUSED_STRICT_FIELDS}
+    return {k: (None if k in _UNUSED_STRICT_FIELDS else v) for k, v in manifest.items()}
 
 
 def _try_parse_manifest(manifest: dict, model_class):
