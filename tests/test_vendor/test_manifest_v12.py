@@ -15,6 +15,7 @@ from pathlib import Path
 
 import pytest
 
+from datapilot.core.platforms.dbt.factory import DBTFactory
 from vendor.dbt_artifacts_parser.parser import parse_manifest
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 
@@ -49,6 +50,20 @@ def test_parses_javascript_supported_language(manifest):
 
     assert isinstance(parsed, ManifestV12)
     languages = [lang.value for lang in parsed.macros[FUNCTION_MACRO_ID].supported_languages]
+    assert languages == ["sql", "python", "javascript"]
+
+
+def test_wraps_project_macro_supporting_javascript(manifest):
+    """GIVEN a project-owned macro (e.g. a custom UDF materialization) supporting JavaScript
+    WHEN the parsed manifest is wrapped for insights
+    THEN the macro's languages convert without a ValueError."""
+    manifest = _with_function_macro(manifest)
+    project = manifest["metadata"]["project_name"]
+    manifest["macros"][FUNCTION_MACRO_ID]["package_name"] = project
+
+    macros = DBTFactory.get_manifest_wrapper(parse_manifest(manifest)).get_macros()
+
+    languages = [lang.value for lang in macros[FUNCTION_MACRO_ID].supported_languages]
     assert languages == ["sql", "python", "javascript"]
 
 
