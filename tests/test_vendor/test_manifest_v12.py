@@ -16,6 +16,7 @@ from pathlib import Path
 import pytest
 
 from datapilot.core.platforms.dbt.factory import DBTFactory
+from vendor.dbt_artifacts_parser.parser import _try_parse_manifest
 from vendor.dbt_artifacts_parser.parser import parse_manifest
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
 
@@ -79,12 +80,16 @@ def test_unparseable_disabled_falls_back_to_none(manifest):
     assert parsed.disabled is None
 
 
-def test_unrelated_errors_still_raise(manifest):
-    """GIVEN a manifest that is invalid outside the ``disabled`` section
+def test_failed_fallback_raises_the_original_error():
+    """GIVEN a manifest whose first parse and `disabled`-nulled retry fail with different errors
     WHEN it is parsed
-    THEN the original validation error surfaces instead of being masked."""
-    manifest = _with_function_macro(manifest)
-    manifest["macros"][FUNCTION_MACRO_ID]["supported_languages"] = ["cobol"]
+    THEN the original error is raised, not the retry's."""
 
-    with pytest.raises(ValueError, match="supported_languages"):
-        parse_manifest(manifest)
+    class Model:
+        def __init__(self, **manifest):
+            if manifest["disabled"] is None:
+                raise ValueError("retry error")
+            raise ValueError("original error")
+
+    with pytest.raises(ValueError, match="^original error$"):
+        _try_parse_manifest({"disabled": {}}, Model)
