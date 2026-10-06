@@ -1640,6 +1640,8 @@ class Argument(BaseParserModel):
 class SupportedLanguage(Enum):
     python = "python"
     sql = "sql"
+    # dbt-core 1.11+ ships `materialization_function_default` supporting UDFs in JavaScript
+    javascript = "javascript"
 
 
 class Macros(BaseParserModel):

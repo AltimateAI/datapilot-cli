@@ -18,8 +18,8 @@ from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v8 import ManifestV8
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v9 import ManifestV9
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v10 import ManifestV10
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import ManifestV11
-from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v11 import SupportedLanguage
 from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import ManifestV12
+from vendor.dbt_artifacts_parser.parsers.manifest.manifest_v12 import SupportedLanguage
 
 
 class DBTVersion(BaseModel):

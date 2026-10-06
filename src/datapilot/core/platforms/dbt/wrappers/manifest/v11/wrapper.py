@@ -28,6 +28,7 @@ from datapilot.core.platforms.dbt.schemas.manifest import AltimateResourceType
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateSeedConfig
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateSeedNode
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateSourceConfig
+from datapilot.core.platforms.dbt.schemas.manifest import AltimateSupportedLanguage
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateTestConfig
 from datapilot.core.platforms.dbt.schemas.manifest import AltimateTestMetadata
 from datapilot.core.platforms.dbt.wrappers.manifest.v11.schemas import TEST_TYPE_TO_NODE_MAP
@@ -181,7 +182,9 @@ class ManifestV11Wrapper(BaseManifestWrapper):
             patch_path=macro.patch_path,
             arguments=[AltimateMacroArgument(**arg.model_dump()) for arg in macro.arguments] if macro.arguments else None,
             created_at=macro.created_at,
-            supported_languages=macro.supported_languages,
+            supported_languages=[AltimateSupportedLanguage(lang.value) for lang in macro.supported_languages]
+            if macro.supported_languages
+            else None,
         )
 
     def _get_exposure(self, exposure: ExposureNode) -> AltimateManifestExposureNode:

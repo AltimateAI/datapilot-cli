@@ -62,7 +62,7 @@ setup(
     ],
     python_requires=">=3.8",
     install_requires=[
-        "click~=8.1.7",
+        "click>=8.1.7,<9.0",
         "pydantic >=2.0,<3.0",
         "ruamel.yaml~=0.18.6",
         "tabulate~=0.9.0",
@@ -70,7 +70,7 @@ setup(
         "sqlglot[c]==30.11.0",
         "mcp>=1.9.0,<2.0.0",
         "pyperclip~=1.8.2",
-        "python-dotenv~=1.0.0",
+        "python-dotenv>=1.0.0,<2.0",
     ],
     extras_require={
         # eg:
